@@ -13,11 +13,12 @@ class StoryCreateTableViewCell: UITableViewCell {
 
     @IBOutlet weak var cameraView: UIView!
     @IBOutlet weak var videoView: UIView!
+    var creationViews = []
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        var creationViews = [textView,cameraView,videoView]
+        creationViews = [textView,cameraView,videoView]
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

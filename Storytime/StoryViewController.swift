@@ -9,7 +9,13 @@
 import UIKit
 
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    let screenSize: CGRect = UIScreen.mainScreen().bounds
 
+    @IBOutlet weak var createView: UIView!
+
+    @IBOutlet weak var createViewTrailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var createViewLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var createViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var storyTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,6 +23,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Do any additional setup after loading the view.
         storyTableView.delegate = self
         storyTableView.dataSource = self
+        var createButton :UIBarButtonItem = UIBarButtonItem(title: "+", style: .Plain, target: self, action: "createEvent")
+        self.navigationItem.rightBarButtonItem = createButton
+        createViewHeightConstraint.constant = 0
+//        createViewLeadingConstraint.constant = screenSize.width/4
+//        createViewTrailingConstraint.constant = screenSize.width/4
+        self.createView.hidden = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -29,11 +41,38 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryCreateTableViewCell") as StoryCreateTableViewCell
+        var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryImageTableViewCell") as StoryImageTableViewCell
         return cell
 
     }
+    
+    func createEvent() {
+        self.view.layoutIfNeeded()
+        self.createView.hidden = false
+        self.createViewHeightConstraint.constant = 329
+//        createViewLeadingConstraint.constant = 0
+//        createViewTrailingConstraint.constant = 0
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            
+            })
+        
+    }
 
+    @IBAction func closeCompose(sender: AnyObject) {
+        self.view.layoutIfNeeded()
+        
+        self.createViewHeightConstraint.constant = 0
+//        createViewLeadingConstraint.constant = screenSize.width/4
+//        createViewTrailingConstraint.constant = screenSize.width/4
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            }, completion: {
+                (value: Bool) in
+                self.createView.hidden = true
+        })
+    }
+    
     /*
     // MARK: - Navigation
 
@@ -43,5 +82,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Pass the selected object to the new view controller.
     }
     */
+
 
 }
