@@ -51,4 +51,20 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     */
 
+    @IBAction func newStoryButtonWasTapped(sender: AnyObject) {
+        let permissions = []
+        PFFacebookUtils.logInWithPermissions(permissions, {
+            (user: PFUser!, error: NSError!) -> Void in
+            if let user = user {
+                if user.isNew {
+                    println("User signed up and logged in through Facebook!")
+                } else {
+                    println("User logged in through Facebook!")
+                }
+            } else {
+                println("Uh oh. The user cancelled the Facebook login.")
+            }
+        })
+    }
+
 }

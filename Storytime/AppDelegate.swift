@@ -17,6 +17,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        Parse.setApplicationId("N1IU3qQJhUOkP2E93hNyISSrJu0uUsMsFjmG23bO", clientKey: "RQO2yFnxsSKsMRzUcPzhqvgGx438fzJhBFB2Jgin")
+        PFFacebookUtils.initializeFacebook()
+        PFTwitterUtils.initializeWithConsumerKey("C32fxiLVtibIsevg8HT2cDVpw", consumerSecret: "QDWMrdBILOAEtAGbzzVKTHGszf5V96kxsFYEGqAZCR8lhdq15a")
+        
+        PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
+
+        
         UINavigationBar.appearance().backgroundColor = UIColor(red: 49.0/255.0, green: 49.0/255.0, blue: 78.0/255.0, alpha: 1.0)
         UINavigationBar.appearance().tintColor = UIColor(red: 49.0/255.0, green: 49.0/255.0, blue: 78.0/255.0, alpha: 1.0)
         UIBarButtonItem.appearance().tintColor = UIColor.whiteColor()
@@ -41,6 +49,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        FBAppCall.handleDidBecomeActiveWithSession(PFFacebookUtils.session())
+
     }
 
     func applicationWillTerminate(application: UIApplication) {
@@ -110,6 +120,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 abort()
             }
         }
+    }
+    
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+        return FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication)
     }
 
 }

@@ -93,6 +93,12 @@
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="user" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FCN-4s-4sV">
+                                                    <rect key="frame" x="203" y="31" width="34" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="dZB-0p-cfg" firstAttribute="leading" secondItem="a0k-dm-RAp" secondAttribute="leadingMargin" constant="61" id="2SF-3M-Fb5"/>
@@ -160,7 +166,13 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" title="Current" id="xUF-Fh-EQ1"/>
+                    <navigationItem key="navigationItem" title="Current" id="xUF-Fh-EQ1">
+                        <barButtonItem key="rightBarButtonItem" title="+" id="vSc-ku-Gmx">
+                            <connections>
+                                <action selector="newStoryButtonWasTapped:" destination="vXZ-lx-hvc" id="dUZ-yu-M64"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="rankingTableView" destination="3oL-19-xSC" id="cf9-aO-L8C"/>
                     </connections>
@@ -301,7 +313,7 @@
                                 <rect key="frame" x="16" y="126" width="568" height="329"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R8b-X1-Hgv" userLabel="TextSelection">
-                                        <rect key="frame" x="0.0" y="0.5" width="188.5" height="46.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="188.5" height="46.5"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="text_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="hLJ-LP-zOt">
                                                 <rect key="frame" x="72" y="1" width="44" height="44"/>
@@ -320,10 +332,10 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8dU-HB-pCZ" userLabel="CameraSelection">
-                                        <rect key="frame" x="189" y="0.5" width="189" height="46.5"/>
+                                        <rect key="frame" x="189" y="0.0" width="189" height="46.5"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="RkM-KB-jvo">
-                                                <rect key="frame" x="72.5" y="1.5" width="44" height="44"/>
+                                                <rect key="frame" x="72" y="1" width="44" height="44"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="44" id="gQB-Bu-gjP"/>
                                                     <constraint firstAttribute="width" constant="44" id="nAQ-YN-IDh"/>
@@ -338,7 +350,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="73K-CJ-Q8y" userLabel="VideoSelection">
-                                        <rect key="frame" x="379" y="0.5" width="188.5" height="46.5"/>
+                                        <rect key="frame" x="379" y="0.0" width="188.5" height="46.5"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="video_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="rU8-tC-dDx">
                                                 <rect key="frame" x="72" y="1" width="44" height="44"/>
@@ -470,6 +482,12 @@
                                     <constraint firstItem="R8b-X1-Hgv" firstAttribute="width" secondItem="73K-CJ-Q8y" secondAttribute="width" id="sIp-lZ-YL3"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="user" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4T8-ck-Y0C">
+                                <rect key="frame" x="149" y="95" width="34" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
