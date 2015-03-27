@@ -30,6 +30,7 @@
 		DDBA74601AC60E2200D0EC97 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA745E1AC60E2200D0EC97 /* FBSDKLoginKit.framework */; };
 		DDBA74611AC60E2200D0EC97 /* FBSDKMessengerShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA745F1AC60E2200D0EC97 /* FBSDKMessengerShareKit.framework */; };
 		DDBA74631AC60F8600D0EC97 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA74621AC60F8600D0EC97 /* FacebookSDK.framework */; };
+		DDBA74651AC6144300D0EC97 /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA74641AC6144300D0EC97 /* ParseUI.framework */; };
 		DDC9368B1AC47CAE006D4646 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC9368A1AC47CAE006D4646 /* AppDelegate.swift */; };
 		DDC9368E1AC47CAE006D4646 /* Storytime.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DDC9368C1AC47CAE006D4646 /* Storytime.xcdatamodeld */; };
 		DDC936901AC47CAE006D4646 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC9368F1AC47CAE006D4646 /* ViewController.swift */; };
@@ -511,6 +512,7 @@
 		DDBA745E1AC60E2200D0EC97 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../Documents/FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		DDBA745F1AC60E2200D0EC97 /* FBSDKMessengerShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKMessengerShareKit.framework; path = ../../Documents/FacebookSDK/FBSDKMessengerShareKit.framework; sourceTree = "<group>"; };
 		DDBA74621AC60F8600D0EC97 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
+		DDBA74641AC6144300D0EC97 /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
 		DDC936851AC47CAE006D4646 /* Storytime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Storytime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDC936891AC47CAE006D4646 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDC9368A1AC47CAE006D4646 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -972,6 +974,7 @@
 				DDBA720C1AC5FCFE00D0EC97 /* libz.dylib in Frameworks */,
 				DDBA720A1AC5FCF800D0EC97 /* SystemConfiguration.framework in Frameworks */,
 				DDBA72081AC5FCF100D0EC97 /* StoreKit.framework in Frameworks */,
+				DDBA74651AC6144300D0EC97 /* ParseUI.framework in Frameworks */,
 				DDBA745D1AC60DF100D0EC97 /* FBSDKCoreKit.framework in Frameworks */,
 				DDBA72041AC5FCE500D0EC97 /* Security.framework in Frameworks */,
 				DDBA72021AC5FCDF00D0EC97 /* QuartzCore.framework in Frameworks */,
@@ -1053,6 +1056,7 @@
 		DDC9367C1AC47CAE006D4646 = {
 			isa = PBXGroup;
 			children = (
+				DDBA74641AC6144300D0EC97 /* ParseUI.framework */,
 				DDBA74621AC60F8600D0EC97 /* FacebookSDK.framework */,
 				DDBA745E1AC60E2200D0EC97 /* FBSDKLoginKit.framework */,
 				DDBA745F1AC60E2200D0EC97 /* FBSDKMessengerShareKit.framework */,
@@ -2271,6 +2275,7 @@
 					"$(PROJECT_DIR)/parse-library-1.7.0",
 					/Users/fho/Documents/FacebookSDK,
 					"$(PROJECT_DIR)/FacebookSDK",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Storytime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2293,6 +2298,7 @@
 					"$(PROJECT_DIR)/parse-library-1.7.0",
 					/Users/fho/Documents/FacebookSDK,
 					"$(PROJECT_DIR)/FacebookSDK",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Storytime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

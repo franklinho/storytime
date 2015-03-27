@@ -8,8 +8,10 @@
 
 import UIKit
 
-class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
 
+    @IBOutlet weak var logOutButton: UIBarButtonItem!
+    
     @IBOutlet weak var rankingTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +21,9 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         rankingTableView.backgroundView?.backgroundColor = UIColor(red: 41.0/255.0, green: 37.0/255.0, blue: 55.0/255.0, alpha: 1.0)
         rankingTableView.delegate = self
         rankingTableView.dataSource = self
+        if (PFUser.currentUser() == nil){
+            logOutButton.enabled = false
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -52,19 +57,82 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     */
 
     @IBAction func newStoryButtonWasTapped(sender: AnyObject) {
-        let permissions = []
-        PFFacebookUtils.logInWithPermissions(permissions, {
-            (user: PFUser!, error: NSError!) -> Void in
-            if let user = user {
-                if user.isNew {
-                    println("User signed up and logged in through Facebook!")
-                } else {
-                    println("User logged in through Facebook!")
-                }
-            } else {
-                println("Uh oh. The user cancelled the Facebook login.")
-            }
-        })
+        if (PFUser.currentUser() == nil){
+            var loginViewController : PFLogInViewController = PFLogInViewController()
+            loginViewController.delegate = self
+            loginViewController.facebookPermissions = NSArray(array: ["friends_about_me"])
+            loginViewController.fields = PFLogInFields.Twitter | PFLogInFields.Facebook | PFLogInFields.DismissButton
+            
+            
+            var signUpViewController : PFSignUpViewController = PFSignUpViewController()
+            signUpViewController.delegate = self
+            
+            loginViewController.signUpController = signUpViewController
+            
+            self.presentViewController(loginViewController, animated: true, completion: nil)
+        }
+        
+        
     }
-
+    
+    func logInViewController(logInController: PFLogInViewController!, shouldBeginLogInWithUsername username: String!, password: String!) -> Bool {
+        if ((username != nil && password != nil && countElements(username) != 0 && countElements(password) != 0) ) {
+            return true
+        }
+        
+        UIAlertView(title: "Missing Information", message: "Make sure you fill out all of the information", delegate: nil, cancelButtonTitle: "OK").show()
+        
+        return false
+    }
+    
+    func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+        logOutButton.enabled = true
+    }
+    
+    func logInViewController(logInController: PFLogInViewController!, didFailToLogInWithError error: NSError!) {
+        println("Failed to log in")
+    }
+    
+    func logInViewControllerDidCancelLogIn(logInController: PFLogInViewController!) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func signUpViewController(signUpController: PFSignUpViewController!, shouldBeginSignUp info: [NSObject : AnyObject]!) -> Bool {
+        var informationComplete : Bool = true
+        
+        for (key,value) in info {
+            var field : NSString = info["key"] as NSString
+            if (field.length == 0) {
+                informationComplete = false
+                break
+            }
+        }
+        
+        if (!informationComplete) {
+            UIAlertView(title: "Missing Information", message: "Make sure you fill out all of the information", delegate: nil, cancelButtonTitle: "OK").show()
+            
+        }
+        return informationComplete
+        
+    }
+    
+    func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+        logOutButton.enabled = true
+    }
+    
+    func signUpViewController(signUpController: PFSignUpViewController!, didFailToSignUpWithError error: NSError!) {
+        println("Failed to sign up")
+    }
+    
+    func signUpViewControllerDidCancelSignUp(signUpController: PFSignUpViewController!) {
+        println("User dismissed the signupviewcontroller")
+    }
+    
+    @IBAction func logOutButtonWasTapped(sender: AnyObject) {
+        PFUser.logOut()
+        UIAlertView(title: "Logged Out", message: "You have successfully logged out.", delegate: nil, cancelButtonTitle: "OK").show()
+    }
+    
 }

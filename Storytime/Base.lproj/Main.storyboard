@@ -167,6 +167,11 @@
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" title="Current" id="xUF-Fh-EQ1">
+                        <barButtonItem key="leftBarButtonItem" title="Log Out" id="2oU-rX-Dpc">
+                            <connections>
+                                <action selector="logOutButtonWasTapped:" destination="vXZ-lx-hvc" id="Jw8-70-DAh"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="+" id="vSc-ku-Gmx">
                             <connections>
                                 <action selector="newStoryButtonWasTapped:" destination="vXZ-lx-hvc" id="dUZ-yu-M64"/>
@@ -174,6 +179,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="logOutButton" destination="2oU-rX-Dpc" id="Vtt-ZK-53K"/>
                         <outlet property="rankingTableView" destination="3oL-19-xSC" id="cf9-aO-L8C"/>
                     </connections>
                 </viewController>
