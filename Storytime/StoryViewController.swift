@@ -13,6 +13,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     @IBOutlet weak var createView: UIView!
 
+    @IBOutlet weak var createViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var createViewTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var createViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var createViewHeightConstraint: NSLayoutConstraint!
@@ -25,7 +26,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         storyTableView.dataSource = self
         var createButton :UIBarButtonItem = UIBarButtonItem(title: "+", style: .Plain, target: self, action: "createEvent")
         self.navigationItem.rightBarButtonItem = createButton
-        createViewHeightConstraint.constant = 0
+        createViewTopConstraint.constant = -329
 //        createViewLeadingConstraint.constant = screenSize.width/4
 //        createViewTrailingConstraint.constant = screenSize.width/4
         self.createView.hidden = true
@@ -49,7 +50,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func createEvent() {
         self.view.layoutIfNeeded()
         self.createView.hidden = false
-        self.createViewHeightConstraint.constant = 329
+        self.createViewTopConstraint.constant = 0
 //        createViewLeadingConstraint.constant = 0
 //        createViewTrailingConstraint.constant = 0
         UIView.animateWithDuration(0.3, animations: {
@@ -62,7 +63,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBAction func closeCompose(sender: AnyObject) {
         self.view.layoutIfNeeded()
         
-        self.createViewHeightConstraint.constant = 0
+        self.createViewTopConstraint.constant = -329
 //        createViewLeadingConstraint.constant = screenSize.width/4
 //        createViewTrailingConstraint.constant = screenSize.width/4
         UIView.animateWithDuration(0.3, animations: {
