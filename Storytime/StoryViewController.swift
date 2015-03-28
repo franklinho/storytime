@@ -18,6 +18,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var createViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var createViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var storyTableView: UITableView!
+    
+    @IBOutlet weak var cameraContainer: UIView!
+    @IBOutlet weak var textContainer: UIView!
+    @IBOutlet weak var videoContainer: UIView!
+    var createViews = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -30,6 +36,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //        createViewLeadingConstraint.constant = screenSize.width/4
 //        createViewTrailingConstraint.constant = screenSize.width/4
         self.createView.hidden = true
+        createViews = [cameraContainer, textContainer, videoContainer]
     }
 
     override func didReceiveMemoryWarning() {
@@ -84,5 +91,26 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     */
 
+    @IBAction func videoSelectorWasTapped(sender: AnyObject) {
+        for view in createViews {
+            (view as UIView).hidden = true
+            videoContainer.hidden = false
+        }
+    }
 
+    @IBAction func cameraSelectorWasTapped(sender: AnyObject) {
+        for view in createViews {
+            (view as UIView).hidden = true
+            cameraContainer.hidden = false
+        }
+    }
+
+
+    @IBAction func textSelectorWasTapped(sender: AnyObject) {
+        println("Text button was tapped")
+        for view in createViews {
+            (view as UIView).hidden = true
+            textContainer.hidden = false
+        }
+    }
 }
