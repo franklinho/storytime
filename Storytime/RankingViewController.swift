@@ -10,7 +10,7 @@ import UIKit
 
 class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
 
-    var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
+    
     @IBOutlet weak var logOutButton: UIBarButtonItem!
     
     @IBOutlet weak var rankingTableView: UITableView!
@@ -73,7 +73,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             
             self.presentViewController(loginViewController, animated: true, completion: nil)
         } else {
-            self.storyVC.newStory = true
+            var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
+            storyVC.newStory = true
             navigationController?.pushViewController(storyVC, animated: true)
         }
         
@@ -93,7 +94,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         logOutButton.enabled = true
-        self.storyVC.newStory = true
+        var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
+        storyVC.newStory = true
         navigationController?.pushViewController(storyVC, animated: true)
     }
     
@@ -127,7 +129,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         logOutButton.enabled = true
-        self.storyVC.newStory = true
+        var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
+        storyVC.newStory = true
         navigationController?.pushViewController(storyVC, animated: true)
     }
     
