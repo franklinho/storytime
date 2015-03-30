@@ -11,10 +11,19 @@ import UIKit
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var newStory : Bool = false
+    var storyCreated : Bool = false
+    var story : PFObject?
+    
+    @IBOutlet weak var userLabel: UILabel!
+    
+    @IBOutlet weak var storyTitleLabel: UILabel!
+    
     @IBOutlet weak var titleView: UIView!
     @IBOutlet weak var createTextView: UITextView!
     @IBOutlet weak var createView: UIView!
     @IBOutlet weak var createTitleView: UIView!
+
+    @IBOutlet weak var titleTextField: UITextField!
 
     @IBOutlet weak var createViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var createViewTrailingConstraint: NSLayoutConstraint!
@@ -87,17 +96,22 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     @IBAction func closeCompose(sender: AnyObject) {
+        minimizeCreateView()
+    }
+    
+    func minimizeCreateView() {
         self.view.layoutIfNeeded()
         
         self.createViewTopConstraint.constant = -329
-//        createViewLeadingConstraint.constant = screenSize.width/4
-//        createViewTrailingConstraint.constant = screenSize.width/4
+        //        createViewLeadingConstraint.constant = screenSize.width/4
+        //        createViewTrailingConstraint.constant = screenSize.width/4
         UIView.animateWithDuration(0.3, animations: {
             self.view.layoutIfNeeded()
             }, completion: {
                 (value: Bool) in
                 self.createView.hidden = true
         })
+
     }
     
     /*
@@ -111,7 +125,58 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     */
 
     @IBAction func textSubmitButtonWasTapped(sender: AnyObject) {
+        if (story != nil) {
+            var event: PFObject = PFObject(className: "Event")
+            event["storyObject"] = self.story!
+            event["text"] = self.createTextView.text
+            event.saveInBackgroundWithBlock({
+                (success: Bool, error: NSError!) -> Void in
+                if (success) {
+                    // The object has been saved.
+                    println("Event successfully saved")
+                    self.minimizeCreateView()
+                    self.createTextView.text = ""
+                } else {
+                    // There was a problem, check error.description
+                    println("There was an error saving the event: \(error.description)")
+                }
+            })
+        } else {
+            
+            story = PFObject(className: "Story")
+            story!["title"] = titleTextField.text
+            story!["user"] = PFUser.currentUser().username
+            story!.saveInBackgroundWithBlock({
+                (success: Bool, error: NSError!) -> Void in
+                if (success) {
+                    // The object has been saved.
+                    var event: PFObject = PFObject(className: "Event")
+                    event["storyObject"] = self.story!
+                    event["text"] = self.createTextView.text
+                    event.saveInBackgroundWithBlock({
+                        (success: Bool, error: NSError!) -> Void in
+                        if (success) {
+                            // The object has been saved.
+                            println("Story and event successfully saved")
+                            self.storyTitleLabel.text = self.story!["title"] as? String
+                            self.userLabel.text = PFUser.currentUser().username
+                            self.createTitleView.hidden = true
+                            self.titleView.hidden = false
+                            self.minimizeCreateView()
+                            self.createTextView.text = ""
+                        } else {
+                            // There was a problem, check error.description
+                            println("There was an error saving the event: \(error.description)")
+                        }
+                    })
+                } else {
+                    // There was a problem, check error.description
+                    println("There was an error saving the story: \(error.description)")
+                }
+            })
         
+        }
+
     }
 
     @IBAction func videoSelectorWasTapped(sender: AnyObject) {

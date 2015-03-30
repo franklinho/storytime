@@ -627,8 +627,11 @@
                         <outlet property="createViewTopConstraint" destination="7Wn-lE-Vze" id="zzn-Bv-AdK"/>
                         <outlet property="createViewTrailingConstraint" destination="Qaq-3q-I0I" id="p6n-sV-t6h"/>
                         <outlet property="storyTableView" destination="Bes-cU-TpY" id="3rw-Nx-vtY"/>
+                        <outlet property="storyTitleLabel" destination="N6n-gn-M1B" id="sVr-8S-zcC"/>
                         <outlet property="textContainer" destination="9bx-7K-B4N" id="Kyx-Ec-nS9"/>
+                        <outlet property="titleTextField" destination="cHL-Ds-X6q" id="52j-ZF-7Qm"/>
                         <outlet property="titleView" destination="zC1-cs-0xd" id="yCz-iD-wGP"/>
+                        <outlet property="userLabel" destination="4T8-ck-Y0C" id="anN-v3-GwR"/>
                         <outlet property="videoContainer" destination="ecm-OX-hx2" id="Iz7-Vj-lmV"/>
                     </connections>
                 </viewController>
