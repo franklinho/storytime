@@ -508,7 +508,7 @@
                                             <outletCollection property="gestureRecognizers" destination="RSB-Up-0BQ" appends="YES" id="wrQ-ND-BRs"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="334" id="1Sp-W7-uAW" customClass="StoryVideoTableViewCell" customModule="Storytime" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StoryVideoTableViewCell" rowHeight="334" id="1Sp-W7-uAW" customClass="StoryVideoTableViewCell" customModule="Storytime" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1Sp-W7-uAW" id="mqd-bj-yN5">
@@ -536,7 +536,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="334" id="ceY-LX-QHm" customClass="StoryTextTableViewCell" customModule="Storytime" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StoryTextTableViewCell" rowHeight="334" id="ceY-LX-QHm" customClass="StoryTextTableViewCell" customModule="Storytime" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ceY-LX-QHm" id="1hj-Eu-03B">
@@ -564,6 +564,10 @@
                                                 <constraint firstItem="7Fo-GF-3C7" firstAttribute="top" secondItem="hZ4-oq-XVh" secondAttribute="bottom" constant="5" id="vsF-wN-PcH"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="eventTextLabel" destination="7Fo-GF-3C7" id="PjI-uW-H7X"/>
+                                            <outlet property="timestampLabel" destination="hZ4-oq-XVh" id="lUg-Xp-cap"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>

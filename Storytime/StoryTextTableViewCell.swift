@@ -11,6 +11,9 @@ import UIKit
 
 class StoryTextTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var eventTextLabel: UILabel!
+    
+    @IBOutlet weak var timestampLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

@@ -13,6 +13,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var newStory : Bool = false
     var storyCreated : Bool = false
     var story : PFObject?
+    var events : NSArray?
     
     @IBOutlet weak var userLabel: UILabel!
     
@@ -69,15 +70,23 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if newStory == false {
-            return 1
+        if events != nil {
+            return self.events!.count
         } else {
             return 0
         }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryImageTableViewCell") as StoryImageTableViewCell
+        var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryTextTableViewCell") as StoryTextTableViewCell
+        var event : PFObject?
+        if (events != nil) {
+            event = events![indexPath.row] as PFObject
+            cell.eventTextLabel.text = event!["text"] as? String
+            cell.timestampLabel.text = "\(event!.createdAt)"
+        }
+        
+
         return cell
 
     }
@@ -136,6 +145,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     println("Event successfully saved")
                     self.minimizeCreateView()
                     self.createTextView.text = ""
+                    self.requestEventsForStory()
+                    self.view.endEditing(true)
                 } else {
                     // There was a problem, check error.description
                     println("There was an error saving the event: \(error.description)")
@@ -164,6 +175,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             self.titleView.hidden = false
                             self.minimizeCreateView()
                             self.createTextView.text = ""
+                            self.requestEventsForStory()
+                            self.view.endEditing(true)
                         } else {
                             // There was a problem, check error.description
                             println("There was an error saving the event: \(error.description)")
@@ -201,4 +214,29 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             textContainer.hidden = false
         }
     }
+    
+    func requestEventsForStory() {
+        var query = PFQuery(className:"Event")
+        query.whereKey("storyObject", equalTo:self.story)
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [AnyObject]!, error: NSError!) -> Void in
+            if error == nil {
+                // The find succeeded.
+                println("Successfully retrieved \(objects.count) events.")
+                self.events = objects
+                self.storyTableView.reloadData()
+                // Do something with the found objects
+                if let objects = objects as? [PFObject] {
+                    for object in objects {
+                        var text = object["text"]
+                        println("Object ID: \(object.objectId), Timestamp: \(object.createdAt?), Text: \(text)")
+                    }
+                }
+            } else {
+                // Log details of the failure
+                println("Error: \(error) \(error.userInfo!)")
+            }
+        }
+    }
+
 }

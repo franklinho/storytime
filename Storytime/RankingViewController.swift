@@ -147,4 +147,5 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         UIAlertView(title: "Logged Out", message: "You have successfully logged out.", delegate: nil, cancelButtonTitle: "OK").show()
     }
     
+        
 }
