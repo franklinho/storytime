@@ -10,8 +10,11 @@ import UIKit
 
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let screenSize: CGRect = UIScreen.mainScreen().bounds
-
+    var newStory : Bool = false
+    @IBOutlet weak var titleView: UIView!
+    @IBOutlet weak var createTextView: UITextView!
     @IBOutlet weak var createView: UIView!
+    @IBOutlet weak var createTitleView: UIView!
 
     @IBOutlet weak var createViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var createViewTrailingConstraint: NSLayoutConstraint!
@@ -32,10 +35,22 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         storyTableView.dataSource = self
         var createButton :UIBarButtonItem = UIBarButtonItem(title: "+", style: .Plain, target: self, action: "createEvent")
         self.navigationItem.rightBarButtonItem = createButton
-        createViewTopConstraint.constant = -329
+        if newStory == false {
+            createViewTopConstraint.constant = -329
+            self.createView.hidden = true
+            createTitleView.hidden = true
+            titleView.hidden = false
+        } else {
+            createViewTopConstraint.constant = 0
+            self.createView.hidden = false
+            titleView.hidden = true
+            createTitleView.hidden = false
+            titleView.hidden = true
+        }
+
 //        createViewLeadingConstraint.constant = screenSize.width/4
 //        createViewTrailingConstraint.constant = screenSize.width/4
-        self.createView.hidden = true
+
         createViews = [cameraContainer, textContainer, videoContainer]
     }
 
@@ -45,7 +60,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        if newStory == false {
+            return 1
+        } else {
+            return 0
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -90,6 +109,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Pass the selected object to the new view controller.
     }
     */
+
+    @IBAction func textSubmitButtonWasTapped(sender: AnyObject) {
+        
+    }
 
     @IBAction func videoSelectorWasTapped(sender: AnyObject) {
         for view in createViews {

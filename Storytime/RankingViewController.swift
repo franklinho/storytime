@@ -10,6 +10,7 @@ import UIKit
 
 class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
 
+    var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
     @IBOutlet weak var logOutButton: UIBarButtonItem!
     
     @IBOutlet weak var rankingTableView: UITableView!
@@ -24,6 +25,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         if (PFUser.currentUser() == nil){
             logOutButton.enabled = false
         }
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -70,6 +72,9 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             loginViewController.signUpController = signUpViewController
             
             self.presentViewController(loginViewController, animated: true, completion: nil)
+        } else {
+            self.storyVC.newStory = true
+            navigationController?.pushViewController(storyVC, animated: true)
         }
         
         
@@ -88,6 +93,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         logOutButton.enabled = true
+        self.storyVC.newStory = true
+        navigationController?.pushViewController(storyVC, animated: true)
     }
     
     func logInViewController(logInController: PFLogInViewController!, didFailToLogInWithError error: NSError!) {
@@ -120,6 +127,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         logOutButton.enabled = true
+        self.storyVC.newStory = true
+        navigationController?.pushViewController(storyVC, animated: true)
     }
     
     func signUpViewController(signUpController: PFSignUpViewController!, didFailToSignUpWithError error: NSError!) {
