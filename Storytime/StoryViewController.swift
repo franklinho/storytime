@@ -158,6 +158,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             story = PFObject(className: "Story")
             story!["title"] = titleTextField.text
             story!["user"] = PFUser.currentUser().username
+            story!["upvotes"] = 1
+            story!["downvotes"] = 0
             story!.saveInBackgroundWithBlock({
                 (success: Bool, error: NSError!) -> Void in
                 if (success) {
@@ -239,6 +241,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 // Log details of the failure
                 println("Error: \(error) \(error.userInfo!)")
             }
+        }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        if storyCreated == true {
+            requestEventsForStory()
         }
     }
 

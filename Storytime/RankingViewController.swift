@@ -10,6 +10,7 @@ import UIKit
 
 class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
 
+    var stories : NSArray?
     
     @IBOutlet weak var logOutButton: UIBarButtonItem!
     
@@ -34,12 +35,23 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        if stories != nil {
+            return stories!.count
+        } else {
+            return 0
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = rankingTableView.dequeueReusableCellWithIdentifier("RankingTableViewCell") as RankingTableViewCell
-        
+        var story : PFObject?
+        if stories != nil {
+            story = stories![indexPath.row] as? PFObject
+            cell.titleLabel.text = story!["title"] as? String
+            var upvotes = story!["upvotes"] as? Int
+            var downvotes = story!["downvotes"] as? Int
+            cell.pointsLabel.text = "\(upvotes!-downvotes!)"
+        }
         cell.rankLabel.text = "\(indexPath.row+1)"
         cell.titleLabel.text = "This is the #\(indexPath.row+1) story"
         
@@ -126,6 +138,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
+    override func viewDidAppear(animated: Bool) {
+        requestStories()
+    }
+    
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         logOutButton.enabled = true
@@ -147,5 +163,44 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         UIAlertView(title: "Logged Out", message: "You have successfully logged out.", delegate: nil, cancelButtonTitle: "OK").show()
     }
     
+    func requestStories() {
+        var query = PFQuery(className:"Story")
+        query.orderByDescending("upvotes")
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [AnyObject]!, error: NSError!) -> Void in
+            if error == nil {
+                // The find succeeded.
+                println("Successfully retrieved \(objects.count) events.")
+                self.stories = objects
+                self.rankingTableView.reloadData()
+                // Do something with the found objects
+                if let objects = objects as? [PFObject] {
+                    for object in objects {
+                        var title = object["title"]
+                        println("Object ID: \(object.objectId), Timestamp: \(object.createdAt?), Text: \(title)")
+                    }
+                }
+            } else {
+                // Log details of the failure
+                println("Error: \(error) \(error.userInfo!)")
+            }
+        }
+    }
+
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == "RankingTableViewCellToStoryVCSegue") {
+            
+            var storyVC : StoryViewController = segue.destinationViewController as StoryViewController
+            var storyIndex = rankingTableView!.indexPathForSelectedRow()?.row
+            var selectedStory : PFObject?
+            if stories != nil {
+                selectedStory = stories![storyIndex!] as PFObject
+                storyVC.story = selectedStory
+                storyVC.storyCreated = true
+            }
+            
+        }
+    }
+
         
 }

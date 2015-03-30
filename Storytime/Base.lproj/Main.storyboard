@@ -146,7 +146,7 @@
                                             <outlet property="rankLabel" destination="ZhU-Ht-rNz" id="Sb7-Zb-9Z9"/>
                                             <outlet property="titleLabel" destination="dZB-0p-cfg" id="gv6-aV-5OB"/>
                                             <outlet property="upvoteButton" destination="nFt-dc-hlf" id="Uf2-Vu-xWJ"/>
-                                            <segue destination="nXj-xd-FNA" kind="show" id="gzv-Hc-Qwl"/>
+                                            <segue destination="nXj-xd-FNA" kind="show" identifier="RankingTableViewCellToStoryVCSegue" id="gzv-Hc-Qwl"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
