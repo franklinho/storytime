@@ -136,6 +136,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBAction func textSubmitButtonWasTapped(sender: AnyObject) {
         if (story != nil) {
             var event: PFObject = PFObject(className: "Event")
+            event["type"] = "text"
             event["storyObject"] = self.story!
             event["text"] = self.createTextView.text
             event.saveInBackgroundWithBlock({
@@ -162,6 +163,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 if (success) {
                     // The object has been saved.
                     var event: PFObject = PFObject(className: "Event")
+                    event["type"] = "text"
                     event["storyObject"] = self.story!
                     event["text"] = self.createTextView.text
                     event.saveInBackgroundWithBlock({
@@ -218,6 +220,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func requestEventsForStory() {
         var query = PFQuery(className:"Event")
         query.whereKey("storyObject", equalTo:self.story)
+        query.orderByDescending("createdAt")
         query.findObjectsInBackgroundWithBlock {
             (objects: [AnyObject]!, error: NSError!) -> Void in
             if error == nil {
