@@ -234,7 +234,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 if let objects = objects as? [PFObject] {
                     for object in objects {
                         var text = object["text"]
-                        println("Object ID: \(object.objectId), Timestamp: \(object.createdAt?), Text: \(text)")
+                        println("Object ID: \(object.objectId!), Timestamp: \(object.createdAt!), Text: \(text)")
                     }
                 }
             } else {
