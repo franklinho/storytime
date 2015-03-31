@@ -48,12 +48,12 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         if stories != nil {
             story = stories![indexPath.row] as? PFObject
             cell.titleLabel.text = story!["title"] as? String
+            cell.userLabel.text = story!["user"] as? String
             var upvotes = story!["upvotes"] as? Int
             var downvotes = story!["downvotes"] as? Int
             cell.pointsLabel.text = "\(upvotes!-downvotes!)"
         }
         cell.rankLabel.text = "\(indexPath.row+1)"
-        cell.titleLabel.text = "This is the #\(indexPath.row+1) story"
         
         return cell
 

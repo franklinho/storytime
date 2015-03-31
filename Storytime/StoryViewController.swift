@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     let screenSize: CGRect = UIScreen.mainScreen().bounds
@@ -14,7 +15,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var storyCreated : Bool = false
     var story : PFObject?
     var events : NSArray?
+    let captureSession = AVCaptureSession()
     
+    @IBOutlet weak var storyPointsLabel: UILabel!
     @IBOutlet weak var userLabel: UILabel!
     
     @IBOutlet weak var storyTitleLabel: UILabel!
@@ -46,11 +49,18 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var createButton :UIBarButtonItem = UIBarButtonItem(title: "+", style: .Plain, target: self, action: "createEvent")
         self.navigationItem.rightBarButtonItem = createButton
         if newStory == false {
-            createViewTopConstraint.constant = -329
+            self.storyTitleLabel.text = self.story!["title"] as? String
+            var upvotes = story!["upvotes"] as? Int
+            var downvotes = story!["downvotes"] as? Int
+            self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
+
+            self.userLabel.text = self.story!["user"] as? String
+            createViewTopConstraint.constant = -280
             self.createView.hidden = true
             createTitleView.hidden = true
             titleView.hidden = false
         } else {
+
             createViewTopConstraint.constant = 0
             self.createView.hidden = false
             titleView.hidden = true
@@ -62,6 +72,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //        createViewTrailingConstraint.constant = screenSize.width/4
 
         createViews = [cameraContainer, textContainer, videoContainer]
+        captureSession.sessionPreset = AVCaptureSessionPresetLow
+        let devices = AVCaptureDevice.devices()
+        println(devices)
     }
 
     override func didReceiveMemoryWarning() {
@@ -111,7 +124,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func minimizeCreateView() {
         self.view.layoutIfNeeded()
         
-        self.createViewTopConstraint.constant = -329
+        self.createViewTopConstraint.constant = -280
         //        createViewLeadingConstraint.constant = screenSize.width/4
         //        createViewTrailingConstraint.constant = screenSize.width/4
         UIView.animateWithDuration(0.3, animations: {
@@ -175,6 +188,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             println("Story and event successfully saved")
                             self.storyTitleLabel.text = self.story!["title"] as? String
                             self.userLabel.text = PFUser.currentUser().username
+                            var upvotes = self.story!["upvotes"] as? Int
+                            var downvotes = self.story!["downvotes"] as? Int
+                            self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
                             self.createTitleView.hidden = true
                             self.titleView.hidden = false
                             self.minimizeCreateView()
