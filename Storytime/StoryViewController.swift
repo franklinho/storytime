@@ -16,10 +16,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var story : PFObject?
     var events : NSArray?
     let captureSession = AVCaptureSession()
+    var captureDevice : AVCaptureDevice?
     
     @IBOutlet weak var storyPointsLabel: UILabel!
     @IBOutlet weak var userLabel: UILabel!
     
+    @IBOutlet weak var cameraSendButton: UIButton!
     @IBOutlet weak var storyTitleLabel: UILabel!
     
     @IBOutlet weak var titleView: UIView!
@@ -67,6 +69,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             createTitleView.hidden = false
             titleView.hidden = true
         }
+        
+        cameraSendButton.layer.borderWidth = 3.0
+        cameraSendButton.layer.borderColor = UIColor.whiteColor().CGColor
+        cameraSendButton.layer.cornerRadius = 40
+        cameraSendButton.clipsToBounds = true
 
 //        createViewLeadingConstraint.constant = screenSize.width/4
 //        createViewTrailingConstraint.constant = screenSize.width/4
@@ -75,6 +82,53 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         captureSession.sessionPreset = AVCaptureSessionPresetLow
         let devices = AVCaptureDevice.devices()
         println(devices)
+        
+        // Loop through all the capture devices on this phone
+        for device in devices {
+            // Make sure this particular device supports video
+            if (device.hasMediaType(AVMediaTypeVideo)) {
+                // Finally check the position and confirm we've got the back camera
+                if(device.position == AVCaptureDevicePosition.Back) {
+                    captureDevice = device as? AVCaptureDevice
+                }
+            }
+        }
+        
+        if captureDevice != nil {
+            
+            beginSession()
+            configureDevice()
+        }
+    }
+    
+    func configureDevice() {
+        if let device = captureDevice {
+            device.lockForConfiguration(nil)
+            if captureDevice!.isFocusModeSupported(AVCaptureFocusMode.ContinuousAutoFocus){
+                
+                device.focusMode = AVCaptureFocusMode.ContinuousAutoFocus
+            }
+            if (captureDevice?.focusPointOfInterestSupported != false) {
+                captureDevice?.focusPointOfInterest = CGPointMake(0.5, 0.5)
+            }
+            device.unlockForConfiguration()
+        }
+        
+    }
+    
+    func beginSession() {
+        var err : NSError? = nil
+        captureSession.addInput(AVCaptureDeviceInput(device: captureDevice, error: &err))
+        
+        if err != nil {
+            println("error: \(err?.localizedDescription)")
+        }
+        
+        var previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        self.cameraContainer.layer.insertSublayer(previewLayer, atIndex: 0)
+        previewLayer?.frame = CGRectMake(0, 0, cameraContainer.layer.frame.width, cameraContainer.layer.frame.height)
+        captureSession.startRunning()
     }
 
     override func didReceiveMemoryWarning() {
@@ -224,6 +278,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             (view as UIView).hidden = true
             cameraContainer.hidden = false
         }
+        if captureSession.canSetSessionPreset(AVCaptureSessionPresetHigh){
+                captureSession.sessionPreset = AVCaptureSessionPresetHigh
+        }
+        
     }
 
 
