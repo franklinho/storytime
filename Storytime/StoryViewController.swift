@@ -17,6 +17,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var events : NSArray?
     let captureSession = AVCaptureSession()
     var captureDevice : AVCaptureDevice?
+    var stillImageOutput : AVCaptureStillImageOutput?
+    var capturedImage : UIImage?
+    
     
     @IBOutlet weak var storyPointsLabel: UILabel!
     @IBOutlet weak var userLabel: UILabel!
@@ -98,6 +101,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             beginSession()
             configureDevice()
+            
         }
     }
     
@@ -282,6 +286,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 captureSession.sessionPreset = AVCaptureSessionPresetHigh
         }
         
+        stillImageOutput = AVCaptureStillImageOutput()
+        stillImageOutput!.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
+        captureSession.addOutput(stillImageOutput)
+        
     }
 
 
@@ -329,4 +337,82 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.view.endEditing(true)
     }
 
+    @IBAction func photoSendButtonWasTapped(sender: AnyObject) {
+        println("\(stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo))")
+        if let videoConnection = stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo){
+            stillImageOutput?.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: {
+                (sampleBuffer,error) in
+                var imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
+//                var dataProvider = CGDataProviderCreateWithCFData(imageData)
+//                var cgImageRef = CGImageCreateWithJPEGDataProvider(dataProvider, nil, true, kCGRenderingIntentDefault)
+//                var image = UIImage(CGImage: cgImageRef, scale: 1.0, orientation: UIImageOrientation.Right)
+                var imageFile : PFFile = PFFile(name: "image.png", data: imageData)
+                imageFile.save()
+                
+            
+                
+                
+                if (self.story != nil) {
+                    var event: PFObject = PFObject(className: "Event")
+                    event["type"] = "photo"
+                    event["storyObject"] = self.story!
+                    event["image"] = imageFile
+                    event.saveInBackgroundWithBlock({
+                        (success: Bool, error: NSError!) -> Void in
+                        if (success) {
+                            // The object has been saved.
+                            println("Event successfully saved")
+                            self.minimizeCreateView()
+                            self.requestEventsForStory()
+                            self.view.endEditing(true)
+                        } else {
+                            // There was a problem, check error.description
+                            println("There was an error saving the event: \(error.description)")
+                        }
+                    })
+                } else {
+                    
+                    self.story = PFObject(className: "Story")
+                    self.story!["title"] = self.titleTextField.text
+                    self.story!["user"] = PFUser.currentUser().username
+                    self.story!["upvotes"] = 1
+                    self.story!["downvotes"] = 0
+                    self.story!.saveInBackgroundWithBlock({
+                        (success: Bool, error: NSError!) -> Void in
+                        if (success) {
+                            // The object has been saved.
+                            var event: PFObject = PFObject(className: "Event")
+                            event["type"] = "photo"
+                            event["storyObject"] = self.story!
+                            event["image"] = imageFile
+                            event.saveInBackgroundWithBlock({
+                                (success: Bool, error: NSError!) -> Void in
+                                if (success) {
+                                    // The object has been saved.
+                                    println("Story and event successfully saved")
+                                    self.storyTitleLabel.text = self.story!["title"] as? String
+                                    self.userLabel.text = PFUser.currentUser().username
+                                    var upvotes = self.story!["upvotes"] as? Int
+                                    var downvotes = self.story!["downvotes"] as? Int
+                                    self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
+                                    self.createTitleView.hidden = true
+                                    self.titleView.hidden = false
+                                    self.minimizeCreateView()
+                                    self.requestEventsForStory()
+                                    self.view.endEditing(true)
+                                } else {
+                                    // There was a problem, check error.description
+                                    println("There was an error saving the event: \(error.description)")
+                                }
+                            })
+                        } else {
+                            // There was a problem, check error.description
+                            println("There was an error saving the story: \(error.description)")
+                        }
+                    })
+                    
+                }
+            })
+        }
+    }
 }
