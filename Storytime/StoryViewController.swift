@@ -323,5 +323,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             requestEventsForStory()
         }
     }
+    
+    @IBAction func storyTableViewWasTapped(sender: AnyObject) {
+        minimizeCreateView()
+        self.view.endEditing(true)
+    }
 
 }
