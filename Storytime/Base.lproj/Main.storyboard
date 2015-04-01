@@ -199,9 +199,8 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="579-Bq-XMg" id="k8a-fD-VX3">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aKU-no-Xjj">
+                                                <imageView multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aKU-no-Xjj">
                                                     <rect key="frame" x="18" y="39" width="565" height="279.5"/>
-                                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="timestamp" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R0z-QG-dDV">
                                                     <rect key="frame" x="484" y="10" width="99" height="24"/>
@@ -223,6 +222,8 @@
                                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                         <gestureRecognizers/>
                                         <connections>
+                                            <outlet property="eventImageView" destination="aKU-no-Xjj" id="YgA-vF-d5O"/>
+                                            <outlet property="timestampLabel" destination="R0z-QG-dDV" id="leI-gd-KHD"/>
                                             <outletCollection property="gestureRecognizers" destination="RSB-Up-0BQ" appends="YES" id="wrQ-ND-BRs"/>
                                         </connections>
                                     </tableViewCell>

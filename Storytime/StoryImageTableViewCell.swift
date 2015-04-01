@@ -10,6 +10,10 @@ import UIKit
 
 class StoryImageTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var timestampLabel: UILabel!
+    
+    @IBOutlet weak var eventImageView: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

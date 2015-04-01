@@ -164,27 +164,29 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func requestStories() {
-        var query = PFQuery(className:"Story")
-        query.orderByDescending("upvotes")
-        query.findObjectsInBackgroundWithBlock {
-            (objects: [AnyObject]!, error: NSError!) -> Void in
-            if error == nil {
-                // The find succeeded.
-                println("Successfully retrieved \(objects.count) events.")
-                self.stories = objects
-                self.rankingTableView.reloadData()
-                // Do something with the found objects
-                if let objects = objects as? [PFObject] {
-                    for object in objects {
-                        var title = object["title"]
-                        println("Object ID: \(object.objectId), Timestamp: \(object.createdAt?), Text: \(title)")
+        dispatch_async(dispatch_get_main_queue(),{
+            var query = PFQuery(className:"Story")
+            query.orderByDescending("upvotes")
+            query.findObjectsInBackgroundWithBlock {
+                (objects: [AnyObject]!, error: NSError!) -> Void in
+                if error == nil {
+                    // The find succeeded.
+                    println("Successfully retrieved \(objects.count) events.")
+                    self.stories = objects
+                    self.rankingTableView.reloadData()
+                    // Do something with the found objects
+                    if let objects = objects as? [PFObject] {
+                        for object in objects {
+                            var title = object["title"]
+                            println("Object ID: \(object.objectId), Timestamp: \(object.createdAt?), Text: \(title)")
+                        }
                     }
+                } else {
+                    // Log details of the failure
+                    println("Error: \(error) \(error.userInfo!)")
                 }
-            } else {
-                // Log details of the failure
-                println("Error: \(error) \(error.userInfo!)")
             }
-        }
+        })
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

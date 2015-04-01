@@ -18,6 +18,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     let captureSession = AVCaptureSession()
     var captureDevice : AVCaptureDevice?
     var stillImageOutput : AVCaptureStillImageOutput?
+    var videoOutput : AVCaptureMovieFileOutput?
     var capturedImage : UIImage?
     
     
@@ -149,16 +150,32 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryTextTableViewCell") as StoryTextTableViewCell
         var event : PFObject?
         if (events != nil) {
             event = events![indexPath.row] as PFObject
-            cell.eventTextLabel.text = event!["text"] as? String
-            cell.timestampLabel.text = "\(event!.createdAt)"
+            if event!["type"] as NSString == "text" {
+                var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryTextTableViewCell") as StoryTextTableViewCell
+                cell.eventTextLabel.text = event!["text"] as? String
+                cell.timestampLabel.text = "\(event!.createdAt)"
+                return cell
+            } else {
+                var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryImageTableViewCell") as StoryImageTableViewCell
+                cell.timestampLabel.text = "\(event!.createdAt)"
+                let userImageFile = event!["image"] as PFFile
+                userImageFile.getDataInBackgroundWithBlock {
+                    (imageData: NSData!, error: NSError!) -> Void in
+                    if error == nil {
+                        let image = UIImage(data:imageData)
+                        cell.eventImageView.image = image
+                    }
+                }
+                
+                return cell
+            }
+            
+        } else {
+            return UITableViewCell()
         }
-        
-
-        return cell
 
     }
     
@@ -273,8 +290,28 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBAction func videoSelectorWasTapped(sender: AnyObject) {
         for view in createViews {
             (view as UIView).hidden = true
-            videoContainer.hidden = false
+            cameraContainer.hidden = false
         }
+        if captureSession.outputs.count > 0 {
+            for output in captureSession.outputs {
+                captureSession.removeOutput(output as AVCaptureOutput)
+            }
+        }
+        
+        videoOutput = AVCaptureMovieFileOutput()
+        
+        var totalSeconds : Float64 = 60;			//Total seconds
+        var preferredTimeScale : Int32 = 30;	//Frames per second
+        var maxDuration : CMTime  = CMTimeMakeWithSeconds(totalSeconds, preferredTimeScale)	//<<SET MAX DURATION
+        videoOutput?.maxRecordedDuration = maxDuration
+        
+        videoOutput?.minFreeDiskSpaceLimit = 1024 * 1024;						//<<SET MIN FREE SPACE IN BYTES FOR RECORDING TO CONTINUE ON A VOLUME
+        
+        if captureSession.canAddOutput(stillImageOutput) {
+            captureSession.addOutput(videoOutput)
+            println("video output added")
+        }
+
     }
 
     @IBAction func cameraSelectorWasTapped(sender: AnyObject) {
@@ -286,10 +323,20 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 captureSession.sessionPreset = AVCaptureSessionPresetHigh
         }
         
+        if captureSession.outputs.count > 0 {
+            for output in captureSession.outputs {
+                captureSession.removeOutput(output as AVCaptureOutput)
+            }
+        }
+        
         stillImageOutput = AVCaptureStillImageOutput()
         stillImageOutput!.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
-        captureSession.addOutput(stillImageOutput)
-        
+        if captureSession.canAddOutput(stillImageOutput) {
+            captureSession.addOutput(stillImageOutput)
+            println("still image output added")
+        }
+
+            
     }
 
 
@@ -302,28 +349,31 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func requestEventsForStory() {
-        var query = PFQuery(className:"Event")
-        query.whereKey("storyObject", equalTo:self.story)
-        query.orderByDescending("createdAt")
-        query.findObjectsInBackgroundWithBlock {
-            (objects: [AnyObject]!, error: NSError!) -> Void in
-            if error == nil {
-                // The find succeeded.
-                println("Successfully retrieved \(objects.count) events.")
-                self.events = objects
-                self.storyTableView.reloadData()
-                // Do something with the found objects
-                if let objects = objects as? [PFObject] {
-                    for object in objects {
-                        var text = object["text"]
-                        println("Object ID: \(object.objectId!), Timestamp: \(object.createdAt!), Text: \(text)")
+        dispatch_async(dispatch_get_main_queue(),{
+            var query = PFQuery(className:"Event")
+            query.whereKey("storyObject", equalTo:self.story)
+            query.orderByDescending("createdAt")
+            query.findObjectsInBackgroundWithBlock {
+                (objects: [AnyObject]!, error: NSError!) -> Void in
+                if error == nil {
+                    // The find succeeded.
+                    println("Successfully retrieved \(objects.count) events.")
+                    self.events = objects
+                    self.storyTableView.reloadData()
+                    // Do something with the found objects
+                    if let objects = objects as? [PFObject] {
+                        for object in objects {
+                            var text = object["text"]
+                            println("Object ID: \(object.objectId!), Timestamp: \(object.createdAt!), Text: \(text)")
+                        }
                     }
+                } else {
+                    // Log details of the failure
+                    println("Error: \(error) \(error.userInfo!)")
                 }
-            } else {
-                // Log details of the failure
-                println("Error: \(error) \(error.userInfo!)")
             }
-        }
+        })
+        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -414,5 +464,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             })
         }
+        minimizeCreateView()
     }
 }
