@@ -26,6 +26,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var documentPath : NSString = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as NSString
     var videoPath : String?
 
+    @IBOutlet weak var holdToRecordLabel: UILabel!
     
     @IBOutlet var videoLongPressGestureRecognizer: UILongPressGestureRecognizer!
 
@@ -40,6 +41,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var createTitleView: UIView!
 
     @IBOutlet weak var titleTextField: UITextField!
+
 
     @IBOutlet weak var createViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var createViewTrailingConstraint: NSLayoutConstraint!
@@ -59,6 +61,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         videoLongPressGestureRecognizer.enabled = false
         storyTableView.delegate = self
         storyTableView.dataSource = self
+        
+        holdToRecordLabel.layer.borderColor = UIColor.whiteColor().CGColor
+        holdToRecordLabel.layer.borderWidth = 3.0;
+        holdToRecordLabel.layer.cornerRadius = 17
+        holdToRecordLabel.clipsToBounds = true
+
+        createViewHeightConstraint.constant = self.view.bounds.width + 46
+        
         var createButton :UIBarButtonItem = UIBarButtonItem(title: "+", style: .Plain, target: self, action: "createEvent")
         self.navigationItem.rightBarButtonItem = createButton
         if newStory == false {
@@ -68,7 +78,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
 
             self.userLabel.text = self.story!["user"] as? String
-            createViewTopConstraint.constant = -280
+            createViewTopConstraint.constant = -(screenSize.width + 46)
             self.createView.hidden = true
             createTitleView.hidden = true
             titleView.hidden = false
@@ -107,14 +117,17 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
         
+        
+        
+        self.view.updateConstraints()
+        self.view.layoutIfNeeded()
+        
         if captureDevice != nil {
             
             beginSession()
             configureDevice()
             
         }
-        
-        
         
     }
     
@@ -241,7 +254,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func minimizeCreateView() {
         self.view.layoutIfNeeded()
         
-        self.createViewTopConstraint.constant = -280
+        self.createViewTopConstraint.constant = -(screenSize.width + 46)
         //        createViewLeadingConstraint.constant = screenSize.width/4
         //        createViewTrailingConstraint.constant = screenSize.width/4
         UIView.animateWithDuration(0.3, animations: {
@@ -332,6 +345,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBAction func videoSelectorWasTapped(sender: AnyObject) {
         cameraSendButton.hidden = true
         cameraSendButton.enabled = false
+        holdToRecordLabel.hidden = false
         videoLongPressGestureRecognizer.enabled = true
         for view in createViews {
             (view as UIView).hidden = true
@@ -364,6 +378,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBAction func cameraSelectorWasTapped(sender: AnyObject) {
         cameraSendButton.hidden = false
         cameraSendButton.enabled = true
+        holdToRecordLabel.hidden = true
         videoLongPressGestureRecognizer.enabled = false
         for view in createViews {
             (view as UIView).hidden = true
@@ -440,6 +455,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBAction func videoLongPressGestureRecognizerWasTapped(sender: AnyObject) {
         if sender.state == UIGestureRecognizerState.Began {
+            holdToRecordLabel.hidden = true
             var filename = "Video1"
             videoPath =  "\(documentPath)/\(filename).mp4"
 
@@ -448,10 +464,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if sender.state == UIGestureRecognizerState.Cancelled {
             self.videoOutput?.stopRecording()
+            holdToRecordLabel.hidden = false
         }
         
         if sender.state == UIGestureRecognizerState.Ended {
             self.videoOutput?.stopRecording()
+            holdToRecordLabel.hidden = false
         }
     }
     
