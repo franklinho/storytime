@@ -233,27 +233,30 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1Sp-W7-uAW" id="mqd-bj-yN5">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rQZ-QA-kQt">
-                                                    <rect key="frame" x="18" y="39" width="565" height="279.5"/>
-                                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="timestamp" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pUg-eM-eHA">
                                                     <rect key="frame" x="484" y="10" width="99" height="24"/>
                                                     <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lX6-HP-Kvp">
+                                                    <rect key="frame" x="8" y="41.5" width="584" height="284.5"/>
+                                                </view>
                                             </subviews>
                                             <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
-                                                <constraint firstAttribute="bottomMargin" secondItem="rQZ-QA-kQt" secondAttribute="bottom" constant="8" id="Btd-iv-sgj"/>
+                                                <constraint firstItem="lX6-HP-Kvp" firstAttribute="bottom" secondItem="mqd-bj-yN5" secondAttribute="bottomMargin" id="4Zp-eL-BFj"/>
+                                                <constraint firstItem="lX6-HP-Kvp" firstAttribute="top" secondItem="pUg-eM-eHA" secondAttribute="bottom" constant="8" id="8vE-cm-Jv8"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="lX6-HP-Kvp" secondAttribute="trailing" id="L86-8c-gaX"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="pUg-eM-eHA" secondAttribute="trailing" constant="10" id="S0u-BD-6jv"/>
+                                                <constraint firstItem="lX6-HP-Kvp" firstAttribute="leading" secondItem="mqd-bj-yN5" secondAttribute="leadingMargin" id="m5z-FV-Onf"/>
                                                 <constraint firstItem="pUg-eM-eHA" firstAttribute="top" secondItem="mqd-bj-yN5" secondAttribute="topMargin" constant="2" id="mkn-ls-X7o"/>
-                                                <constraint firstItem="rQZ-QA-kQt" firstAttribute="leading" secondItem="mqd-bj-yN5" secondAttribute="leadingMargin" constant="10" id="xIQ-xq-sOK"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="rQZ-QA-kQt" secondAttribute="trailing" constant="10" id="yhL-AQ-tGp"/>
-                                                <constraint firstItem="rQZ-QA-kQt" firstAttribute="top" secondItem="pUg-eM-eHA" secondAttribute="bottom" constant="5" id="z2O-QZ-ZhR"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="playerView" destination="lX6-HP-Kvp" id="GSL-Sv-fQS"/>
+                                            <outlet property="timestampLabel" destination="pUg-eM-eHA" id="0ka-OO-uLT"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="StoryTextTableViewCell" rowHeight="334" id="ceY-LX-QHm" customClass="StoryTextTableViewCell" customModule="Storytime" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
@@ -307,6 +310,7 @@
                                             </label>
                                         </subviews>
                                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
+                                        <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="centerX" secondItem="Vrh-zi-bam" secondAttribute="centerX" id="bbm-Z0-Vnc"/>
                                             <constraint firstAttribute="centerY" secondItem="Vrh-zi-bam" secondAttribute="centerY" id="puy-BV-mPW"/>
@@ -454,10 +458,14 @@
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
+                                        <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="centerX" secondItem="pr2-RN-Ddl" secondAttribute="centerX" id="TbK-j7-TsX"/>
                                             <constraint firstAttribute="bottom" secondItem="pr2-RN-Ddl" secondAttribute="bottom" constant="16" id="XGq-Qk-tQo"/>
                                         </constraints>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="49O-YB-Itb" appends="YES" id="Nbr-U0-Tk6"/>
+                                        </connections>
                                     </view>
                                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EDG-pS-8Gr" userLabel="Text Button">
                                         <rect key="frame" x="0.0" y="0.0" width="199.5" height="45.5"/>
@@ -687,6 +695,7 @@
                         <outlet property="titleView" destination="zC1-cs-0xd" id="yCz-iD-wGP"/>
                         <outlet property="userLabel" destination="4T8-ck-Y0C" id="anN-v3-GwR"/>
                         <outlet property="videoContainer" destination="ecm-OX-hx2" id="Iz7-Vj-lmV"/>
+                        <outlet property="videoLongPressGestureRecognizer" destination="49O-YB-Itb" id="oMJ-iU-Qt7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dQT-Aw-0Gi" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -700,6 +709,11 @@
                         <action selector="storyTableViewWasTapped:" destination="nXj-xd-FNA" id="IjQ-dg-PHd"/>
                     </connections>
                 </tapGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="49O-YB-Itb">
+                    <connections>
+                        <action selector="videoLongPressGestureRecognizerWasTapped:" destination="nXj-xd-FNA" id="9fq-nt-fxI"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1849" y="360"/>
         </scene>

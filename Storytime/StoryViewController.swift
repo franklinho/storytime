@@ -8,8 +8,10 @@
 
 import UIKit
 import AVFoundation
+import MediaPlayer
 
-class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+
+class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate {
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var newStory : Bool = false
     var storyCreated : Bool = false
@@ -17,18 +19,22 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var events : NSArray?
     let captureSession = AVCaptureSession()
     var captureDevice : AVCaptureDevice?
+    var audioCaptureDevice : AVCaptureDevice?
     var stillImageOutput : AVCaptureStillImageOutput?
     var videoOutput : AVCaptureMovieFileOutput?
     var capturedImage : UIImage?
+    var documentPath : NSString = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as NSString
+    var videoPath : String?
+
     
-    
+    @IBOutlet var videoLongPressGestureRecognizer: UILongPressGestureRecognizer!
+
     @IBOutlet weak var storyPointsLabel: UILabel!
     @IBOutlet weak var userLabel: UILabel!
     
     @IBOutlet weak var cameraSendButton: UIButton!
     @IBOutlet weak var storyTitleLabel: UILabel!
-    
-    @IBOutlet weak var titleView: UIView!
+         @IBOutlet weak var titleView: UIView!
     @IBOutlet weak var createTextView: UITextView!
     @IBOutlet weak var createView: UIView!
     @IBOutlet weak var createTitleView: UIView!
@@ -50,6 +56,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        videoLongPressGestureRecognizer.enabled = false
         storyTableView.delegate = self
         storyTableView.dataSource = self
         var createButton :UIBarButtonItem = UIBarButtonItem(title: "+", style: .Plain, target: self, action: "createEvent")
@@ -95,6 +102,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 if(device.position == AVCaptureDevicePosition.Back) {
                     captureDevice = device as? AVCaptureDevice
                 }
+            } else if (device.hasMediaType(AVMediaTypeAudio)){
+                audioCaptureDevice = device as? AVCaptureDevice
             }
         }
         
@@ -104,6 +113,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             configureDevice()
             
         }
+        
+        
+        
     }
     
     func configureDevice() {
@@ -124,10 +136,15 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func beginSession() {
         var err : NSError? = nil
         captureSession.addInput(AVCaptureDeviceInput(device: captureDevice, error: &err))
+        captureSession.addInput(AVCaptureDeviceInput(device: audioCaptureDevice, error: &err))
         
         if err != nil {
             println("error: \(err?.localizedDescription)")
         }
+        
+
+
+        
         
         var previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
@@ -158,7 +175,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 cell.eventTextLabel.text = event!["text"] as? String
                 cell.timestampLabel.text = "\(event!.createdAt)"
                 return cell
-            } else {
+            } else if event!["type"] as String == "photo" {
                 var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryImageTableViewCell") as StoryImageTableViewCell
                 cell.timestampLabel.text = "\(event!.createdAt)"
                 let userImageFile = event!["image"] as PFFile
@@ -170,6 +187,31 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                 }
                 
+                return cell
+            } else {
+                var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryVideoTableViewCell") as StoryVideoTableViewCell
+                cell.timestampLabel.text = "\(event!.createdAt)"
+                
+                var path = "\(documentPath)/\(indexPath.row).mp4"
+                
+                let videoFile = event!["video"] as PFFile
+                videoFile.getDataInBackgroundWithBlock {
+                    (videoData: NSData!, error: NSError!) -> Void in
+                    if error == nil {
+                        videoData.writeToFile(path, atomically: true)
+                        println("File now at \(path)")
+                    }
+                }
+                var movieURL = NSURL(fileURLWithPath: path)
+                
+                var player = MPMoviePlayerController()
+                player.contentURL = movieURL
+                player.view
+                
+                player.view.frame = CGRectMake(0, 0, cell.playerView.frame.width, cell.playerView.frame.height)
+                cell.playerView.addSubview(player.view)
+                player.play()
+
                 return cell
             }
             
@@ -288,9 +330,15 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     @IBAction func videoSelectorWasTapped(sender: AnyObject) {
+        cameraSendButton.hidden = true
+        cameraSendButton.enabled = false
+        videoLongPressGestureRecognizer.enabled = true
         for view in createViews {
             (view as UIView).hidden = true
             cameraContainer.hidden = false
+        }
+        if captureSession.canSetSessionPreset(AVCaptureSessionPresetHigh){
+            captureSession.sessionPreset = AVCaptureSessionPresetHigh
         }
         if captureSession.outputs.count > 0 {
             for output in captureSession.outputs {
@@ -298,23 +346,25 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
         
-        videoOutput = AVCaptureMovieFileOutput()
+
         
-        var totalSeconds : Float64 = 60;			//Total seconds
-        var preferredTimeScale : Int32 = 30;	//Frames per second
-        var maxDuration : CMTime  = CMTimeMakeWithSeconds(totalSeconds, preferredTimeScale)	//<<SET MAX DURATION
-        videoOutput?.maxRecordedDuration = maxDuration
+        videoOutput = AVCaptureMovieFileOutput()
         
         videoOutput?.minFreeDiskSpaceLimit = 1024 * 1024;						//<<SET MIN FREE SPACE IN BYTES FOR RECORDING TO CONTINUE ON A VOLUME
         
-        if captureSession.canAddOutput(stillImageOutput) {
+
+        if captureSession.canAddOutput(videoOutput) {
             captureSession.addOutput(videoOutput)
             println("video output added")
         }
 
     }
 
+    
     @IBAction func cameraSelectorWasTapped(sender: AnyObject) {
+        cameraSendButton.hidden = false
+        cameraSendButton.enabled = true
+        videoLongPressGestureRecognizer.enabled = false
         for view in createViews {
             (view as UIView).hidden = true
             cameraContainer.hidden = false
@@ -342,6 +392,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     @IBAction func textSelectorWasTapped(sender: AnyObject) {
         println("Text button was tapped")
+        videoLongPressGestureRecognizer.enabled = false
         for view in createViews {
             (view as UIView).hidden = true
             textContainer.hidden = false
@@ -386,6 +437,96 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         minimizeCreateView()
         self.view.endEditing(true)
     }
+    
+    @IBAction func videoLongPressGestureRecognizerWasTapped(sender: AnyObject) {
+        if sender.state == UIGestureRecognizerState.Began {
+            var filename = "Video1"
+            videoPath =  "\(documentPath)/\(filename).mp4"
+
+            self.videoOutput?.startRecordingToOutputFileURL(NSURL(fileURLWithPath: self.videoPath!), recordingDelegate: self)
+        }
+        
+        if sender.state == UIGestureRecognizerState.Cancelled {
+            self.videoOutput?.stopRecording()
+        }
+        
+        if sender.state == UIGestureRecognizerState.Ended {
+            self.videoOutput?.stopRecording()
+        }
+    }
+    
+    func captureOutput(captureOutput: AVCaptureFileOutput!, didStartRecordingToOutputFileAtURL fileURL: NSURL!, fromConnections connections: [AnyObject]!) {
+        println("Video recording started")
+    }
+    
+    func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
+        
+        var data = NSData(contentsOfURL: outputFileURL)
+        println("Successfully saved video at \(outputFileURL)")
+        
+        var videoFile = PFFile(name: "video.mp4", contentsAtPath: "\(videoPath!)")
+        if (self.story != nil) {
+            var event: PFObject = PFObject(className: "Event")
+            event["type"] = "video"
+            event["storyObject"] = self.story!
+            event["video"] = videoFile
+            event.saveInBackgroundWithBlock({
+                (success: Bool, error: NSError!) -> Void in
+                if (success) {
+                    // The object has been saved.
+                    println("Event successfully saved")
+                    self.minimizeCreateView()
+                    self.requestEventsForStory()
+                    self.view.endEditing(true)
+                } else {
+                    // There was a problem, check error.description
+                    println("There was an error saving the event: \(error.description)")
+                }
+            })
+        } else {
+            
+            self.story = PFObject(className: "Story")
+            self.story!["title"] = self.titleTextField.text
+            self.story!["user"] = PFUser.currentUser().username
+            self.story!["upvotes"] = 1
+            self.story!["downvotes"] = 0
+            self.story!.saveInBackgroundWithBlock({
+                (success: Bool, error: NSError!) -> Void in
+                if (success) {
+                    // The object has been saved.
+                    var event: PFObject = PFObject(className: "Event")
+                    event["type"] = "video"
+                    event["storyObject"] = self.story!
+                    event["video"] = videoFile
+                    event.saveInBackgroundWithBlock({
+                        (success: Bool, error: NSError!) -> Void in
+                        if (success) {
+                            // The object has been saved.
+                            println("Story and event successfully saved")
+                            self.storyTitleLabel.text = self.story!["title"] as? String
+                            self.userLabel.text = PFUser.currentUser().username
+                            var upvotes = self.story!["upvotes"] as? Int
+                            var downvotes = self.story!["downvotes"] as? Int
+                            self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
+                            self.createTitleView.hidden = true
+                            self.titleView.hidden = false
+                            self.minimizeCreateView()
+                            self.requestEventsForStory()
+                            self.view.endEditing(true)
+                        } else {
+                            // There was a problem, check error.description
+                            println("There was an error saving the event: \(error.description)")
+                        }
+                    })
+                } else {
+                    // There was a problem, check error.description
+                    println("There was an error saving the story: \(error.description)")
+                }
+            })
+            
+        }
+        
+    }
 
     @IBAction func photoSendButtonWasTapped(sender: AnyObject) {
         println("\(stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo))")
@@ -393,10 +534,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             stillImageOutput?.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: {
                 (sampleBuffer,error) in
                 var imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
-//                var dataProvider = CGDataProviderCreateWithCFData(imageData)
-//                var cgImageRef = CGImageCreateWithJPEGDataProvider(dataProvider, nil, true, kCGRenderingIntentDefault)
-//                var image = UIImage(CGImage: cgImageRef, scale: 1.0, orientation: UIImageOrientation.Right)
-                var imageFile : PFFile = PFFile(name: "image.png", data: imageData)
+                var dataProvider = CGDataProviderCreateWithCFData(imageData)
+                var cgImageRef = CGImageCreateWithJPEGDataProvider(dataProvider, nil, true, kCGRenderingIntentDefault)
+                var photoImage = UIImage(CGImage: cgImageRef, scale: 1.0, orientation: UIImageOrientation.Right)
+                
+                
+                var squareImage = self.squareImageWithImage(photoImage!)
+                var squareImageData = UIImageJPEGRepresentation(squareImage, 1.0)
+                var imageFile : PFFile = PFFile(name: "image.png", data: squareImageData)
                 imageFile.save()
                 
             
@@ -466,4 +611,22 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         minimizeCreateView()
     }
+    
+    func squareImageWithImage(image : UIImage) -> UIImage {
+        
+        var refWidth : CGFloat = CGFloat(CGImageGetWidth(image.CGImage))
+        var refHeight : CGFloat = CGFloat(CGImageGetHeight(image.CGImage))
+        
+        var x = (refWidth - CGFloat(image.size.width)) / 2.0
+        var y = (refHeight - CGFloat(image.size.width)) / 2.0
+        
+        var cropRect : CGRect = CGRectMake(x, y, image.size.width, image.size.width)
+        var imageRef : CGImageRef = CGImageCreateWithImageInRect(image.CGImage, cropRect)
+        var cropped = UIImage(CGImage: imageRef, scale: 0, orientation: image.imageOrientation)
+        
+        return cropped!
+        
+    }
+    
+    
 }
