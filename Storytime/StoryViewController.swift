@@ -240,6 +240,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 var movieURL = NSURL(fileURLWithPath: path)
                 cell.player = AVPlayer(URL: movieURL)
                 
+                
                 cell.playerLayer = AVPlayerLayer(player: cell.player!)
                 cell.playerLayer!.frame = CGRectMake(0, 0, screenSize.width, screenSize.width)
                 cell.playerLayer!.videoGravity = AVLayerVideoGravityResizeAspect
@@ -816,6 +817,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if playableCells.lastObject?.player != nil {
             playingVideoCell = playableCells[0] as StoryVideoTableViewCell
+            playingVideoCell!.player!.actionAtItemEnd = .None
+            
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "restartVideoFromBeginning", name: AVPlayerItemDidPlayToEndTimeNotification, object: playingVideoCell!.player!.currentItem)
+            
             playingVideoCell!.player!.play()
             println("Playing cell")
         }
@@ -832,6 +837,17 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         println("StoryTableview Frame : \(storyTableView.frame)")
         var completelyVisible : Bool = CGRectContainsRect(storyTableView.frame, cellRect)
         return completelyVisible
+    }
+    
+    func restartVideoFromBeginning() {
+        //create a CMTime for zero seconds so we can go back to the beginning
+        let seconds : Int64 = 0
+        let preferredTimeScale : Int32 = 1
+        let seekTime : CMTime = CMTimeMake(seconds, preferredTimeScale)
+        
+        playingVideoCell!.player!.seekToTime(seekTime)
+        
+        playingVideoCell!.player!.play()
     }
     
 }
