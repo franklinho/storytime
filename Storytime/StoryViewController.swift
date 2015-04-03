@@ -490,46 +490,46 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
 //        var data = NSData(contentsOfURL: outputFileURL)
         println("Successfully saved video at \(outputFileURL)")
-        self.saveVideoEvent()
+        
         
 //        var filename = "CroppedVideo1"
 //        croppedVideoPath =  "\(documentPath)/\(filename).mp4"
-//        
+//
 //        var asset : AVAsset = AVAsset.assetWithURL(outputFileURL) as AVAsset
-//        
+//
 //        var composition : AVMutableComposition = AVMutableComposition()
 //        composition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: Int32(kCMPersistentTrackID_Invalid))
-//        
+//
 //        var clipVideoTrack : AVAssetTrack = asset.tracksWithMediaType(AVMediaTypeVideo)[0] as AVAssetTrack
-//        
+//
 //        var videoComposition: AVMutableVideoComposition = AVMutableVideoComposition()
 //        videoComposition.frameDuration = CMTimeMake(1, 60)
 //        videoComposition.renderSize = CGSizeMake(clipVideoTrack.naturalSize.height, clipVideoTrack.naturalSize.height)
-//        
+//
 //        var instruction: AVMutableVideoCompositionInstruction = AVMutableVideoCompositionInstruction()
 //        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeMakeWithSeconds(60, 30))
-//        
-//        
+//
+//
 //        var transformer: AVMutableVideoCompositionLayerInstruction =
 //        AVMutableVideoCompositionLayerInstruction(assetTrack: clipVideoTrack)
-//    
+//
 //
 //        var t1: CGAffineTransform = CGAffineTransformMakeTranslation(clipVideoTrack.naturalSize.height, -(clipVideoTrack.naturalSize.width - clipVideoTrack.naturalSize.height)/2 )
 //        var t2: CGAffineTransform = CGAffineTransformRotate(t1, CGFloat(M_PI_2))
-//        
+//
 //        var finalTransform: CGAffineTransform = t2
-//        
+//
 //        transformer.setTransform(finalTransform, atTime: kCMTimeZero)
-//        
+//
 //        instruction.layerInstructions = NSArray(object: transformer)
 //        videoComposition.instructions = NSArray(object: instruction)
-//        
-//        
+//
+//
 //        var exporter = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetHighestQuality)
 //        exporter.videoComposition = videoComposition
 //        exporter.outputFileType = AVFileTypeQuickTimeMovie
 //        exporter.outputURL = NSURL(fileURLWithPath: croppedVideoPath!)
-//        
+//
 //        exporter.exportAsynchronouslyWithCompletionHandler({
 //            
 //            //display video after export is complete, for example...
@@ -537,10 +537,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //            println("Cropped video saved at \(outputURL)")
 //            self.saveVideoEvent()
 //            
-//        })
-        
+//        })        
 
-        
+        self.saveVideoEvent()
         
     }
     
