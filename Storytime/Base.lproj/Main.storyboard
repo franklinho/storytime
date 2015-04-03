@@ -733,7 +733,7 @@
                         <action selector="storyTableViewWasTapped:" destination="nXj-xd-FNA" id="IjQ-dg-PHd"/>
                     </connections>
                 </tapGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="49O-YB-Itb">
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.0" id="49O-YB-Itb">
                     <connections>
                         <action selector="videoLongPressGestureRecognizerWasTapped:" destination="nXj-xd-FNA" id="9fq-nt-fxI"/>
                     </connections>

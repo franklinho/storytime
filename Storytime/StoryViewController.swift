@@ -30,6 +30,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var playingVideoCell : StoryVideoTableViewCell?
 
 
+
     @IBOutlet weak var holdToRecordLabel: UILabel!
     
     @IBOutlet var videoLongPressGestureRecognizer: UILongPressGestureRecognizer!
@@ -61,6 +62,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
 
+//        NSFileManager.defaultManager().createDirectoryAtPath("\(documentPath)/videos/", withIntermediateDirectories: false, attributes: nil, error: nil)
+        
         storyTableView.rowHeight = screenSize.width
         // Do any additional setup after loading the view.
         videoLongPressGestureRecognizer.enabled = false
@@ -226,8 +229,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
                 
                 cell.timestampLabel.text = "\(event!.createdAt)"
-                
                 var path = "\(documentPath)/\(indexPath.row).mp4"
+                
+                if (NSFileManager.defaultManager().fileExistsAtPath(path)) {
+                    NSFileManager.defaultManager().removeItemAtPath(path, error: nil)
+                }
+                
 
                 let videoFile = event!["video"] as PFFile
                 videoFile.getDataInBackgroundWithBlock {
@@ -235,19 +242,31 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     if error == nil {
                         videoData.writeToFile(path, atomically: true)
                         println("File now at \(path)")
+                        var movieURL = NSURL(fileURLWithPath: path)
+                        cell.player = AVPlayer(URL: movieURL)
+                        
+                        
+                        cell.playerLayer = AVPlayerLayer(player: cell.player!)
+                        cell.playerLayer!.frame = CGRectMake(0, 0, self.screenSize.width, self.screenSize.width)
+                        cell.playerLayer!.videoGravity = AVLayerVideoGravityResizeAspect
+                        cell.playerLayer!.needsDisplayOnBoundsChange = true
+                        
+                        cell.contentView.layer.addSublayer(cell.playerLayer)
+                        cell.contentView.layer.needsDisplayOnBoundsChange = true
+                        
+                        if self.cellCompletelyOnScreen(indexPath){
+                            self.playingVideoCell = cell
+                            self.playingVideoCell!.player!.play()
+                            self.playingVideoCell!.player!.actionAtItemEnd = .None
+                            
+                            
+                            NSNotificationCenter.defaultCenter().addObserver(self, selector: "restartVideoFromBeginning", name: AVPlayerItemDidPlayToEndTimeNotification, object: self.playingVideoCell!.player!.currentItem)
+                        }
+                        
+                        
                     }
                 }
-                var movieURL = NSURL(fileURLWithPath: path)
-                cell.player = AVPlayer(URL: movieURL)
                 
-                
-                cell.playerLayer = AVPlayerLayer(player: cell.player!)
-                cell.playerLayer!.frame = CGRectMake(0, 0, screenSize.width, screenSize.width)
-                cell.playerLayer!.videoGravity = AVLayerVideoGravityResizeAspect
-                cell.playerLayer!.needsDisplayOnBoundsChange = true
-                
-                cell.contentView.layer.addSublayer(cell.playerLayer)
-                cell.contentView.layer.needsDisplayOnBoundsChange = true
                 
                 return cell
                 
@@ -270,6 +289,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             })
         
+        if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 {
+            playingVideoCell?.player?.pause()
+        }
+        
     }
 
     @IBAction func closeCompose(sender: AnyObject) {
@@ -277,6 +300,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func minimizeCreateView() {
+        
         self.view.layoutIfNeeded()
         
         self.createViewTopConstraint.constant = -(screenSize.width + 46)
@@ -288,8 +312,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 (value: Bool) in
                 self.createView.hidden = true
         })
-
+        vision.stopPreview()
+        videoLongPressGestureRecognizer.enabled = false
+        for view in createViews {
+            (view as UIView).hidden = true
+            textContainer.hidden = false
+        }
     }
+    
     
     /*
     // MARK: - Navigation
@@ -443,7 +473,15 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+    func deleteVideoFiles() {
+        var documentFiles = NSFileManager.defaultManager().contentsOfDirectoryAtPath(documentPath, error: nil)
+        for file in documentFiles! {
+            NSFileManager.defaultManager().removeItemAtPath("\(documentPath)/file", error: nil)
+        }
+    }
+    
     func requestEventsForStory() {
+        
         dispatch_async(dispatch_get_main_queue(),{
             var query = PFQuery(className:"Event")
             query.whereKey("storyObject", equalTo:self.story)
@@ -788,6 +826,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if (playingVideoCell != nil && playingVideoCell!.player != nil) {
             if playingVideoCell!.player!.rate == 1.0 {
                 playingVideoCell!.player?.pause()
+                
                 println("Pausing video")
             }
         }
@@ -815,13 +854,18 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         }
         
-        if playableCells.lastObject?.player != nil {
+        if playableCells.count > 0 && playableCells[0].player != nil {
             playingVideoCell = playableCells[0] as StoryVideoTableViewCell
-            playingVideoCell!.player!.actionAtItemEnd = .None
             
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: "restartVideoFromBeginning", name: AVPlayerItemDidPlayToEndTimeNotification, object: playingVideoCell!.player!.currentItem)
+            if playingVideoCell!.player? != nil {
+                playingVideoCell!.player!.play()
+                playingVideoCell!.player!.actionAtItemEnd = .None
+                
+                
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: "restartVideoFromBeginning", name: AVPlayerItemDidPlayToEndTimeNotification, object: playingVideoCell!.player!.currentItem)
+            }
             
-            playingVideoCell!.player!.play()
+            
             println("Playing cell")
         }
         
