@@ -11,6 +11,7 @@ import AVFoundation
 
 class StoryVideoTableViewCell: UITableViewCell {
     
+    var playerLayer : AVPlayerLayer?
     @IBOutlet weak var playerView: UIView!
     @IBOutlet weak var timestampLabel: UILabel!
     override func awakeFromNib() {

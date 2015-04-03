@@ -11,7 +11,7 @@ import AVFoundation
 import MediaPlayer
 
 
-class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate {
+class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate {
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var newStory : Bool = false
     var storyCreated : Bool = false
@@ -26,6 +26,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var documentPath : NSString = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as NSString
     var videoPath : String?
     var croppedVideoPath : String?
+    var vision : PBJVision = PBJVision.sharedInstance()
+
 
     @IBOutlet weak var holdToRecordLabel: UILabel!
     
@@ -102,71 +104,83 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //        createViewTrailingConstraint.constant = screenSize.width/4
 
         createViews = [cameraContainer, textContainer, videoContainer]
-        captureSession.sessionPreset = AVCaptureSessionPresetLow
-        let devices = AVCaptureDevice.devices()
-        println(devices)
+//        captureSession.sessionPreset = AVCaptureSessionPresetLow
+//        let devices = AVCaptureDevice.devices()
+//        println(devices)
         
         // Loop through all the capture devices on this phone
-        for device in devices {
-            // Make sure this particular device supports video
-            if (device.hasMediaType(AVMediaTypeVideo)) {
-                // Finally check the position and confirm we've got the back camera
-                if(device.position == AVCaptureDevicePosition.Back) {
-                    captureDevice = device as? AVCaptureDevice
-                }
-            } else if (device.hasMediaType(AVMediaTypeAudio)){
-                audioCaptureDevice = device as? AVCaptureDevice
-            }
-        }
-        
+//        for device in devices {
+//            // Make sure this particular device supports video
+//            if (device.hasMediaType(AVMediaTypeVideo)) {
+//                // Finally check the position and confirm we've got the back camera
+//                if(device.position == AVCaptureDevicePosition.Back) {
+//                    captureDevice = device as? AVCaptureDevice
+//                }
+//            } else if (device.hasMediaType(AVMediaTypeAudio)){
+//                audioCaptureDevice = device as? AVCaptureDevice
+//            }
+//        }
+//        
         
         
         self.view.updateConstraints()
         self.view.layoutIfNeeded()
         
-        if captureDevice != nil {
-            
-            beginSession()
-            configureDevice()
-            
-        }
+        var previewLayer = PBJVision.sharedInstance().previewLayer
+        previewLayer.frame = cameraContainer.bounds
+        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        cameraContainer.layer.insertSublayer(previewLayer, atIndex: 0)
+        
+//        if captureDevice != nil {
+//            
+//            beginSession()
+        configureDevice()
+//
+//        }
         
     }
     
     func configureDevice() {
-        if let device = captureDevice {
-            device.lockForConfiguration(nil)
-            if captureDevice!.isFocusModeSupported(AVCaptureFocusMode.ContinuousAutoFocus){
-                
-                device.focusMode = AVCaptureFocusMode.ContinuousAutoFocus
-            }
-            if (captureDevice?.focusPointOfInterestSupported != false) {
-                captureDevice?.focusPointOfInterest = CGPointMake(0.5, 0.5)
-            }
-            device.unlockForConfiguration()
-        }
-        
+//        if let device = captureDevice {
+//            device.lockForConfiguration(nil)
+//            if captureDevice!.isFocusModeSupported(AVCaptureFocusMode.ContinuousAutoFocus){
+//                
+//                device.focusMode = AVCaptureFocusMode.ContinuousAutoFocus
+//            }
+//            if (captureDevice?.focusPointOfInterestSupported != false) {
+//                captureDevice?.focusPointOfInterest = CGPointMake(0.5, 0.5)
+//            }
+//            device.unlockForConfiguration()
+//        }
+
+        vision.delegate = self
+
+
+        vision.cameraOrientation = PBJCameraOrientation.Portrait
+        vision.focusMode = PBJFocusMode.ContinuousAutoFocus
+        vision.outputFormat = PBJOutputFormat.Square
+        vision.maximumCaptureDuration = CMTimeMakeWithSeconds(10, 600)
     }
     
-    func beginSession() {
-        var err : NSError? = nil
-        captureSession.addInput(AVCaptureDeviceInput(device: captureDevice, error: &err))
-        captureSession.addInput(AVCaptureDeviceInput(device: audioCaptureDevice, error: &err))
-        
-        if err != nil {
-            println("error: \(err?.localizedDescription)")
-        }
-        
-
-
-        
-        
-        var previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        self.cameraContainer.layer.insertSublayer(previewLayer, atIndex: 0)
-        previewLayer?.frame = CGRectMake(0, 0, cameraContainer.layer.frame.width, cameraContainer.layer.frame.height)
-        captureSession.startRunning()
-    }
+//    func beginSession() {
+//        var err : NSError? = nil
+//        captureSession.addInput(AVCaptureDeviceInput(device: captureDevice, error: &err))
+//        captureSession.addInput(AVCaptureDeviceInput(device: audioCaptureDevice, error: &err))
+//        
+//        if err != nil {
+//            println("error: \(err?.localizedDescription)")
+//        }
+//        
+//
+//
+//        
+//        
+//        var previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+//        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+//        self.cameraContainer.layer.insertSublayer(previewLayer, atIndex: 0)
+//        previewLayer?.frame = CGRectMake(0, 0, cameraContainer.layer.frame.width, cameraContainer.layer.frame.height)
+//        captureSession.startRunning()
+//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -206,6 +220,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             } else {
                 var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryVideoTableViewCell") as StoryVideoTableViewCell
                 
+                if cell.playerLayer != nil {
+                    cell.playerLayer!.removeFromSuperlayer()
+                }
+                
                 cell.timestampLabel.text = "\(event!.createdAt)"
                 
                 var path = "\(documentPath)/\(indexPath.row).mp4"
@@ -221,12 +239,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 var movieURL = NSURL(fileURLWithPath: path)
                 var avPlayer = AVPlayer(URL: movieURL)
                 
-                var playerLayer : AVPlayerLayer = AVPlayerLayer(player: avPlayer)
-                playerLayer.frame = CGRectMake(0, 0, screenSize.width, screenSize.width)
-                playerLayer.videoGravity = AVLayerVideoGravityResizeAspect
-                playerLayer.needsDisplayOnBoundsChange = true
+                cell.playerLayer = AVPlayerLayer(player: avPlayer)
+                cell.playerLayer!.frame = CGRectMake(0, 0, screenSize.width, screenSize.width)
+                cell.playerLayer!.videoGravity = AVLayerVideoGravityResizeAspect
+                cell.playerLayer!.needsDisplayOnBoundsChange = true
                 
-                cell.contentView.layer.addSublayer(playerLayer)
+                cell.contentView.layer.addSublayer(cell.playerLayer)
                 cell.contentView.layer.needsDisplayOnBoundsChange = true
 
                 avPlayer.play()
@@ -350,6 +368,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     @IBAction func videoSelectorWasTapped(sender: AnyObject) {
+        vision.cameraMode = PBJCameraMode.Video
         cameraSendButton.hidden = true
         cameraSendButton.enabled = false
         holdToRecordLabel.hidden = false
@@ -358,31 +377,33 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             (view as UIView).hidden = true
             cameraContainer.hidden = false
         }
-        if captureSession.canSetSessionPreset(AVCaptureSessionPresetHigh){
-            captureSession.sessionPreset = AVCaptureSessionPresetHigh
-        }
-        if captureSession.outputs.count > 0 {
-            for output in captureSession.outputs {
-                captureSession.removeOutput(output as AVCaptureOutput)
-            }
-        }
-        
-
-        
-        videoOutput = AVCaptureMovieFileOutput()
-        
-        videoOutput?.minFreeDiskSpaceLimit = 1024 * 1024;						//<<SET MIN FREE SPACE IN BYTES FOR RECORDING TO CONTINUE ON A VOLUME
-        
-
-        if captureSession.canAddOutput(videoOutput) {
-            captureSession.addOutput(videoOutput)
-            println("video output added")
-        }
+//        if captureSession.canSetSessionPreset(AVCaptureSessionPresetHigh){
+//            captureSession.sessionPreset = AVCaptureSessionPresetHigh
+//        }
+//        if captureSession.outputs.count > 0 {
+//            for output in captureSession.outputs {
+//                captureSession.removeOutput(output as AVCaptureOutput)
+//            }
+//        }
+//        
+//
+//        
+//        videoOutput = AVCaptureMovieFileOutput()
+//        
+//        videoOutput?.minFreeDiskSpaceLimit = 1024 * 1024;						//<<SET MIN FREE SPACE IN BYTES FOR RECORDING TO CONTINUE ON A VOLUME
+//        
+//
+//        if captureSession.canAddOutput(videoOutput) {
+//            captureSession.addOutput(videoOutput)
+//            println("video output added")
+//        }
+        vision.startPreview()
 
     }
 
     
     @IBAction func cameraSelectorWasTapped(sender: AnyObject) {
+        vision.cameraMode = PBJCameraMode.Photo
         cameraSendButton.hidden = false
         cameraSendButton.enabled = true
         holdToRecordLabel.hidden = true
@@ -391,24 +412,25 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             (view as UIView).hidden = true
             cameraContainer.hidden = false
         }
-        if captureSession.canSetSessionPreset(AVCaptureSessionPresetHigh){
-                captureSession.sessionPreset = AVCaptureSessionPresetHigh
-        }
-        
-        if captureSession.outputs.count > 0 {
-            for output in captureSession.outputs {
-                captureSession.removeOutput(output as AVCaptureOutput)
-            }
-        }
-        
-        stillImageOutput = AVCaptureStillImageOutput()
-        stillImageOutput!.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
-        if captureSession.canAddOutput(stillImageOutput) {
-            captureSession.addOutput(stillImageOutput)
-            println("still image output added")
-        }
+//        if captureSession.canSetSessionPreset(AVCaptureSessionPresetHigh){
+//                captureSession.sessionPreset = AVCaptureSessionPresetHigh
+//        }
+//        
+//        if captureSession.outputs.count > 0 {
+//            for output in captureSession.outputs {
+//                captureSession.removeOutput(output as AVCaptureOutput)
+//            }
+//        }
+//        
+//        stillImageOutput = AVCaptureStillImageOutput()
+//        stillImageOutput!.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
+//        if captureSession.canAddOutput(stillImageOutput) {
+//            captureSession.addOutput(stillImageOutput)
+//            println("still image output added")
+//        }
 
-            
+       vision.startPreview()
+        
     }
 
 
@@ -463,21 +485,30 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBAction func videoLongPressGestureRecognizerWasTapped(sender: AnyObject) {
         if sender.state == UIGestureRecognizerState.Began {
             holdToRecordLabel.hidden = true
-            var filename = "Video1"
-            videoPath =  "\(documentPath)/\(filename).mp4"
-
-            self.videoOutput?.startRecordingToOutputFileURL(NSURL(fileURLWithPath: self.videoPath!), recordingDelegate: self)
+//            var filename = "Video1"
+//            videoPath =  "\(documentPath)/\(filename).mp4"
+//
+//            self.videoOutput?.startRecordingToOutputFileURL(NSURL(fileURLWithPath: self.videoPath!), recordingDelegate: self)
+            vision.startVideoCapture()
         }
         
         if sender.state == UIGestureRecognizerState.Cancelled {
-            self.videoOutput?.stopRecording()
-            holdToRecordLabel.hidden = false
+//            self.videoOutput?.stopRecording()
+//            holdToRecordLabel.hidden = false
+            vision.endVideoCapture()
         }
         
         if sender.state == UIGestureRecognizerState.Ended {
-            self.videoOutput?.stopRecording()
+//            self.videoOutput?.stopRecording()
             holdToRecordLabel.hidden = false
+            vision.endVideoCapture()
         }
+    }
+    
+    func vision(vision: PBJVision!, capturedVideo videoDict: [NSObject : AnyObject]!, error: NSError!) {
+        self.videoPath = videoDict[PBJVisionVideoPathKey] as String
+        self.saveVideoEvent()
+        
     }
     
     func captureOutput(captureOutput: AVCaptureFileOutput!, didStartRecordingToOutputFileAtURL fileURL: NSURL!, fromConnections connections: [AnyObject]!) {
@@ -607,27 +638,60 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
         }
     }
+    
+    func vision(vision: PBJVision!, capturedPhoto photoDict: [NSObject : AnyObject]!, error: NSError!) {
+        capturedImage = photoDict[PBJVisionPhotoImageKey] as UIImage
+        sendPhoto()
+    }
 
     @IBAction func photoSendButtonWasTapped(sender: AnyObject) {
-        println("\(stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo))")
-        if let videoConnection = stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo){
-            stillImageOutput?.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: {
-                (sampleBuffer,error) in
-                var imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
-                var dataProvider = CGDataProviderCreateWithCFData(imageData)
-                var cgImageRef = CGImageCreateWithJPEGDataProvider(dataProvider, nil, true, kCGRenderingIntentDefault)
-                var photoImage = UIImage(CGImage: cgImageRef, scale: 1.0, orientation: UIImageOrientation.Right)
-                
-                
-                var squareImage = self.squareImageWithImage(photoImage!)
-                var squareImageData = UIImageJPEGRepresentation(squareImage, 1.0)
-                var imageFile : PFFile = PFFile(name: "image.png", data: squareImageData)
-                imageFile.save()
-                
+        vision.capturePhoto()
+//        println("\(stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo))")
+//        if let videoConnection = stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo){
+//            stillImageOutput?.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: {
+//                (sampleBuffer,error) in
+//                
+//            })
+//        }
+    }
+    
+    func sendPhoto() {
+        
+        var squareImage = squareImageWithImage(capturedImage!)
+        var squareImageData = UIImageJPEGRepresentation(squareImage, 1.0)
+        var imageFile : PFFile = PFFile(name: "image.png", data: squareImageData)
+        imageFile.save()
+
+        
+        if (self.story != nil) {
+            var event: PFObject = PFObject(className: "Event")
+            event["type"] = "photo"
+            event["storyObject"] = self.story!
+            event["image"] = imageFile
+            event.saveInBackgroundWithBlock({
+                (success: Bool, error: NSError!) -> Void in
+                if (success) {
+                    // The object has been saved.
+                    println("Event successfully saved")
+                    self.minimizeCreateView()
+                    self.requestEventsForStory()
+                    self.view.endEditing(true)
+                } else {
+                    // There was a problem, check error.description
+                    println("There was an error saving the event: \(error.description)")
+                }
+            })
+        } else {
             
-                
-                
-                if (self.story != nil) {
+            self.story = PFObject(className: "Story")
+            self.story!["title"] = self.titleTextField.text
+            self.story!["user"] = PFUser.currentUser().username
+            self.story!["upvotes"] = 1
+            self.story!["downvotes"] = 0
+            self.story!.saveInBackgroundWithBlock({
+                (success: Bool, error: NSError!) -> Void in
+                if (success) {
+                    // The object has been saved.
                     var event: PFObject = PFObject(className: "Event")
                     event["type"] = "photo"
                     event["storyObject"] = self.story!
@@ -636,7 +700,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         (success: Bool, error: NSError!) -> Void in
                         if (success) {
                             // The object has been saved.
-                            println("Event successfully saved")
+                            println("Story and event successfully saved")
+                            self.storyTitleLabel.text = self.story!["title"] as? String
+                            self.userLabel.text = PFUser.currentUser().username
+                            var upvotes = self.story!["upvotes"] as? Int
+                            var downvotes = self.story!["downvotes"] as? Int
+                            self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
+                            self.createTitleView.hidden = true
+                            self.titleView.hidden = false
                             self.minimizeCreateView()
                             self.requestEventsForStory()
                             self.view.endEditing(true)
@@ -646,50 +717,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     })
                 } else {
-                    
-                    self.story = PFObject(className: "Story")
-                    self.story!["title"] = self.titleTextField.text
-                    self.story!["user"] = PFUser.currentUser().username
-                    self.story!["upvotes"] = 1
-                    self.story!["downvotes"] = 0
-                    self.story!.saveInBackgroundWithBlock({
-                        (success: Bool, error: NSError!) -> Void in
-                        if (success) {
-                            // The object has been saved.
-                            var event: PFObject = PFObject(className: "Event")
-                            event["type"] = "photo"
-                            event["storyObject"] = self.story!
-                            event["image"] = imageFile
-                            event.saveInBackgroundWithBlock({
-                                (success: Bool, error: NSError!) -> Void in
-                                if (success) {
-                                    // The object has been saved.
-                                    println("Story and event successfully saved")
-                                    self.storyTitleLabel.text = self.story!["title"] as? String
-                                    self.userLabel.text = PFUser.currentUser().username
-                                    var upvotes = self.story!["upvotes"] as? Int
-                                    var downvotes = self.story!["downvotes"] as? Int
-                                    self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
-                                    self.createTitleView.hidden = true
-                                    self.titleView.hidden = false
-                                    self.minimizeCreateView()
-                                    self.requestEventsForStory()
-                                    self.view.endEditing(true)
-                                } else {
-                                    // There was a problem, check error.description
-                                    println("There was an error saving the event: \(error.description)")
-                                }
-                            })
-                        } else {
-                            // There was a problem, check error.description
-                            println("There was an error saving the story: \(error.description)")
-                        }
-                    })
-                    
+                    // There was a problem, check error.description
+                    println("There was an error saving the story: \(error.description)")
                 }
             })
+            
         }
-        minimizeCreateView()
     }
     
     func squareImageWithImage(image : UIImage) -> UIImage {
