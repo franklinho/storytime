@@ -25,6 +25,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var capturedImage : UIImage?
     var documentPath : NSString = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as NSString
     var videoPath : String?
+    var croppedVideoPath : String?
 
     @IBOutlet weak var holdToRecordLabel: UILabel!
     
@@ -57,6 +58,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        storyTableView.rowHeight = screenSize.width
         // Do any additional setup after loading the view.
         videoLongPressGestureRecognizer.enabled = false
         storyTableView.delegate = self
@@ -203,10 +205,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 return cell
             } else {
                 var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryVideoTableViewCell") as StoryVideoTableViewCell
+                
                 cell.timestampLabel.text = "\(event!.createdAt)"
                 
                 var path = "\(documentPath)/\(indexPath.row).mp4"
-                
+
                 let videoFile = event!["video"] as PFFile
                 videoFile.getDataInBackgroundWithBlock {
                     (videoData: NSData!, error: NSError!) -> Void in
@@ -216,16 +219,20 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                 }
                 var movieURL = NSURL(fileURLWithPath: path)
+                var avPlayer = AVPlayer(URL: movieURL)
                 
-                var player = MPMoviePlayerController()
-                player.contentURL = movieURL
-                player.view
+                var playerLayer : AVPlayerLayer = AVPlayerLayer(player: avPlayer)
+                playerLayer.frame = CGRectMake(0, 0, screenSize.width, screenSize.width)
+                playerLayer.videoGravity = AVLayerVideoGravityResizeAspect
+                playerLayer.needsDisplayOnBoundsChange = true
                 
-                player.view.frame = CGRectMake(0, 0, cell.playerView.frame.width, cell.playerView.frame.height)
-                cell.playerView.addSubview(player.view)
-                player.play()
+                cell.contentView.layer.addSublayer(playerLayer)
+                cell.contentView.layer.needsDisplayOnBoundsChange = true
 
+                avPlayer.play()
+                
                 return cell
+                
             }
             
         } else {
@@ -479,10 +486,67 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
         
-        var data = NSData(contentsOfURL: outputFileURL)
-        println("Successfully saved video at \(outputFileURL)")
         
-        var videoFile = PFFile(name: "video.mp4", contentsAtPath: "\(videoPath!)")
+        
+//        var data = NSData(contentsOfURL: outputFileURL)
+        println("Successfully saved video at \(outputFileURL)")
+        self.saveVideoEvent()
+        
+//        var filename = "CroppedVideo1"
+//        croppedVideoPath =  "\(documentPath)/\(filename).mp4"
+//        
+//        var asset : AVAsset = AVAsset.assetWithURL(outputFileURL) as AVAsset
+//        
+//        var composition : AVMutableComposition = AVMutableComposition()
+//        composition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: Int32(kCMPersistentTrackID_Invalid))
+//        
+//        var clipVideoTrack : AVAssetTrack = asset.tracksWithMediaType(AVMediaTypeVideo)[0] as AVAssetTrack
+//        
+//        var videoComposition: AVMutableVideoComposition = AVMutableVideoComposition()
+//        videoComposition.frameDuration = CMTimeMake(1, 60)
+//        videoComposition.renderSize = CGSizeMake(clipVideoTrack.naturalSize.height, clipVideoTrack.naturalSize.height)
+//        
+//        var instruction: AVMutableVideoCompositionInstruction = AVMutableVideoCompositionInstruction()
+//        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeMakeWithSeconds(60, 30))
+//        
+//        
+//        var transformer: AVMutableVideoCompositionLayerInstruction =
+//        AVMutableVideoCompositionLayerInstruction(assetTrack: clipVideoTrack)
+//    
+//
+//        var t1: CGAffineTransform = CGAffineTransformMakeTranslation(clipVideoTrack.naturalSize.height, -(clipVideoTrack.naturalSize.width - clipVideoTrack.naturalSize.height)/2 )
+//        var t2: CGAffineTransform = CGAffineTransformRotate(t1, CGFloat(M_PI_2))
+//        
+//        var finalTransform: CGAffineTransform = t2
+//        
+//        transformer.setTransform(finalTransform, atTime: kCMTimeZero)
+//        
+//        instruction.layerInstructions = NSArray(object: transformer)
+//        videoComposition.instructions = NSArray(object: instruction)
+//        
+//        
+//        var exporter = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetHighestQuality)
+//        exporter.videoComposition = videoComposition
+//        exporter.outputFileType = AVFileTypeQuickTimeMovie
+//        exporter.outputURL = NSURL(fileURLWithPath: croppedVideoPath!)
+//        
+//        exporter.exportAsynchronouslyWithCompletionHandler({
+//            
+//            //display video after export is complete, for example...
+//            let outputURL:NSURL = exporter.outputURL;
+//            println("Cropped video saved at \(outputURL)")
+//            self.saveVideoEvent()
+//            
+//        })
+        
+
+        
+        
+    }
+    
+    func saveVideoEvent() {
+        var videoFile = PFFile(name: "video.mp4", contentsAtPath: "\(self.videoPath!)")
+        
         if (self.story != nil) {
             var event: PFObject = PFObject(className: "Event")
             event["type"] = "video"
@@ -543,7 +607,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             })
             
         }
-        
     }
 
     @IBAction func photoSendButtonWasTapped(sender: AnyObject) {
@@ -645,6 +708,48 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         return cropped!
         
     }
+    
+//    func cropVideoAtPath(video: NSURL) -> String {
+//        
+//        var filename = "CroppedVideo1"
+//        croppedVideoPath =  "\(documentPath)/\(filename).mp4"
+//        
+//        var asset : AVAsset = AVAsset.assetWithURL(video) as AVAsset
+//        
+//        var composition : AVMutableComposition = AVMutableComposition()
+//        composition.addMutableTrackWithMediaType(AVMediaTypeVideo, preferredTrackID: Int32(kCMPersistentTrackID_Invalid))
+//        
+//        var clipVideoTrack : AVAssetTrack = asset.tracksWithMediaType(AVMediaTypeVideo)[0] as AVAssetTrack
+//        
+//        var videoComposition = AVMutableVideoComposition()
+//        videoComposition.renderSize = CGSizeMake(clipVideoTrack.naturalSize.height, clipVideoTrack.naturalSize.height)
+//        videoComposition.frameDuration = CMTimeMake(1, 30)
+//        
+//        var instruction : AVMutableVideoCompositionInstruction = AVMutableVideoCompositionInstruction()
+//        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, CMTimeMakeWithSeconds(60, 30))
+//        
+//        var transformer : AVMutableVideoCompositionLayerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: clipVideoTrack)
+//        var t1 : CGAffineTransform = CGAffineTransformMakeTranslation(clipVideoTrack.naturalSize.height, -(clipVideoTrack.naturalSize.width - clipVideoTrack.naturalSize.height) / 2)
+//        var t2 : CGAffineTransform = CGAffineTransformRotate(t1, CGFloat(M_PI_2))
+//        
+//        
+//        var finalTransform : CGAffineTransform = t2
+//        transformer.setTransform(finalTransform, atTime: kCMTimeZero)
+//        instruction.layerInstructions = [transformer]
+//        videoComposition.instructions = [instruction]
+//        
+//        var exporter = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetHighestQuality)
+//        exporter.videoComposition = videoComposition
+//        exporter.outputURL = NSURL(fileURLWithPath: croppedVideoPath!)
+//        exporter.outputFileType = AVFileTypeQuickTimeMovie
+//        
+//        exporter.exportAsynchronouslyWithCompletionHandler({
+//            finished in
+//            
+//        })
+//        
+//
+//    }
     
     
 }

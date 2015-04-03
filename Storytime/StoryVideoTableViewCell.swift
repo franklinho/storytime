@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import AVFoundation
 
 class StoryVideoTableViewCell: UITableViewCell {
-
+    
     @IBOutlet weak var playerView: UIView!
     @IBOutlet weak var timestampLabel: UILabel!
     override func awakeFromNib() {
