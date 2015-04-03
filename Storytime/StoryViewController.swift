@@ -27,6 +27,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var videoPath : String?
     var croppedVideoPath : String?
     var vision : PBJVision = PBJVision.sharedInstance()
+    var playingVideoCell : StoryVideoTableViewCell?
 
 
     @IBOutlet weak var holdToRecordLabel: UILabel!
@@ -237,17 +238,15 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                 }
                 var movieURL = NSURL(fileURLWithPath: path)
-                var avPlayer = AVPlayer(URL: movieURL)
+                cell.player = AVPlayer(URL: movieURL)
                 
-                cell.playerLayer = AVPlayerLayer(player: avPlayer)
+                cell.playerLayer = AVPlayerLayer(player: cell.player!)
                 cell.playerLayer!.frame = CGRectMake(0, 0, screenSize.width, screenSize.width)
                 cell.playerLayer!.videoGravity = AVLayerVideoGravityResizeAspect
                 cell.playerLayer!.needsDisplayOnBoundsChange = true
                 
                 cell.contentView.layer.addSublayer(cell.playerLayer)
                 cell.contentView.layer.needsDisplayOnBoundsChange = true
-
-                avPlayer.play()
                 
                 return cell
                 
@@ -455,6 +454,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     println("Successfully retrieved \(objects.count) events.")
                     self.events = objects
                     self.storyTableView.reloadData()
+                    self.scrollViewDidEndDecelerating(self.storyTableView)
                     // Do something with the found objects
                     if let objects = objects as? [PFObject] {
                         for object in objects {
@@ -783,5 +783,55 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //
 //    }
     
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if (playingVideoCell != nil && playingVideoCell!.player != nil) {
+            if playingVideoCell!.player!.rate == 1.0 {
+                playingVideoCell!.player?.pause()
+                println("Pausing video")
+            }
+        }
+    }
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        var cells = storyTableView.visibleCells()
+        var indexPaths = storyTableView.indexPathsForVisibleRows()
+        
+        
+        
+        var playableCells : NSMutableArray = []
+        
+        if indexPaths != nil {
+            var cellCount = indexPaths!.count
+            for (var i = 0; i < indexPaths!.count; i++) {
+                if cellCompletelyOnScreen(indexPaths![i] as NSIndexPath) {
+                    playableCells.addObject(cells[i])
+                    println("Cell at index \(i) is fully on screen")
+                } else {
+                    println("Cell at index \(i) is not fully on screen")
+                }
+                
+            }
+
+        }
+        
+        if playableCells.lastObject?.player != nil {
+            playingVideoCell = playableCells[0] as StoryVideoTableViewCell
+            playingVideoCell!.player!.play()
+            println("Playing cell")
+        }
+        
+        
+    }
+    
+
+    
+    func cellCompletelyOnScreen(indexPath : NSIndexPath) -> Bool {
+        var cellRect : CGRect = storyTableView.rectForRowAtIndexPath(indexPath)
+        cellRect = storyTableView.convertRect(cellRect, toView: storyTableView.superview)
+        println("Cell Rect: \(cellRect)")
+        println("StoryTableview Frame : \(storyTableView.frame)")
+        var completelyVisible : Bool = CGRectContainsRect(storyTableView.frame, cellRect)
+        return completelyVisible
+    }
     
 }
