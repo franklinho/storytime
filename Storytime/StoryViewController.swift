@@ -1018,6 +1018,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         if self.story != nil {
+            self.story!.saveInBackground()
             var upvotes = story!["upvotes"] as? Int
             var downvotes = story!["downvotes"] as? Int
             pointsLabel.text = "\(upvotes!-downvotes!)"
@@ -1054,6 +1055,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         if self.story != nil {
+            self.story!.saveInBackground()
             var upvotes = story!["upvotes"] as? Int
             var downvotes = story!["downvotes"] as? Int
             pointsLabel.text = "\(upvotes!-downvotes!)"
