@@ -28,8 +28,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var croppedVideoPath : String?
     var vision : PBJVision = PBJVision.sharedInstance()
     var playingVideoCell : StoryVideoTableViewCell?
+    var storyUpVoted = false
+    var storyDownVoted = false
 
-
+    @IBOutlet weak var pointsLabel: UILabel!
+    @IBOutlet weak var upVoteButton: UIButton!
+    @IBOutlet weak var downVoteButton: UIButton!
+    var votedStories : NSMutableDictionary = [:]
 
     @IBOutlet weak var holdToRecordLabel: UILabel!
     
@@ -61,6 +66,30 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if PFUser.currentUser() != nil{
+            if PFUser.currentUser()["votedStories"] != nil {
+                self.votedStories = PFUser.currentUser()["votedStories"] as NSMutableDictionary
+                if self.story != nil{
+                    if votedStories[self.story!.objectId] as Int == 1 {
+                        storyUpVoted = true
+                        upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
+                        pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
+                    } else if votedStories[self.story!.objectId] as Int == -1 {
+                        storyDownVoted = true
+                        downVoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
+                        pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
+                    }
+                }
+            }
+        }
+        
+        if self.story != nil {
+            var upvotes = story!["upvotes"] as? Int
+            var downvotes = story!["downvotes"] as? Int
+            println("Points are \(upvotes!-downvotes!)")
+            pointsLabel.text = "\(upvotes!-downvotes!)"
+        }
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyBoardWillChange:", name: UIKeyboardWillChangeFrameNotification, object: nil)
 
@@ -348,7 +377,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.minimizeCreateView()
                 if self.story!["thumbnailText"] == nil {
                     self.story!["thumbnailText"] = self.createTextView.text
-                    self.story!.save()
+                    self.story!.saveInBackground()
                 }
                 self.createTextView.text = ""
                 self.requestEventsForStory()
@@ -393,6 +422,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.userLabel.text = PFUser.currentUser().username
                     var upvotes = self.story!["upvotes"] as? Int
                     var downvotes = self.story!["downvotes"] as? Int
+                    self.storyUpVoted = true
+                    self.votedStories[self.story!.objectId] = 1
+                    PFUser.currentUser()["votedStories"] = self.votedStories
+                    PFUser.currentUser().saveInBackground()
+                    self.upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
+                    self.pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
                     self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
                     self.createTitleView.hidden = true
                     self.titleView.hidden = false
@@ -672,7 +707,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         var screenCapImageData = UIImageJPEGRepresentation(screenCapImage, 1.0)
                         var imageFile : PFFile = PFFile(name: "image.png", data: screenCapImageData)
                         self.story!["thumbnailVideoScreenCap"] = imageFile
-                        self.story!.save()
+                        self.story!.saveInBackground()
                         
                     }
                 }
@@ -706,6 +741,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     var upvotes = self.story!["upvotes"] as? Int
                     var downvotes = self.story!["downvotes"] as? Int
                     self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
+                    self.storyUpVoted = true
+                    self.votedStories[self.story!.objectId] = 1
+                    PFUser.currentUser()["votedStories"] = self.votedStories
+                    PFUser.currentUser().saveInBackground()
+                    self.upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
+                    self.pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
                     self.createTitleView.hidden = true
                     self.titleView.hidden = false
                     self.createVideoEvent(videoFile)
@@ -782,6 +823,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     var upvotes = self.story!["upvotes"] as? Int
                     var downvotes = self.story!["downvotes"] as? Int
                     self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
+                    self.storyUpVoted = true
+                    self.votedStories[self.story!.objectId] = 1
+                    PFUser.currentUser()["votedStories"] = self.votedStories
+                    PFUser.currentUser().saveInBackground()
+                    self.upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
+                    self.pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
                     self.createTitleView.hidden = true
                     self.titleView.hidden = false
                     self.createPhotoEvent(imageFile)
@@ -944,11 +991,75 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
         })
         
-
-        
-
-        
-        
     }
-    
+
+    @IBAction func upVoteButtonWasTapped(sender: AnyObject) {
+        if storyUpVoted == true {
+            self.votedStories[self.story!.objectId] = 0
+            storyUpVoted = false
+            upVoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
+            pointsLabel.textColor = UIColor.whiteColor()
+            self.story!["upvotes"] = self.story!["upvotes"] as Int - 1
+        } else if storyDownVoted == true {
+            self.votedStories[self.story!.objectId] = 1
+            storyUpVoted = true
+            storyDownVoted = false
+            upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
+            downVoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
+            pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
+            self.story!["upvotes"] = self.story!["upvotes"] as Int + 1
+            self.story!["downvotes"] = self.story!["downvotes"] as Int - 1
+        }else {
+            self.votedStories[self.story!.objectId] = 1
+            storyUpVoted = true
+            upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
+            pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
+            self.story!["upvotes"] = self.story!["upvotes"] as Int + 1
+        }
+        
+        if self.story != nil {
+            var upvotes = story!["upvotes"] as? Int
+            var downvotes = story!["downvotes"] as? Int
+            pointsLabel.text = "\(upvotes!-downvotes!)"
+        }
+        
+        PFUser.currentUser()["votedStories"] = self.votedStories
+        PFUser.currentUser().saveInBackground()
+    }
+
+    @IBAction func downVoteButtonWasTapped(sender: AnyObject) {
+        if storyDownVoted == true {
+            self.votedStories[self.story!.objectId] = 0
+            storyDownVoted = false
+            downVoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
+            pointsLabel.textColor = UIColor.whiteColor()
+            self.story!["downvotes"] = self.story!["downvotes"] as Int - 1
+        } else if storyUpVoted == true {
+            self.votedStories[self.story!.objectId] = -1
+            storyDownVoted = true
+            storyUpVoted = false
+            downVoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
+            upVoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
+            pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
+            self.story!["downvotes"] = self.story!["downvotes"] as Int + 1
+            self.story!["upvotes"] = self.story!["upvotes"] as Int - 1
+            
+        }else {
+            self.votedStories[self.story!.objectId] = -1
+            storyDownVoted = true
+            downVoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
+            pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
+            self.story!["downvotes"] = self.story!["downvotes"] as Int + 1
+            
+        }
+        
+        if self.story != nil {
+            var upvotes = story!["upvotes"] as? Int
+            var downvotes = story!["downvotes"] as? Int
+            pointsLabel.text = "\(upvotes!-downvotes!)"
+        }
+        
+        PFUser.currentUser()["votedStories"] = self.votedStories
+        PFUser.currentUser().saveInBackground()
+    }
 }

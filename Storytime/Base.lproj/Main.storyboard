@@ -676,7 +676,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zC1-cs-0xd" userLabel="TitleView">
                                 <rect key="frame" x="0.0" y="64" width="600" height="90"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Loc-lA-bxs">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Loc-lA-bxs" userLabel="DownVoteButton">
                                         <rect key="frame" x="10" y="53" width="44" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="8Ro-L6-JNt"/>
@@ -685,8 +685,11 @@
                                         <state key="normal" image="down_icon_white.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="downVoteButtonWasTapped:" destination="nXj-xd-FNA" eventType="touchUpInside" id="weg-cU-k9r"/>
+                                        </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0fP-OH-gNp">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0fP-OH-gNp" userLabel="UpVoteButton">
                                         <rect key="frame" x="10" y="-3" width="44" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="44" id="TTY-rD-Mhv"/>
@@ -695,8 +698,11 @@
                                         <state key="normal" image="up_icon_white.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="upVoteButtonWasTapped:" destination="nXj-xd-FNA" eventType="touchUpInside" id="JnB-bH-c7w"/>
+                                        </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="moj-b6-kOg">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="moj-b6-kOg" userLabel="pointsLabel">
                                         <rect key="frame" x="25" y="28" width="15" height="35.5"/>
                                         <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="26"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -808,13 +814,16 @@
                         <outlet property="createViewLeadingConstraint" destination="EKN-hi-haj" id="7CQ-lB-opb"/>
                         <outlet property="createViewTopConstraint" destination="7Wn-lE-Vze" id="zzn-Bv-AdK"/>
                         <outlet property="createViewTrailingConstraint" destination="Qaq-3q-I0I" id="p6n-sV-t6h"/>
+                        <outlet property="downVoteButton" destination="Loc-lA-bxs" id="5SE-Yu-LqH"/>
                         <outlet property="holdToRecordLabel" destination="2jj-nm-h1E" id="zjk-Eq-MCm"/>
+                        <outlet property="pointsLabel" destination="moj-b6-kOg" id="sjD-aN-DhB"/>
                         <outlet property="storyPointsLabel" destination="moj-b6-kOg" id="jcL-0h-BRE"/>
                         <outlet property="storyTableView" destination="Bes-cU-TpY" id="3rw-Nx-vtY"/>
                         <outlet property="storyTitleLabel" destination="N6n-gn-M1B" id="sVr-8S-zcC"/>
                         <outlet property="textContainer" destination="9bx-7K-B4N" id="Kyx-Ec-nS9"/>
                         <outlet property="titleTextField" destination="cHL-Ds-X6q" id="52j-ZF-7Qm"/>
                         <outlet property="titleView" destination="zC1-cs-0xd" id="yCz-iD-wGP"/>
+                        <outlet property="upVoteButton" destination="0fP-OH-gNp" id="CJ8-gL-E4t"/>
                         <outlet property="userLabel" destination="4T8-ck-Y0C" id="anN-v3-GwR"/>
                         <outlet property="videoContainer" destination="ecm-OX-hx2" id="Iz7-Vj-lmV"/>
                         <outlet property="videoLongPressGestureRecognizer" destination="49O-YB-Itb" id="oMJ-iU-Qt7"/>
