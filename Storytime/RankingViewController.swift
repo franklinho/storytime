@@ -11,6 +11,7 @@ import UIKit
 class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
 
     var stories : NSArray?
+    let screenSize: CGRect = UIScreen.mainScreen().bounds
     
     @IBOutlet weak var logOutButton: UIBarButtonItem!
     
@@ -19,6 +20,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        
+
+        
         rankingTableView.backgroundView = nil
         rankingTableView.backgroundView?.backgroundColor = UIColor(red: 41.0/255.0, green: 37.0/255.0, blue: 55.0/255.0, alpha: 1.0)
         rankingTableView.delegate = self
@@ -27,6 +32,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             logOutButton.enabled = false
         }
         
+        self.rankingTableView.rowHeight = self.screenSize.width
     }
 
     override func didReceiveMemoryWarning() {
@@ -52,8 +58,36 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             var upvotes = story!["upvotes"] as? Int
             var downvotes = story!["downvotes"] as? Int
             cell.pointsLabel.text = "\(upvotes!-downvotes!)"
+            cell.previewImageView.hidden = true
+            if story!["thumbnailImage"] != nil {
+                let imageFile = story!["thumbnailImage"] as PFFile
+                imageFile.getDataInBackgroundWithBlock {
+                    (imageData: NSData!, error: NSError!) -> Void in
+                    if error == nil {
+                        let image = UIImage(data:imageData)
+                        cell.previewImageView.image = image
+                        cell.previewImageView.hidden = false
+                        cell.thumbnailTextLabel.hidden = true
+                    }
+                }
+            } else if story!["thumbnailVideoScreenCap"] != nil {
+                let imageFile = story!["thumbnailVideoScreenCap"] as PFFile
+                imageFile.getDataInBackgroundWithBlock {
+                    (imageData: NSData!, error: NSError!) -> Void in
+                    if error == nil {
+                        let image = UIImage(data:imageData)
+                        cell.previewImageView.image = image
+                        cell.previewImageView.hidden = false
+                        cell.thumbnailTextLabel.hidden = true
+                    }
+                }
+            } else if story!["thumbnailText"] != nil {
+                cell.previewImageView.hidden = true
+                cell.thumbnailTextLabel.hidden = false
+                cell.thumbnailTextLabel.text = story!["thumbnailText"] as String
+            }
         }
-        cell.rankLabel.text = "\(indexPath.row+1)"
+        cell.rankLabel.text = "\(indexPath.row+1)."
         
         return cell
 
