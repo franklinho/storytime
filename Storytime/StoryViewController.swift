@@ -346,6 +346,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 // The object has been saved.
                 println("Event successfully saved")
                 self.minimizeCreateView()
+                if self.story!["thumbnailText"] == nil {
+                    self.story!["thumbnailText"] = self.createTextView.text
+                    self.story!.save()
+                }
                 self.createTextView.text = ""
                 self.requestEventsForStory()
                 
@@ -656,6 +660,22 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 // The object has been saved.
                 println("Event successfully saved")
                 self.vision.stopPreview()
+                if self.story!["thumbnailVideoScreenCap"] == nil {
+                    if self.story!["thumbnailImage"] == nil {
+                        var asset : AVURLAsset = AVURLAsset(URL: NSURL(fileURLWithPath: self.videoPath!), options: nil)
+                        var generate : AVAssetImageGenerator = AVAssetImageGenerator(asset: asset)
+                        var time : CMTime = CMTimeMake(1, 60)
+                        var imgRef : CGImageRef = generate.copyCGImageAtTime(time, actualTime: nil, error: nil)
+                        var screenCapImage = UIImage(CGImage: imgRef)
+                        
+                        
+                        var screenCapImageData = UIImageJPEGRepresentation(screenCapImage, 1.0)
+                        var imageFile : PFFile = PFFile(name: "image.png", data: screenCapImageData)
+                        self.story!["thumbnailVideoScreenCap"] = imageFile
+                        self.story!.save()
+                        
+                    }
+                }
                 self.requestEventsForStory()
             } else {
                 // There was a problem, check error.description
@@ -706,8 +726,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     @IBAction func photoSendButtonWasTapped(sender: AnyObject) {
-        
-        self.vision.capturePhoto()
+        dispatch_async(dispatch_get_main_queue(),{
+            self.vision.capturePhoto()
+        })
         
         self.minimizeCreateView()
     }
@@ -723,6 +744,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 // The object has been saved.
                 println("Event successfully saved")
                 self.vision.stopPreview()
+                if self.story!["thumbnailImage"] == nil {
+                    self.story!["thumbnailImage"] = imageFile
+                    self.story!.save()
+                }
                 self.requestEventsForStory()
             } else {
                 // There was a problem, check error.description
@@ -737,7 +762,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var squareImage = squareImageWithImage(capturedImage!)
         var squareImageData = UIImageJPEGRepresentation(squareImage, 1.0)
         var imageFile : PFFile = PFFile(name: "image.png", data: squareImageData)
-        imageFile.save()
 
         
         if (self.story != nil) {
