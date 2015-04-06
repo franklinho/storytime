@@ -61,6 +61,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyBoardWillChange:", name: UIKeyboardWillChangeFrameNotification, object: nil)
 
 //        NSFileManager.defaultManager().createDirectoryAtPath("\(documentPath)/videos/", withIntermediateDirectories: false, attributes: nil, error: nil)
         
@@ -229,17 +231,20 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
                 
                 cell.timestampLabel.text = "\(event!.createdAt)"
-                var path = "\(documentPath)/\(indexPath.row).mp4"
                 
-                if (NSFileManager.defaultManager().fileExistsAtPath(path)) {
-                    NSFileManager.defaultManager().removeItemAtPath(path, error: nil)
-                }
+                
+                
                 
 
                 let videoFile = event!["video"] as PFFile
                 videoFile.getDataInBackgroundWithBlock {
                     (videoData: NSData!, error: NSError!) -> Void in
                     if error == nil {
+                        var path = "\(self.documentPath)/\(indexPath.row).mp4"
+                        if (NSFileManager.defaultManager().fileExistsAtPath(path)) {
+                            NSFileManager.defaultManager().removeItemAtPath(path, error: nil)
+                        }
+                        
                         videoData.writeToFile(path, atomically: true)
                         println("File now at \(path)")
                         var movieURL = NSURL(fileURLWithPath: path)
@@ -251,7 +256,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         cell.playerLayer!.videoGravity = AVLayerVideoGravityResizeAspect
                         cell.playerLayer!.needsDisplayOnBoundsChange = true
                         
-                        cell.contentView.layer.addSublayer(cell.playerLayer)
+                        cell.contentView.layer.insertSublayer(cell.playerLayer!, atIndex: 0)
                         cell.contentView.layer.needsDisplayOnBoundsChange = true
                         
                         if self.cellCompletelyOnScreen(indexPath){
@@ -398,6 +403,17 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     @IBAction func videoSelectorWasTapped(sender: AnyObject) {
+        self.view.endEditing(true)
+        self.view.endEditing(true)
+        self.view.layoutIfNeeded()
+        var createViewRect : CGRect = self.createView.bounds
+        self.createViewHeightConstraint.constant = self.view.bounds.width + 46
+        
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            
+        })
+        
         vision.cameraMode = PBJCameraMode.Video
         cameraSendButton.hidden = true
         cameraSendButton.enabled = false
@@ -433,6 +449,16 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     
     @IBAction func cameraSelectorWasTapped(sender: AnyObject) {
+        self.view.endEditing(true)
+        self.view.layoutIfNeeded()
+        var createViewRect : CGRect = self.createView.bounds
+        self.createViewHeightConstraint.constant = self.view.bounds.width + 46
+        
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            
+        })
+        
         vision.cameraMode = PBJCameraMode.Photo
         cameraSendButton.hidden = false
         cameraSendButton.enabled = true
@@ -892,6 +918,33 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         playingVideoCell!.player!.seekToTime(seekTime)
         
         playingVideoCell!.player!.play()
+    }
+    
+    func keyBoardWillChange(notification: NSNotification) {
+        // Adjusts size of text view to scroll when keyboard is up
+        var keyBoardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+        self.view.convertRect(keyBoardRect, fromView: nil)
+        
+        var createViewRect : CGRect = self.createView.bounds
+        
+        self.view.layoutIfNeeded()
+        
+        if CGFloat(createViewRect.origin.y) + CGFloat(createViewRect.height) > CGFloat(keyBoardRect.height) {
+            self.createViewHeightConstraint.constant = CGFloat(keyBoardRect.height) - CGFloat(createViewRect.origin.y) + 46
+        } else {
+            self.createViewHeightConstraint.constant = self.view.bounds.width + 46
+        }
+        
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            
+        })
+        
+
+        
+
+        
+        
     }
     
 }

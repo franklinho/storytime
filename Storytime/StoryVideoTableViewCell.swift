@@ -15,6 +15,7 @@ class StoryVideoTableViewCell: UITableViewCell {
     var playerLayer : AVPlayerLayer?
     @IBOutlet weak var playerView: UIView!
     @IBOutlet weak var timestampLabel: UILabel!
+    @IBOutlet weak var videoView: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
