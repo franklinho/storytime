@@ -317,7 +317,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 (value: Bool) in
                 self.createView.hidden = true
         })
-        vision.stopPreview()
         videoLongPressGestureRecognizer.enabled = false
         for view in createViews {
             (view as UIView).hidden = true
@@ -335,27 +334,45 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Pass the selected object to the new view controller.
     }
     */
+    
+    func createTextEvent() {
+        var event: PFObject = PFObject(className: "Event")
+        event["type"] = "text"
+        event["storyObject"] = self.story!
+        event["text"] = self.createTextView.text
+        event.saveInBackgroundWithBlock({
+            (success: Bool, error: NSError!) -> Void in
+            if (success) {
+                // The object has been saved.
+                println("Event successfully saved")
+                self.minimizeCreateView()
+                self.createTextView.text = ""
+                self.requestEventsForStory()
+                
+            } else {
+                // There was a problem, check error.description
+                println("There was an error saving the event: \(error.description)")
+            }
+        })
+    }
 
     @IBAction func textSubmitButtonWasTapped(sender: AnyObject) {
+        self.view.endEditing(true)
+        
+        self.minimizeCreateView()
+        self.view.layoutIfNeeded()
+        
+       
+        self.createViewHeightConstraint.constant = self.view.bounds.width + 46
+        
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            
+        })
+
+        
         if (story != nil) {
-            var event: PFObject = PFObject(className: "Event")
-            event["type"] = "text"
-            event["storyObject"] = self.story!
-            event["text"] = self.createTextView.text
-            event.saveInBackgroundWithBlock({
-                (success: Bool, error: NSError!) -> Void in
-                if (success) {
-                    // The object has been saved.
-                    println("Event successfully saved")
-                    self.minimizeCreateView()
-                    self.createTextView.text = ""
-                    self.requestEventsForStory()
-                    self.view.endEditing(true)
-                } else {
-                    // There was a problem, check error.description
-                    println("There was an error saving the event: \(error.description)")
-                }
-            })
+            self.createTextEvent()
         } else {
             
             story = PFObject(className: "Story")
@@ -367,31 +384,15 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 (success: Bool, error: NSError!) -> Void in
                 if (success) {
                     // The object has been saved.
-                    var event: PFObject = PFObject(className: "Event")
-                    event["type"] = "text"
-                    event["storyObject"] = self.story!
-                    event["text"] = self.createTextView.text
-                    event.saveInBackgroundWithBlock({
-                        (success: Bool, error: NSError!) -> Void in
-                        if (success) {
-                            // The object has been saved.
-                            println("Story and event successfully saved")
-                            self.storyTitleLabel.text = self.story!["title"] as? String
-                            self.userLabel.text = PFUser.currentUser().username
-                            var upvotes = self.story!["upvotes"] as? Int
-                            var downvotes = self.story!["downvotes"] as? Int
-                            self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
-                            self.createTitleView.hidden = true
-                            self.titleView.hidden = false
-                            self.minimizeCreateView()
-                            self.createTextView.text = ""
-                            self.requestEventsForStory()
-                            self.view.endEditing(true)
-                        } else {
-                            // There was a problem, check error.description
-                            println("There was an error saving the event: \(error.description)")
-                        }
-                    })
+                    println("Story and event successfully saved")
+                    self.storyTitleLabel.text = self.story!["title"] as? String
+                    self.userLabel.text = PFUser.currentUser().username
+                    var upvotes = self.story!["upvotes"] as? Int
+                    var downvotes = self.story!["downvotes"] as? Int
+                    self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
+                    self.createTitleView.hidden = true
+                    self.titleView.hidden = false
+                    self.createTextEvent()
                 } else {
                     // There was a problem, check error.description
                     println("There was an error saving the story: \(error.description)")
@@ -519,6 +520,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     println("Successfully retrieved \(objects.count) events.")
                     self.events = objects
                     self.storyTableView.reloadData()
+                    self.storyTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
                     self.scrollViewDidEndDecelerating(self.storyTableView)
                     // Do something with the found objects
                     if let objects = objects as? [PFObject] {
@@ -571,9 +573,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func vision(vision: PBJVision!, capturedVideo videoDict: [NSObject : AnyObject]!, error: NSError!) {
-        self.videoPath = videoDict[PBJVisionVideoPathKey] as String
-        self.saveVideoEvent()
         
+        
+        dispatch_async(dispatch_get_main_queue(),{
+            self.videoPath = videoDict[PBJVisionVideoPathKey] as String
+            self.saveVideoEvent()
+        })
+        self.minimizeCreateView()
     }
     
     func captureOutput(captureOutput: AVCaptureFileOutput!, didStartRecordingToOutputFileAtURL fileURL: NSURL!, fromConnections connections: [AnyObject]!) {
@@ -639,27 +645,31 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
+    func createVideoEvent(videoFile : PFFile) {
+        var event: PFObject = PFObject(className: "Event")
+        event["type"] = "video"
+        event["storyObject"] = self.story!
+        event["video"] = videoFile
+        event.saveInBackgroundWithBlock({
+            (success: Bool, error: NSError!) -> Void in
+            if (success) {
+                // The object has been saved.
+                println("Event successfully saved")
+                self.vision.stopPreview()
+                self.requestEventsForStory()
+            } else {
+                // There was a problem, check error.description
+                println("There was an error saving the event: \(error.description)")
+            }
+        })
+
+    }
+    
     func saveVideoEvent() {
         var videoFile = PFFile(name: "video.mp4", contentsAtPath: "\(self.videoPath!)")
         
         if (self.story != nil) {
-            var event: PFObject = PFObject(className: "Event")
-            event["type"] = "video"
-            event["storyObject"] = self.story!
-            event["video"] = videoFile
-            event.saveInBackgroundWithBlock({
-                (success: Bool, error: NSError!) -> Void in
-                if (success) {
-                    // The object has been saved.
-                    println("Event successfully saved")
-                    self.minimizeCreateView()
-                    self.requestEventsForStory()
-                    self.view.endEditing(true)
-                } else {
-                    // There was a problem, check error.description
-                    println("There was an error saving the event: \(error.description)")
-                }
-            })
+            createVideoEvent(videoFile)
         } else {
             
             self.story = PFObject(className: "Story")
@@ -671,30 +681,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 (success: Bool, error: NSError!) -> Void in
                 if (success) {
                     // The object has been saved.
-                    var event: PFObject = PFObject(className: "Event")
-                    event["type"] = "video"
-                    event["storyObject"] = self.story!
-                    event["video"] = videoFile
-                    event.saveInBackgroundWithBlock({
-                        (success: Bool, error: NSError!) -> Void in
-                        if (success) {
-                            // The object has been saved.
-                            println("Story and event successfully saved")
-                            self.storyTitleLabel.text = self.story!["title"] as? String
-                            self.userLabel.text = PFUser.currentUser().username
-                            var upvotes = self.story!["upvotes"] as? Int
-                            var downvotes = self.story!["downvotes"] as? Int
-                            self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
-                            self.createTitleView.hidden = true
-                            self.titleView.hidden = false
-                            self.minimizeCreateView()
-                            self.requestEventsForStory()
-                            self.view.endEditing(true)
-                        } else {
-                            // There was a problem, check error.description
-                            println("There was an error saving the event: \(error.description)")
-                        }
-                    })
+                    self.storyTitleLabel.text = self.story!["title"] as? String
+                    self.userLabel.text = PFUser.currentUser().username
+                    var upvotes = self.story!["upvotes"] as? Int
+                    var downvotes = self.story!["downvotes"] as? Int
+                    self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
+                    self.createTitleView.hidden = true
+                    self.titleView.hidden = false
+                    self.createVideoEvent(videoFile)
                 } else {
                     // There was a problem, check error.description
                     println("There was an error saving the story: \(error.description)")
@@ -706,21 +700,39 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func vision(vision: PBJVision!, capturedPhoto photoDict: [NSObject : AnyObject]!, error: NSError!) {
         capturedImage = photoDict[PBJVisionPhotoImageKey] as UIImage
-        sendPhoto()
+        dispatch_async(dispatch_get_main_queue(),{
+            self.savePhotoEvent()
+        })
     }
 
     @IBAction func photoSendButtonWasTapped(sender: AnyObject) {
-        vision.capturePhoto()
-//        println("\(stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo))")
-//        if let videoConnection = stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo){
-//            stillImageOutput?.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: {
-//                (sampleBuffer,error) in
-//                
-//            })
-//        }
+        
+        self.vision.capturePhoto()
+        
+        self.minimizeCreateView()
     }
     
-    func sendPhoto() {
+    func createPhotoEvent(imageFile : PFFile) {
+        var event: PFObject = PFObject(className: "Event")
+        event["type"] = "photo"
+        event["storyObject"] = self.story!
+        event["image"] = imageFile
+        event.saveInBackgroundWithBlock({
+            (success: Bool, error: NSError!) -> Void in
+            if (success) {
+                // The object has been saved.
+                println("Event successfully saved")
+                self.vision.stopPreview()
+                self.requestEventsForStory()
+            } else {
+                // There was a problem, check error.description
+                println("There was an error saving the event: \(error.description)")
+            }
+        })
+    }
+    
+    
+    func savePhotoEvent() {
         
         var squareImage = squareImageWithImage(capturedImage!)
         var squareImageData = UIImageJPEGRepresentation(squareImage, 1.0)
@@ -729,23 +741,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         
         if (self.story != nil) {
-            var event: PFObject = PFObject(className: "Event")
-            event["type"] = "photo"
-            event["storyObject"] = self.story!
-            event["image"] = imageFile
-            event.saveInBackgroundWithBlock({
-                (success: Bool, error: NSError!) -> Void in
-                if (success) {
-                    // The object has been saved.
-                    println("Event successfully saved")
-                    self.minimizeCreateView()
-                    self.requestEventsForStory()
-                    self.view.endEditing(true)
-                } else {
-                    // There was a problem, check error.description
-                    println("There was an error saving the event: \(error.description)")
-                }
-            })
+            self.createPhotoEvent(imageFile)
         } else {
             
             self.story = PFObject(className: "Story")
@@ -757,30 +753,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 (success: Bool, error: NSError!) -> Void in
                 if (success) {
                     // The object has been saved.
-                    var event: PFObject = PFObject(className: "Event")
-                    event["type"] = "photo"
-                    event["storyObject"] = self.story!
-                    event["image"] = imageFile
-                    event.saveInBackgroundWithBlock({
-                        (success: Bool, error: NSError!) -> Void in
-                        if (success) {
-                            // The object has been saved.
-                            println("Story and event successfully saved")
-                            self.storyTitleLabel.text = self.story!["title"] as? String
-                            self.userLabel.text = PFUser.currentUser().username
-                            var upvotes = self.story!["upvotes"] as? Int
-                            var downvotes = self.story!["downvotes"] as? Int
-                            self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
-                            self.createTitleView.hidden = true
-                            self.titleView.hidden = false
-                            self.minimizeCreateView()
-                            self.requestEventsForStory()
-                            self.view.endEditing(true)
-                        } else {
-                            // There was a problem, check error.description
-                            println("There was an error saving the event: \(error.description)")
-                        }
-                    })
+                    self.storyTitleLabel.text = self.story!["title"] as? String
+                    self.userLabel.text = PFUser.currentUser().username
+                    var upvotes = self.story!["upvotes"] as? Int
+                    var downvotes = self.story!["downvotes"] as? Int
+                    self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
+                    self.createTitleView.hidden = true
+                    self.titleView.hidden = false
+                    self.createPhotoEvent(imageFile)
                 } else {
                     // There was a problem, check error.description
                     println("There was an error saving the story: \(error.description)")
