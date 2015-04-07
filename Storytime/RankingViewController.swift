@@ -12,6 +12,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
 
     var stories : NSArray?
     let screenSize: CGRect = UIScreen.mainScreen().bounds
+    var votedStories : NSMutableDictionary = [:]
     
     @IBOutlet weak var logOutButton: UIBarButtonItem!
     
@@ -50,6 +51,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = rankingTableView.dequeueReusableCellWithIdentifier("RankingTableViewCell") as RankingTableViewCell
+        cell.upvoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
+        cell.downvoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
+        cell.pointsLabel.textColor = UIColor.whiteColor()
+        
         var story : PFObject?
         if stories != nil {
             story = stories![indexPath.row] as? PFObject
@@ -61,6 +66,28 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             var upvotes = story!["upvotes"] as? Int
             var downvotes = story!["downvotes"] as? Int
             cell.pointsLabel.text = "\(upvotes!-downvotes!)"
+            
+            
+            
+            if PFUser.currentUser() != nil{
+                if PFUser.currentUser()["votedStories"] != nil {
+                    self.votedStories = PFUser.currentUser()["votedStories"] as NSMutableDictionary
+                    if votedStories[story!.objectId] != nil{
+                        if votedStories[story!.objectId] as Int == 1 {
+                            cell.storyUpVoted = true
+                            cell.upvoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
+                            cell.pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
+                        } else if votedStories[story!.objectId] as Int == -1 {
+                            cell.storyDownVoted = true
+                            cell.downvoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
+                            cell.pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
+                        }
+                    }
+                }
+            }
+            
+            
+            
             cell.previewImageView.hidden = true
             if story!["thumbnailImage"] != nil {
                 let imageFile = story!["thumbnailImage"] as PFFile

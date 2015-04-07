@@ -70,15 +70,17 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if PFUser.currentUser() != nil{
             if PFUser.currentUser()["votedStories"] != nil {
                 self.votedStories = PFUser.currentUser()["votedStories"] as NSMutableDictionary
-                if self.story != nil{
-                    if votedStories[self.story!.objectId] as Int == 1 {
-                        storyUpVoted = true
-                        upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
-                        pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
-                    } else if votedStories[self.story!.objectId] as Int == -1 {
-                        storyDownVoted = true
-                        downVoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
-                        pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
+                if votedStories[self.story!.objectId] != nil {
+                    if self.story != nil{
+                        if votedStories[self.story!.objectId] as Int == 1 {
+                            storyUpVoted = true
+                            upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
+                            pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
+                        } else if votedStories[self.story!.objectId] as Int == -1 {
+                            storyDownVoted = true
+                            downVoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
+                            pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
+                        }
                     }
                 }
             }

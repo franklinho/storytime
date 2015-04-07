@@ -17,6 +17,8 @@ class RankingTableViewCell: UITableViewCell {
     @IBOutlet weak var upvoteButton: UIButton!
     @IBOutlet weak var downvoteButton: UIButton!
     @IBOutlet weak var voteView: UIView!
+    var storyUpVoted = false
+    var storyDownVoted = false
     
     @IBOutlet weak var titleView: UIView!
     @IBOutlet weak var userLabel: UILabel!
