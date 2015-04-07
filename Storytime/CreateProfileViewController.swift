@@ -15,12 +15,15 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
     
     @IBOutlet weak var userNameTextField: UITextField!
     
+    @IBOutlet weak var usernameTakenLabel: UILabel!
+    @IBOutlet weak var usernameRequiredLabel: UILabel!
     @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var tapToCaptureLabel: UILabel!
     var vision : PBJVision = PBJVision.sharedInstance()
     var previewLayer : AVCaptureVideoPreviewLayer?
     var isCapturing = false
     var previewLayerAdded = false
+    var profileImage : UIImage?
     
     @IBOutlet weak var profileImageView: UIImageView!
     
@@ -103,6 +106,7 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
     func vision(vision: PBJVision!, capturedPhoto photoDict: [NSObject : AnyObject]!, error: NSError!) {
         var capturedImage = photoDict[PBJVisionPhotoImageKey] as UIImage
         var squareImage = squareImageWithImage(capturedImage)
+        profileImage = squareImage
         profileImageView.image = squareImage
     }
     
@@ -130,4 +134,52 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
         self.view.endEditing(true)
         return true
     }
+    
+
+    @IBAction func submitButtonWasTapped(sender: AnyObject) {
+        self.view.endEditing(true)
+        usernameRequiredLabel.hidden = true
+        usernameTakenLabel.hidden = true
+        if userNameTextField.text == "" {
+            usernameRequiredLabel.hidden = false
+        } else {
+            var query = PFQuery(className:"User")
+            query.whereKey("profileName", equalTo:userNameTextField.text)
+            query.findObjectsInBackgroundWithBlock {
+                (objects: [AnyObject]!, error: NSError!) -> Void in
+                if error == nil {
+                    // The find succeeded.
+                    println("Successfully retrieved \(objects.count) usernames.")
+                    // Do something with the found objects
+                    if objects.count > 0 {
+                        self.usernameTakenLabel.hidden = false
+                    } else {
+                        var user = PFUser.currentUser()
+                        user["profileName"] = self.userNameTextField.text
+                        
+                        if self.profileImage != nil {
+                            var profileImageData = UIImageJPEGRepresentation(self.profileImage, 1.0)
+                            var imageFile : PFFile = PFFile(name: "image.png", data: profileImageData)
+                            user["profileImage"] = imageFile
+                        }
+                        
+                        user.saveInBackgroundWithBlock {
+                            (success: Bool, error: NSError!) -> Void in
+                            if (success) {
+                                // The object has been saved.
+                                self.dismissViewControllerAnimated(true, completion: nil)
+                            } else {
+                                // There was a problem, check error.description
+                            }
+                        }
+                    }
+                } else {
+                    // Log details of the failure
+                    println("Error: \(error) \(error.userInfo!)")
+                }
+            }
+        }
+    }
+    
+    
 }

@@ -23,6 +23,8 @@
             <string>OpenSans</string>
             <string>OpenSans</string>
             <string>OpenSans</string>
+            <string>OpenSans</string>
+            <string>OpenSans</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -303,8 +305,8 @@
                                 <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q1a-3y-C7j">
-                                <rect key="frame" x="254" y="366" width="92.5" height="23.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="username:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q1a-3y-C7j">
+                                <rect key="frame" x="255" y="366" width="90.5" height="23.5"/>
                                 <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -321,7 +323,22 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="submitButtonWasTapped:" destination="ded-PO-Ujr" eventType="touchUpInside" id="sft-gN-ZHt"/>
+                                </connections>
                             </button>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="username is required" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lWo-dR-fvO">
+                                <rect key="frame" x="215" y="435" width="169.5" height="23.5"/>
+                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
+                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="username is taken, choose another" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oa2-p6-ZfL">
+                                <rect key="frame" x="161" y="434" width="278.5" height="23.5"/>
+                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
+                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
@@ -333,7 +350,11 @@
                             <constraint firstItem="Q1a-3y-C7j" firstAttribute="top" secondItem="9Br-Lx-G19" secondAttribute="bottom" constant="34" id="JvK-rl-jCq"/>
                             <constraint firstItem="9Br-Lx-G19" firstAttribute="top" secondItem="5cO-jj-gnI" secondAttribute="bottom" constant="62" id="O8T-D6-Uw5"/>
                             <constraint firstItem="J1r-ZA-UVm" firstAttribute="top" secondItem="WLG-do-Wgf" secondAttribute="bottom" constant="55" id="Oys-pw-DlT"/>
+                            <constraint firstAttribute="centerX" secondItem="lWo-dR-fvO" secondAttribute="centerX" id="TVW-jW-JEw"/>
                             <constraint firstItem="WLG-do-Wgf" firstAttribute="top" secondItem="Q1a-3y-C7j" secondAttribute="bottom" constant="8" id="ViE-AW-ga6"/>
+                            <constraint firstItem="oa2-p6-ZfL" firstAttribute="top" secondItem="WLG-do-Wgf" secondAttribute="bottom" constant="7" id="X9f-MG-O2M"/>
+                            <constraint firstItem="lWo-dR-fvO" firstAttribute="top" secondItem="WLG-do-Wgf" secondAttribute="bottom" constant="8" id="jgH-ea-drJ"/>
+                            <constraint firstAttribute="centerX" secondItem="oa2-p6-ZfL" secondAttribute="centerX" id="z09-aE-rKg"/>
                         </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="KdE-Tl-4oL" appends="YES" id="Sq5-4t-utJ"/>
@@ -346,6 +367,8 @@
                         <outlet property="submitButton" destination="J1r-ZA-UVm" id="bGu-rx-Efd"/>
                         <outlet property="tapToCaptureLabel" destination="yio-nz-WaA" id="NSF-NA-0Lf"/>
                         <outlet property="userNameTextField" destination="WLG-do-Wgf" id="1m3-n7-1wD"/>
+                        <outlet property="usernameRequiredLabel" destination="lWo-dR-fvO" id="unc-4M-4Sm"/>
+                        <outlet property="usernameTakenLabel" destination="oa2-p6-ZfL" id="OXD-62-CaD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qbW-uA-kla" userLabel="First Responder" sceneMemberID="firstResponder"/>
