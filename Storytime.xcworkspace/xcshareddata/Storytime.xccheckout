@@ -6,19 +6,15 @@
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>9B112EF7-2082-477E-BF4F-E9DEA3353403</string>
-	<key>IDESourceControlProjectName</key>
-	<string>Storytime</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>BD467BC1B533AA84AA6FF48C1CEFF1493F3C624B</key>
 		<string>https://github.com/franklinho/storytime.git</string>
 	</dict>
-	<key>IDESourceControlProjectPath</key>
-	<string>Storytime.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>BD467BC1B533AA84AA6FF48C1CEFF1493F3C624B</key>
-		<string>..</string>
+		<string>Storytime/</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/franklinho/storytime.git</string>
@@ -34,7 +30,7 @@
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>BD467BC1B533AA84AA6FF48C1CEFF1493F3C624B</string>
 			<key>IDESourceControlWCCName</key>
-			<string>storytime</string>
+			<string>Storytime</string>
 		</dict>
 	</array>
 </dict>

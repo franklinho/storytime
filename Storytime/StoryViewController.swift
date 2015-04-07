@@ -115,8 +115,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             var upvotes = story!["upvotes"] as? Int
             var downvotes = story!["downvotes"] as? Int
             self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
-
-            self.userLabel.text = self.story!["user"] as? String
+            var storyUser : PFUser = self.story!["user"] as PFUser
+            var profileName = storyUser["profileName"]
+            self.userLabel.text = profileName as? String
             createViewTopConstraint.constant = -(screenSize.width + 46)
             self.createView.hidden = true
             createTitleView.hidden = true
@@ -410,7 +411,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             story = PFObject(className: "Story")
             story!["title"] = titleTextField.text
-            story!["user"] = PFUser.currentUser().username
+            story!["user"] = PFUser.currentUser()
             story!["upvotes"] = 1
             story!["downvotes"] = 0
             story!.saveInBackgroundWithBlock({
@@ -729,7 +730,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             self.story = PFObject(className: "Story")
             self.story!["title"] = self.titleTextField.text
-            self.story!["user"] = PFUser.currentUser().username
+            self.story!["user"] = PFUser.currentUser()
             self.story!["upvotes"] = 1
             self.story!["downvotes"] = 0
             self.story!.saveInBackgroundWithBlock({
@@ -811,7 +812,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             self.story = PFObject(className: "Story")
             self.story!["title"] = self.titleTextField.text
-            self.story!["user"] = PFUser.currentUser().username
+            self.story!["user"] = PFUser.currentUser()
             self.story!["upvotes"] = 1
             self.story!["downvotes"] = 0
             self.story!.saveInBackgroundWithBlock({
@@ -819,7 +820,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 if (success) {
                     // The object has been saved.
                     self.storyTitleLabel.text = self.story!["title"] as? String
-                    self.userLabel.text = PFUser.currentUser().username
+                    var storyUser : PFUser = PFUser.currentUser() as PFUser
+                    var profileName : String = storyUser["profileName"] as String
+                    self.userLabel.text = profileName as String
                     var upvotes = self.story!["upvotes"] as? Int
                     var downvotes = self.story!["downvotes"] as? Int
                     self.storyPointsLabel.text = "\(upvotes!-downvotes!)"

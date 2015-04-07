@@ -54,7 +54,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         if stories != nil {
             story = stories![indexPath.row] as? PFObject
             cell.titleLabel.text = story!["title"] as? String
-            cell.userLabel.text = story!["user"] as? String
+            var storyUser : PFUser = story!["user"] as PFUser
+            storyUser.fetchIfNeeded()
+            var profileName : String = storyUser["profileName"] as String
+            cell.userLabel.text = profileName
             var upvotes = story!["upvotes"] as? Int
             var downvotes = story!["downvotes"] as? Int
             cell.pointsLabel.text = "\(upvotes!-downvotes!)"
