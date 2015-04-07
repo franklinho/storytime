@@ -20,6 +20,7 @@ class RankingTableViewCell: UITableViewCell {
     var storyUpVoted = false
     var storyDownVoted = false
     
+    @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var titleView: UIView!
     @IBOutlet weak var userLabel: UILabel!
     
@@ -36,6 +37,11 @@ class RankingTableViewCell: UITableViewCell {
         
         titleView.layer.cornerRadius = 10
         titleView.clipsToBounds = true
+        
+        profileImageView.layer.cornerRadius = 31
+        profileImageView.layer.borderWidth = 2
+        profileImageView.layer.borderColor = UIColor.darkGrayColor().CGColor
+        profileImageView.clipsToBounds = true
         
     }
 

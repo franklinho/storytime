@@ -32,6 +32,7 @@
 		DDBA720A1AC5FCF800D0EC97 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA72091AC5FCF800D0EC97 /* SystemConfiguration.framework */; };
 		DDBA720C1AC5FCFE00D0EC97 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA720B1AC5FCFE00D0EC97 /* libz.dylib */; };
 		DDBA720E1AC5FD0700D0EC97 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA720D1AC5FD0700D0EC97 /* libsqlite3.dylib */; };
+		DDC55B051AD4965A00659E70 /* user_icon_scaled_white.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC55B041AD4965A00659E70 /* user_icon_scaled_white.png */; };
 		DDC9368B1AC47CAE006D4646 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC9368A1AC47CAE006D4646 /* AppDelegate.swift */; };
 		DDC9368E1AC47CAE006D4646 /* Storytime.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DDC9368C1AC47CAE006D4646 /* Storytime.xcdatamodeld */; };
 		DDC936901AC47CAE006D4646 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC9368F1AC47CAE006D4646 /* ViewController.swift */; };
@@ -522,6 +523,7 @@
 		DDBA720B1AC5FCFE00D0EC97 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		DDBA720D1AC5FD0700D0EC97 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		DDBA720F1AC5FD3600D0EC97 /* Storytime-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Storytime-Bridging-Header.h"; sourceTree = "<group>"; };
+		DDC55B041AD4965A00659E70 /* user_icon_scaled_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = user_icon_scaled_white.png; path = ../Storytime/user_icon_scaled_white.png; sourceTree = "<group>"; };
 		DDC936851AC47CAE006D4646 /* Storytime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Storytime.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDC936891AC47CAE006D4646 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDC9368A1AC47CAE006D4646 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -1064,6 +1066,7 @@
 		DDBA72141AC5FD5B00D0EC97 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				DDC55B041AD4965A00659E70 /* user_icon_scaled_white.png */,
 				DDF06E9A1AD45857007D4954 /* user_icon_white.png */,
 				DDF06E981AD453FD007D4954 /* plus_icon_white.png */,
 				DDF06E941AD44ED2007D4954 /* switch_camera_icon.png */,
@@ -2151,6 +2154,7 @@
 				DDC93A1D1AC49422006D4646 /* text_icon.png in Resources */,
 				DDC939AF1AC47F5D006D4646 /* rdio-with-circle.svg in Resources */,
 				DDC939001AC47F5D006D4646 /* light-down.svg in Resources */,
+				DDC55B051AD4965A00659E70 /* user_icon_scaled_white.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

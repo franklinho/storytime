@@ -17,6 +17,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var storyCreated : Bool = false
     var story : PFObject?
     var events : NSArray?
+    @IBOutlet weak var userProfileImage: UIImageView!
     let captureSession = AVCaptureSession()
     var captureDevice : AVCaptureDevice?
     var audioCaptureDevice : AVCaptureDevice?
@@ -67,6 +68,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        userProfileImage.layer.cornerRadius = 31
+        userProfileImage.layer.borderColor = UIColor.whiteColor().CGColor
+        userProfileImage.layer.borderWidth = 2
+        userProfileImage.clipsToBounds = true
+        
         if PFUser.currentUser() != nil{
             if PFUser.currentUser()["votedStories"] != nil {
                 self.votedStories = PFUser.currentUser()["votedStories"] as NSMutableDictionary
@@ -91,6 +97,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             var downvotes = story!["downvotes"] as? Int
             println("Points are \(upvotes!-downvotes!)")
             pointsLabel.text = "\(upvotes!-downvotes!)"
+
         }
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyBoardWillChange:", name: UIKeyboardWillChangeFrameNotification, object: nil)
@@ -118,7 +125,17 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             var downvotes = story!["downvotes"] as? Int
             self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
             var storyUser : PFUser = self.story!["user"] as PFUser
+            storyUser.fetchIfNeeded()
             var profileName = storyUser["profileName"]
+            var profileImageFile = storyUser["profileImage"] as PFFile
+            profileImageFile.getDataInBackgroundWithBlock {
+                (imageData: NSData!, error: NSError!) -> Void in
+                if error == nil {
+                    let image = UIImage(data:imageData)
+                    self.userProfileImage.image = image
+                }
+            }
+            
             self.userLabel.text = profileName as? String
             createViewTopConstraint.constant = -(screenSize.width + 46)
             self.createView.hidden = true

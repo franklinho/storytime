@@ -62,6 +62,15 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             var storyUser : PFUser = story!["user"] as PFUser
             storyUser.fetchIfNeeded()
             var profileName : String = storyUser["profileName"] as String
+            var profileImageFile = storyUser["profileImage"] as PFFile
+            profileImageFile.getDataInBackgroundWithBlock {
+                (imageData: NSData!, error: NSError!) -> Void in
+                if error == nil {
+                    let image = UIImage(data:imageData)
+                    cell.profileImageView.image = image
+                }
+            }
+   
             cell.userLabel.text = profileName
             var upvotes = story!["upvotes"] as? Int
             var downvotes = story!["downvotes"] as? Int
