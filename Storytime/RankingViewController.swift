@@ -118,6 +118,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             loginViewController.signUpController = signUpViewController
             
             self.presentViewController(loginViewController, animated: true, completion: nil)
+        } else if (PFUser.currentUser() != nil && PFUser.currentUser()["screenName"] == nil) {
+            var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
+            self.presentViewController(createProfileVC, animated: true, completion: nil)
+
         } else {
             var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
             storyVC.newStory = true

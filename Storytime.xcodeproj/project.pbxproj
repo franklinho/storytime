@@ -478,6 +478,10 @@
 		DDC93A1D1AC49422006D4646 /* text_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC93A1C1AC49422006D4646 /* text_icon.png */; };
 		DDF06E921AD33038007D4954 /* down_icon_red.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF06E901AD33038007D4954 /* down_icon_red.png */; };
 		DDF06E931AD33038007D4954 /* up_icon_green.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF06E911AD33038007D4954 /* up_icon_green.png */; };
+		DDF06E951AD44ED2007D4954 /* switch_camera_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF06E941AD44ED2007D4954 /* switch_camera_icon.png */; };
+		DDF06E971AD4529F007D4954 /* CreateProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF06E961AD4529F007D4954 /* CreateProfileViewController.swift */; };
+		DDF06E991AD453FD007D4954 /* plus_icon_white.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF06E981AD453FD007D4954 /* plus_icon_white.png */; };
+		DDF06E9B1AD45857007D4954 /* user_icon_white.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF06E9A1AD45857007D4954 /* user_icon_white.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -968,6 +972,10 @@
 		DDC93A1C1AC49422006D4646 /* text_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = text_icon.png; sourceTree = "<group>"; };
 		DDF06E901AD33038007D4954 /* down_icon_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down_icon_red.png; sourceTree = "<group>"; };
 		DDF06E911AD33038007D4954 /* up_icon_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = up_icon_green.png; sourceTree = "<group>"; };
+		DDF06E941AD44ED2007D4954 /* switch_camera_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switch_camera_icon.png; sourceTree = "<group>"; };
+		DDF06E961AD4529F007D4954 /* CreateProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateProfileViewController.swift; sourceTree = "<group>"; };
+		DDF06E981AD453FD007D4954 /* plus_icon_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus_icon_white.png; sourceTree = "<group>"; };
+		DDF06E9A1AD45857007D4954 /* user_icon_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user_icon_white.png; sourceTree = "<group>"; };
 		E8ECC8C0FC39FC2D49766AFB /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -1056,6 +1064,9 @@
 		DDBA72141AC5FD5B00D0EC97 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				DDF06E9A1AD45857007D4954 /* user_icon_white.png */,
+				DDF06E981AD453FD007D4954 /* plus_icon_white.png */,
+				DDF06E941AD44ED2007D4954 /* switch_camera_icon.png */,
 				DDF06E901AD33038007D4954 /* down_icon_red.png */,
 				DDF06E911AD33038007D4954 /* up_icon_green.png */,
 				DDC939D21AC47FD8006D4646 /* fontello-dcf07f50 */,
@@ -1100,6 +1111,7 @@
 				DDC9368A1AC47CAE006D4646 /* AppDelegate.swift */,
 				DDC9368F1AC47CAE006D4646 /* ViewController.swift */,
 				DDC936911AC47CAE006D4646 /* Main.storyboard */,
+				DDF06E961AD4529F007D4954 /* CreateProfileViewController.swift */,
 				DDC93A101AC48F96006D4646 /* StoryImageTableViewCell.swift */,
 				DDC93A121AC48FA2006D4646 /* StoryTextTableViewCell.swift */,
 				DDC93A141AC48FAD006D4646 /* StoryVideoTableViewCell.swift */,
@@ -1806,6 +1818,7 @@
 				DDC938611AC47F5D006D4646 /* arrow-with-circle-up.svg in Resources */,
 				DDC938741AC47F5D006D4646 /* bucket.svg in Resources */,
 				DDC939631AC47F5D006D4646 /* text-document.svg in Resources */,
+				DDF06E991AD453FD007D4954 /* plus_icon_white.png in Resources */,
 				DDC939911AC47F5D006D4646 /* flickr.svg in Resources */,
 				DDC939CD1AC47F5D006D4646 /* youko-with-circle.svg in Resources */,
 				DDC938EB1AC47F5D006D4646 /* Icon in Resources */,
@@ -1831,6 +1844,7 @@
 				DDC939271AC47F5D006D4646 /* palette.svg in Resources */,
 				DDC93A071AC48268006D4646 /* OpenSans-Light.ttf in Resources */,
 				DDC938521AC47F5D006D4646 /* arrow-bold-down.svg in Resources */,
+				DDF06E9B1AD45857007D4954 /* user_icon_white.png in Resources */,
 				DDC938E51AC47F5D006D4646 /* heart-outlined.svg in Resources */,
 				DDC9391D1AC47F5D006D4646 /* music.svg in Resources */,
 				DDC939761AC47F5D006D4646 /* uninstall.svg in Resources */,
@@ -1854,6 +1868,7 @@
 				DDC939A01AC47F5D006D4646 /* linkedin-with-circle.svg in Resources */,
 				DDC938481AC47F5D006D4646 /* aircraft-take-off.svg in Resources */,
 				DDC939821AC47F5D006D4646 /* warning.svg in Resources */,
+				DDF06E951AD44ED2007D4954 /* switch_camera_icon.png in Resources */,
 				DDC939701AC47F5D006D4646 /* triangle-left.svg in Resources */,
 				DDC938F91AC47F5D006D4646 /* laptop.svg in Resources */,
 				DDC938D91AC47F5D006D4646 /* folder-music.svg in Resources */,
@@ -2189,6 +2204,7 @@
 				DDC93A131AC48FA2006D4646 /* StoryTextTableViewCell.swift in Sources */,
 				DDC93A0F1AC48E22006D4646 /* StoryViewController.swift in Sources */,
 				DDC936901AC47CAE006D4646 /* ViewController.swift in Sources */,
+				DDF06E971AD4529F007D4954 /* CreateProfileViewController.swift in Sources */,
 				DDC93A171AC48FB9006D4646 /* StoryCreateTableViewCell.swift in Sources */,
 				DDC93A151AC48FAD006D4646 /* StoryVideoTableViewCell.swift in Sources */,
 				DDC93A111AC48F96006D4646 /* StoryImageTableViewCell.swift in Sources */,

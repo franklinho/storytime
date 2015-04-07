@@ -1064,4 +1064,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         PFUser.currentUser()["votedStories"] = self.votedStories
         PFUser.currentUser().saveInBackground()
     }
+    
+    @IBAction func cameraSwitchButtonWasTapped(sender: AnyObject) {
+        if vision.cameraDevice == PBJCameraDevice.Back {
+            vision.cameraDevice = PBJCameraDevice.Front
+        } else {
+            vision.cameraDevice = PBJCameraDevice.Back
+        }
+    }
+    
 }
