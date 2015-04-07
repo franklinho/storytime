@@ -310,6 +310,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         
                         if self.cellCompletelyOnScreen(indexPath){
                             self.playingVideoCell = cell
+                            self.playingVideoCell?.playButtonIconImageView.hidden = true
                             self.playingVideoCell!.player!.play()
                             self.playingVideoCell!.player!.actionAtItemEnd = .None
                             
@@ -345,6 +346,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 {
             playingVideoCell?.player?.pause()
+            playingVideoCell?.playButtonIconImageView.hidden = false
         }
         
     }
@@ -925,6 +927,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if (playingVideoCell != nil && playingVideoCell!.player != nil) {
             if playingVideoCell!.player!.rate == 1.0 {
                 playingVideoCell!.player?.pause()
+                playingVideoCell?.playButtonIconImageView.hidden = false
                 
                 println("Pausing video")
             }
@@ -957,6 +960,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             playingVideoCell = playableCells[0] as StoryVideoTableViewCell
             
             if playingVideoCell!.player? != nil {
+                playingVideoCell?.playButtonIconImageView.hidden = true
                 playingVideoCell!.player!.play()
                 playingVideoCell!.player!.actionAtItemEnd = .None
                 
@@ -990,7 +994,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         playingVideoCell!.player!.seekToTime(seekTime)
         
+        playingVideoCell?.playButtonIconImageView.hidden = true
         playingVideoCell!.player!.play()
+        
     }
     
     func keyBoardWillChange(notification: NSNotification) {

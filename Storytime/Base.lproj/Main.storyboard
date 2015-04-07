@@ -424,7 +424,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="334" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Bes-cU-TpY">
-                                <rect key="frame" x="0.0" y="480" width="600" height="120"/>
+                                <rect key="frame" x="0.0" y="154" width="600" height="446"/>
                                 <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                 <gestureRecognizers/>
                                 <color key="sectionIndexBackgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
@@ -495,12 +495,20 @@
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" alpha="0.75" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="play_button_icon_white.png" translatesAutoresizingMaskIntoConstraints="NO" id="V3A-ji-sEl">
+                                                    <rect key="frame" x="200" y="67" width="200" height="200"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="200" id="56T-yT-HPN"/>
+                                                        <constraint firstAttribute="width" constant="200" id="DHX-NH-hcK"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstItem="lX6-HP-Kvp" firstAttribute="bottom" secondItem="mqd-bj-yN5" secondAttribute="bottomMargin" id="4Zp-eL-BFj"/>
                                                 <constraint firstItem="lX6-HP-Kvp" firstAttribute="top" secondItem="pUg-eM-eHA" secondAttribute="bottom" constant="8" id="8vE-cm-Jv8"/>
                                                 <constraint firstItem="lX6-HP-Kvp" firstAttribute="leading" secondItem="mqd-bj-yN5" secondAttribute="leading" id="9Cm-qA-s82"/>
+                                                <constraint firstAttribute="centerY" secondItem="V3A-ji-sEl" secondAttribute="centerY" id="IVP-VA-TfS"/>
                                                 <constraint firstAttribute="trailing" secondItem="lX6-HP-Kvp" secondAttribute="trailing" id="Kev-dF-NFv"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="lX6-HP-Kvp" secondAttribute="trailing" id="L86-8c-gaX"/>
                                                 <constraint firstItem="lX6-HP-Kvp" firstAttribute="top" secondItem="mqd-bj-yN5" secondAttribute="top" id="Laf-cW-0ke"/>
@@ -508,6 +516,7 @@
                                                 <constraint firstAttribute="bottom" secondItem="lX6-HP-Kvp" secondAttribute="bottom" id="gWZ-Vu-2gl"/>
                                                 <constraint firstItem="lX6-HP-Kvp" firstAttribute="leading" secondItem="mqd-bj-yN5" secondAttribute="leadingMargin" id="m5z-FV-Onf"/>
                                                 <constraint firstItem="pUg-eM-eHA" firstAttribute="top" secondItem="mqd-bj-yN5" secondAttribute="topMargin" constant="2" id="mkn-ls-X7o"/>
+                                                <constraint firstAttribute="centerX" secondItem="V3A-ji-sEl" secondAttribute="centerX" id="nQF-rY-6kS"/>
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
@@ -519,6 +528,7 @@
                                             </variation>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="playButtonIconImageView" destination="V3A-ji-sEl" id="g7K-TI-ToQ"/>
                                             <outlet property="playerView" destination="lX6-HP-Kvp" id="GSL-Sv-fQS"/>
                                             <outlet property="timestampLabel" destination="pUg-eM-eHA" id="0ka-OO-uLT"/>
                                             <outlet property="videoView" destination="lX6-HP-Kvp" id="uKL-ZE-M1G"/>
@@ -563,7 +573,7 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DxK-24-jad" userLabel="CreateView">
-                                <rect key="frame" x="0.0" y="154" width="600" height="326"/>
+                                <rect key="frame" x="0.0" y="-172" width="600" height="326"/>
                                 <subviews>
                                     <view hidden="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="748" translatesAutoresizingMaskIntoConstraints="NO" id="ecm-OX-hx2" userLabel="VideoContainer">
                                         <rect key="frame" x="0.0" y="46" width="600" height="280"/>
@@ -1008,7 +1018,7 @@
                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="zC1-cs-0xd" firstAttribute="top" secondItem="z5O-jy-g3q" secondAttribute="bottom" id="7Sq-7f-PNh"/>
-                            <constraint firstItem="DxK-24-jad" firstAttribute="top" secondItem="zC1-cs-0xd" secondAttribute="bottom" id="7Wn-lE-Vze"/>
+                            <constraint firstItem="DxK-24-jad" firstAttribute="top" secondItem="zC1-cs-0xd" secondAttribute="bottom" constant="-326" id="7Wn-lE-Vze"/>
                             <constraint firstItem="Bes-cU-TpY" firstAttribute="top" secondItem="DxK-24-jad" secondAttribute="bottom" id="7eU-bI-HGn"/>
                             <constraint firstItem="Ebf-0P-F2l" firstAttribute="top" secondItem="z5O-jy-g3q" secondAttribute="bottom" id="87f-hc-MkS"/>
                             <constraint firstItem="DxK-24-jad" firstAttribute="leading" secondItem="TJV-F8-eXr" secondAttribute="leadingMargin" id="EKN-hi-haj"/>
@@ -1100,6 +1110,7 @@
     <resources>
         <image name="camera_icon.png" width="256" height="256"/>
         <image name="down_icon_white.png" width="256" height="256"/>
+        <image name="play_button_icon_white.png" width="256" height="256"/>
         <image name="switch_camera_icon.png" width="128" height="128"/>
         <image name="text_icon.png" width="256" height="256"/>
         <image name="up_icon_white.png" width="256" height="256"/>

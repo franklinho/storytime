@@ -11,6 +11,7 @@ import AVFoundation
 
 class StoryVideoTableViewCell: UITableViewCell {
     
+    @IBOutlet weak var playButtonIconImageView: UIImageView!
     var player : AVPlayer?
     var playerLayer : AVPlayerLayer?
     @IBOutlet weak var playerView: UIView!
@@ -19,6 +20,8 @@ class StoryVideoTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        playButtonIconImageView.layer.cornerRadius = 100
+        playButtonIconImageView.clipsToBounds = true
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
