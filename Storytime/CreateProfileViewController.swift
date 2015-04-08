@@ -10,6 +10,7 @@ import UIKit
 
 class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFieldDelegate {
 
+    @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var profilePhotoLabel: UILabel!
     @IBOutlet weak var profilePreviewView: UIView!
     
@@ -39,7 +40,11 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
         
         submitButton.layer.cornerRadius = 10
         submitButton.clipsToBounds = true
-
+        
+        closeButton.layer.cornerRadius = 23
+        closeButton.layer.borderWidth = 4
+        closeButton.layer.borderColor = UIColor.whiteColor().CGColor
+        closeButton.clipsToBounds = true
         
         previewLayer = vision.previewLayer
         previewLayer!.frame = profilePreviewView.bounds
@@ -136,6 +141,11 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
     }
     
 
+    @IBAction func closeButtonWasTapped(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    
     @IBAction func submitButtonWasTapped(sender: AnyObject) {
         self.view.endEditing(true)
         usernameRequiredLabel.hidden = true

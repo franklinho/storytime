@@ -8,11 +8,12 @@
 
 import UIKit
 
-class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
+class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, RankingTableViewCellDelegate {
 
     var stories : NSArray?
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var votedStories : NSMutableDictionary = [:]
+    var creatingNewStory = false
     
     @IBOutlet weak var logOutButton: UIBarButtonItem!
     
@@ -49,11 +50,20 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
+    func displayCreateProfileViewController() {
+        presentCreateProfileViewController()
+    }
+
+    func displayLoginViewController() {
+        presentLoginViewController()
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = rankingTableView.dequeueReusableCellWithIdentifier("RankingTableViewCell") as RankingTableViewCell
         cell.upvoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
         cell.downvoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
         cell.pointsLabel.textColor = UIColor.whiteColor()
+        cell.delegate = self
         
         var story : PFObject?
         if stories != nil {
@@ -62,17 +72,24 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.titleLabel.text = story!["title"] as? String
             var storyUser : PFUser = story!["user"] as PFUser
             storyUser.fetchIfNeeded()
-            var profileName : String = storyUser["profileName"] as String
-            var profileImageFile = storyUser["profileImage"] as PFFile
-            profileImageFile.getDataInBackgroundWithBlock {
-                (imageData: NSData!, error: NSError!) -> Void in
-                if error == nil {
-                    let image = UIImage(data:imageData)
-                    cell.profileImageView.image = image
+            if storyUser["profileName"] != nil {
+                var profileName : String = storyUser["profileName"] as String
+                cell.userLabel.text = profileName
+            }
+            
+            if storyUser["profileImage"] != nil {
+                var profileImageFile = storyUser["profileImage"] as PFFile
+                profileImageFile.getDataInBackgroundWithBlock {
+                    (imageData: NSData!, error: NSError!) -> Void in
+                    if error == nil {
+                        let image = UIImage(data:imageData)
+                        cell.profileImageView.image = image
+                    }
                 }
             }
-   
-            cell.userLabel.text = profileName
+            
+            
+            
             var upvotes = story!["upvotes"] as? Int
             var downvotes = story!["downvotes"] as? Int
             cell.pointsLabel.text = "\(upvotes!-downvotes!)"
@@ -143,25 +160,34 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         // Pass the selected object to the new view controller.
     }
     */
+    
+    func presentLoginViewController() {
+        var loginViewController : PFLogInViewController = PFLogInViewController()
+        loginViewController.delegate = self
+        loginViewController.facebookPermissions = NSArray(array: ["friends_about_me"])
+        loginViewController.fields = PFLogInFields.Twitter | PFLogInFields.Facebook | PFLogInFields.DismissButton
+        
+        
+        var signUpViewController : PFSignUpViewController = PFSignUpViewController()
+        signUpViewController.delegate = self
+        
+        loginViewController.signUpController = signUpViewController
+        
+        self.presentViewController(loginViewController, animated: true, completion: nil)
+    }
+    
+    func presentCreateProfileViewController() {
+        var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
+        self.presentViewController(createProfileVC, animated: true, completion: nil)
+
+    }
 
     @IBAction func newStoryButtonWasTapped(sender: AnyObject) {
+        creatingNewStory = true
         if (PFUser.currentUser() == nil){
-            var loginViewController : PFLogInViewController = PFLogInViewController()
-            loginViewController.delegate = self
-            loginViewController.facebookPermissions = NSArray(array: ["friends_about_me"])
-            loginViewController.fields = PFLogInFields.Twitter | PFLogInFields.Facebook | PFLogInFields.DismissButton
-            
-            
-            var signUpViewController : PFSignUpViewController = PFSignUpViewController()
-            signUpViewController.delegate = self
-            
-            loginViewController.signUpController = signUpViewController
-            
-            self.presentViewController(loginViewController, animated: true, completion: nil)
+            presentLoginViewController()
         } else if (PFUser.currentUser() != nil && PFUser.currentUser()["profileName"] == nil) {
-            var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
-            self.presentViewController(createProfileVC, animated: true, completion: nil)
-
+            presentCreateProfileViewController()
         } else {
             var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
             storyVC.newStory = true
@@ -189,9 +215,11 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         } else {
-            var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
-            storyVC.newStory = true
-            navigationController?.pushViewController(storyVC, animated: true)
+            if self.creatingNewStory == true {
+                var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
+                storyVC.newStory = true
+                navigationController?.pushViewController(storyVC, animated: true)
+            }
         }
         
     }
@@ -234,9 +262,11 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         } else {
-            var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
-            storyVC.newStory = true
-            navigationController?.pushViewController(storyVC, animated: true)
+            if self.creatingNewStory == true {
+                var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
+                storyVC.newStory = true
+                navigationController?.pushViewController(storyVC, animated: true)
+            }
         }
     }
     

@@ -8,7 +8,16 @@
 
 import UIKit
 
-class RankingTableViewCell: UITableViewCell {
+// Protocol for triggering login/signup/createProfileViewControllers
+
+protocol RankingTableViewCellDelegate{
+    func displayLoginViewController()
+    func displayCreateProfileViewController()
+}
+
+class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
+    
+    var delegate : RankingTableViewCellDelegate?
 
     @IBOutlet weak var rankLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
@@ -54,6 +63,30 @@ class RankingTableViewCell: UITableViewCell {
     }
 
     @IBAction func upvoteButtonWasTapped(sender: AnyObject) {
+        if (PFUser.currentUser() == nil){
+            self.delegate?.displayLoginViewController()
+            
+        } else if (PFUser.currentUser() != nil && PFUser.currentUser()["profileName"] == nil) {
+            self.delegate?.displayCreateProfileViewController()
+            
+        } else {
+            upvoteStory()
+        }
+    }
+    
+    @IBAction func downvoteButtonWasTapped(sender: AnyObject) {
+        if (PFUser.currentUser() == nil){
+            self.delegate?.displayLoginViewController()
+            
+        } else if (PFUser.currentUser() != nil && PFUser.currentUser()["profileName"] == nil) {
+            self.delegate?.displayCreateProfileViewController()
+            
+        } else {
+            downvoteStory()
+        }
+    }
+    
+    func upvoteStory() {
         if PFUser.currentUser() != nil{
             if PFUser.currentUser()["votedStories"] != nil {
                 if self.story != nil {
@@ -93,13 +126,10 @@ class RankingTableViewCell: UITableViewCell {
                 }
             }
         }
-                
-                
-                
-        
+
     }
     
-    @IBAction func downvoteButtonWasTapped(sender: AnyObject) {
+    func downvoteStory() {
         if PFUser.currentUser() != nil{
             if PFUser.currentUser()["votedStories"] != nil {
                 if self.story != nil {
