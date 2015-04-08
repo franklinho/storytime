@@ -652,6 +652,7 @@
                                             <outlet property="upvoteButton" destination="hLT-x5-ZNy" id="JbE-TC-jeG"/>
                                             <outlet property="userButton" destination="MYb-wQ-dey" id="5US-X5-wv2"/>
                                             <outlet property="voteView" destination="dVe-Vg-V6R" id="6us-Te-zk8"/>
+                                            <segue destination="nXj-xd-FNA" kind="show" identifier="ProfileRankingTableViewCellToStoryVCSegue" id="ZfJ-zs-kTV"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -1326,17 +1327,25 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="user" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4T8-ck-Y0C">
-                                        <rect key="frame" x="136" y="51" width="33.5" height="20.5"/>
+                                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="user" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4T8-ck-Y0C">
+                                        <rect key="frame" x="136" y="35" width="33.5" height="44"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="3GN-p0-cYc"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="aCr-wU-EQw" appends="YES" id="JVn-tM-tMB"/>
+                                        </connections>
                                     </label>
                                 </subviews>
                                 <color key="backgroundColor" red="0.12156862745098039" green="0.12941176470588237" blue="0.14117647058823529" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="N6n-gn-M1B" firstAttribute="top" secondItem="zC1-cs-0xd" secondAttribute="top" constant="19" id="16y-Ug-yka"/>
                                     <constraint firstAttribute="height" constant="90" id="1wG-Fn-Sxt"/>
+                                    <constraint firstItem="4T8-ck-Y0C" firstAttribute="top" secondItem="zC1-cs-0xd" secondAttribute="top" constant="35" id="2Ci-gT-BwF"/>
                                     <constraint firstItem="N6n-gn-M1B" firstAttribute="leading" secondItem="0fP-OH-gNp" secondAttribute="trailing" constant="81" id="A0t-T8-p8N"/>
                                     <constraint firstItem="N6n-gn-M1B" firstAttribute="top" secondItem="zC1-cs-0xd" secondAttribute="top" constant="8" id="Frj-c9-Xth"/>
                                     <constraint firstItem="0fP-OH-gNp" firstAttribute="leading" secondItem="zC1-cs-0xd" secondAttribute="leading" constant="10" id="Ft6-Da-CxO"/>
@@ -1356,6 +1365,7 @@
                                     <mask key="constraints">
                                         <exclude reference="A0t-T8-p8N"/>
                                         <exclude reference="Frj-c9-Xth"/>
+                                        <exclude reference="H4V-7v-B6d"/>
                                         <exclude reference="e2x-3b-4Tz"/>
                                     </mask>
                                 </variation>
@@ -1474,6 +1484,11 @@
                         <action selector="videoLongPressGestureRecognizerWasTapped:" destination="nXj-xd-FNA" id="9fq-nt-fxI"/>
                     </connections>
                 </pongPressGestureRecognizer>
+                <tapGestureRecognizer id="aCr-wU-EQw">
+                    <connections>
+                        <action selector="userLabelWasTapped:" destination="nXj-xd-FNA" id="6Sa-Dp-sCZ"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2661" y="360"/>
         </scene>
@@ -1547,4 +1562,7 @@
         <image name="user_icon_scaled_white.png" width="300" height="300"/>
         <image name="video_icon.png" width="256" height="256"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="ZfJ-zs-kTV"/>
+    </inferredMetricsTieBreakers>
 </document>

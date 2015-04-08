@@ -48,12 +48,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         storyTableView.dataSource = self
         
         storyTableView.rowHeight = self.screenSize.width
-        
+        requestStories()
         
     }
     
     override func viewDidAppear(animated: Bool) {
-        requestStories()
+        
     }
 
     override func didReceiveMemoryWarning() {

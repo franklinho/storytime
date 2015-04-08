@@ -203,6 +203,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //
 //        }
         
+        if storyCreated == true {
+            requestEventsForStory()
+        }
+        
     }
     
     
@@ -631,9 +635,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     override func viewDidAppear(animated: Bool) {
-        if storyCreated == true {
-            requestEventsForStory()
-        }
+        
     }
     
     @IBAction func storyTableViewWasTapped(sender: AnyObject) {
@@ -1348,6 +1350,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     
+    @IBAction func userLabelWasTapped(sender: AnyObject) {
+        var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as ProfileViewController
+        profileVC.user = self.story!["user"] as? PFUser
+        navigationController?.pushViewController(profileVC, animated: true)
+
+        
+    }
     
     
 }
