@@ -11,7 +11,8 @@ import AVFoundation
 import MediaPlayer
 
 
-class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate {
+class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
+    
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var newStory : Bool = false
     var storyCreated : Bool = false
@@ -31,6 +32,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var playingVideoCell : StoryVideoTableViewCell?
     var storyUpVoted = false
     var storyDownVoted = false
+    var creatingEvent = false
+    var createViewExpanded = false
+    var createButton :UIBarButtonItem?
 
     @IBOutlet weak var pointsLabel: UILabel!
     @IBOutlet weak var upVoteButton: UIButton!
@@ -119,7 +123,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         createViewHeightConstraint.constant = self.view.bounds.width + 46
         
-        var createButton :UIBarButtonItem = UIBarButtonItem(title: "+", style: .Plain, target: self, action: "createEvent")
+        createButton = UIBarButtonItem(title: "+", style: .Plain, target: self, action: "createButtonWasTapped")
         self.navigationItem.rightBarButtonItem = createButton
         if newStory == false {
             self.storyTitleLabel.text = self.story!["title"] as? String
@@ -331,6 +335,21 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     }
     
+    
+    func createButtonWasTapped() {
+        if (PFUser.currentUser() == nil){
+            presentLoginViewController()
+        } else if (PFUser.currentUser() != nil && PFUser.currentUser()["profileName"] == nil) {
+            presentCreateProfileViewController()
+        } else {
+            if createViewExpanded == false {
+                createEvent()
+            } else {
+                minimizeCreateView()
+            }
+        }
+    }
+    
     func createEvent() {
         self.view.layoutIfNeeded()
         self.createView.hidden = false
@@ -340,12 +359,17 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         UIView.animateWithDuration(0.3, animations: {
             self.view.layoutIfNeeded()
             
+            }, completion: {
+                (value: Bool) in
+                self.createViewExpanded = true
+                self.createButton!.title = "X"
             })
         
         if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 {
             playingVideoCell?.player?.pause()
             playingVideoCell?.playButtonIconImageView.hidden = false
         }
+        
         
     }
 
@@ -365,12 +389,16 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }, completion: {
                 (value: Bool) in
                 self.createView.hidden = true
+                self.createViewExpanded = false
+                self.createButton!.title = "+"
         })
         videoLongPressGestureRecognizer.enabled = false
         for view in createViews {
             (view as UIView).hidden = true
             textContainer.hidden = false
         }
+        
+        
     }
     
     
@@ -1020,6 +1048,28 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     @IBAction func upVoteButtonWasTapped(sender: AnyObject) {
+        if (PFUser.currentUser() == nil){
+            presentLoginViewController()
+        } else if (PFUser.currentUser() != nil && PFUser.currentUser()["profileName"] == nil) {
+            presentCreateProfileViewController()
+        } else {
+            upvoteStory()
+        }
+    }
+    
+    
+    
+    @IBAction func downVoteButtonWasTapped(sender: AnyObject) {
+        if (PFUser.currentUser() == nil){
+            presentLoginViewController()
+        } else if (PFUser.currentUser() != nil && PFUser.currentUser()["profileName"] == nil) {
+            presentCreateProfileViewController()
+        } else {
+            downvoteStory()
+        }
+    }
+    
+    func upvoteStory() {
         if storyUpVoted == true {
             self.votedStories[self.story!.objectId] = 0
             storyUpVoted = false
@@ -1054,7 +1104,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         PFUser.currentUser().saveInBackground()
     }
 
-    @IBAction func downVoteButtonWasTapped(sender: AnyObject) {
+    
+    func downvoteStory() {
         if storyDownVoted == true {
             self.votedStories[self.story!.objectId] = 0
             storyDownVoted = false
@@ -1090,6 +1141,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         PFUser.currentUser()["votedStories"] = self.votedStories
         PFUser.currentUser().saveInBackground()
     }
+
     
     @IBAction func cameraSwitchButtonWasTapped(sender: AnyObject) {
         if vision.cameraDevice == PBJCameraDevice.Back {
@@ -1126,5 +1178,104 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         return timeSinceEvent!
 
     }
+    
+    func presentLoginViewController() {
+        var loginViewController : PFLogInViewController = PFLogInViewController()
+        loginViewController.delegate = self
+        loginViewController.facebookPermissions = NSArray(array: ["friends_about_me"])
+        loginViewController.fields = PFLogInFields.Twitter | PFLogInFields.Facebook | PFLogInFields.DismissButton
+        
+        
+        var signUpViewController : PFSignUpViewController = PFSignUpViewController()
+        signUpViewController.delegate = self
+        
+        loginViewController.signUpController = signUpViewController
+        
+        self.presentViewController(loginViewController, animated: true, completion: nil)
+    }
+    
+    func presentCreateProfileViewController() {
+        var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
+        self.presentViewController(createProfileVC, animated: true, completion: nil)
+        
+    }
+    
+    func logInViewController(logInController: PFLogInViewController!, shouldBeginLogInWithUsername username: String!, password: String!) -> Bool {
+        if ((username != nil && password != nil && countElements(username) != 0 && countElements(password) != 0) ) {
+            return true
+        }
+        
+        UIAlertView(title: "Missing Information", message: "Make sure you fill out all of the information", delegate: nil, cancelButtonTitle: "OK").show()
+        
+        return false
+    }
+    
+    func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+        
+        if PFUser.currentUser()["profileName"] == nil {
+            var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
+            self.presentViewController(createProfileVC, animated: true, completion: nil)
+        } else {
+//            if self.creatingNewStory == true {
+//                var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
+//                storyVC.newStory = true
+//                navigationController?.pushViewController(storyVC, animated: true)
+//            }
+        }
+        
+    }
+    
+    func logInViewController(logInController: PFLogInViewController!, didFailToLogInWithError error: NSError!) {
+        println("Failed to log in")
+    }
+    
+    func logInViewControllerDidCancelLogIn(logInController: PFLogInViewController!) {
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func signUpViewController(signUpController: PFSignUpViewController!, shouldBeginSignUp info: [NSObject : AnyObject]!) -> Bool {
+        var informationComplete : Bool = true
+        
+        for (key,value) in info {
+            var field : NSString = info["key"] as NSString
+            if (field.length == 0) {
+                informationComplete = false
+                break
+            }
+        }
+        
+        if (!informationComplete) {
+            UIAlertView(title: "Missing Information", message: "Make sure you fill out all of the information", delegate: nil, cancelButtonTitle: "OK").show()
+            
+        }
+        return informationComplete
+        
+    }
+
+    func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+        if PFUser.currentUser()["profileName"] == nil {
+            var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
+            self.presentViewController(createProfileVC, animated: true, completion: nil)
+        } else {
+//            if self.creatingNewStory == true {
+//                var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
+//                storyVC.newStory = true
+//                navigationController?.pushViewController(storyVC, animated: true)
+//            }
+        }
+    }
+    
+    func signUpViewController(signUpController: PFSignUpViewController!, didFailToSignUpWithError error: NSError!) {
+        println("Failed to sign up")
+    }
+    
+    func signUpViewControllerDidCancelSignUp(signUpController: PFSignUpViewController!) {
+        println("User dismissed the signupviewcontroller")
+    }
+    
+    
+    
     
 }

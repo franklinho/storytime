@@ -253,6 +253,11 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewDidAppear(animated: Bool) {
         requestStories()
+        if PFUser.currentUser() != nil {
+            logOutButton.enabled = true
+        } else {
+            logOutButton.enabled = false
+        }
     }
     
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
@@ -281,6 +286,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBAction func logOutButtonWasTapped(sender: AnyObject) {
         PFUser.logOut()
         UIAlertView(title: "Logged Out", message: "You have successfully logged out.", delegate: nil, cancelButtonTitle: "OK").show()
+        self.votedStories = [:] as NSMutableDictionary
     }
     
     func requestStories() {
