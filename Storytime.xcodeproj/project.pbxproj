@@ -20,6 +20,7 @@
 		DD70FBD11ACF16DE0002C5CC /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD70FBD01ACF16DE0002C5CC /* ParseUI.framework */; };
 		DD70FBD31ACF16FB0002C5CC /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD70FBD21ACF16FB0002C5CC /* Parse.framework */; };
 		DD8C82851AD5CE1E00B9A47B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */; };
+		DD8C828B1AD5D52600B9A47B /* menu_icon_white.png in Resources */ = {isa = PBXBuildFile; fileRef = DD8C828A1AD5D52600B9A47B /* menu_icon_white.png */; };
 		DDBA71F61AC5FCC100D0EC97 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA71F51AC5FCC100D0EC97 /* Accounts.framework */; };
 		DDBA71F81AC5FCC700D0EC97 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA71F71AC5FCC700D0EC97 /* AudioToolbox.framework */; };
 		DDBA71FA1AC5FCCC00D0EC97 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA71F91AC5FCCC00D0EC97 /* CFNetwork.framework */; };
@@ -512,6 +513,7 @@
 		DD70FBD01ACF16DE0002C5CC /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
 		DD70FBD21ACF16FB0002C5CC /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = Pods/Parse/Parse.framework; sourceTree = "<group>"; };
 		DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		DD8C828A1AD5D52600B9A47B /* menu_icon_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_icon_white.png; sourceTree = "<group>"; };
 		DDBA71F51AC5FCC100D0EC97 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		DDBA71F71AC5FCC700D0EC97 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		DDBA71F91AC5FCCC00D0EC97 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -1072,6 +1074,7 @@
 		DDBA72141AC5FD5B00D0EC97 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				DD8C828A1AD5D52600B9A47B /* menu_icon_white.png */,
 				DDC55B061AD49C0700659E70 /* play_button_icon_white.png */,
 				DDC55B041AD4965A00659E70 /* user_icon_scaled_white.png */,
 				DDF06E9A1AD45857007D4954 /* user_icon_white.png */,
@@ -1924,6 +1927,7 @@
 				DDC939A91AC47F5D006D4646 /* pinterest.svg in Resources */,
 				DDC939601AC47F5D006D4646 /* tablet.svg in Resources */,
 				DDC939BA1AC47F5D006D4646 /* spotify.svg in Resources */,
+				DD8C828B1AD5D52600B9A47B /* menu_icon_white.png in Resources */,
 				DDC938C31AC47F5D006D4646 /* email.svg in Resources */,
 				DDC939381AC47F5D006D4646 /* quote.svg in Resources */,
 				DDC9390B1AC47F5D006D4646 /* loop.svg in Resources */,

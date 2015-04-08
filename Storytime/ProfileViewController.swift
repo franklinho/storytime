@@ -14,20 +14,40 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var votedStories : NSMutableDictionary = [:]
     var user : PFUser?
+    @IBOutlet weak var profileImageView: UIImageView!
     
     @IBOutlet weak var storyTableView: UITableView!
     @IBOutlet weak var usernameLabel: UILabel!
-    @IBOutlet weak var profileImageView: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        profileImageView.layer.cornerRadius = 50
+        profileImageView.layer.borderColor = UIColor.darkGrayColor().CGColor
+        profileImageView.layer.borderWidth = 4
+        profileImageView.clipsToBounds = true
+        
         if user == nil && PFUser.currentUser() != nil {
             user = PFUser.currentUser()
+        }
+        
+        if user != nil {
+            usernameLabel.text = user!["profileName"] as String
+            var profileImageFile = user!["profileImage"] as PFFile
+            profileImageFile.getDataInBackgroundWithBlock {
+                (imageData: NSData!, error: NSError!) -> Void in
+                if error == nil {
+                    let image = UIImage(data:imageData)
+                    self.profileImageView.image = image
+                }
+            }
+
         }
 
         // Do any additional setup after loading the view.
         storyTableView.delegate = self
         storyTableView.dataSource = self
+        
+        storyTableView.rowHeight = self.screenSize.width
     }
 
     override func didReceiveMemoryWarning() {
