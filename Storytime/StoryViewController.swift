@@ -257,11 +257,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             if event!["type"] as NSString == "text" {
                 var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryTextTableViewCell") as StoryTextTableViewCell
                 cell.eventTextLabel.text = event!["text"] as? String
-                cell.timestampLabel.text = "\(event!.createdAt)"
+                cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
                 return cell
             } else if event!["type"] as String == "photo" {
                 var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryImageTableViewCell") as StoryImageTableViewCell
-                cell.timestampLabel.text = "\(event!.createdAt)"
+                cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
                 let userImageFile = event!["image"] as PFFile
                 userImageFile.getDataInBackgroundWithBlock {
                     (imageData: NSData!, error: NSError!) -> Void in
@@ -279,11 +279,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.playerLayer!.removeFromSuperlayer()
                 }
                 
-                cell.timestampLabel.text = "\(event!.createdAt)"
-                
-                
-                
-                
+                cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
 
                 let videoFile = event!["video"] as PFFile
                 videoFile.getDataInBackgroundWithBlock {
@@ -1099,6 +1095,34 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         } else {
             vision.cameraDevice = PBJCameraDevice.Back
         }
+    }
+    
+    func timeSinceTimeStamp(timeStamp : NSDate) -> String {
+        // Calculate time since tweet creation
+        var secondsBetween : NSTimeInterval = NSDate().timeIntervalSinceDate(timeStamp)
+        var numberOfMinutesDouble = secondsBetween/60 as Double
+        var numberOfMinutes : Int = Int(numberOfMinutesDouble)
+        
+        //        println("\(numberOfMinutes)")
+        
+        var timeSinceEvent : String?
+        
+        if numberOfMinutes < 60 {
+            timeSinceEvent = "\(numberOfMinutes)m ago"
+        } else if numberOfMinutes < 1440 && numberOfMinutes >= 60 {
+            var hours = Int(numberOfMinutes/60)
+            timeSinceEvent = "\(hours)h ago"
+        } else {
+            let oldDateFormatter = NSDateFormatter()
+            oldDateFormatter.dateFormat = "MM/dd/yy"
+            timeSinceEvent = oldDateFormatter.stringFromDate(timeStamp)
+        }
+        
+//        let timeStampDateFormatter = NSDateFormatter()
+//        timeStampDateFormatter.dateFormat = "MM/dd/yy, HH:mm aa"
+//        self.timeStamp = timeStampDateFormatter.stringFromDate(createdTimeStamp)
+        return timeSinceEvent!
+
     }
     
 }

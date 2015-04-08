@@ -10,13 +10,18 @@ import UIKit
 
 class StoryImageTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var timestampView: UIView!
     @IBOutlet weak var timestampLabel: UILabel!
     
+
     @IBOutlet weak var eventImageView: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        timestampView.layer.cornerRadius = 5
+        timestampView.clipsToBounds = true
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

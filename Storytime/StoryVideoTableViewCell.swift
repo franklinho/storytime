@@ -11,6 +11,7 @@ import AVFoundation
 
 class StoryVideoTableViewCell: UITableViewCell {
     
+    @IBOutlet weak var timestampView: UIView!
     @IBOutlet weak var playButtonIconImageView: UIImageView!
     var player : AVPlayer?
     var playerLayer : AVPlayerLayer?
@@ -22,6 +23,9 @@ class StoryVideoTableViewCell: UITableViewCell {
         // Initialization code
         playButtonIconImageView.layer.cornerRadius = 100
         playButtonIconImageView.clipsToBounds = true
+        
+        timestampView.layer.cornerRadius = 5
+        timestampView.clipsToBounds = true
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
