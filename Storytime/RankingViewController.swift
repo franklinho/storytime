@@ -14,12 +14,15 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var votedStories : NSMutableDictionary = [:]
     var creatingNewStory = false
+    var refreshControl : UIRefreshControl!
     
     @IBOutlet weak var logOutButton: UIBarButtonItem!
     
     @IBOutlet weak var rankingTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
 
         // Do any additional setup after loading the view.
         
@@ -38,6 +41,16 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
         self.rankingTableView.rowHeight = self.screenSize.width
+        
+        // Add pull to refresh to the tableview
+        self.refreshControl = UIRefreshControl()
+        var pullToRefreshString = "Pull to refresh"
+        var pullToRefreshAttributedString : NSMutableAttributedString = NSMutableAttributedString(string: pullToRefreshString)
+        pullToRefreshAttributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, countElements(pullToRefreshString)))
+        self.refreshControl.attributedTitle = pullToRefreshAttributedString
+        self.refreshControl.addTarget(self, action: "requestStories", forControlEvents: UIControlEvents.ValueChanged)
+        self.rankingTableView.addSubview(refreshControl)
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -309,19 +322,15 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                     println("Successfully retrieved \(objects.count) events.")
                     self.stories = objects
                     self.rankingTableView.reloadData()
-                    // Do something with the found objects
-                    if let objects = objects as? [PFObject] {
-                        for object in objects {
-                            var title = object["title"]
-                            println("Object ID: \(object.objectId), Timestamp: \(object.createdAt?), Text: \(title)")
-                        }
-                    }
+                    self.refreshControl.endRefreshing()
                 } else {
                     // Log details of the failure
                     println("Error: \(error) \(error.userInfo!)")
+                    self.refreshControl.endRefreshing()
                 }
             }
         })
+        
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

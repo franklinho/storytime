@@ -35,6 +35,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var creatingEvent = false
     var createViewExpanded = false
     var createButton :UIBarButtonItem?
+    var refreshControl : UIRefreshControl!
 
     @IBOutlet weak var pointsLabel: UILabel!
     @IBOutlet weak var upVoteButton: UIButton!
@@ -206,6 +207,16 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if storyCreated == true {
             requestEventsForStory()
         }
+        
+        
+        // Add pull to refresh to the tableview
+        self.refreshControl = UIRefreshControl()
+        var pullToRefreshString = "Pull to refresh"
+        var pullToRefreshAttributedString : NSMutableAttributedString = NSMutableAttributedString(string: pullToRefreshString)
+        pullToRefreshAttributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, countElements(pullToRefreshString)))
+        self.refreshControl.attributedTitle = pullToRefreshAttributedString
+        self.refreshControl.addTarget(self, action: "requestEventsForStory", forControlEvents: UIControlEvents.ValueChanged)
+        self.storyTableView.addSubview(refreshControl)
         
     }
     
@@ -618,16 +629,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.storyTableView.reloadData()
                     self.storyTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
                     self.scrollViewDidEndDecelerating(self.storyTableView)
-                    // Do something with the found objects
-                    if let objects = objects as? [PFObject] {
-                        for object in objects {
-                            var text = object["text"]
-                            println("Object ID: \(object.objectId!), Timestamp: \(object.createdAt!), Text: \(text)")
-                        }
-                    }
+                    self.refreshControl.endRefreshing()
                 } else {
                     // Log details of the failure
                     println("Error: \(error) \(error.userInfo!)")
+                    self.refreshControl.endRefreshing()
                 }
             }
         })
