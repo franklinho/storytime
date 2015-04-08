@@ -184,9 +184,16 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         logOutButton.enabled = true
-        var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
-        storyVC.newStory = true
-        navigationController?.pushViewController(storyVC, animated: true)
+        
+        if PFUser.currentUser()["profileName"] == nil {
+            var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
+            self.presentViewController(createProfileVC, animated: true, completion: nil)
+        } else {
+            var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
+            storyVC.newStory = true
+            navigationController?.pushViewController(storyVC, animated: true)
+        }
+        
     }
     
     func logInViewController(logInController: PFLogInViewController!, didFailToLogInWithError error: NSError!) {
@@ -223,9 +230,14 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         logOutButton.enabled = true
-        var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
-        storyVC.newStory = true
-        navigationController?.pushViewController(storyVC, animated: true)
+        if PFUser.currentUser()["profileName"] == nil {
+            var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
+            self.presentViewController(createProfileVC, animated: true, completion: nil)
+        } else {
+            var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
+            storyVC.newStory = true
+            navigationController?.pushViewController(storyVC, animated: true)
+        }
     }
     
     func signUpViewController(signUpController: PFSignUpViewController!, didFailToSignUpWithError error: NSError!) {
