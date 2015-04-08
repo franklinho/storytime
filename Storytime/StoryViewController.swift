@@ -103,12 +103,22 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
         
+        createButton = UIBarButtonItem(title: "+", style: .Plain, target: self, action: "createButtonWasTapped")
+        
         if self.story != nil {
             var upvotes = story!["upvotes"] as? Int
             var downvotes = story!["downvotes"] as? Int
             println("Points are \(upvotes!-downvotes!)")
             pointsLabel.text = "\(upvotes!-downvotes!)"
-
+            if PFUser.currentUser() != nil {
+                if self.story!["user"] as PFUser == PFUser.currentUser() {
+                    createButton!.enabled = true
+                } else {
+                    createButton!.enabled = false
+                }
+            }
+        } else {
+            createButton!.enabled = true
         }
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyBoardWillChange:", name: UIKeyboardWillChangeFrameNotification, object: nil)
@@ -128,7 +138,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         createViewHeightConstraint.constant = self.view.bounds.width + 46
         
-        createButton = UIBarButtonItem(title: "+", style: .Plain, target: self, action: "createButtonWasTapped")
+        
+        
         self.navigationItem.rightBarButtonItem = createButton
         if newStory == false {
             self.storyTitleLabel.text = self.story!["title"] as? String
