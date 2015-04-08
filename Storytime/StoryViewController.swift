@@ -206,6 +206,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if storyCreated == true {
             requestEventsForStory()
+            GSProgressHUD.show()
         }
         
         
@@ -630,10 +631,16 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.storyTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
                     self.scrollViewDidEndDecelerating(self.storyTableView)
                     self.refreshControl.endRefreshing()
+                    if(GSProgressHUD.isVisible()) {
+                        GSProgressHUD.dismiss()
+                    }
                 } else {
                     // Log details of the failure
                     println("Error: \(error) \(error.userInfo!)")
                     self.refreshControl.endRefreshing()
+                    if(GSProgressHUD.isVisible()) {
+                        GSProgressHUD.dismiss()
+                    }
                 }
             }
         })

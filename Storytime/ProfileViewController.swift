@@ -52,6 +52,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         storyTableView.rowHeight = self.screenSize.width
         requestStories()
+        GSProgressHUD.show()
         
         // Add pull to refresh to the tableview
         self.refreshControl = UIRefreshControl()
@@ -187,10 +188,16 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                         self.stories = objects
                         self.storyTableView.reloadData()
                         self.refreshControl.endRefreshing()
+                        if(GSProgressHUD.isVisible()) {
+                            GSProgressHUD.dismiss()
+                        }
                     } else {
                         // Log details of the failure
                         println("Error: \(error) \(error.userInfo!)")
                         self.refreshControl.endRefreshing()
+                        if(GSProgressHUD.isVisible()) {
+                            GSProgressHUD.dismiss()
+                        }
                     }
                 }
             })

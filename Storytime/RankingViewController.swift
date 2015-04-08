@@ -274,6 +274,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     override func viewDidAppear(animated: Bool) {
+        GSProgressHUD.show()
         requestStories()
         if PFUser.currentUser() != nil {
             logOutButton.enabled = true
@@ -323,10 +324,16 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                     self.stories = objects
                     self.rankingTableView.reloadData()
                     self.refreshControl.endRefreshing()
+                    if(GSProgressHUD.isVisible()) {
+                        GSProgressHUD.dismiss()
+                    }
                 } else {
                     // Log details of the failure
                     println("Error: \(error) \(error.userInfo!)")
                     self.refreshControl.endRefreshing()
+                    if(GSProgressHUD.isVisible()) {
+                        GSProgressHUD.dismiss()
+                    }
                 }
             }
         })
