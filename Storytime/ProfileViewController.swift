@@ -198,6 +198,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         presentLoginViewController()
     }
     
+    func displayUserProfileView(user: PFUser) {
+        var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as ProfileViewController
+        profileVC.user = user
+        navigationController?.pushViewController(profileVC, animated: true)
+    }
+    
     func presentLoginViewController() {
         var loginViewController : PFLogInViewController = PFLogInViewController()
         loginViewController.delegate = self

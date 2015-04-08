@@ -61,6 +61,12 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         presentLoginViewController()
     }
     
+    func displayUserProfileView(user: PFUser) {
+        var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as ProfileViewController
+        profileVC.user = user
+        navigationController?.pushViewController(profileVC, animated: true)
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = rankingTableView.dequeueReusableCellWithIdentifier("RankingTableViewCell") as RankingTableViewCell
         cell.upvoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)

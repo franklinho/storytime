@@ -13,6 +13,7 @@ import UIKit
 protocol RankingTableViewCellDelegate{
     func displayLoginViewController()
     func displayCreateProfileViewController()
+    func displayUserProfileView(user : PFUser)
 }
 
 class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
@@ -174,6 +175,9 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
 
     }
     
+    @IBAction func userLabelWasTapped(sender: AnyObject) {
+        self.delegate?.displayUserProfileView(self.story!["user"] as PFUser)
+    }
     
 
 }
