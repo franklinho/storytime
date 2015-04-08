@@ -32,8 +32,8 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
     
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var titleView: UIView!
-    @IBOutlet weak var userLabel: UILabel!
     
+    @IBOutlet weak var userButton: UIButton!
     @IBOutlet weak var thumbnailTextLabel: UILabel!
     var votedStories : NSMutableDictionary?
     
@@ -173,4 +173,7 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
         }
 
     }
+    
+    
+
 }

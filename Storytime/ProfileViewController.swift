@@ -77,7 +77,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             storyUser.fetchIfNeeded()
             if storyUser["profileName"] != nil {
                 var profileName : String = storyUser["profileName"] as String
-                cell.userLabel.text = profileName
+                cell.userButton.setTitle(profileName, forState: UIControlState.Normal)
             }
             
             if storyUser["profileImage"] != nil {
