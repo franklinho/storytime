@@ -73,6 +73,9 @@
                                                             <state key="normal" image="up_icon_white.png">
                                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                             </state>
+                                                            <connections>
+                                                                <action selector="upvoteButtonWasTapped:" destination="0LO-iP-4RM" eventType="touchUpInside" id="tWK-f1-HMC"/>
+                                                            </connections>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dSy-gn-lcR">
                                                             <rect key="frame" x="5" y="90" width="45" height="45"/>
@@ -83,6 +86,9 @@
                                                             <state key="normal" image="down_icon_white.png">
                                                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                             </state>
+                                                            <connections>
+                                                                <action selector="downvoteButtonWasTapped:" destination="0LO-iP-4RM" eventType="touchUpInside" id="4bD-yf-mXc"/>
+                                                            </connections>
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8HI-12-6XN">
                                                             <rect key="frame" x="20" y="50" width="15" height="35.5"/>
@@ -463,8 +469,8 @@
                                                     </constraints>
                                                     <variation key="default">
                                                         <mask key="constraints">
-                                                            <exclude reference="Nr5-SJ-qjB"/>
                                                             <exclude reference="IBZ-KN-d21"/>
+                                                            <exclude reference="Nr5-SJ-qjB"/>
                                                         </mask>
                                                     </variation>
                                                 </view>
@@ -540,8 +546,8 @@
                                                     </constraints>
                                                     <variation key="default">
                                                         <mask key="constraints">
-                                                            <exclude reference="fXL-8w-4ns"/>
                                                             <exclude reference="NNi-iv-12P"/>
+                                                            <exclude reference="fXL-8w-4ns"/>
                                                         </mask>
                                                     </variation>
                                                 </view>

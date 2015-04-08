@@ -58,6 +58,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         var story : PFObject?
         if stories != nil {
             story = stories![indexPath.row] as? PFObject
+            cell.story = story
             cell.titleLabel.text = story!["title"] as? String
             var storyUser : PFUser = story!["user"] as PFUser
             storyUser.fetchIfNeeded()
