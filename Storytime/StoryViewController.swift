@@ -72,6 +72,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.storyTableView.tableHeaderView = UIView(frame: CGRectMake(0.0, 0.0, self.storyTableView.bounds.size.width, 0.01))
+        
         userProfileImage.layer.cornerRadius = 31
         userProfileImage.layer.borderColor = UIColor.whiteColor().CGColor
         userProfileImage.layer.borderWidth = 2
@@ -200,6 +202,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //        }
         
     }
+    
     
     func configureDevice() {
 //        if let device = captureDevice {
