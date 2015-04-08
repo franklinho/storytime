@@ -51,6 +51,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.refreshControl.addTarget(self, action: "requestStories", forControlEvents: UIControlEvents.ValueChanged)
         self.rankingTableView.addSubview(refreshControl)
 
+        GSProgressHUD.show()
+        requestStories()
     }
 
     override func didReceiveMemoryWarning() {
@@ -274,8 +276,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     override func viewDidAppear(animated: Bool) {
-        GSProgressHUD.show()
-        requestStories()
+        
         if PFUser.currentUser() != nil {
             logOutButton.enabled = true
         } else {
