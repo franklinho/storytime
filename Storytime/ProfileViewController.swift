@@ -48,6 +48,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         storyTableView.dataSource = self
         
         storyTableView.rowHeight = self.screenSize.width
+        
+        
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        requestStories()
     }
 
     override func didReceiveMemoryWarning() {
@@ -147,7 +153,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        if stories != nil {
+            return self.stories!.count
+        } else {
+            return 0
+        }
     }
     
     func requestStories() {
@@ -285,6 +295,20 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         println("User dismissed the signupviewcontroller")
     }
 
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == "ProfileRankingTableViewCellToStoryVCSegue") {
+            
+            var storyVC : StoryViewController = segue.destinationViewController as StoryViewController
+            var storyIndex = storyTableView!.indexPathForSelectedRow()?.row
+            var selectedStory : PFObject?
+            if stories != nil {
+                selectedStory = stories![storyIndex!] as PFObject
+                storyVC.story = selectedStory
+                storyVC.storyCreated = true
+            }
+            
+        }
+    }
     
 
     /*
