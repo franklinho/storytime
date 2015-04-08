@@ -19,6 +19,7 @@
 		DD49B4201ACF13970027F2C9 /* libstdc++.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3D45981ACF0CAA001B38BD /* libstdc++.6.dylib */; };
 		DD70FBD11ACF16DE0002C5CC /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD70FBD01ACF16DE0002C5CC /* ParseUI.framework */; };
 		DD70FBD31ACF16FB0002C5CC /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD70FBD21ACF16FB0002C5CC /* Parse.framework */; };
+		DD8C82851AD5CE1E00B9A47B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */; };
 		DDBA71F61AC5FCC100D0EC97 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA71F51AC5FCC100D0EC97 /* Accounts.framework */; };
 		DDBA71F81AC5FCC700D0EC97 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA71F71AC5FCC700D0EC97 /* AudioToolbox.framework */; };
 		DDBA71FA1AC5FCCC00D0EC97 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA71F91AC5FCCC00D0EC97 /* CFNetwork.framework */; };
@@ -510,6 +511,7 @@
 		DD3D460A1ACF1255001B38BD /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		DD70FBD01ACF16DE0002C5CC /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
 		DD70FBD21ACF16FB0002C5CC /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = Pods/Parse/Parse.framework; sourceTree = "<group>"; };
+		DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		DDBA71F51AC5FCC100D0EC97 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		DDBA71F71AC5FCC700D0EC97 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		DDBA71F91AC5FCCC00D0EC97 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -974,6 +976,7 @@
 		DDC93A181AC493FE006D4646 /* video_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_icon.png; sourceTree = "<group>"; };
 		DDC93A1A1AC4940E006D4646 /* camera_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_icon.png; sourceTree = "<group>"; };
 		DDC93A1C1AC49422006D4646 /* text_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = text_icon.png; sourceTree = "<group>"; };
+		DDE0A5421AD5C6E1002B5D88 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		DDF06E901AD33038007D4954 /* down_icon_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down_icon_red.png; sourceTree = "<group>"; };
 		DDF06E911AD33038007D4954 /* up_icon_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = up_icon_green.png; sourceTree = "<group>"; };
 		DDF06E941AD44ED2007D4954 /* switch_camera_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switch_camera_icon.png; sourceTree = "<group>"; };
@@ -1061,6 +1064,7 @@
 				DDBA71F71AC5FCC700D0EC97 /* AudioToolbox.framework */,
 				DDBA71F51AC5FCC100D0EC97 /* Accounts.framework */,
 				E8ECC8C0FC39FC2D49766AFB /* libPods.a */,
+				DDE0A5421AD5C6E1002B5D88 /* ProfileViewController.swift */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1117,6 +1121,7 @@
 				DDC9368A1AC47CAE006D4646 /* AppDelegate.swift */,
 				DDC9368F1AC47CAE006D4646 /* ViewController.swift */,
 				DDC936911AC47CAE006D4646 /* Main.storyboard */,
+				DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */,
 				DDF06E961AD4529F007D4954 /* CreateProfileViewController.swift */,
 				DDC93A101AC48F96006D4646 /* StoryImageTableViewCell.swift */,
 				DDC93A121AC48FA2006D4646 /* StoryTextTableViewCell.swift */,
@@ -2215,6 +2220,7 @@
 				DDF06E971AD4529F007D4954 /* CreateProfileViewController.swift in Sources */,
 				DDC93A171AC48FB9006D4646 /* StoryCreateTableViewCell.swift in Sources */,
 				DDC93A151AC48FAD006D4646 /* StoryVideoTableViewCell.swift in Sources */,
+				DD8C82851AD5CE1E00B9A47B /* ProfileViewController.swift in Sources */,
 				DDC93A111AC48F96006D4646 /* StoryImageTableViewCell.swift in Sources */,
 				DDC9368E1AC47CAE006D4646 /* Storytime.xcdatamodeld in Sources */,
 				DDC9368B1AC47CAE006D4646 /* AppDelegate.swift in Sources */,

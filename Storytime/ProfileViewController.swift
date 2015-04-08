@@ -1,43 +1,33 @@
 //
-//  RankingViewController.swift
+//  ProfileViewController.swift
 //  Storytime
 //
-//  Created by Franklin Ho on 3/26/15.
+//  Created by Franklin Ho on 4/8/15.
 //  Copyright (c) 2015 Franklin Ho. All rights reserved.
 //
 
 import UIKit
 
-class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, RankingTableViewCellDelegate {
+class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, RankingTableViewCellDelegate,PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
 
     var stories : NSArray?
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var votedStories : NSMutableDictionary = [:]
-    var creatingNewStory = false
+    var user : PFUser?
     
-    @IBOutlet weak var logOutButton: UIBarButtonItem!
-    
-    @IBOutlet weak var rankingTableView: UITableView!
+    @IBOutlet weak var storyTableView: UITableView!
+    @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var profileImageView: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if user == nil && PFUser.currentUser() != nil {
+            user = PFUser.currentUser()
+        }
 
         // Do any additional setup after loading the view.
-        
-        if PFUser.currentUser() != nil && PFUser.currentUser()?["profileName"] != nil && PFUser.currentUser()?["canonicalProfileName"] == nil {
-            PFUser.currentUser()["canonicalProfileName"] = (PFUser.currentUser()?["profileName"] as String).lowercaseString
-            PFUser.currentUser().saveInBackground()
-        }
-
-        
-        rankingTableView.backgroundView = nil
-        rankingTableView.backgroundView?.backgroundColor = UIColor(red: 41.0/255.0, green: 37.0/255.0, blue: 55.0/255.0, alpha: 1.0)
-        rankingTableView.delegate = self
-        rankingTableView.dataSource = self
-        if (PFUser.currentUser() == nil){
-            logOutButton.enabled = false
-        }
-        
-        self.rankingTableView.rowHeight = self.screenSize.width
+        storyTableView.delegate = self
+        storyTableView.dataSource = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,24 +35,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         // Dispose of any resources that can be recreated.
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if stories != nil {
-            return stories!.count
-        } else {
-            return 0
-        }
-    }
-    
-    func displayCreateProfileViewController() {
-        presentCreateProfileViewController()
-    }
-
-    func displayLoginViewController() {
-        presentLoginViewController()
-    }
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = rankingTableView.dequeueReusableCellWithIdentifier("RankingTableViewCell") as RankingTableViewCell
+        var cell = storyTableView.dequeueReusableCellWithIdentifier("RankingTableViewCell") as RankingTableViewCell
         cell.upvoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
         cell.downvoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
         cell.pointsLabel.textColor = UIColor.whiteColor()
@@ -150,19 +124,49 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         cell.rankLabel.text = "\(indexPath.row+1)."
         
         return cell
-
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
     }
-    */
+    
+    func requestStories() {
+        if self.user != nil {
+            dispatch_async(dispatch_get_main_queue(),{
+                var query = PFQuery(className:"Story")
+                query.whereKey("user", equalTo: self.user)
+                query.orderByDescending("upvotes")
+                query.findObjectsInBackgroundWithBlock {
+                    (objects: [AnyObject]!, error: NSError!) -> Void in
+                    if error == nil {
+                        // The find succeeded.
+                        println("Successfully retrieved \(objects.count) events.")
+                        self.stories = objects
+                        self.storyTableView.reloadData()
+                        // Do something with the found objects
+                        if let objects = objects as? [PFObject] {
+                            for object in objects {
+                                var title = object["title"]
+                                println("Object ID: \(object.objectId), Timestamp: \(object.createdAt?), Text: \(title)")
+                            }
+                        }
+                    } else {
+                        // Log details of the failure
+                        println("Error: \(error) \(error.userInfo!)")
+                    }
+                }
+            })
+        }
+    }
+    
+    
+    func displayCreateProfileViewController() {
+        presentCreateProfileViewController()
+    }
+    
+    func displayLoginViewController() {
+        presentLoginViewController()
+    }
     
     func presentLoginViewController() {
         var loginViewController : PFLogInViewController = PFLogInViewController()
@@ -182,23 +186,9 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     func presentCreateProfileViewController() {
         var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
         self.presentViewController(createProfileVC, animated: true, completion: nil)
-
-    }
-
-    @IBAction func newStoryButtonWasTapped(sender: AnyObject) {
-        creatingNewStory = true
-        if (PFUser.currentUser() == nil){
-            presentLoginViewController()
-        } else if (PFUser.currentUser() != nil && PFUser.currentUser()["profileName"] == nil) {
-            presentCreateProfileViewController()
-        } else {
-            var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
-            storyVC.newStory = true
-            navigationController?.pushViewController(storyVC, animated: true)
-        }
-        
         
     }
+    
     
     func logInViewController(logInController: PFLogInViewController!, shouldBeginLogInWithUsername username: String!, password: String!) -> Bool {
         if ((username != nil && password != nil && countElements(username) != 0 && countElements(password) != 0) ) {
@@ -212,17 +202,16 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
-        logOutButton.enabled = true
         
         if PFUser.currentUser()["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         } else {
-            if self.creatingNewStory == true {
-                var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
-                storyVC.newStory = true
-                navigationController?.pushViewController(storyVC, animated: true)
-            }
+            //            if self.creatingNewStory == true {
+            //                var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
+            //                storyVC.newStory = true
+            //                navigationController?.pushViewController(storyVC, animated: true)
+            //            }
         }
         
     }
@@ -254,27 +243,17 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
-    override func viewDidAppear(animated: Bool) {
-        requestStories()
-        if PFUser.currentUser() != nil {
-            logOutButton.enabled = true
-        } else {
-            logOutButton.enabled = false
-        }
-    }
-    
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
-        logOutButton.enabled = true
         if PFUser.currentUser()["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         } else {
-            if self.creatingNewStory == true {
-                var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
-                storyVC.newStory = true
-                navigationController?.pushViewController(storyVC, animated: true)
-            }
+            //            if self.creatingNewStory == true {
+            //                var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
+            //                storyVC.newStory = true
+            //                navigationController?.pushViewController(storyVC, animated: true)
+            //            }
         }
     }
     
@@ -285,53 +264,17 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     func signUpViewControllerDidCancelSignUp(signUpController: PFSignUpViewController!) {
         println("User dismissed the signupviewcontroller")
     }
-    
-    @IBAction func logOutButtonWasTapped(sender: AnyObject) {
-        PFUser.logOut()
-        UIAlertView(title: "Logged Out", message: "You have successfully logged out.", delegate: nil, cancelButtonTitle: "OK").show()
-        self.votedStories = [:] as NSMutableDictionary
-    }
-    
-    func requestStories() {
-        dispatch_async(dispatch_get_main_queue(),{
-            var query = PFQuery(className:"Story")
-            query.orderByDescending("upvotes")
-            query.findObjectsInBackgroundWithBlock {
-                (objects: [AnyObject]!, error: NSError!) -> Void in
-                if error == nil {
-                    // The find succeeded.
-                    println("Successfully retrieved \(objects.count) events.")
-                    self.stories = objects
-                    self.rankingTableView.reloadData()
-                    // Do something with the found objects
-                    if let objects = objects as? [PFObject] {
-                        for object in objects {
-                            var title = object["title"]
-                            println("Object ID: \(object.objectId), Timestamp: \(object.createdAt?), Text: \(title)")
-                        }
-                    }
-                } else {
-                    // Log details of the failure
-                    println("Error: \(error) \(error.userInfo!)")
-                }
-            }
-        })
-    }
 
+    
+
+    /*
+    // MARK: - Navigation
+
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if (segue.identifier == "RankingTableViewCellToStoryVCSegue") {
-            
-            var storyVC : StoryViewController = segue.destinationViewController as StoryViewController
-            var storyIndex = rankingTableView!.indexPathForSelectedRow()?.row
-            var selectedStory : PFObject?
-            if stories != nil {
-                selectedStory = stories![storyIndex!] as PFObject
-                storyVC.story = selectedStory
-                storyVC.storyCreated = true
-            }
-            
-        }
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
     }
+    */
 
-        
 }

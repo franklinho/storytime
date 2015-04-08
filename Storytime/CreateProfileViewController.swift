@@ -154,7 +154,7 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
             usernameRequiredLabel.hidden = false
         } else {
             var query = PFQuery(className:"User")
-            query.whereKey("profileName", equalTo:userNameTextField.text)
+            query.whereKey("canonicalProfileName", equalTo:userNameTextField.text.lowercaseString)
             query.findObjectsInBackgroundWithBlock {
                 (objects: [AnyObject]!, error: NSError!) -> Void in
                 if error == nil {
@@ -166,6 +166,7 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
                     } else {
                         var user = PFUser.currentUser()
                         user["profileName"] = self.userNameTextField.text
+                        user["canonicalProfileName"] = self.userNameTextField.text.lowercaseString
                         
                         if self.profileImage != nil {
                             var profileImageData = UIImageJPEGRepresentation(self.profileImage, 1.0)
