@@ -489,7 +489,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="333.5"/>
                                                 </imageView>
                                                 <view alpha="0.75" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tZm-gV-9HT">
-                                                    <rect key="frame" x="494.5" y="10" width="95.5" height="27.5"/>
+                                                    <rect key="frame" x="494" y="10" width="95.5" height="27.5"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="timestamp" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZOr-Rv-ntf">
                                                             <rect key="frame" x="5" y="2" width="85.5" height="23.5"/>
@@ -566,7 +566,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <view alpha="0.75" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cis-kN-nv6">
-                                                    <rect key="frame" x="494.5" y="10.5" width="95.5" height="27.5"/>
+                                                    <rect key="frame" x="494" y="10" width="95.5" height="27.5"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="timestamp" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J2H-ea-73u">
                                                             <rect key="frame" x="5" y="2" width="85.5" height="23.5"/>
@@ -632,7 +632,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Fo-GF-3C7">
-                                                    <rect key="frame" x="266.5" y="149.5" width="67.5" height="34.5"/>
+                                                    <rect key="frame" x="266" y="149" width="67.5" height="34.5"/>
                                                     <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="25"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1069,7 +1069,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="user" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4T8-ck-Y0C">
-                                        <rect key="frame" x="135" y="51" width="33.5" height="20.5"/>
+                                        <rect key="frame" x="136" y="51" width="33.5" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -1133,6 +1133,13 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hjH-W7-xQN" userLabel="ProgressView">
+                                <rect key="frame" x="0.0" y="64" width="600" height="5"/>
+                                <color key="backgroundColor" red="0.96079940029999999" green="0.93582712550000002" blue="0.018377676499999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="5" id="S3d-hD-f6B"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -1143,8 +1150,11 @@
                             <constraint firstItem="DxK-24-jad" firstAttribute="leading" secondItem="TJV-F8-eXr" secondAttribute="leadingMargin" id="EKN-hi-haj"/>
                             <constraint firstItem="f9M-XW-drY" firstAttribute="top" secondItem="Bes-cU-TpY" secondAttribute="bottom" id="Jse-kw-cEK"/>
                             <constraint firstItem="Ebf-0P-F2l" firstAttribute="leading" secondItem="TJV-F8-eXr" secondAttribute="leadingMargin" constant="-16" id="LPq-ez-sJt"/>
+                            <constraint firstAttribute="trailing" secondItem="hjH-W7-xQN" secondAttribute="trailing" id="Ouc-7q-uGX"/>
                             <constraint firstItem="zC1-cs-0xd" firstAttribute="height" secondItem="Ebf-0P-F2l" secondAttribute="height" id="QXu-V6-mZZ"/>
                             <constraint firstItem="DxK-24-jad" firstAttribute="trailing" secondItem="TJV-F8-eXr" secondAttribute="trailingMargin" id="Qaq-3q-I0I"/>
+                            <constraint firstItem="hjH-W7-xQN" firstAttribute="top" secondItem="z5O-jy-g3q" secondAttribute="bottom" id="VxY-hD-dpp"/>
+                            <constraint firstItem="hjH-W7-xQN" firstAttribute="leading" secondItem="TJV-F8-eXr" secondAttribute="leading" id="XxR-gL-JkG"/>
                             <constraint firstAttribute="centerX" secondItem="DxK-24-jad" secondAttribute="centerX" id="brm-Wi-d61"/>
                             <constraint firstItem="Bes-cU-TpY" firstAttribute="leading" secondItem="TJV-F8-eXr" secondAttribute="leadingMargin" constant="-16" id="cVi-rI-X1W"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Bes-cU-TpY" secondAttribute="trailing" constant="-16" id="eIq-OO-YG2"/>
@@ -1175,6 +1185,8 @@
                         <outlet property="downVoteButton" destination="Loc-lA-bxs" id="5SE-Yu-LqH"/>
                         <outlet property="holdToRecordLabel" destination="2jj-nm-h1E" id="zjk-Eq-MCm"/>
                         <outlet property="pointsLabel" destination="moj-b6-kOg" id="sjD-aN-DhB"/>
+                        <outlet property="progressView" destination="hjH-W7-xQN" id="QK7-li-hUH"/>
+                        <outlet property="progressViewTrailingConstraint" destination="Ouc-7q-uGX" id="m2O-rD-bkT"/>
                         <outlet property="storyPointsLabel" destination="moj-b6-kOg" id="jcL-0h-BRE"/>
                         <outlet property="storyTableView" destination="Bes-cU-TpY" id="3rw-Nx-vtY"/>
                         <outlet property="storyTitleLabel" destination="N6n-gn-M1B" id="sVr-8S-zcC"/>

@@ -69,6 +69,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var videoContainer: UIView!
     var createViews = []
     
+    @IBOutlet weak var progressView: UIView!
+    @IBOutlet weak var progressViewTrailingConstraint: NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -740,6 +742,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         event["type"] = "video"
         event["storyObject"] = self.story!
         event["video"] = videoFile
+        
         event.saveInBackgroundWithBlock({
             (success: Bool, error: NSError!) -> Void in
             if (success) {
@@ -772,7 +775,39 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func saveVideoEvent() {
+        self.progressViewTrailingConstraint.constant = self.screenSize.width
+        self.view.layoutIfNeeded()
+        self.progressView.hidden = false
         var videoFile = PFFile(name: "video.mp4", contentsAtPath: "\(self.videoPath!)")
+        
+        videoFile.saveInBackgroundWithBlock({
+            (success: Bool, error: NSError!) -> Void in
+                if (success) {
+                    println("Video successfully uploaded")
+                } else {
+                    println("There was an error saving the video file: \(error.description)")
+                    self.progressView.hidden = true
+                }
+        
+            }, progressBlock: {
+                (percentDone: CInt) -> Void in
+                if percentDone == 100 {
+                    self.progressView.hidden = true
+                } else if percentDone != 0 {
+                    self.view.layoutIfNeeded()
+                    
+                    self.progressViewTrailingConstraint.constant = CGFloat(self.screenSize.width)*CGFloat(percentDone/100) as CGFloat
+                    
+                    
+                    UIView.animateWithDuration(0.3, animations: {
+                        self.view.layoutIfNeeded()
+                        
+                    })
+                    
+                    
+                }
+        
+        })
         
         if (self.story != nil) {
             createVideoEvent(videoFile)
@@ -850,10 +885,44 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     func savePhotoEvent() {
+
+        
+        self.progressViewTrailingConstraint.constant = self.screenSize.width
+        self.view.layoutIfNeeded()
+        self.progressView.hidden = false
         
         var squareImage = squareImageWithImage(capturedImage!)
         var squareImageData = UIImageJPEGRepresentation(squareImage, 1.0)
         var imageFile : PFFile = PFFile(name: "image.png", data: squareImageData)
+        
+        imageFile.saveInBackgroundWithBlock({
+            (success: Bool, error: NSError!) -> Void in
+            if (success) {
+                println("Image successfully uploaded")
+            } else {
+                println("There was an error saving the image file: \(error.description)")
+                self.progressView.hidden = true
+            }
+            
+            }, progressBlock: {
+                (percentDone: CInt) -> Void in
+                if percentDone == 100 {
+                    self.progressView.hidden = true
+                } else if percentDone != 0 {
+                    self.view.layoutIfNeeded()
+                    
+                    self.progressViewTrailingConstraint.constant = CGFloat(self.screenSize.width)*CGFloat(percentDone/100) as CGFloat
+                    
+                    
+                    UIView.animateWithDuration(0.3, animations: {
+                        self.view.layoutIfNeeded()
+                        
+                    })
+                    
+                    
+                }
+                
+        })
 
         
         if (self.story != nil) {
@@ -1043,7 +1112,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.createViewHeightConstraint.constant = self.view.bounds.width + 46
         }
         
-        UIView.animateWithDuration(0.3, animations: {
+        UIView.animateWithDuration(0.1, animations: {
             self.view.layoutIfNeeded()
             
         })
