@@ -423,6 +423,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func minimizeCreateView() {
+        createButton?.enabled = true
         
         self.view.layoutIfNeeded()
         
