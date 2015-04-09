@@ -82,26 +82,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         userProfileImage.layer.borderWidth = 2
         userProfileImage.clipsToBounds = true
         
-        if PFUser.currentUser() != nil{
-            if PFUser.currentUser()["votedStories"] != nil {
-                self.votedStories = PFUser.currentUser()["votedStories"] as NSMutableDictionary
-                if self.story != nil {
-                    if votedStories[self.story!.objectId] != nil {
-                        if self.story != nil{
-                            if votedStories[self.story!.objectId] as Int == 1 {
-                                storyUpVoted = true
-                                upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
-                                pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
-                            } else if votedStories[self.story!.objectId] as Int == -1 {
-                                storyDownVoted = true
-                                downVoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
-                                pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        updateVotingLabels()
         
         createButton = UIBarButtonItem(title: "+", style: .Plain, target: self, action: "createButtonWasTapped")
         
@@ -110,15 +91,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             var downvotes = story!["downvotes"] as? Int
             println("Points are \(upvotes!-downvotes!)")
             pointsLabel.text = "\(upvotes!-downvotes!)"
-            if PFUser.currentUser() != nil {
-                if self.story!["user"] as PFUser == PFUser.currentUser() {
-                    createButton!.enabled = true
-                } else {
-                    createButton!.enabled = false
-                }
-            }
-        } else {
-            createButton!.enabled = true
+            
         }
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyBoardWillChange:", name: UIKeyboardWillChangeFrameNotification, object: nil)
@@ -163,6 +136,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.createView.hidden = true
             createTitleView.hidden = true
             titleView.hidden = false
+            if PFUser.currentUser() != nil {
+                if self.story!["user"] as PFUser == PFUser.currentUser() {
+                    createButton!.enabled = true
+                } else {
+                    createButton!.enabled = false
+                }
+            }
         } else {
 
             createViewTopConstraint.constant = 0
@@ -170,6 +150,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             titleView.hidden = true
             createTitleView.hidden = false
             titleView.hidden = true
+            createButton!.enabled = false
+            createButton!.title = "X"
+            createViewExpanded = true
         }
         
         cameraSendButton.layer.borderWidth = 3.0
@@ -230,6 +213,29 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.refreshControl.addTarget(self, action: "requestEventsForStory", forControlEvents: UIControlEvents.ValueChanged)
         self.storyTableView.addSubview(refreshControl)
         
+    }
+    
+    func updateVotingLabels() {
+        if PFUser.currentUser() != nil{
+            if PFUser.currentUser()["votedStories"] != nil {
+                self.votedStories = PFUser.currentUser()["votedStories"] as NSMutableDictionary
+                if self.story != nil {
+                    if votedStories[self.story!.objectId] != nil {
+                        if self.story != nil{
+                            if votedStories[self.story!.objectId] as Int == 1 {
+                                storyUpVoted = true
+                                upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
+                                pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
+                            } else if votedStories[self.story!.objectId] as Int == -1 {
+                                storyDownVoted = true
+                                downVoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
+                                pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
     
@@ -1310,6 +1316,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
+        updateVotingLabels()
         
         if PFUser.currentUser()["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
@@ -1353,6 +1360,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
+        updateVotingLabels()
         if PFUser.currentUser()["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)

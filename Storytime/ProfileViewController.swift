@@ -29,8 +29,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         profileImageView.layer.borderWidth = 4
         profileImageView.clipsToBounds = true
         
-        if user == nil && PFUser.currentUser() != nil {
-            user = PFUser.currentUser()
+        if user == nil {
+            if PFUser.currentUser() != nil {
+                user = PFUser.currentUser()
+            } else {
+                presentLoginViewController()
+            }
         }
         
         if user != nil {
@@ -253,6 +257,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
+        self.storyTableView.reloadData()
         
         if PFUser.currentUser()["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
@@ -296,6 +301,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
+        self.storyTableView.reloadData()
         if PFUser.currentUser()["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)

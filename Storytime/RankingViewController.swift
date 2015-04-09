@@ -22,6 +22,9 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if PFUser.currentUser() == nil {
+            logOutButton.title = "Log In"
+        }
         
 
         // Do any additional setup after loading the view.
@@ -36,9 +39,6 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         rankingTableView.backgroundView?.backgroundColor = UIColor(red: 41.0/255.0, green: 37.0/255.0, blue: 55.0/255.0, alpha: 1.0)
         rankingTableView.delegate = self
         rankingTableView.dataSource = self
-        if (PFUser.currentUser() == nil){
-            logOutButton.enabled = false
-        }
         
         self.rankingTableView.rowHeight = self.screenSize.width
         
@@ -233,7 +233,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
-        logOutButton.enabled = true
+        self.rankingTableView.reloadData()
+        logOutButton.title = "Log Out"
         
         if PFUser.currentUser()["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
@@ -278,15 +279,16 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidAppear(animated: Bool) {
         
         if PFUser.currentUser() != nil {
-            logOutButton.enabled = true
+            logOutButton.title = "Log Out"
         } else {
-            logOutButton.enabled = false
+            logOutButton.title = "Log In"
         }
     }
     
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
-        logOutButton.enabled = true
+        self.rankingTableView.reloadData()
+        logOutButton.title = "Log Out"
         if PFUser.currentUser()["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
@@ -308,9 +310,16 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     @IBAction func logOutButtonWasTapped(sender: AnyObject) {
-        PFUser.logOut()
-        UIAlertView(title: "Logged Out", message: "You have successfully logged out.", delegate: nil, cancelButtonTitle: "OK").show()
-        self.votedStories = [:] as NSMutableDictionary
+        if PFUser.currentUser() != nil {
+            PFUser.logOut()
+            UIAlertView(title: "Logged Out", message: "You have successfully logged out.", delegate: nil, cancelButtonTitle: "OK").show()
+            self.votedStories = [:] as NSMutableDictionary
+            self.rankingTableView.reloadData()
+            self.logOutButton.title = "Log In"
+        } else {
+            presentLoginViewController()
+        }
+        
     }
     
     func requestStories() {
