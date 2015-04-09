@@ -19,10 +19,14 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var storyTableView: UITableView!
     @IBOutlet weak var usernameLabel: UILabel!
     var refreshControl : UIRefreshControl!
+    var profileTabBarItem : UITabBarItem?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as UITabBarItem
+
         
         profileImageView.layer.cornerRadius = 50
         profileImageView.layer.borderColor = UIColor.darkGrayColor().CGColor
@@ -258,6 +262,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         self.storyTableView.reloadData()
+        profileTabBarItem!.enabled = true
         
         if PFUser.currentUser()["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
@@ -302,6 +307,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         self.storyTableView.reloadData()
+        profileTabBarItem!.enabled = true
+        
         if PFUser.currentUser()["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)

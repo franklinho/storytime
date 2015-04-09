@@ -15,6 +15,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     var votedStories : NSMutableDictionary = [:]
     var creatingNewStory = false
     var refreshControl : UIRefreshControl!
+    var profileTabBarItem : UITabBarItem?
     
     @IBOutlet weak var logOutButton: UIBarButtonItem!
     
@@ -22,8 +23,12 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as UITabBarItem
+        
+        
         if PFUser.currentUser() == nil {
             logOutButton.title = "Log In"
+            profileTabBarItem!.enabled = false
         }
         
 
@@ -235,6 +240,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.dismissViewControllerAnimated(true, completion: nil)
         self.rankingTableView.reloadData()
         logOutButton.title = "Log Out"
+        profileTabBarItem!.enabled = true
         
         if PFUser.currentUser()["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
@@ -289,6 +295,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.dismissViewControllerAnimated(true, completion: nil)
         self.rankingTableView.reloadData()
         logOutButton.title = "Log Out"
+        profileTabBarItem!.enabled = true
         if PFUser.currentUser()["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
@@ -316,6 +323,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             self.votedStories = [:] as NSMutableDictionary
             self.rankingTableView.reloadData()
             self.logOutButton.title = "Log In"
+            profileTabBarItem!.enabled = false
         } else {
             presentLoginViewController()
         }

@@ -13,6 +13,7 @@ import MediaPlayer
 
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
     
+    var profileTabBarItem : UITabBarItem?
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var newStory : Bool = false
     var storyCreated : Bool = false
@@ -74,6 +75,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var progressViewTrailingConstraint: NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as UITabBarItem
         
         self.storyTableView.tableHeaderView = UIView(frame: CGRectMake(0.0, 0.0, self.storyTableView.bounds.size.width, 0.01))
         
@@ -1321,6 +1324,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         updateVotingLabels()
+        profileTabBarItem!.enabled = true
         
         if PFUser.currentUser()["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
@@ -1365,6 +1369,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         updateVotingLabels()
+        profileTabBarItem!.enabled = true
         if PFUser.currentUser()["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
