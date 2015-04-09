@@ -137,7 +137,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             createTitleView.hidden = true
             titleView.hidden = false
             if PFUser.currentUser() != nil {
-                if self.story!["user"] as PFUser == PFUser.currentUser() {
+                var storyUser = self.story!["user"] as PFUser
+                storyUser.fetchIfNeeded()
+                var currentUser = PFUser.currentUser()
+                println("Story user is \(storyUser.username) and current user is \(currentUser.username)")
+                if  storyUser.username == currentUser.username {
                     createButton!.enabled = true
                 } else {
                     createButton!.enabled = false
