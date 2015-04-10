@@ -631,12 +631,12 @@
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
-                                                    <exclude reference="uSg-iI-mRJ"/>
                                                     <exclude reference="Cl3-yP-l1d"/>
+                                                    <exclude reference="uSg-iI-mRJ"/>
                                                     <exclude reference="imE-GD-cZq"/>
-                                                    <exclude reference="sKJ-hL-3YN"/>
                                                     <exclude reference="M9m-FE-vGh"/>
                                                     <exclude reference="pSV-fB-zv3"/>
+                                                    <exclude reference="sKJ-hL-3YN"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
@@ -952,7 +952,7 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DxK-24-jad" userLabel="CreateView">
-                                <rect key="frame" x="0.0" y="-172" width="600" height="326"/>
+                                <rect key="frame" x="0.0" y="154" width="600" height="326"/>
                                 <subviews>
                                     <view hidden="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="748" translatesAutoresizingMaskIntoConstraints="NO" id="ecm-OX-hx2" userLabel="VideoContainer">
                                         <rect key="frame" x="0.0" y="46" width="600" height="280"/>
@@ -1413,7 +1413,7 @@
                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="zC1-cs-0xd" firstAttribute="top" secondItem="z5O-jy-g3q" secondAttribute="bottom" id="7Sq-7f-PNh"/>
-                            <constraint firstItem="DxK-24-jad" firstAttribute="top" secondItem="zC1-cs-0xd" secondAttribute="bottom" constant="-326" id="7Wn-lE-Vze"/>
+                            <constraint firstItem="DxK-24-jad" firstAttribute="top" secondItem="zC1-cs-0xd" secondAttribute="bottom" id="7Wn-lE-Vze"/>
                             <constraint firstItem="Bes-cU-TpY" firstAttribute="top" secondItem="DxK-24-jad" secondAttribute="bottom" id="7eU-bI-HGn"/>
                             <constraint firstItem="Ebf-0P-F2l" firstAttribute="top" secondItem="z5O-jy-g3q" secondAttribute="bottom" id="87f-hc-MkS"/>
                             <constraint firstItem="DxK-24-jad" firstAttribute="leading" secondItem="TJV-F8-eXr" secondAttribute="leadingMargin" id="EKN-hi-haj"/>
@@ -1480,7 +1480,7 @@
                         <action selector="storyTableViewWasTapped:" destination="nXj-xd-FNA" id="IjQ-dg-PHd"/>
                     </connections>
                 </tapGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.0" id="49O-YB-Itb">
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.10000000000000001" id="49O-YB-Itb">
                     <connections>
                         <action selector="videoLongPressGestureRecognizerWasTapped:" destination="nXj-xd-FNA" id="9fq-nt-fxI"/>
                     </connections>

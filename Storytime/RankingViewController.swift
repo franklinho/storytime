@@ -372,6 +372,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             
         }
     }
+    
+    override func viewWillDisappear(animated: Bool) {
+        GSProgressHUD.dismiss()
+    }
 
         
 }

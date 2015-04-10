@@ -1402,5 +1402,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
+    override func viewWillDisappear(animated: Bool) {
+        GSProgressHUD.dismiss()
+    }
+    
     
 }
