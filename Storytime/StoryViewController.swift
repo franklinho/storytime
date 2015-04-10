@@ -11,7 +11,7 @@ import AVFoundation
 import MediaPlayer
 
 
-class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
+class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate {
     
     var profileTabBarItem : UITabBarItem?
     let screenSize: CGRect = UIScreen.mainScreen().bounds
@@ -325,6 +325,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 return cell
             } else {
                 var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryVideoTableViewCell") as StoryVideoTableViewCell
+                
+                cell.delegate = self
                 
                 if cell.playerLayer != nil {
                     cell.playerLayer!.removeFromSuperlayer()
@@ -1404,6 +1406,30 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewWillDisappear(animated: Bool) {
         GSProgressHUD.dismiss()
+    }
+    
+    func playOrPauseVideoCell(videoCell: StoryVideoTableViewCell) {
+        if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 && playingVideoCell != videoCell {
+            playingVideoCell?.player?.pause()
+            playingVideoCell?.playButtonIconImageView.hidden = false
+        }
+        
+        self.playingVideoCell = videoCell
+        if self.playingVideoCell?.player?.rate == 0 {
+            self.playingVideoCell?.playButtonIconImageView.hidden = true
+            self.playingVideoCell!.player!.play()
+            self.playingVideoCell!.player!.actionAtItemEnd = .None
+            
+            
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "restartVideoFromBeginning", name: AVPlayerItemDidPlayToEndTimeNotification, object: self.playingVideoCell!.player!.currentItem)
+        } else {
+            self.playingVideoCell?.player?.pause()
+            self.playingVideoCell?.playButtonIconImageView.hidden = false
+        }
+        
+        
+        
+        
     }
     
     

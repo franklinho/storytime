@@ -817,6 +817,24 @@
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lX6-HP-Kvp" userLabel="videoView">
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="333.5"/>
+                                                    <subviews>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gV7-g4-Kp7">
+                                                            <rect key="frame" x="0.0" y="0.0" width="600" height="333.5"/>
+                                                            <state key="normal">
+                                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                            </state>
+                                                            <connections>
+                                                                <action selector="videoViewWasTapped:" destination="1Sp-W7-uAW" eventType="touchUpInside" id="HR3-fP-fEn"/>
+                                                            </connections>
+                                                        </button>
+                                                    </subviews>
+                                                    <gestureRecognizers/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="gV7-g4-Kp7" secondAttribute="trailing" id="9r7-b4-QrF"/>
+                                                        <constraint firstItem="gV7-g4-Kp7" firstAttribute="top" secondItem="lX6-HP-Kvp" secondAttribute="top" id="P7r-LT-d5Y"/>
+                                                        <constraint firstAttribute="bottom" secondItem="gV7-g4-Kp7" secondAttribute="bottom" id="bew-gt-VFh"/>
+                                                        <constraint firstItem="gV7-g4-Kp7" firstAttribute="leading" secondItem="lX6-HP-Kvp" secondAttribute="leading" id="rV4-W6-oII"/>
+                                                    </constraints>
                                                 </view>
                                                 <imageView userInteractionEnabled="NO" alpha="0.75" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="play_button_icon_white.png" translatesAutoresizingMaskIntoConstraints="NO" id="V3A-ji-sEl">
                                                     <rect key="frame" x="200" y="67" width="200" height="200"/>
@@ -952,7 +970,7 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DxK-24-jad" userLabel="CreateView">
-                                <rect key="frame" x="0.0" y="154" width="600" height="326"/>
+                                <rect key="frame" x="0.0" y="-172" width="600" height="326"/>
                                 <subviews>
                                     <view hidden="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="748" translatesAutoresizingMaskIntoConstraints="NO" id="ecm-OX-hx2" userLabel="VideoContainer">
                                         <rect key="frame" x="0.0" y="46" width="600" height="280"/>
@@ -1413,7 +1431,7 @@
                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="zC1-cs-0xd" firstAttribute="top" secondItem="z5O-jy-g3q" secondAttribute="bottom" id="7Sq-7f-PNh"/>
-                            <constraint firstItem="DxK-24-jad" firstAttribute="top" secondItem="zC1-cs-0xd" secondAttribute="bottom" id="7Wn-lE-Vze"/>
+                            <constraint firstItem="DxK-24-jad" firstAttribute="top" secondItem="zC1-cs-0xd" secondAttribute="bottom" constant="-326" id="7Wn-lE-Vze"/>
                             <constraint firstItem="Bes-cU-TpY" firstAttribute="top" secondItem="DxK-24-jad" secondAttribute="bottom" id="7eU-bI-HGn"/>
                             <constraint firstItem="Ebf-0P-F2l" firstAttribute="top" secondItem="z5O-jy-g3q" secondAttribute="bottom" id="87f-hc-MkS"/>
                             <constraint firstItem="DxK-24-jad" firstAttribute="leading" secondItem="TJV-F8-eXr" secondAttribute="leadingMargin" id="EKN-hi-haj"/>

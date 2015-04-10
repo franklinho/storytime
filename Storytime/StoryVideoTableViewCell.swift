@@ -9,7 +9,12 @@
 import UIKit
 import AVFoundation
 
+protocol StoryVideoTableViewCellDelegate{
+    func playOrPauseVideoCell(videoCell : StoryVideoTableViewCell)
+}
+
 class StoryVideoTableViewCell: UITableViewCell {
+    var delegate : StoryVideoTableViewCellDelegate?
     
     @IBOutlet weak var timestampView: UIView!
     @IBOutlet weak var playButtonIconImageView: UIImageView!
@@ -34,4 +39,7 @@ class StoryVideoTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+    @IBAction func videoViewWasTapped(sender: AnyObject) {
+        self.delegate?.playOrPauseVideoCell(self)
+    }
 }
