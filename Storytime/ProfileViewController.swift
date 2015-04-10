@@ -10,11 +10,14 @@ import UIKit
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, RankingTableViewCellDelegate,PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
 
-    var stories : NSArray?
+    var stories = []
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var votedStories : NSMutableDictionary = [:]
     var user : PFUser?
     @IBOutlet weak var profileImageView: UIImageView!
+    var currentOffset = 0
+    var maxReached = false
+    var requestingObjects = false
     
     @IBOutlet weak var storyTableView: UITableView!
     @IBOutlet weak var usernameLabel: UILabel!
@@ -59,8 +62,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         storyTableView.dataSource = self
         
         storyTableView.rowHeight = self.screenSize.width
-        requestStories()
-        GSProgressHUD.show()
+        refreshStories()
+//        GSProgressHUD.show()
         
         // Add pull to refresh to the tableview
         self.refreshControl = UIRefreshControl()
@@ -68,7 +71,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         var pullToRefreshAttributedString : NSMutableAttributedString = NSMutableAttributedString(string: pullToRefreshString)
         pullToRefreshAttributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, countElements(pullToRefreshString)))
         self.refreshControl.attributedTitle = pullToRefreshAttributedString
-        self.refreshControl.addTarget(self, action: "requestStories", forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl.addTarget(self, action: "refreshStories", forControlEvents: UIControlEvents.ValueChanged)
         self.storyTableView.addSubview(refreshControl)
 
         
@@ -84,15 +87,19 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = storyTableView.dequeueReusableCellWithIdentifier("RankingTableViewCell") as RankingTableViewCell
-        cell.upvoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
-        cell.downvoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
-        cell.pointsLabel.textColor = UIColor.whiteColor()
-        cell.delegate = self
-        
-        var story : PFObject?
-        if stories != nil {
-            story = stories![indexPath.row] as? PFObject
+        if indexPath.row == storyTableView.numberOfRowsInSection(0)-1 && maxReached == false {
+            var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as UITableViewCell
+            return cell
+        } else {
+            var cell = storyTableView.dequeueReusableCellWithIdentifier("RankingTableViewCell") as RankingTableViewCell
+            cell.upvoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
+            cell.downvoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
+            cell.pointsLabel.textColor = UIColor.whiteColor()
+            cell.delegate = self
+            
+            var story : PFObject?
+            
+            story = stories[indexPath.row] as? PFObject
             cell.story = story
             cell.titleLabel.text = story!["title"] as? String
             var storyUser : PFUser = story!["user"] as PFUser
@@ -168,48 +175,81 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 cell.thumbnailTextLabel.hidden = false
                 cell.thumbnailTextLabel.text = story!["thumbnailText"] as String
             }
+            
+            cell.rankLabel.text = "\(indexPath.row+1)."
+            
+            return cell
         }
-        cell.rankLabel.text = "\(indexPath.row+1)."
         
-        return cell
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if stories != nil {
-            return self.stories!.count
+        print("Table returning \(self.stories.count) cells")
+        if maxReached == true {
+            return self.stories.count
         } else {
-            return 0
+            return self.stories.count + 1
         }
+
+        
     }
     
-    func requestStories() {
-        if self.user != nil {
-            dispatch_async(dispatch_get_main_queue(),{
-                var query = PFQuery(className:"Story")
-                query.whereKey("user", equalTo: self.user)
-                query.orderByDescending("upvotes")
-                query.findObjectsInBackgroundWithBlock {
-                    (objects: [AnyObject]!, error: NSError!) -> Void in
-                    if error == nil {
-                        // The find succeeded.
-                        println("Successfully retrieved \(objects.count) events.")
-                        self.stories = objects
-                        self.storyTableView.reloadData()
-                        self.refreshControl.endRefreshing()
-                        if(GSProgressHUD.isVisible()) {
-                            GSProgressHUD.dismiss()
-                        }
-                    } else {
-                        // Log details of the failure
-                        println("Error: \(error) \(error.userInfo!)")
-                        self.refreshControl.endRefreshing()
-                        if(GSProgressHUD.isVisible()) {
-                            GSProgressHUD.dismiss()
-                        }
+    func refreshStories() {
+        
+        requestStories(self, offset: 0)
+    }
+    
+    func requestStories(sender:AnyObject, offset: Int) {
+        maxReached = false
+        
+        dispatch_async(dispatch_get_main_queue(),{
+            var query = PFQuery(className:"Story")
+            query.whereKey("user", equalTo: self.user)
+            query.orderByDescending("upvotes")
+            query.addDescendingOrder("createdAt")
+            query.limit = 10
+            if offset == 0 {
+                self.stories = []
+                self.currentOffset = 0
+            }
+            print("Query skipping \(self.currentOffset) stories")
+            query.skip = self.currentOffset
+            query.findObjectsInBackgroundWithBlock {
+                (objects: [AnyObject]!, error: NSError!) -> Void in
+                if error == nil {
+                    // The find succeeded.
+                    println("Successfully retrieved \(objects.count) events.")
+                    for object in objects {
+                        var objectTitle = object["title"]
+                        println("This is the object's title: \(objectTitle!))")
                     }
+                    if objects.count == 0 || objects.count < 10 {
+                        self.maxReached = true
+                    }
+                    
+                    var temporaryArray : NSMutableArray = NSMutableArray(array: self.stories)
+                    temporaryArray.addObjectsFromArray(objects)
+                    self.stories = temporaryArray
+                    self.currentOffset = self.stories.count
+                    
+                    self.storyTableView.reloadData()
+                    print("This is a list of all the stories \(self.stories)")
+                    self.refreshControl.endRefreshing()
+                    //                    if(GSProgressHUD.isVisible()) {
+                    //                        GSProgressHUD.dismiss()
+                    //                    }
+                    self.requestingObjects = false
+                } else {
+                    // Log details of the failure
+                    println("Error: \(error) \(error.userInfo!)")
+                    self.refreshControl.endRefreshing()
+                    //                    if(GSProgressHUD.isVisible()) {
+                    //                        GSProgressHUD.dismiss()
+                    //                    }
                 }
-            })
-        }
+            }
+        })
+        
     }
     
     
@@ -335,11 +375,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             var storyVC : StoryViewController = segue.destinationViewController as StoryViewController
             var storyIndex = storyTableView!.indexPathForSelectedRow()?.row
             var selectedStory : PFObject?
-            if stories != nil {
-                selectedStory = stories![storyIndex!] as PFObject
-                storyVC.story = selectedStory
-                storyVC.storyCreated = true
-            }
+
+            selectedStory = stories[storyIndex!] as PFObject
+            storyVC.story = selectedStory
+            storyVC.storyCreated = true
+
             
         }
     }
@@ -357,6 +397,24 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewWillDisappear(animated: Bool) {
         GSProgressHUD.dismiss()
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        
+        
+        var actualPosition :CGFloat = scrollView.contentOffset.y
+        var contentHeight : CGFloat = scrollView.contentSize.height - 750
+        
+        //        println("Actual Position: \(actualPosition), Content Height: \(contentHeight)")
+        if (actualPosition >= contentHeight && stories.count > 0) {
+            
+            if self.maxReached == false && self.requestingObjects == false {
+                requestingObjects = true
+                self.requestStories(self, offset: currentOffset)
+                self.storyTableView.reloadData()
+            }
+        }
+        
     }
 
 }

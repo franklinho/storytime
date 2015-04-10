@@ -10,12 +10,15 @@ import UIKit
 
 class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, RankingTableViewCellDelegate {
 
-    var stories : NSArray?
+    var stories = []
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var votedStories : NSMutableDictionary = [:]
     var creatingNewStory = false
     var refreshControl : UIRefreshControl!
     var profileTabBarItem : UITabBarItem?
+    var currentOffset = 0
+    var maxReached = false
+    var requestingObjects = false
     
     @IBOutlet weak var logOutButton: UIBarButtonItem!
     
@@ -53,11 +56,12 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         var pullToRefreshAttributedString : NSMutableAttributedString = NSMutableAttributedString(string: pullToRefreshString)
         pullToRefreshAttributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, countElements(pullToRefreshString)))
         self.refreshControl.attributedTitle = pullToRefreshAttributedString
-        self.refreshControl.addTarget(self, action: "requestStories", forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl.addTarget(self, action: "refreshStories", forControlEvents: UIControlEvents.ValueChanged)
         self.rankingTableView.addSubview(refreshControl)
 
-        GSProgressHUD.show()
-        requestStories()
+//        GSProgressHUD.show()
+        self.currentOffset = 0
+        requestStories(self,offset: currentOffset)
     }
 
     override func didReceiveMemoryWarning() {
@@ -66,11 +70,14 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if stories != nil {
-            return stories!.count
+        print("Table returning \(self.stories.count) cells")
+        if maxReached == true {
+            return self.stories.count
         } else {
-            return 0
+            return self.stories.count + 1
         }
+        
+        
     }
     
     func displayCreateProfileViewController() {
@@ -88,15 +95,19 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell = rankingTableView.dequeueReusableCellWithIdentifier("RankingTableViewCell") as RankingTableViewCell
-        cell.upvoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
-        cell.downvoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
-        cell.pointsLabel.textColor = UIColor.whiteColor()
-        cell.delegate = self
-        
-        var story : PFObject?
-        if stories != nil {
-            story = stories![indexPath.row] as? PFObject
+        if indexPath.row == rankingTableView.numberOfRowsInSection(0)-1 && maxReached == false {
+            var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as UITableViewCell
+            return cell
+        } else {
+            var cell = rankingTableView.dequeueReusableCellWithIdentifier("RankingTableViewCell") as RankingTableViewCell
+            cell.upvoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
+            cell.downvoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
+            cell.pointsLabel.textColor = UIColor.whiteColor()
+            cell.delegate = self
+            
+            var story : PFObject?
+            
+            story = stories[indexPath.row] as? PFObject
             cell.story = story
             cell.titleLabel.text = story!["title"] as? String
             var storyUser : PFUser = story!["user"] as PFUser
@@ -172,10 +183,12 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 cell.thumbnailTextLabel.hidden = false
                 cell.thumbnailTextLabel.text = story!["thumbnailText"] as String
             }
+            
+            cell.rankLabel.text = "\(indexPath.row+1)."
+            
+            return cell
         }
-        cell.rankLabel.text = "\(indexPath.row+1)."
         
-        return cell
 
     }
     
@@ -329,29 +342,57 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         
     }
+    func refreshStories() {
+
+        requestStories(self, offset: 0)
+    }
     
-    func requestStories() {
+    func requestStories(sender:AnyObject, offset: Int) {
+        maxReached = false
+        
         dispatch_async(dispatch_get_main_queue(),{
             var query = PFQuery(className:"Story")
             query.orderByDescending("upvotes")
+            query.addDescendingOrder("createdAt")
+            query.limit = 10
+            if offset == 0 {
+                self.stories = []
+                self.currentOffset = 0
+            }
+            print("Query skipping \(self.currentOffset) stories")
+            query.skip = self.currentOffset
             query.findObjectsInBackgroundWithBlock {
                 (objects: [AnyObject]!, error: NSError!) -> Void in
                 if error == nil {
                     // The find succeeded.
                     println("Successfully retrieved \(objects.count) events.")
-                    self.stories = objects
-                    self.rankingTableView.reloadData()
-                    self.refreshControl.endRefreshing()
-                    if(GSProgressHUD.isVisible()) {
-                        GSProgressHUD.dismiss()
+                    for object in objects {
+                        var objectTitle = object["title"]
+                        println("This is the object's title: \(objectTitle!))")
                     }
+                    if objects.count == 0 || objects.count < 10 {
+                        self.maxReached = true
+                    }
+                    
+                    var temporaryArray : NSMutableArray = NSMutableArray(array: self.stories)
+                    temporaryArray.addObjectsFromArray(objects)
+                    self.stories = temporaryArray
+                    self.currentOffset = self.stories.count
+                    
+                    self.rankingTableView.reloadData()
+                    print("This is a list of all the stories \(self.stories)")
+                    self.refreshControl.endRefreshing()
+//                    if(GSProgressHUD.isVisible()) {
+//                        GSProgressHUD.dismiss()
+//                    }
+                    self.requestingObjects = false
                 } else {
                     // Log details of the failure
                     println("Error: \(error) \(error.userInfo!)")
                     self.refreshControl.endRefreshing()
-                    if(GSProgressHUD.isVisible()) {
-                        GSProgressHUD.dismiss()
-                    }
+//                    if(GSProgressHUD.isVisible()) {
+//                        GSProgressHUD.dismiss()
+//                    }
                 }
             }
         })
@@ -364,17 +405,36 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             var storyVC : StoryViewController = segue.destinationViewController as StoryViewController
             var storyIndex = rankingTableView!.indexPathForSelectedRow()?.row
             var selectedStory : PFObject?
-            if stories != nil {
-                selectedStory = stories![storyIndex!] as PFObject
-                storyVC.story = selectedStory
-                storyVC.storyCreated = true
-            }
-            
+            selectedStory = stories[storyIndex!] as PFObject
+            storyVC.story = selectedStory
+            storyVC.storyCreated = true
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        GSProgressHUD.dismiss()
+//    override func viewWillDisappear(animated: Bool) {
+//        GSProgressHUD.dismiss()
+//    }
+    
+    override func viewWillAppear(animated: Bool) {
+        self.rankingTableView.reloadData()
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        
+        
+        var actualPosition :CGFloat = scrollView.contentOffset.y
+        var contentHeight : CGFloat = scrollView.contentSize.height - 750
+        
+//        println("Actual Position: \(actualPosition), Content Height: \(contentHeight)")
+        if (actualPosition >= contentHeight && stories.count > 0) {
+            
+            if self.maxReached == false && self.requestingObjects == false {
+                requestingObjects = true
+                requestStories(self, offset: currentOffset)
+                self.rankingTableView.reloadData()
+            }
+        }
+        
     }
 
         

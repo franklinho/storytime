@@ -43,7 +43,7 @@
         <!--Current-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController title="Current" id="vXZ-lx-hvc" customClass="RankingViewController" customModule="Storytime" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Current" automaticallyAdjustsScrollViewInsets="NO" id="vXZ-lx-hvc" customClass="RankingViewController" customModule="Storytime" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -53,7 +53,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="359" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="3oL-19-xSC">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="551"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="487"/>
                                 <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexBackgroundColor" red="0.16078431372549018" green="0.14509803921568626" blue="0.21568627450980393" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexTrackingBackgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -222,6 +222,24 @@
                                             <segue destination="nXj-xd-FNA" kind="show" identifier="RankingTableViewCellToStoryVCSegue" id="gzv-Hc-Qwl"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SpinnerCell" id="9va-XV-dvp">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9va-XV-dvp" id="h7o-EA-NQV">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="ZIM-90-XtZ">
+                                                    <rect key="frame" x="290" y="169.5" width="20" height="20"/>
+                                                    <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </activityIndicatorView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="centerX" secondItem="ZIM-90-XtZ" secondAttribute="centerX" id="PaT-QW-M5t"/>
+                                                <constraint firstAttribute="centerY" secondItem="ZIM-90-XtZ" secondAttribute="centerY" id="VO5-Be-JTc"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
+                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>
@@ -229,6 +247,8 @@
                         <constraints>
                             <constraint firstItem="3oL-19-xSC" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="0Rm-DA-cOQ"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="3oL-19-xSC" secondAttribute="bottom" id="9P0-MN-qJv"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="3oL-19-xSC" secondAttribute="bottom" id="IfN-sd-FWV"/>
+                            <constraint firstItem="3oL-19-xSC" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="ZBN-8o-BRW"/>
                             <constraint firstItem="3oL-19-xSC" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="rjl-iu-oyk"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3oL-19-xSC" secondAttribute="trailing" constant="-16" id="rnQ-B2-vSQ"/>
                             <constraint firstItem="3oL-19-xSC" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" id="yEL-lS-f2V"/>
@@ -236,6 +256,8 @@
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="rjl-iu-oyk"/>
+                                <exclude reference="yEL-lS-f2V"/>
+                                <exclude reference="9P0-MN-qJv"/>
                             </mask>
                         </variation>
                     </view>
@@ -492,6 +514,24 @@
                                 <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexBackgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SpinnerCell" id="ak0-EV-ELb">
+                                        <rect key="frame" x="0.0" y="121" width="600" height="359"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ak0-EV-ELb" id="V71-zc-Vi7">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="bdC-3b-u8S">
+                                                    <rect key="frame" x="290" y="169.5" width="20" height="20"/>
+                                                    <color key="color" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </activityIndicatorView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="centerY" secondItem="bdC-3b-u8S" secondAttribute="centerY" id="1eY-Go-edd"/>
+                                                <constraint firstAttribute="centerX" secondItem="bdC-3b-u8S" secondAttribute="centerX" id="1pe-f0-cQ2"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
+                                    </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="RankingTableViewCell" rowHeight="359" id="OtC-gk-5E7" customClass="RankingTableViewCell" customModule="Storytime" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
@@ -1582,6 +1622,6 @@
         <image name="video_icon.png" width="256" height="256"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="gzv-Hc-Qwl"/>
+        <segue reference="ZfJ-zs-kTV"/>
     </inferredMetricsTieBreakers>
 </document>
