@@ -513,8 +513,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     // The object has been saved.
                     println("Story and event successfully saved")
                     self.storyTitleLabel.text = self.story!["title"] as? String
-                    self.userLabel.text = PFUser.currentUser().username
-                    var upvotes = self.story!["upvotes"] as? Int
+                    if  PFUser.currentUser()["profileName"] != nil {
+                        self.userLabel.text = PFUser.currentUser()!["profileName"] as String
+                    }
+                                        var upvotes = self.story!["upvotes"] as? Int
                     var downvotes = self.story!["downvotes"] as? Int
                     self.storyUpVoted = true
                     self.votedStories[self.story!.objectId] = 1
@@ -863,7 +865,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 if (success) {
                     // The object has been saved.
                     self.storyTitleLabel.text = self.story!["title"] as? String
-                    self.userLabel.text = PFUser.currentUser().username
+                    if  PFUser.currentUser()["profileName"] != nil {
+                        self.userLabel.text = PFUser.currentUser()!["profileName"] as String
+                    }
                     var upvotes = self.story!["upvotes"] as? Int
                     var downvotes = self.story!["downvotes"] as? Int
                     self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
@@ -1118,9 +1122,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func cellCompletelyOnScreen(indexPath : NSIndexPath) -> Bool {
         var cellRect : CGRect = storyTableView.rectForRowAtIndexPath(indexPath)
         cellRect = storyTableView.convertRect(cellRect, toView: storyTableView.superview)
+        var adjustedCellRect = CGRectMake(cellRect.origin.x, cellRect.origin.y + 1, cellRect.width, cellRect.height - 2)
         println("Cell Rect: \(cellRect)")
         println("StoryTableview Frame : \(storyTableView.frame)")
-        var completelyVisible : Bool = CGRectContainsRect(storyTableView.frame, cellRect)
+        var completelyVisible : Bool = CGRectContainsRect(storyTableView.frame, adjustedCellRect)
         return completelyVisible
     }
     
