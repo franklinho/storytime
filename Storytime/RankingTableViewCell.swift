@@ -67,9 +67,6 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
         if (PFUser.currentUser() == nil){
             self.delegate?.displayLoginViewController()
             
-        } else if (PFUser.currentUser() != nil && PFUser.currentUser()["profileName"] == nil) {
-            self.delegate?.displayCreateProfileViewController()
-            
         } else {
             upvoteStory()
         }
@@ -78,10 +75,6 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
     @IBAction func downvoteButtonWasTapped(sender: AnyObject) {
         if (PFUser.currentUser() == nil){
             self.delegate?.displayLoginViewController()
-            
-        } else if (PFUser.currentUser() != nil && PFUser.currentUser()["profileName"] == nil) {
-            self.delegate?.displayCreateProfileViewController()
-            
         } else {
             downvoteStory()
         }

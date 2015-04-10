@@ -1167,8 +1167,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBAction func upVoteButtonWasTapped(sender: AnyObject) {
         if (PFUser.currentUser() == nil){
             presentLoginViewController()
-        } else if (PFUser.currentUser() != nil && PFUser.currentUser()["profileName"] == nil) {
-            presentCreateProfileViewController()
         } else {
             upvoteStory()
         }
@@ -1179,8 +1177,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBAction func downVoteButtonWasTapped(sender: AnyObject) {
         if (PFUser.currentUser() == nil){
             presentLoginViewController()
-        } else if (PFUser.currentUser() != nil && PFUser.currentUser()["profileName"] == nil) {
-            presentCreateProfileViewController()
         } else {
             downvoteStory()
         }
@@ -1376,6 +1372,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.dismissViewControllerAnimated(true, completion: nil)
         updateVotingLabels()
         profileTabBarItem!.enabled = true
+        
         if PFUser.currentUser()["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
