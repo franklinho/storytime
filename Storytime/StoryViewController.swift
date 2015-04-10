@@ -18,7 +18,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var newStory : Bool = false
     var storyCreated : Bool = false
     var story : PFObject?
-    var events : NSArray?
+    var events = []
     @IBOutlet weak var userProfileImage: UIImageView!
     let captureSession = AVCaptureSession()
     var captureDevice : AVCaptureDevice?
@@ -37,6 +37,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var createViewExpanded = false
     var createButton :UIBarButtonItem?
     var refreshControl : UIRefreshControl!
+    
+    var currentOffset = 0
+    var maxReached = false
+    var requestingObjects = false
 
     @IBOutlet weak var pointsLabel: UILabel!
     @IBOutlet weak var upVoteButton: UIButton!
@@ -206,8 +210,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //        }
         
         if storyCreated == true {
-            requestEventsForStory()
-            GSProgressHUD.show()
+            refreshEventsForStory()
+//            GSProgressHUD.show()
         }
         
         
@@ -217,7 +221,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var pullToRefreshAttributedString : NSMutableAttributedString = NSMutableAttributedString(string: pullToRefreshString)
         pullToRefreshAttributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, countElements(pullToRefreshString)))
         self.refreshControl.attributedTitle = pullToRefreshAttributedString
-        self.refreshControl.addTarget(self, action: "requestEventsForStory", forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl.addTarget(self, action: "refreshEventsForStory", forControlEvents: UIControlEvents.ValueChanged)
         self.storyTableView.addSubview(refreshControl)
         
     }
@@ -294,92 +298,100 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if events != nil {
-            return self.events!.count
+        print("Table returning \(self.events.count) cells")
+        if maxReached == true {
+            return self.events.count
         } else {
-            return 0
+            return self.events.count + 1
         }
+        
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var event : PFObject?
-        if (events != nil) {
-            event = events![indexPath.row] as PFObject
-            if event!["type"] as NSString == "text" {
-                var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryTextTableViewCell") as StoryTextTableViewCell
-                cell.eventTextLabel.text = event!["text"] as? String
-                cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
-                return cell
-            } else if event!["type"] as String == "photo" {
-                var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryImageTableViewCell") as StoryImageTableViewCell
-                cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
-                let userImageFile = event!["image"] as PFFile
-                userImageFile.getDataInBackgroundWithBlock {
-                    (imageData: NSData!, error: NSError!) -> Void in
-                    if error == nil {
-                        let image = UIImage(data:imageData)
-                        cell.eventImageView.image = image
-                    }
-                }
-                
-                return cell
-            } else {
-                var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryVideoTableViewCell") as StoryVideoTableViewCell
-                
-                cell.delegate = self
-                
-                if cell.playerLayer != nil {
-                    cell.playerLayer!.removeFromSuperlayer()
-                }
-                
-                cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
-
-                let videoFile = event!["video"] as PFFile
-                videoFile.getDataInBackgroundWithBlock {
-                    (videoData: NSData!, error: NSError!) -> Void in
-                    if error == nil {
-                        var path = "\(self.documentPath)/\(indexPath.row).mp4"
-                        if (NSFileManager.defaultManager().fileExistsAtPath(path)) {
-                            NSFileManager.defaultManager().removeItemAtPath(path, error: nil)
-                        }
-                        
-                        videoData.writeToFile(path, atomically: true)
-                        println("File now at \(path)")
-                        var movieURL = NSURL(fileURLWithPath: path)
-                        cell.player = AVPlayer(URL: movieURL)
-                        
-                        
-                        cell.playerLayer = AVPlayerLayer(player: cell.player!)
-                        cell.playerLayer!.frame = CGRectMake(0, 0, self.screenSize.width, self.screenSize.width)
-                        cell.playerLayer!.videoGravity = AVLayerVideoGravityResizeAspect
-                        cell.playerLayer!.needsDisplayOnBoundsChange = true
-                        
-                        cell.contentView.layer.insertSublayer(cell.playerLayer!, atIndex: 0)
-                        cell.contentView.layer.needsDisplayOnBoundsChange = true
-                        
-                        if self.cellCompletelyOnScreen(indexPath){
-                            self.playingVideoCell = cell
-                            self.playingVideoCell?.playButtonIconImageView.hidden = true
-                            self.playingVideoCell!.player!.play()
-                            self.playingVideoCell!.player!.actionAtItemEnd = .None
-                            
-                            
-                            NSNotificationCenter.defaultCenter().addObserver(self, selector: "restartVideoFromBeginning", name: AVPlayerItemDidPlayToEndTimeNotification, object: self.playingVideoCell!.player!.currentItem)
-                        }
-                        
-                        
-                    }
-                }
-                
-                
-                return cell
-                
-            }
-            
+        if indexPath.row == storyTableView.numberOfRowsInSection(0)-1 && maxReached == false {
+            var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as UITableViewCell
+            return cell
         } else {
-            return UITableViewCell()
-        }
+            if events.count > 0 {
+                event = events[indexPath.row] as PFObject
+                if event!["type"] as NSString == "text" {
+                    var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryTextTableViewCell") as StoryTextTableViewCell
+                    cell.eventTextLabel.text = event!["text"] as? String
+                    cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
+                    return cell
+                } else if event!["type"] as String == "photo" {
+                    var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryImageTableViewCell") as StoryImageTableViewCell
+                    cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
+                    let userImageFile = event!["image"] as PFFile
+                    userImageFile.getDataInBackgroundWithBlock {
+                        (imageData: NSData!, error: NSError!) -> Void in
+                        if error == nil {
+                            let image = UIImage(data:imageData)
+                            cell.eventImageView.image = image
+                        }
+                    }
+                    
+                    return cell
+                } else {
+                    var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryVideoTableViewCell") as StoryVideoTableViewCell
+                    
+                    cell.delegate = self
+                    
+                    if cell.playerLayer != nil {
+                        cell.playerLayer!.removeFromSuperlayer()
+                    }
+                    
+                    cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
+                    
+                    let videoFile = event!["video"] as PFFile
+                    videoFile.getDataInBackgroundWithBlock {
+                        (videoData: NSData!, error: NSError!) -> Void in
+                        if error == nil {
+                            var path = "\(self.documentPath)/\(indexPath.row).mp4"
+                            if (NSFileManager.defaultManager().fileExistsAtPath(path)) {
+                                NSFileManager.defaultManager().removeItemAtPath(path, error: nil)
+                            }
+                            
+                            videoData.writeToFile(path, atomically: true)
+                            println("File now at \(path)")
+                            var movieURL = NSURL(fileURLWithPath: path)
+                            cell.player = AVPlayer(URL: movieURL)
+                            
+                            
+                            cell.playerLayer = AVPlayerLayer(player: cell.player!)
+                            cell.playerLayer!.frame = CGRectMake(0, 0, self.screenSize.width, self.screenSize.width)
+                            cell.playerLayer!.videoGravity = AVLayerVideoGravityResizeAspect
+                            cell.playerLayer!.needsDisplayOnBoundsChange = true
+                            
+                            cell.contentView.layer.insertSublayer(cell.playerLayer!, atIndex: 0)
+                            cell.contentView.layer.needsDisplayOnBoundsChange = true
+                            
+                            if self.cellCompletelyOnScreen(indexPath){
+                                self.playingVideoCell = cell
+                                self.playingVideoCell?.playButtonIconImageView.hidden = true
+                                self.playingVideoCell!.player!.play()
+                                self.playingVideoCell!.player!.actionAtItemEnd = .None
+                                
+                                
+                                NSNotificationCenter.defaultCenter().addObserver(self, selector: "restartVideoFromBeginning", name: AVPlayerItemDidPlayToEndTimeNotification, object: self.playingVideoCell!.player!.currentItem)
+                            }
+                            
+                            
+                        }
+                    }
+                    
+                    
+                    return cell
+                    
+                }
+                
+            } else {
+                return UITableViewCell()
+            }
 
+        }
+        
     }
     
     
@@ -476,7 +488,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.story!.saveInBackground()
                 }
                 self.createTextView.text = ""
-                self.requestEventsForStory()
+                self.refreshEventsForStory()
                 
             } else {
                 // There was a problem, check error.description
@@ -644,37 +656,63 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    func requestEventsForStory() {
+    func refreshEventsForStory() {
+        requestEventsForStory(self, offset: 0)
+    }
+    
+    func requestEventsForStory(sender:AnyObject, offset: Int) {
+        maxReached = false
         
         dispatch_async(dispatch_get_main_queue(),{
             var query = PFQuery(className:"Event")
             query.whereKey("storyObject", equalTo:self.story)
             query.orderByDescending("createdAt")
+
+            query.limit = 10
+            if offset == 0 {
+                self.events = []
+                self.currentOffset = 0
+            }
+            print("Query skipping \(self.currentOffset) stories")
+            query.skip = self.currentOffset
             query.findObjectsInBackgroundWithBlock {
                 (objects: [AnyObject]!, error: NSError!) -> Void in
                 if error == nil {
                     // The find succeeded.
                     println("Successfully retrieved \(objects.count) events.")
-                    self.events = objects
-                    self.storyTableView.reloadData()
-                    self.storyTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: true)
-                    self.scrollViewDidEndDecelerating(self.storyTableView)
-                    self.refreshControl.endRefreshing()
-                    if(GSProgressHUD.isVisible()) {
-                        GSProgressHUD.dismiss()
+                    for object in objects {
+                        var objectTitle = object["title"]
+                        println("This is the object's title: \(objectTitle!))")
                     }
+                    if objects.count == 0 || objects.count < 10 {
+                        self.maxReached = true
+                    }
+                    
+                    var temporaryArray : NSMutableArray = NSMutableArray(array: self.events)
+                    temporaryArray.addObjectsFromArray(objects)
+                    self.events = temporaryArray
+                    self.currentOffset = self.events.count
+                    
+                    self.storyTableView.reloadData()
+                    print("This is a list of all the events \(self.events)")
+                    self.refreshControl.endRefreshing()
+                    //                    if(GSProgressHUD.isVisible()) {
+                    //                        GSProgressHUD.dismiss()
+                    //                    }
+                    self.requestingObjects = false
                 } else {
                     // Log details of the failure
                     println("Error: \(error) \(error.userInfo!)")
                     self.refreshControl.endRefreshing()
-                    if(GSProgressHUD.isVisible()) {
-                        GSProgressHUD.dismiss()
-                    }
+                    //                    if(GSProgressHUD.isVisible()) {
+                    //                        GSProgressHUD.dismiss()
+                    //                    }
                 }
             }
         })
         
     }
+
     
     override func viewDidAppear(animated: Bool) {
         
@@ -809,7 +847,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         
                     }
                 }
-                self.requestEventsForStory()
+                self.refreshEventsForStory()
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the event: \(error.description)")
@@ -921,7 +959,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.story!["thumbnailImage"] = imageFile
                     self.story!.save()
                 }
-                self.requestEventsForStory()
+                self.refreshEventsForStory()
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the event: \(error.description)")
@@ -1074,6 +1112,19 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 playingVideoCell?.playButtonIconImageView.hidden = false
                 
                 println("Pausing video")
+            }
+        }
+        
+        var actualPosition :CGFloat = scrollView.contentOffset.y
+        var contentHeight : CGFloat = scrollView.contentSize.height - 750
+        
+        //        println("Actual Position: \(actualPosition), Content Height: \(contentHeight)")
+        if (actualPosition >= contentHeight && events.count > 0) {
+            
+            if self.maxReached == false && self.requestingObjects == false {
+                requestingObjects = true
+                requestEventsForStory(self, offset: currentOffset)
+                self.storyTableView.reloadData()
             }
         }
     }
@@ -1405,7 +1456,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     override func viewWillDisappear(animated: Bool) {
-        GSProgressHUD.dismiss()
+//        GSProgressHUD.dismiss()
         if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 {
             playingVideoCell?.player?.pause()
             playingVideoCell?.playButtonIconImageView.hidden = false
