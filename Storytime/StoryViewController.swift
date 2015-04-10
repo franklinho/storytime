@@ -1293,13 +1293,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func presentLoginViewController() {
-        var loginViewController : PFLogInViewController = PFLogInViewController()
+        var loginViewController : CustomLoginViewController = CustomLoginViewController()
         loginViewController.delegate = self
         loginViewController.facebookPermissions = NSArray(array: ["friends_about_me"])
         loginViewController.fields = PFLogInFields.Twitter | PFLogInFields.Facebook | PFLogInFields.DismissButton
         
         
-        var signUpViewController : PFSignUpViewController = PFSignUpViewController()
+        var signUpViewController : CustomSignUpViewController = CustomSignUpViewController()
         signUpViewController.delegate = self
         
         loginViewController.signUpController = signUpViewController

@@ -21,6 +21,9 @@
 		DD70FBD31ACF16FB0002C5CC /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD70FBD21ACF16FB0002C5CC /* Parse.framework */; };
 		DD8C82851AD5CE1E00B9A47B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */; };
 		DD8C828B1AD5D52600B9A47B /* menu_icon_white.png in Resources */ = {isa = PBXBuildFile; fileRef = DD8C828A1AD5D52600B9A47B /* menu_icon_white.png */; };
+		DD9B26DE1AD8574600E6D3DE /* CustomLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9B26DD1AD8574600E6D3DE /* CustomLoginViewController.swift */; };
+		DD9B26E01AD8578A00E6D3DE /* CustomSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9B26DF1AD8578A00E6D3DE /* CustomSignUpViewController.swift */; };
+		DD9B26E21AD85F9800E6D3DE /* storyweave_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = DD9B26E11AD85F9800E6D3DE /* storyweave_logo.png */; };
 		DDBA71F61AC5FCC100D0EC97 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA71F51AC5FCC100D0EC97 /* Accounts.framework */; };
 		DDBA71F81AC5FCC700D0EC97 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA71F71AC5FCC700D0EC97 /* AudioToolbox.framework */; };
 		DDBA71FA1AC5FCCC00D0EC97 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA71F91AC5FCCC00D0EC97 /* CFNetwork.framework */; };
@@ -514,6 +517,9 @@
 		DD70FBD21ACF16FB0002C5CC /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = Pods/Parse/Parse.framework; sourceTree = "<group>"; };
 		DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		DD8C828A1AD5D52600B9A47B /* menu_icon_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_icon_white.png; sourceTree = "<group>"; };
+		DD9B26DD1AD8574600E6D3DE /* CustomLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLoginViewController.swift; sourceTree = "<group>"; };
+		DD9B26DF1AD8578A00E6D3DE /* CustomSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSignUpViewController.swift; sourceTree = "<group>"; };
+		DD9B26E11AD85F9800E6D3DE /* storyweave_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = storyweave_logo.png; sourceTree = "<group>"; };
 		DDBA71F51AC5FCC100D0EC97 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		DDBA71F71AC5FCC700D0EC97 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		DDBA71F91AC5FCCC00D0EC97 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -1074,6 +1080,7 @@
 		DDBA72141AC5FD5B00D0EC97 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				DD9B26E11AD85F9800E6D3DE /* storyweave_logo.png */,
 				DD8C828A1AD5D52600B9A47B /* menu_icon_white.png */,
 				DDC55B061AD49C0700659E70 /* play_button_icon_white.png */,
 				DDC55B041AD4965A00659E70 /* user_icon_scaled_white.png */,
@@ -1127,6 +1134,8 @@
 				DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */,
 				DDF06E961AD4529F007D4954 /* CreateProfileViewController.swift */,
 				DDC93A101AC48F96006D4646 /* StoryImageTableViewCell.swift */,
+				DD9B26DD1AD8574600E6D3DE /* CustomLoginViewController.swift */,
+				DD9B26DF1AD8578A00E6D3DE /* CustomSignUpViewController.swift */,
 				DDC93A121AC48FA2006D4646 /* StoryTextTableViewCell.swift */,
 				DDC93A141AC48FAD006D4646 /* StoryVideoTableViewCell.swift */,
 				DDC93A161AC48FB9006D4646 /* StoryCreateTableViewCell.swift */,
@@ -2035,6 +2044,7 @@
 				DDC939541AC47F5D006D4646 /* sports-club.svg in Resources */,
 				DDC939251AC47F5D006D4646 /* old-phone.svg in Resources */,
 				DDC9397E1AC47F5D006D4646 /* video.svg in Resources */,
+				DD9B26E21AD85F9800E6D3DE /* storyweave_logo.png in Resources */,
 				DDC939B71AC47F5D006D4646 /* smashing.svg in Resources */,
 				DDC93A041AC48268006D4646 /* OpenSans-ExtraBold.ttf in Resources */,
 				DDC9390D1AC47F5D006D4646 /* magnifying-glass.svg in Resources */,
@@ -2222,12 +2232,14 @@
 				DDC93A0F1AC48E22006D4646 /* StoryViewController.swift in Sources */,
 				DDC936901AC47CAE006D4646 /* ViewController.swift in Sources */,
 				DDF06E971AD4529F007D4954 /* CreateProfileViewController.swift in Sources */,
+				DD9B26E01AD8578A00E6D3DE /* CustomSignUpViewController.swift in Sources */,
 				DDC93A171AC48FB9006D4646 /* StoryCreateTableViewCell.swift in Sources */,
 				DDC93A151AC48FAD006D4646 /* StoryVideoTableViewCell.swift in Sources */,
 				DD8C82851AD5CE1E00B9A47B /* ProfileViewController.swift in Sources */,
 				DDC93A111AC48F96006D4646 /* StoryImageTableViewCell.swift in Sources */,
 				DDC9368E1AC47CAE006D4646 /* Storytime.xcdatamodeld in Sources */,
 				DDC9368B1AC47CAE006D4646 /* AppDelegate.swift in Sources */,
+				DD9B26DE1AD8574600E6D3DE /* CustomLoginViewController.swift in Sources */,
 				DDC936AE1AC47D32006D4646 /* RankingViewController.swift in Sources */,
 				DDC93A0D1AC48589006D4646 /* RankingTableViewCell.swift in Sources */,
 			);
