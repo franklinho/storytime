@@ -1406,6 +1406,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewWillDisappear(animated: Bool) {
         GSProgressHUD.dismiss()
+        if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 {
+            playingVideoCell?.player?.pause()
+            playingVideoCell?.playButtonIconImageView.hidden = false
+        }
     }
     
     func playOrPauseVideoCell(videoCell: StoryVideoTableViewCell) {
@@ -1431,6 +1435,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         
     }
+    
+    
     
     
 }
