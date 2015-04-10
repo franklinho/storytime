@@ -107,84 +107,88 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             
             var story : PFObject?
             
-            story = stories[indexPath.row] as? PFObject
-            cell.story = story
-            cell.titleLabel.text = story!["title"] as? String
-            var storyUser : PFUser = story!["user"] as PFUser
-            storyUser.fetchIfNeeded()
-            if storyUser["profileName"] != nil {
-                var profileName : String = storyUser["profileName"] as String
-                cell.userButton.setTitle(profileName, forState: UIControlState.Normal)
-            }
-            
-            if storyUser["profileImage"] != nil {
-                var profileImageFile = storyUser["profileImage"] as PFFile
-                profileImageFile.getDataInBackgroundWithBlock {
-                    (imageData: NSData!, error: NSError!) -> Void in
-                    if error == nil {
-                        let image = UIImage(data:imageData)
-                        cell.profileImageView.image = image
-                    }
+            if stories.count > 0 {
+                story = stories[indexPath.row] as? PFObject
+                cell.story = story
+                cell.titleLabel.text = story!["title"] as? String
+                var storyUser : PFUser = story!["user"] as PFUser
+                storyUser.fetchIfNeeded()
+                if storyUser["profileName"] != nil {
+                    var profileName : String = storyUser["profileName"] as String
+                    cell.userButton.setTitle(profileName, forState: UIControlState.Normal)
                 }
-            }
-            
-            
-            
-            var upvotes = story!["upvotes"] as? Int
-            var downvotes = story!["downvotes"] as? Int
-            cell.pointsLabel.text = "\(upvotes!-downvotes!)"
-            
-            
-            
-            if PFUser.currentUser() != nil{
-                if PFUser.currentUser()["votedStories"] != nil {
-                    self.votedStories = PFUser.currentUser()["votedStories"] as NSMutableDictionary
-                    if votedStories[story!.objectId] != nil{
-                        if votedStories[story!.objectId] as Int == 1 {
-                            cell.storyUpVoted = true
-                            cell.upvoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
-                            cell.pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
-                        } else if votedStories[story!.objectId] as Int == -1 {
-                            cell.storyDownVoted = true
-                            cell.downvoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
-                            cell.pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
+                
+                if storyUser["profileImage"] != nil {
+                    var profileImageFile = storyUser["profileImage"] as PFFile
+                    profileImageFile.getDataInBackgroundWithBlock {
+                        (imageData: NSData!, error: NSError!) -> Void in
+                        if error == nil {
+                            let image = UIImage(data:imageData)
+                            cell.profileImageView.image = image
                         }
                     }
                 }
-            }
-            
-            
-            
-            cell.previewImageView.hidden = true
-            if story!["thumbnailImage"] != nil {
-                let imageFile = story!["thumbnailImage"] as PFFile
-                imageFile.getDataInBackgroundWithBlock {
-                    (imageData: NSData!, error: NSError!) -> Void in
-                    if error == nil {
-                        let image = UIImage(data:imageData)
-                        cell.previewImageView.image = image
-                        cell.previewImageView.hidden = false
-                        cell.thumbnailTextLabel.hidden = true
+                
+                
+                
+                var upvotes = story!["upvotes"] as? Int
+                var downvotes = story!["downvotes"] as? Int
+                cell.pointsLabel.text = "\(upvotes!-downvotes!)"
+                
+                
+                
+                if PFUser.currentUser() != nil{
+                    if PFUser.currentUser()["votedStories"] != nil {
+                        self.votedStories = PFUser.currentUser()["votedStories"] as NSMutableDictionary
+                        if votedStories[story!.objectId] != nil{
+                            if votedStories[story!.objectId] as Int == 1 {
+                                cell.storyUpVoted = true
+                                cell.upvoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
+                                cell.pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
+                            } else if votedStories[story!.objectId] as Int == -1 {
+                                cell.storyDownVoted = true
+                                cell.downvoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
+                                cell.pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
+                            }
+                        }
                     }
                 }
-            } else if story!["thumbnailVideoScreenCap"] != nil {
-                let imageFile = story!["thumbnailVideoScreenCap"] as PFFile
-                imageFile.getDataInBackgroundWithBlock {
-                    (imageData: NSData!, error: NSError!) -> Void in
-                    if error == nil {
-                        let image = UIImage(data:imageData)
-                        cell.previewImageView.image = image
-                        cell.previewImageView.hidden = false
-                        cell.thumbnailTextLabel.hidden = true
-                    }
-                }
-            } else if story!["thumbnailText"] != nil {
+                
+                
+                
                 cell.previewImageView.hidden = true
-                cell.thumbnailTextLabel.hidden = false
-                cell.thumbnailTextLabel.text = story!["thumbnailText"] as String
+                if story!["thumbnailImage"] != nil {
+                    let imageFile = story!["thumbnailImage"] as PFFile
+                    imageFile.getDataInBackgroundWithBlock {
+                        (imageData: NSData!, error: NSError!) -> Void in
+                        if error == nil {
+                            let image = UIImage(data:imageData)
+                            cell.previewImageView.image = image
+                            cell.previewImageView.hidden = false
+                            cell.thumbnailTextLabel.hidden = true
+                        }
+                    }
+                } else if story!["thumbnailVideoScreenCap"] != nil {
+                    let imageFile = story!["thumbnailVideoScreenCap"] as PFFile
+                    imageFile.getDataInBackgroundWithBlock {
+                        (imageData: NSData!, error: NSError!) -> Void in
+                        if error == nil {
+                            let image = UIImage(data:imageData)
+                            cell.previewImageView.image = image
+                            cell.previewImageView.hidden = false
+                            cell.thumbnailTextLabel.hidden = true
+                        }
+                    }
+                } else if story!["thumbnailText"] != nil {
+                    cell.previewImageView.hidden = true
+                    cell.thumbnailTextLabel.hidden = false
+                    cell.thumbnailTextLabel.text = story!["thumbnailText"] as String
+                }
+                
+                cell.rankLabel.text = "\(indexPath.row+1)."
+                
+                
             }
-            
-            cell.rankLabel.text = "\(indexPath.row+1)."
             
             return cell
         }
