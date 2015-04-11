@@ -33,16 +33,16 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
 
         // Do any additional setup after loading the view.
         
-        profilePreviewView.layer.cornerRadius = 125
+        profilePreviewView.layer.cornerRadius = 100
         profilePreviewView.layer.borderColor = UIColor.whiteColor().CGColor
-        profilePreviewView.layer.borderWidth = 10
+        profilePreviewView.layer.borderWidth = 8
         profilePreviewView.clipsToBounds = true
         
         submitButton.layer.cornerRadius = 10
         submitButton.clipsToBounds = true
         
         closeButton.layer.cornerRadius = 23
-        closeButton.layer.borderWidth = 4
+        closeButton.layer.borderWidth = 3
         closeButton.layer.borderColor = UIColor.whiteColor().CGColor
         closeButton.clipsToBounds = true
         
