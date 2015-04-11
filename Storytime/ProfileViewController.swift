@@ -46,14 +46,17 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         if user != nil {
             usernameLabel.text = user!["profileName"] as String
-            var profileImageFile = user!["profileImage"] as PFFile
-            profileImageFile.getDataInBackgroundWithBlock {
-                (imageData: NSData!, error: NSError!) -> Void in
-                if error == nil {
-                    let image = UIImage(data:imageData)
-                    self.profileImageView.image = image
+            if user!["profileImage"] != nil {
+                var profileImageFile = user!["profileImage"] as PFFile
+                profileImageFile.getDataInBackgroundWithBlock {
+                    (imageData: NSData!, error: NSError!) -> Void in
+                    if error == nil {
+                        let image = UIImage(data:imageData)
+                        self.profileImageView.image = image
+                    }
                 }
             }
+            
 
         }
 
@@ -125,7 +128,16 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
                 var upvotes = story!["upvotes"] as? Int
                 var downvotes = story!["downvotes"] as? Int
-                cell.pointsLabel.text = "\(upvotes!-downvotes!)"
+                if story!["points"] == nil {
+                    story!["points"] = upvotes! - downvotes!
+                    story?.saveInBackground()
+                }
+                
+                if story!["points"] != nil {
+                    var points = story!["points"]
+                    cell.pointsLabel.text = "\(points)"
+                }
+                
                 
                 
                 
@@ -207,7 +219,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         dispatch_async(dispatch_get_main_queue(),{
             var query = PFQuery(className:"Story")
             query.whereKey("user", equalTo: self.user)
-            query.orderByDescending("upvotes")
+            query.orderByDescending("points")
             query.addDescendingOrder("createdAt")
             query.limit = 10
             if offset == 0 {

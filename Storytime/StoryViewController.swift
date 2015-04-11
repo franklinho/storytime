@@ -94,8 +94,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         createButton = UIBarButtonItem(title: "+", style: .Plain, target: self, action: "createButtonWasTapped")
         
         if self.story != nil {
-            var points = story!["points"] as? Int
-            pointsLabel.text = "\(points!)"
+            if story!["points"] != nil {
+                var points = story!["points"] as? Int
+                pointsLabel.text = "\(points!)"
+            }
+            
             
         }
         
@@ -121,8 +124,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.navigationItem.rightBarButtonItem = createButton
         if newStory == false {
             self.storyTitleLabel.text = self.story!["title"] as? String
-            var points = story!["points"] as? Int
-            self.storyPointsLabel.text = "\(points!)"
+            if story!["points"] != nil {
+                var points = story!["points"] as? Int
+                self.storyPointsLabel.text = "\(points!)"
+            }
+            
             var storyUser : PFUser = self.story!["user"] as PFUser
             storyUser.fetchIfNeeded()
             var profileName = storyUser["profileName"]

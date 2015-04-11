@@ -129,11 +129,18 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                 }
                 
+                if story!["points"] == nil {
+                    var upvotes = story!["upvotes"] as Int
+                    var downvotes = story!["downvotes"] as Int
+                    story!["points"] = upvotes - downvotes
+                    story?.saveInBackground()
+                }
                 
-                
-                var points = story!["points"] as? Int
-                cell.pointsLabel.text = "\(points!)"
-                
+                if story!["points"] != nil {
+                    var points = story!["points"] as? Int
+                    cell.pointsLabel.text = "\(points!)"
+
+                }
                 
                 
                 if PFUser.currentUser() != nil{
@@ -355,7 +362,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         dispatch_async(dispatch_get_main_queue(),{
             var query = PFQuery(className:"Story")
-            query.orderByDescending("upvotes")
+            query.orderByDescending("points")
             query.addDescendingOrder("createdAt")
             query.limit = 10
             if offset == 0 {
