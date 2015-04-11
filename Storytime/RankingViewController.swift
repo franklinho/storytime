@@ -131,9 +131,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 
                 
-                var upvotes = story!["upvotes"] as? Int
-                var downvotes = story!["downvotes"] as? Int
-                cell.pointsLabel.text = "\(upvotes!-downvotes!)"
+                var points = story!["points"] as? Int
+                cell.pointsLabel.text = "\(points!)"
                 
                 
                 

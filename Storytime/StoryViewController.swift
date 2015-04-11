@@ -94,10 +94,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         createButton = UIBarButtonItem(title: "+", style: .Plain, target: self, action: "createButtonWasTapped")
         
         if self.story != nil {
-            var upvotes = story!["upvotes"] as? Int
-            var downvotes = story!["downvotes"] as? Int
-            println("Points are \(upvotes!-downvotes!)")
-            pointsLabel.text = "\(upvotes!-downvotes!)"
+            var points = story!["points"] as? Int
+            pointsLabel.text = "\(points!)"
             
         }
         
@@ -123,9 +121,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.navigationItem.rightBarButtonItem = createButton
         if newStory == false {
             self.storyTitleLabel.text = self.story!["title"] as? String
-            var upvotes = story!["upvotes"] as? Int
-            var downvotes = story!["downvotes"] as? Int
-            self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
+            var points = story!["points"] as? Int
+            self.storyPointsLabel.text = "\(points!)"
             var storyUser : PFUser = self.story!["user"] as PFUser
             storyUser.fetchIfNeeded()
             var profileName = storyUser["profileName"]
@@ -519,8 +516,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             story = PFObject(className: "Story")
             story!["title"] = titleTextField.text
             story!["user"] = PFUser.currentUser()
-            story!["upvotes"] = 1
-            story!["downvotes"] = 0
+            var upvotes = 1
+            var downvotes = 0
+            story!["upvotes"] = upvotes
+            story!["downvotes"] = downvotes
+            var points = upvotes - downvotes
+            story!["points"] = points
+
             story!.saveInBackgroundWithBlock({
                 (success: Bool, error: NSError!) -> Void in
                 if (success) {
@@ -538,7 +540,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     PFUser.currentUser().saveInBackground()
                     self.upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
                     self.pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
-                    self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
+                    self.storyPointsLabel.text = "\(points)"
                     self.createTitleView.hidden = true
                     self.titleView.hidden = false
                     self.createTextEvent()
@@ -898,8 +900,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.story = PFObject(className: "Story")
             self.story!["title"] = self.titleTextField.text
             self.story!["user"] = PFUser.currentUser()
-            self.story!["upvotes"] = 1
-            self.story!["downvotes"] = 0
+            var upvotes = 1
+            var downvotes = 0
+            story!["upvotes"] = upvotes
+            story!["downvotes"] = downvotes
+            var points = upvotes - downvotes
+            story!["points"] = points
             self.story!.saveInBackgroundWithBlock({
                 (success: Bool, error: NSError!) -> Void in
                 if (success) {
@@ -910,7 +916,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                     var upvotes = self.story!["upvotes"] as? Int
                     var downvotes = self.story!["downvotes"] as? Int
-                    self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
+                    self.storyPointsLabel.text = "\(points)"
                     self.storyUpVoted = true
                     self.votedStories[self.story!.objectId] = 1
                     PFUser.currentUser()["votedStories"] = self.votedStories
@@ -1016,8 +1022,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.story = PFObject(className: "Story")
             self.story!["title"] = self.titleTextField.text
             self.story!["user"] = PFUser.currentUser()
-            self.story!["upvotes"] = 1
-            self.story!["downvotes"] = 0
+            var upvotes = 1
+            var downvotes = 0
+            story!["upvotes"] = upvotes
+            story!["downvotes"] = downvotes
+            var points = upvotes - downvotes
+            story!["points"] = points
             self.story!.saveInBackgroundWithBlock({
                 (success: Bool, error: NSError!) -> Void in
                 if (success) {
@@ -1028,7 +1038,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.userLabel.text = profileName as String
                     var upvotes = self.story!["upvotes"] as? Int
                     var downvotes = self.story!["downvotes"] as? Int
-                    self.storyPointsLabel.text = "\(upvotes!-downvotes!)"
+                    self.storyPointsLabel.text = "\(points)"
                     self.storyUpVoted = true
                     self.votedStories[self.story!.objectId] = 1
                     PFUser.currentUser()["votedStories"] = self.votedStories
@@ -1242,6 +1252,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             upVoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
             pointsLabel.textColor = UIColor.whiteColor()
             self.story!["upvotes"] = self.story!["upvotes"] as Int - 1
+            var upvotes = story!["upvotes"] as Int
+            var downvotes = story!["downvotes"] as Int
+            self.story!["points"] = upvotes - downvotes
         } else if storyDownVoted == true {
             self.votedStories[self.story!.objectId] = 1
             storyUpVoted = true
@@ -1251,19 +1264,24 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
             self.story!["upvotes"] = self.story!["upvotes"] as Int + 1
             self.story!["downvotes"] = self.story!["downvotes"] as Int - 1
+            var upvotes = story!["upvotes"] as Int
+            var downvotes = story!["downvotes"] as Int
+            self.story!["points"] = upvotes - downvotes
         }else {
             self.votedStories[self.story!.objectId] = 1
             storyUpVoted = true
             upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
             pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
             self.story!["upvotes"] = self.story!["upvotes"] as Int + 1
+            var upvotes = story!["upvotes"] as Int
+            var downvotes = story!["downvotes"] as Int
+            self.story!["points"] = upvotes - downvotes
         }
         
         if self.story != nil {
             self.story!.saveInBackground()
-            var upvotes = story!["upvotes"] as? Int
-            var downvotes = story!["downvotes"] as? Int
-            pointsLabel.text = "\(upvotes!-downvotes!)"
+            var points = story!["points"] as? Int
+            pointsLabel.text = "\(points!)"
         }
         
         PFUser.currentUser()["votedStories"] = self.votedStories
@@ -1299,9 +1317,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if self.story != nil {
             self.story!.saveInBackground()
-            var upvotes = story!["upvotes"] as? Int
-            var downvotes = story!["downvotes"] as? Int
-            pointsLabel.text = "\(upvotes!-downvotes!)"
+            var points = story!["points"] as? Int
+            pointsLabel.text = "\(points!)"
         }
         
         PFUser.currentUser()["votedStories"] = self.votedStories

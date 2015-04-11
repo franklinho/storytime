@@ -134,6 +134,9 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
                         downvoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
                         pointsLabel.textColor = UIColor.whiteColor()
                         self.story!["downvotes"] = self.story!["downvotes"] as Int - 1
+                        var upvotes = story!["upvotes"] as Int
+                        var downvotes = story!["downvotes"] as Int
+                        self.story!["points"] = upvotes - downvotes
                     } else if storyUpVoted == true {
                         self.votedStories![self.story!.objectId] = -1
                         storyDownVoted = true
@@ -143,21 +146,24 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
                         pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
                         self.story!["downvotes"] = self.story!["downvotes"] as Int + 1
                         self.story!["upvotes"] = self.story!["upvotes"] as Int - 1
-                        
+                        var upvotes = story!["upvotes"] as Int
+                        var downvotes = story!["downvotes"] as Int
+                        self.story!["points"] = upvotes - downvotes
                     }else {
                         self.votedStories![self.story!.objectId] = -1
                         storyDownVoted = true
                         downvoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
                         pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
                         self.story!["downvotes"] = self.story!["downvotes"] as Int + 1
-                        
+                        var upvotes = story!["upvotes"] as Int
+                        var downvotes = story!["downvotes"] as Int
+                        self.story!["points"] = upvotes - downvotes
                     }
                     
                     if self.story != nil {
                         self.story!.saveInBackground()
-                        var upvotes = story!["upvotes"] as? Int
-                        var downvotes = story!["downvotes"] as? Int
-                        pointsLabel.text = "\(upvotes!-downvotes!)"
+                        var votes = self.story!["votes"]
+                        pointsLabel.text = "\(votes)"
                     }
                     
                     PFUser.currentUser()["votedStories"] = self.votedStories
