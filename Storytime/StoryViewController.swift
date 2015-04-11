@@ -1175,7 +1175,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func cellCompletelyOnScreen(indexPath : NSIndexPath) -> Bool {
         var cellRect : CGRect = storyTableView.rectForRowAtIndexPath(indexPath)
         cellRect = storyTableView.convertRect(cellRect, toView: storyTableView.superview)
-        var adjustedCellRect = CGRectMake(cellRect.origin.x, cellRect.origin.y + 1, cellRect.width, cellRect.height - 2)
+        var adjustedCellRect = CGRectMake(cellRect.origin.x, cellRect.origin.y + 5, cellRect.width, cellRect.height - 10)
         println("Cell Rect: \(cellRect)")
         println("StoryTableview Frame : \(storyTableView.frame)")
         var completelyVisible : Bool = CGRectContainsRect(storyTableView.frame, adjustedCellRect)
