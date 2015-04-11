@@ -13,7 +13,9 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var mask : CALayer?
+    let screenSize: CGRect = UIScreen.mainScreen().bounds
+    var vc : UIViewController?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -23,6 +25,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         PFTwitterUtils.initializeWithConsumerKey("C32fxiLVtibIsevg8HT2cDVpw", consumerSecret: "QDWMrdBILOAEtAGbzzVKTHGszf5V96kxsFYEGqAZCR8lhdq15a")
         
         PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
+        
+        
+//        self.mask = CALayer()
+//        
+//        
+//        self.mask!.contents = UIImage(named: "storyweave_logo.png")!.CGImage
+//        
+//        
+//        self.mask!.bounds = CGRect(x: 0, y: 0, width: 200, height: 200)
+//        self.mask!.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+//        self.mask!.position = CGPoint(x: self.screenSize.width/2, y: self.screenSize.height/2)
+//        
+//        var storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        self.vc = storyboard.instantiateViewControllerWithIdentifier("TabBarController") as UIViewController
+//        
+//        self.vc!.view.layer.mask = self.mask
+//        self.window?.rootViewController = self.vc
+//        self.vc!.view.alpha = 0
+//        
+//        self.animateMask()
+//        
+//        self.window!.backgroundColor = UIColor(red: 41/255, green: 37/255, blue: 55/255, alpha: 1)
+//        
+//        self.window!.makeKeyAndVisible()
+//        
         
         var systemColor = UIColor(red: 41.0/255.0, green: 37.0/255.0, blue: 55.0/255.0, alpha: 1.0)
         
@@ -130,6 +157,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
         return FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication)
+    }
+    
+    func animateMask() {
+        let keyFrameAnimation = CAKeyframeAnimation(keyPath: "bounds")
+        keyFrameAnimation.delegate = self
+        keyFrameAnimation.duration = 1.5
+        keyFrameAnimation.timingFunctions = [CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut), CAMediaTimingFunction(name:kCAMediaTimingFunctionEaseInEaseOut)]
+        let initialBounds = NSValue(CGRect: mask!.bounds)
+        let secondBounds = NSValue(CGRect: CGRect(x: 0, y: 0, width: mask!.bounds.width * 2, height: mask!.bounds.height * 2))
+        let finalBounds = NSValue(CGRect: CGRect(x: 0, y: 0, width: mask!.bounds.width * 30, height: mask!.bounds.height * 20))
+        keyFrameAnimation.values = [initialBounds, secondBounds, finalBounds]
+        keyFrameAnimation.keyTimes = [0, 0.5, 1.5]
+        
+        
+        self.mask!.addAnimation(keyFrameAnimation, forKey: "bounds")
+        self.mask!.bounds = CGRect(x: 0, y: 0, width: mask!.bounds.width * 20, height: mask!.bounds.width * 20)
+        
+        UIView.animateWithDuration(1.5,
+            delay: 0.0,
+            options: nil,
+            animations: {
+                self.vc!.view.alpha = 1.0
+            },
+            completion: {
+                finished in
+        })
+        
     }
 
 }
