@@ -13,6 +13,8 @@ import MediaPlayer
 
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate {
     
+  
+    @IBOutlet weak var createTitleViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var cameraFlashButton: UIButton!
     var profileTabBarItem : UITabBarItem?
     let screenSize: CGRect = UIScreen.mainScreen().bounds
@@ -81,6 +83,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        createView.hidden = true
+        createTitleViewTopConstraint.constant = CGFloat(screenSize.height)/2 - CGFloat(createTitleView.bounds.height)
         profileTabBarItem = self.tabBarController?.tabBar.items?[1] as UITabBarItem
         
         self.storyTableView.tableHeaderView = UIView(frame: CGRectMake(0.0, 0.0, self.storyTableView.bounds.size.width, 0.01))
@@ -303,10 +307,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print("Table returning \(self.events.count) cells")
-        if maxReached == true {
-            return self.events.count
+        if self.story != nil {
+            if maxReached == true {
+                return self.events.count
+            } else {
+                return self.events.count + 1
+            }
         } else {
-            return self.events.count + 1
+            return 0
         }
         
     }
@@ -1544,6 +1552,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBAction func titleCreateButtonWasTapped(sender: AnyObject) {
         self.view.endEditing(true)
+        self.view.layoutIfNeeded()
         self.upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
         self.pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
         self.storyTitleLabel.text = self.titleTextField.text
@@ -1561,15 +1570,26 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
         }
-        self.createTitleView.hidden = true
-        self.titleView.hidden = false
-
-        self.upVoteButton.enabled = false
-        self.downVoteButton.enabled = false
         
-
-        self.createButton!.enabled = true
-        expandCreateView()
+        self.createTitleViewTopConstraint.constant = 0
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            
+            }, completion: {
+                (value: Bool) in
+                self.createTitleView.hidden = true
+                self.titleView.hidden = false
+                
+                self.upVoteButton.enabled = false
+                self.downVoteButton.enabled = false
+                
+                
+                self.createButton!.enabled = true
+                self.expandCreateView()
+        })
+        
+        
+        
     }
     
     

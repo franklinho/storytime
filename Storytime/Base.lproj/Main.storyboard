@@ -1576,12 +1576,15 @@
                             <constraint firstItem="DxK-24-jad" firstAttribute="top" secondItem="zC1-cs-0xd" secondAttribute="bottom" id="7Wn-lE-Vze"/>
                             <constraint firstItem="Bes-cU-TpY" firstAttribute="top" secondItem="DxK-24-jad" secondAttribute="bottom" id="7eU-bI-HGn"/>
                             <constraint firstItem="Ebf-0P-F2l" firstAttribute="top" secondItem="z5O-jy-g3q" secondAttribute="bottom" id="87f-hc-MkS"/>
+                            <constraint firstItem="Ebf-0P-F2l" firstAttribute="top" secondItem="TJV-F8-eXr" secondAttribute="topMargin" id="Dp4-eH-bkU"/>
                             <constraint firstItem="DxK-24-jad" firstAttribute="leading" secondItem="TJV-F8-eXr" secondAttribute="leadingMargin" id="EKN-hi-haj"/>
                             <constraint firstItem="f9M-XW-drY" firstAttribute="top" secondItem="Bes-cU-TpY" secondAttribute="bottom" id="Jse-kw-cEK"/>
                             <constraint firstItem="Ebf-0P-F2l" firstAttribute="leading" secondItem="TJV-F8-eXr" secondAttribute="leadingMargin" constant="-16" id="LPq-ez-sJt"/>
+                            <constraint firstAttribute="centerY" secondItem="Ebf-0P-F2l" secondAttribute="centerY" id="Oth-1m-c6d"/>
                             <constraint firstAttribute="trailing" secondItem="hjH-W7-xQN" secondAttribute="trailing" id="Ouc-7q-uGX"/>
                             <constraint firstItem="zC1-cs-0xd" firstAttribute="height" secondItem="Ebf-0P-F2l" secondAttribute="height" id="QXu-V6-mZZ"/>
                             <constraint firstItem="DxK-24-jad" firstAttribute="trailing" secondItem="TJV-F8-eXr" secondAttribute="trailingMargin" id="Qaq-3q-I0I"/>
+                            <constraint firstItem="Ebf-0P-F2l" firstAttribute="top" secondItem="z5O-jy-g3q" secondAttribute="bottom" id="VeO-Hm-KVu"/>
                             <constraint firstItem="hjH-W7-xQN" firstAttribute="top" secondItem="z5O-jy-g3q" secondAttribute="bottom" id="VxY-hD-dpp"/>
                             <constraint firstItem="hjH-W7-xQN" firstAttribute="leading" secondItem="TJV-F8-eXr" secondAttribute="leading" id="XxR-gL-JkG"/>
                             <constraint firstAttribute="centerX" secondItem="DxK-24-jad" secondAttribute="centerX" id="brm-Wi-d61"/>
@@ -1598,6 +1601,9 @@
                                 <exclude reference="EKN-hi-haj"/>
                                 <exclude reference="Qaq-3q-I0I"/>
                                 <exclude reference="brm-Wi-d61"/>
+                                <exclude reference="87f-hc-MkS"/>
+                                <exclude reference="Dp4-eH-bkU"/>
+                                <exclude reference="Oth-1m-c6d"/>
                             </mask>
                         </variation>
                     </view>
@@ -1607,6 +1613,7 @@
                         <outlet property="cameraSendButton" destination="pr2-RN-Ddl" id="wIf-UA-7uj"/>
                         <outlet property="createTextView" destination="ok8-qV-o6M" id="Dpw-sE-bNC"/>
                         <outlet property="createTitleView" destination="Ebf-0P-F2l" id="eSq-Rx-Otj"/>
+                        <outlet property="createTitleViewTopConstraint" destination="VeO-Hm-KVu" id="eYb-SV-iku"/>
                         <outlet property="createView" destination="DxK-24-jad" id="bnx-en-TeM"/>
                         <outlet property="createViewHeightConstraint" destination="10X-Td-fSv" id="Hsc-Jt-XIJ"/>
                         <outlet property="createViewLeadingConstraint" destination="EKN-hi-haj" id="7CQ-lB-opb"/>
