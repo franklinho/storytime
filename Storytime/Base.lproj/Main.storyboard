@@ -1262,6 +1262,19 @@
                                                     <action selector="cameraSwitchButtonWasTapped:" destination="nXj-xd-FNA" eventType="touchUpInside" id="WxD-8z-2OJ"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FUC-W5-gsg" userLabel="Flash Button">
+                                                <rect key="frame" x="34" y="202" width="44" height="44"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="44" id="ui2-ZF-q21"/>
+                                                    <constraint firstAttribute="width" constant="44" id="zJi-NU-ZcZ"/>
+                                                </constraints>
+                                                <state key="normal" image="flash_icon_auto.png">
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="flashButtonWasTapped:" destination="nXj-xd-FNA" eventType="touchUpInside" id="FSl-kg-99o"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                         <gestureRecognizers/>
@@ -1270,9 +1283,11 @@
                                             <constraint firstAttribute="centerX" secondItem="2jj-nm-h1E" secondAttribute="centerX" id="MGS-3e-dYI"/>
                                             <constraint firstAttribute="centerX" secondItem="pr2-RN-Ddl" secondAttribute="centerX" id="TbK-j7-TsX"/>
                                             <constraint firstItem="nPQ-Yk-HQb" firstAttribute="leading" secondItem="pTw-oo-VDa" secondAttribute="leading" constant="34" id="UUo-sO-zXV"/>
+                                            <constraint firstItem="FUC-W5-gsg" firstAttribute="leading" secondItem="pTw-oo-VDa" secondAttribute="leading" constant="34" id="Wht-uE-bwp"/>
                                             <constraint firstAttribute="bottom" secondItem="pr2-RN-Ddl" secondAttribute="bottom" constant="16" id="XGq-Qk-tQo"/>
                                             <constraint firstAttribute="centerY" secondItem="2jj-nm-h1E" secondAttribute="centerY" id="dbr-Gm-bQk"/>
                                             <constraint firstAttribute="bottom" secondItem="nPQ-Yk-HQb" secondAttribute="bottom" constant="34" id="oCN-5b-cja"/>
+                                            <constraint firstAttribute="bottom" secondItem="FUC-W5-gsg" secondAttribute="bottom" constant="34" id="sjj-XM-c6D"/>
                                             <constraint firstItem="pr2-RN-Ddl" firstAttribute="top" secondItem="2jj-nm-h1E" secondAttribute="bottom" constant="16" id="tkj-Xc-oBn"/>
                                             <constraint firstItem="pr2-RN-Ddl" firstAttribute="leading" secondItem="nPQ-Yk-HQb" secondAttribute="trailing" constant="34" id="yGH-4b-FUi"/>
                                         </constraints>
@@ -1588,6 +1603,7 @@
                     </view>
                     <connections>
                         <outlet property="cameraContainer" destination="pTw-oo-VDa" id="gVq-u3-Ki9"/>
+                        <outlet property="cameraFlashButton" destination="FUC-W5-gsg" id="M3r-Rq-Lw8"/>
                         <outlet property="cameraSendButton" destination="pr2-RN-Ddl" id="wIf-UA-7uj"/>
                         <outlet property="createTextView" destination="ok8-qV-o6M" id="Dpw-sE-bNC"/>
                         <outlet property="createTitleView" destination="Ebf-0P-F2l" id="eSq-Rx-Otj"/>
@@ -1700,6 +1716,7 @@
         <image name="camera_icon.png" width="256" height="256"/>
         <image name="down_icon_white.png" width="256" height="256"/>
         <image name="feedIcon" width="24" height="24"/>
+        <image name="flash_icon_auto.png" width="405" height="405"/>
         <image name="play_button_icon_white.png" width="256" height="256"/>
         <image name="switch_camera_icon.png" width="128" height="128"/>
         <image name="text_icon.png" width="256" height="256"/>

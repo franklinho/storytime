@@ -489,6 +489,9 @@
 		DDF06E971AD4529F007D4954 /* CreateProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF06E961AD4529F007D4954 /* CreateProfileViewController.swift */; };
 		DDF06E991AD453FD007D4954 /* plus_icon_white.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF06E981AD453FD007D4954 /* plus_icon_white.png */; };
 		DDF06E9B1AD45857007D4954 /* user_icon_white.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF06E9A1AD45857007D4954 /* user_icon_white.png */; };
+		DDF7AED21ADDD96E0033F487 /* flash_icon_auto.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF7AECF1ADDD96E0033F487 /* flash_icon_auto.png */; };
+		DDF7AED31ADDD96E0033F487 /* flash_icon_on.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF7AED01ADDD96E0033F487 /* flash_icon_on.png */; };
+		DDF7AED41ADDD96E0033F487 /* flash_icon_off.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF7AED11ADDD96E0033F487 /* flash_icon_off.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -991,6 +994,9 @@
 		DDF06E961AD4529F007D4954 /* CreateProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateProfileViewController.swift; sourceTree = "<group>"; };
 		DDF06E981AD453FD007D4954 /* plus_icon_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus_icon_white.png; sourceTree = "<group>"; };
 		DDF06E9A1AD45857007D4954 /* user_icon_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user_icon_white.png; sourceTree = "<group>"; };
+		DDF7AECF1ADDD96E0033F487 /* flash_icon_auto.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flash_icon_auto.png; sourceTree = "<group>"; };
+		DDF7AED01ADDD96E0033F487 /* flash_icon_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flash_icon_on.png; sourceTree = "<group>"; };
+		DDF7AED11ADDD96E0033F487 /* flash_icon_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flash_icon_off.png; sourceTree = "<group>"; };
 		E8ECC8C0FC39FC2D49766AFB /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -1080,6 +1086,9 @@
 		DDBA72141AC5FD5B00D0EC97 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				DDF7AECF1ADDD96E0033F487 /* flash_icon_auto.png */,
+				DDF7AED01ADDD96E0033F487 /* flash_icon_on.png */,
+				DDF7AED11ADDD96E0033F487 /* flash_icon_off.png */,
 				DD9B26E11AD85F9800E6D3DE /* storyweave_logo.png */,
 				DD8C828A1AD5D52600B9A47B /* menu_icon_white.png */,
 				DDC55B061AD49C0700659E70 /* play_button_icon_white.png */,
@@ -1876,6 +1885,7 @@
 				DDC9389F1AC47F5D006D4646 /* controller-play.svg in Resources */,
 				DDC939A81AC47F5D006D4646 /* pinterest-with-circle.svg in Resources */,
 				DDC9389E1AC47F5D006D4646 /* controller-paus.svg in Resources */,
+				DDF7AED41ADDD96E0033F487 /* flash_icon_off.png in Resources */,
 				DDC938A41AC47F5D006D4646 /* creative-commons-attribution.svg in Resources */,
 				DDC939711AC47F5D006D4646 /* triangle-right.svg in Resources */,
 				DDC9385C1AC47F5D006D4646 /* arrow-right.svg in Resources */,
@@ -2021,6 +2031,7 @@
 				DDC938F61AC47F5D006D4646 /* lab-flask.svg in Resources */,
 				DDC9385E1AC47F5D006D4646 /* arrow-with-circle-down.svg in Resources */,
 				DDC938721AC47F5D006D4646 /* browser.svg in Resources */,
+				DDF7AED31ADDD96E0033F487 /* flash_icon_on.png in Resources */,
 				DDC938CD1AC47F5D006D4646 /* feather.svg in Resources */,
 				DDC939A31AC47F5D006D4646 /* medium.svg in Resources */,
 				DDC9398B1AC47F5D006D4646 /* dropbox.svg in Resources */,
@@ -2155,6 +2166,7 @@
 				DDC938501AC47F5D006D4646 /* archive.svg in Resources */,
 				DDC939BC1AC47F5D006D4646 /* stumbleupon.svg in Resources */,
 				DDC9391E1AC47F5D006D4646 /* network.svg in Resources */,
+				DDF7AED21ADDD96E0033F487 /* flash_icon_auto.png in Resources */,
 				DDC9385D1AC47F5D006D4646 /* arrow-up.svg in Resources */,
 				DDC938B41AC47F5D006D4646 /* dial-pad.svg in Resources */,
 				DDC938711AC47F5D006D4646 /* briefcase.svg in Resources */,

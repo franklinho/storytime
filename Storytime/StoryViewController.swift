@@ -13,6 +13,7 @@ import MediaPlayer
 
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate {
     
+    @IBOutlet weak var cameraFlashButton: UIButton!
     var profileTabBarItem : UITabBarItem?
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var newStory : Bool = false
@@ -1572,4 +1573,17 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     
+    @IBAction func flashButtonWasTapped(sender: AnyObject) {
+        if vision.flashMode == PBJFlashMode.Auto {
+            vision.flashMode = PBJFlashMode.On
+            cameraFlashButton.setImage(UIImage(named: "flash_icon_on.png"), forState: UIControlState.Normal)
+        } else if vision.flashMode == PBJFlashMode.On {
+            vision.flashMode = PBJFlashMode.Off
+            cameraFlashButton.setImage(UIImage(named: "flash_icon_off.png"), forState: UIControlState.Normal)
+        } else {
+            vision.flashMode = PBJFlashMode.Auto
+            cameraFlashButton.setImage(UIImage(named: "flash_icon_auto.png"), forState: UIControlState.Normal)
+        }
+        
+    }
 }
