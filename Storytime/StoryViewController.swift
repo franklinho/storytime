@@ -158,15 +158,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
         } else {
-
-            createViewTopConstraint.constant = 0
-            self.createView.hidden = false
+            createViewTopConstraint.constant = -(screenSize.width + 46)
+//            createViewTopConstraint.constant = 0
+//            self.createView.hidden = false
             titleView.hidden = true
             createTitleView.hidden = false
-            titleView.hidden = true
             createButton!.enabled = false
-            createButton!.title = "X"
-            createViewExpanded = true
+//            createButton!.title = "X"
+//            createViewExpanded = true
         }
         
         cameraSendButton.layer.borderWidth = 3.0
@@ -273,6 +272,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         vision.focusMode = PBJFocusMode.ContinuousAutoFocus
         vision.outputFormat = PBJOutputFormat.Square
         vision.maximumCaptureDuration = CMTimeMakeWithSeconds(10, 600)
+        vision.flashMode = PBJFlashMode.Auto
     }
     
 //    func beginSession() {
@@ -476,6 +476,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     */
     
     func createTextEvent() {
+        self.upVoteButton.enabled = true
+        self.downVoteButton.enabled = true
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "text"
         event["storyObject"] = self.story!
@@ -573,6 +575,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         })
         
         vision.cameraMode = PBJCameraMode.Video
+        vision.captureSessionPreset = AVCaptureSessionPresetMedium
         cameraSendButton.hidden = true
         cameraSendButton.enabled = false
         holdToRecordLabel.hidden = false
@@ -618,6 +621,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         })
         
         vision.cameraMode = PBJCameraMode.Photo
+        vision.captureSessionPreset = AVCaptureSessionPresetPhoto
         cameraSendButton.hidden = false
         cameraSendButton.enabled = true
         holdToRecordLabel.hidden = true
@@ -828,6 +832,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func createVideoEvent(videoFile : PFFile) {
+        self.upVoteButton.enabled = true
+        self.downVoteButton.enabled = true
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "video"
         event["storyObject"] = self.story!
@@ -957,6 +963,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func createPhotoEvent(imageFile : PFFile) {
+        self.upVoteButton.enabled = true
+        self.downVoteButton.enabled = true
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "photo"
         event["storyObject"] = self.story!
@@ -1216,19 +1224,22 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var keyBoardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
         self.view.convertRect(keyBoardRect, fromView: nil)
         
-        var createViewRect : CGRect = self.createView.bounds
+        var createViewRect : CGRect = self.createView.frame
         
         self.view.layoutIfNeeded()
         
-        if CGFloat(createViewRect.origin.y) + CGFloat(createViewRect.height) > CGFloat(keyBoardRect.height) {
-            self.createViewHeightConstraint.constant = CGFloat(keyBoardRect.height) - CGFloat(createViewRect.origin.y) + 46
+        if CGFloat(createViewRect.origin.y) + CGFloat(createViewRect.height) > CGFloat(keyBoardRect.origin.y) {
+            println("Keyboard Rect: \(keyBoardRect)")
+            println("CreateView Rect: \(createViewRect)")
+            self.createViewHeightConstraint.constant = CGFloat(keyBoardRect.origin.y) - CGFloat(createViewRect.origin.y)
+            println("New Createview Height: \(self.createViewHeightConstraint.constant)")
         } else {
             self.createViewHeightConstraint.constant = self.view.bounds.width + 46
         }
         
         UIView.animateWithDuration(0.1, animations: {
             self.view.layoutIfNeeded()
-            
+            println("Post transform createview Rect: \(createViewRect)")
         })
         
     }
@@ -1510,7 +1521,55 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
+    func expandCreateView() {
+        self.view.layoutIfNeeded()
+        createViewTopConstraint.constant = 0
+        
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            }, completion: {
+                (value: Bool) in
+                self.createView.hidden = false
+                self.createButton!.enabled = false
+                self.createButton!.title = "X"
+                self.createViewExpanded = true
+        })
+
+        
+        
+        
+    }
     
+    
+    @IBAction func titleCreateButtonWasTapped(sender: AnyObject) {
+        self.view.endEditing(true)
+        self.upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
+        self.pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
+        self.storyTitleLabel.text = self.titleTextField.text
+        self.storyPointsLabel.text = "1"
+        
+        if  PFUser.currentUser() != nil {
+            var storyUser = PFUser.currentUser()
+            self.userLabel.text = storyUser["profileName"] as String
+            var profileImageFile = storyUser["profileImage"] as PFFile
+            profileImageFile.getDataInBackgroundWithBlock {
+                (imageData: NSData!, error: NSError!) -> Void in
+                if error == nil {
+                    let image = UIImage(data:imageData)
+                    self.userProfileImage.image = image
+                }
+            }
+        }
+        self.createTitleView.hidden = true
+        self.titleView.hidden = false
+
+        self.upVoteButton.enabled = false
+        self.downVoteButton.enabled = false
+        
+
+        self.createButton!.enabled = true
+        expandCreateView()
+    }
     
     
 }

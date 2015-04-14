@@ -245,7 +245,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             storyVC.newStory = true
             navigationController?.pushViewController(storyVC, animated: true)
         }
-        
+    
         
     }
     

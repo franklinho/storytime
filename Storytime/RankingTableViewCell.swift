@@ -91,6 +91,9 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
                         upvoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
                         pointsLabel.textColor = UIColor.whiteColor()
                         self.story!["upvotes"] = self.story!["upvotes"] as Int - 1
+                        var upvotes = story!["upvotes"] as Int
+                        var downvotes = story!["downvotes"] as Int
+                        self.story!["points"] = upvotes - downvotes
                     } else if storyDownVoted == true {
                         self.votedStories![self.story!.objectId] = 1
                         storyUpVoted = true
@@ -100,19 +103,24 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
                         pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
                         self.story!["upvotes"] = self.story!["upvotes"] as Int + 1
                         self.story!["downvotes"] = self.story!["downvotes"] as Int - 1
+                        var upvotes = story!["upvotes"] as Int
+                        var downvotes = story!["downvotes"] as Int
+                        self.story!["points"] = upvotes - downvotes
                     }else {
                         self.votedStories![self.story!.objectId] = 1
                         storyUpVoted = true
                         upvoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
                         pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
                         self.story!["upvotes"] = self.story!["upvotes"] as Int + 1
+                        var upvotes = story!["upvotes"] as Int
+                        var downvotes = story!["downvotes"] as Int
+                        self.story!["points"] = upvotes - downvotes
                     }
                     
                     if self.story != nil {
                         self.story!.saveInBackground()
-                        var upvotes = story!["upvotes"] as? Int
-                        var downvotes = story!["downvotes"] as? Int
-                        pointsLabel.text = "\(upvotes!-downvotes!)"
+                        var points = self.story!["points"]
+                        pointsLabel.text = "\(points)"
                     }
                     
                     PFUser.currentUser()["votedStories"] = self.votedStories
@@ -162,8 +170,8 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
                     
                     if self.story != nil {
                         self.story!.saveInBackground()
-                        var votes = self.story!["votes"]
-                        pointsLabel.text = "\(votes)"
+                        var points = self.story!["points"]
+                        pointsLabel.text = "\(points)"
                     }
                     
                     PFUser.currentUser()["votedStories"] = self.votedStories

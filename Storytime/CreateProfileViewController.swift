@@ -80,22 +80,32 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
     */
 
     @IBAction func profilePhotoViewWasTapped(sender: AnyObject) {
+        vision.stopPreview()
         println("Profile Image View State : \(profileImageView.hidden)")
         println("Is capturing state: \(isCapturing)")
         if isCapturing == false {
             profileImageView.hidden = true
             
-
-            profilePreviewView.layer.addSublayer(previewLayer)
+            if previewLayer?.superlayer != profilePreviewView.layer {
+                profilePreviewView.layer.insertSublayer(previewLayer, atIndex: UInt32(profilePreviewView.layer.sublayers.count))
+            } else {
+                previewLayer?.removeFromSuperlayer()
+                profilePreviewView.layer.insertSublayer(previewLayer, atIndex: UInt32(profilePreviewView.layer.sublayers.count))
+            }
+            
+            
+            
+            
             vision.startPreview()
             previewLayerAdded = true
 
-            
+
             self.profilePreviewView.bringSubviewToFront(tapToCaptureLabel)
             self.profilePhotoLabel.hidden = true
             self.tapToCaptureLabel.hidden = false
             
             isCapturing = true
+            println("Profile Preview View sublayers: \(profilePreviewView.layer.sublayers)")
         } else {
             println("Capturing Photo")
             self.vision.capturePhoto()
