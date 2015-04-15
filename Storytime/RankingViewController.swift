@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, RankingTableViewCellDelegate {
+class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, RankingTableViewCellDelegate, UISearchBarDelegate {
 
     var stories = []
     let screenSize: CGRect = UIScreen.mainScreen().bounds
@@ -19,13 +19,17 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     var currentOffset = 0
     var maxReached = false
     var requestingObjects = false
+    @IBOutlet var viewTapGestureRecognizer: UITapGestureRecognizer!
     
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var logOutButton: UIBarButtonItem!
     
     @IBOutlet weak var rankingTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        viewTapGestureRecognizer.enabled = false
+        searchBar.delegate = self
         profileTabBarItem = self.tabBarController?.tabBar.items?[1] as UITabBarItem
         
         
@@ -362,6 +366,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         dispatch_async(dispatch_get_main_queue(),{
             var query = PFQuery(className:"Story")
+            if self.searchBar.text != "" {
+                var string = self.searchBar.text as String
+                query.whereKey("title", matchesRegex: string, modifiers: "i")
+            }
             query.orderByDescending("points")
             query.addDescendingOrder("createdAt")
             query.limit = 10
@@ -425,6 +433,11 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
 //        GSProgressHUD.dismiss()
 //    }
     
+    @IBAction func viewWasTapped(sender: AnyObject) {
+        self.view.endEditing(true)
+        self.viewTapGestureRecognizer.enabled = false
+    }
+    
     override func viewWillAppear(animated: Bool) {
         self.rankingTableView.reloadData()
     }
@@ -445,6 +458,38 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         }
         
+    }
+    
+
+
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar){
+        println("Search button pressed")
+        self.refreshStories()
+        self.view.endEditing(true)
+        self.viewTapGestureRecognizer.enabled = false
+    }
+    
+    // Allows search bar to search on empty strings
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        self.viewTapGestureRecognizer.enabled = true
+        var searchBarTextField : UITextField = UITextField()
+        for subview in searchBar.subviews {
+            for secondLevelSubView in subview.subviews{
+                if secondLevelSubView.isKindOfClass(UITextField){
+                    searchBarTextField = secondLevelSubView as UITextField
+                    break
+                }
+            }
+        }
+        searchBarTextField.enablesReturnKeyAutomatically = false
+    }
+    
+    // dismisses keyboard when you click cancel
+    func searchBarCancelButtonClicked(searchBar: UISearchBar){
+        searchBar.text = ""
+        self.view.endEditing(true)
+        self.viewTapGestureRecognizer.enabled = false
     }
 
         
