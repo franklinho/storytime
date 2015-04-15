@@ -563,6 +563,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                         var upvotes = self.story!["upvotes"] as? Int
                     var downvotes = self.story!["downvotes"] as? Int
                     self.storyUpVoted = true
+                    self.storyDownVoted = false
                     self.votedStories[self.story!.objectId] = 1
                     PFUser.currentUser()["votedStories"] = self.votedStories
                     PFUser.currentUser().saveInBackground()
@@ -650,24 +651,26 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             (view as UIView).hidden = true
             cameraContainer.hidden = false
         }
-//        if captureSession.canSetSessionPreset(AVCaptureSessionPresetHigh){
-//                captureSession.sessionPreset = AVCaptureSessionPresetHigh
-//        }
-//        
-//        if captureSession.outputs.count > 0 {
-//            for output in captureSession.outputs {
-//                captureSession.removeOutput(output as AVCaptureOutput)
-//            }
-//        }
-//        
-//        stillImageOutput = AVCaptureStillImageOutput()
-//        stillImageOutput!.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
-//        if captureSession.canAddOutput(stillImageOutput) {
-//            captureSession.addOutput(stillImageOutput)
-//            println("still image output added")
-//        }
+
 
        vision.startPreview()
+        
+        //        if captureSession.canSetSessionPreset(AVCaptureSessionPresetHigh){
+        //                captureSession.sessionPreset = AVCaptureSessionPresetHigh
+        //        }
+        //
+        //        if captureSession.outputs.count > 0 {
+        //            for output in captureSession.outputs {
+        //                captureSession.removeOutput(output as AVCaptureOutput)
+        //            }
+        //        }
+        //
+        //        stillImageOutput = AVCaptureStillImageOutput()
+        //        stillImageOutput!.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
+        //        if captureSession.canAddOutput(stillImageOutput) {
+        //            captureSession.addOutput(stillImageOutput)
+        //            println("still image output added")
+        //        }
         
     }
 
@@ -953,6 +956,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     var downvotes = self.story!["downvotes"] as? Int
                     self.storyPointsLabel.text = "\(points)"
                     self.storyUpVoted = true
+                    self.storyDownVoted = false
                     self.votedStories[self.story!.objectId] = 1
                     PFUser.currentUser()["votedStories"] = self.votedStories
                     PFUser.currentUser().saveInBackground()
@@ -1080,6 +1084,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     var downvotes = self.story!["downvotes"] as? Int
                     self.storyPointsLabel.text = "\(points)"
                     self.storyUpVoted = true
+                    self.storyDownVoted = false
                     self.votedStories[self.story!.objectId] = 1
                     PFUser.currentUser()["votedStories"] = self.votedStories
                     PFUser.currentUser().saveInBackground()
@@ -1333,12 +1338,18 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     
     func downvoteStory() {
+        println("Story upvote = \(storyUpVoted)")
+        println("Story downvote = \(storyDownVoted)")
         if storyDownVoted == true {
             self.votedStories[self.story!.objectId] = 0
             storyDownVoted = false
             downVoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
             pointsLabel.textColor = UIColor.whiteColor()
             self.story!["downvotes"] = self.story!["downvotes"] as Int - 1
+            var upvotes = story!["upvotes"] as Int
+            var downvotes = story!["downvotes"] as Int
+            self.story!["points"] = upvotes - downvotes
+            
         } else if storyUpVoted == true {
             self.votedStories[self.story!.objectId] = -1
             storyDownVoted = true
@@ -1348,6 +1359,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
             self.story!["downvotes"] = self.story!["downvotes"] as Int + 1
             self.story!["upvotes"] = self.story!["upvotes"] as Int - 1
+            var upvotes = story!["upvotes"] as Int
+            var downvotes = story!["downvotes"] as Int
+            self.story!["points"] = upvotes - downvotes
             
         }else {
             self.votedStories[self.story!.objectId] = -1
@@ -1355,6 +1369,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             downVoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
             pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
             self.story!["downvotes"] = self.story!["downvotes"] as Int + 1
+            var upvotes = story!["upvotes"] as Int
+            var downvotes = story!["downvotes"] as Int
+            self.story!["points"] = upvotes - downvotes
             
         }
         
@@ -1548,7 +1565,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func expandCreateView() {
+         self.view.endEditing(true)
         self.view.layoutIfNeeded()
+        var createViewRect : CGRect = self.createView.bounds
+        self.createViewHeightConstraint.constant = self.view.bounds.width + 46
         createViewTopConstraint.constant = 0
         
         UIView.animateWithDuration(0.3, animations: {
@@ -1560,7 +1580,20 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.createButton!.title = "Cancel"
                 self.createViewExpanded = true
         })
-
+        
+        vision.cameraMode = PBJCameraMode.Photo
+        vision.captureSessionPreset = AVCaptureSessionPresetPhoto
+        cameraSendButton.hidden = false
+        cameraSendButton.enabled = true
+        holdToRecordLabel.hidden = true
+        videoLongPressGestureRecognizer.enabled = false
+        for view in createViews {
+            (view as UIView).hidden = true
+            cameraContainer.hidden = false
+        }
+        
+        
+        vision.startPreview()
         
         
         

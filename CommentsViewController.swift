@@ -10,7 +10,11 @@ import UIKit
 
 class CommentsViewController: UIViewController {
 
+    @IBOutlet weak var storyImageView: UIImageView!
+    @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var userButton: UILabel!
 
+    @IBOutlet weak var storyTitleLabel: UILabel!
     @IBOutlet weak var commentsTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
