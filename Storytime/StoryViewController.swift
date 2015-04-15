@@ -485,7 +485,17 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func minimizeCreateView() {
-        createButton?.enabled = true
+        if PFUser.currentUser() != nil {
+            var storyUser = self.story!["user"] as PFUser
+            storyUser.fetchIfNeeded()
+            var currentUser = PFUser.currentUser()
+            println("Story user is \(storyUser.username) and current user is \(currentUser.username)")
+            if  storyUser.username == currentUser.username {
+                createButton!.enabled = true
+            } else {
+                createButton!.enabled = false
+            }
+        }
         
         self.view.layoutIfNeeded()
         
@@ -1466,7 +1476,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var loginViewController : CustomLoginViewController = CustomLoginViewController()
         loginViewController.delegate = self
         loginViewController.facebookPermissions = NSArray(array: ["friends_about_me"])
-        loginViewController.fields = PFLogInFields.Twitter | PFLogInFields.Facebook | PFLogInFields.DismissButton
+//        loginViewController.fields = PFLogInFields.Twitter | PFLogInFields.Facebook | PFLogInFields.DismissButton
+        loginViewController.fields = PFLogInFields.Twitter | PFLogInFields.DismissButton
         
         
         var signUpViewController : CustomSignUpViewController = CustomSignUpViewController()

@@ -221,7 +221,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         var loginViewController : CustomLoginViewController = CustomLoginViewController()
         loginViewController.delegate = self
         loginViewController.facebookPermissions = NSArray(array: ["friends_about_me"])
-        loginViewController.fields = PFLogInFields.Twitter | PFLogInFields.Facebook | PFLogInFields.DismissButton
+//        loginViewController.fields = PFLogInFields.Twitter | PFLogInFields.Facebook | PFLogInFields.DismissButton
+        loginViewController.fields = PFLogInFields.Twitter | PFLogInFields.DismissButton
         
         
         var signUpViewController : CustomSignUpViewController = CustomSignUpViewController()
