@@ -29,15 +29,19 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     var requestingObjects = false
     var playingVideoCell : StoryVideoTableViewCell?
     var documentPath : NSString = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as NSString
+    var videoPath : String?
+    var croppedVideoPath : String?
     
+    @IBOutlet weak var thumbnailImageView: UIImageView!
+    @IBOutlet weak var createTextView: UITextView!
     @IBOutlet weak var createViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var createViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var storyImageView: UIImageView!
     @IBOutlet weak var profileImageView: UIImageView!
-    @IBOutlet weak var userButton: UILabel!
 
     @IBOutlet weak var storyTitleLabel: UILabel!
     @IBOutlet weak var commentsTableView: UITableView!
+    @IBOutlet weak var userLabel: UILabel!
     
     
     @IBOutlet weak var createView: UIView!
@@ -63,6 +67,50 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        if story != nil {
+            
+            if story!["thumbnailImage"] != nil {
+                let imageFile = story!["thumbnailImage"] as PFFile
+                imageFile.getDataInBackgroundWithBlock {
+                    (imageData: NSData!, error: NSError!) -> Void in
+                    if error == nil {
+                        let image = UIImage(data:imageData)
+                        self.thumbnailImageView.image = image
+                        self.thumbnailImageView.hidden = false
+                    }
+                }
+            } else if story!["thumbnailVideoScreenCap"] != nil {
+                let imageFile = story!["thumbnailVideoScreenCap"] as PFFile
+                imageFile.getDataInBackgroundWithBlock {
+                    (imageData: NSData!, error: NSError!) -> Void in
+                    if error == nil {
+                        let image = UIImage(data:imageData)
+                        self.thumbnailImageView.image = image
+                        self.thumbnailImageView.hidden = false
+                    }
+                }
+            }
+            
+            storyTitleLabel.text = story!["title"] as String
+            var storyUser : PFUser = story!["user"] as PFUser
+            if storyUser["profileName"] != nil {
+                var profileName : String = storyUser["profileName"] as String
+                self.userLabel.text = profileName
+            }
+            if storyUser["profileImage"] != nil {
+                var profileImageFile = storyUser["profileImage"] as PFFile
+                profileImageFile.getDataInBackgroundWithBlock {
+                    (imageData: NSData!, error: NSError!) -> Void in
+                    if error == nil {
+                        let image = UIImage(data:imageData)
+                        self.profileImageView.image = image
+                    }
+                }
+            }
+
+        }
+        
         
         commentsTableView.delegate = self
         commentsTableView.dataSource = self
@@ -93,6 +141,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         createViews = [cameraContainer, textContainer, videoContainer]
         profileTabBarItem = self.tabBarController?.tabBar.items?[1] as UITabBarItem
         createViewHeightConstraint.constant = self.view.bounds.width + 46
+        createViewTopConstraint.constant = -(screenSize.width + 46)
         
         self.view.updateConstraints()
         self.view.layoutIfNeeded()
@@ -112,6 +161,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         self.refreshControl.addTarget(self, action: "refreshCommentsForStory", forControlEvents: UIControlEvents.ValueChanged)
         self.commentsTableView.addSubview(refreshControl)
 
+        refreshCommentsForStory()
         
     }
 
@@ -145,18 +195,36 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var comment : PFObject?
         if indexPath.row == commentsTableView.numberOfRowsInSection(0)-1 && maxReached == false {
-            var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as UITableViewCell
+            var cell = tableView.dequeueReusableCellWithIdentifier("CommentSpinnerCell") as UITableViewCell
             return cell
         } else {
             if comments.count > 0 {
                 comment = comments[indexPath.row] as PFObject
                 if comment!["type"] as NSString == "text" {
-                    var cell = commentsTableView.dequeueReusableCellWithIdentifier("StoryTextTableViewCell") as StoryTextTableViewCell
+                    var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentTextTableViewCell") as StoryTextTableViewCell
                     cell.eventTextLabel.text = comment!["text"] as? String
                     cell.timestampLabel.text = timeSinceTimeStamp(comment!.createdAt)
+                    var commentUser : PFUser = comment!["user"] as PFUser
+                    commentUser.fetchIfNeeded()
+                    if commentUser["profileName"] != nil {
+                        var profileName : String = commentUser["profileName"] as String
+                        cell.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
+                        cell.userNameButton.hidden = false
+                    }
+                    if commentUser["profileImage"] != nil {
+                        var profileImageFile = commentUser["profileImage"] as PFFile
+                        profileImageFile.getDataInBackgroundWithBlock {
+                            (imageData: NSData!, error: NSError!) -> Void in
+                            if error == nil {
+                                let image = UIImage(data:imageData)
+                                cell.profileImageView.image = image
+                                cell.profileImageView.hidden = false
+                            }
+                        }
+                    }
                     return cell
                 } else if comment!["type"] as String == "photo" {
-                    var cell = commentsTableView.dequeueReusableCellWithIdentifier("StoryImageTableViewCell") as StoryImageTableViewCell
+                    var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentImageTableViewCell") as StoryImageTableViewCell
                     cell.timestampLabel.text = timeSinceTimeStamp(comment!.createdAt)
                     let userImageFile = comment!["image"] as PFFile
                     userImageFile.getDataInBackgroundWithBlock {
@@ -166,10 +234,28 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                             cell.eventImageView.image = image
                         }
                     }
+                    var commentUser : PFUser = comment!["user"] as PFUser
+                    commentUser.fetchIfNeeded()
+                    if commentUser["profileName"] != nil {
+                        var profileName : String = commentUser["profileName"] as String
+                        cell.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
+                        cell.userNameButton.hidden = false
+                    }
+                    if commentUser["profileImage"] != nil {
+                        var profileImageFile = commentUser["profileImage"] as PFFile
+                        profileImageFile.getDataInBackgroundWithBlock {
+                            (imageData: NSData!, error: NSError!) -> Void in
+                            if error == nil {
+                                let image = UIImage(data:imageData)
+                                cell.profileImageView.image = image
+                                cell.profileImageView.hidden = false
+                            }
+                        }
+                    }
                     
                     return cell
                 } else {
-                    var cell = commentsTableView.dequeueReusableCellWithIdentifier("StoryVideoTableViewCell") as StoryVideoTableViewCell
+                    var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentVideoTableViewCell") as StoryVideoTableViewCell
                     
                     cell.delegate = self
                     
@@ -216,7 +302,25 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                         }
                     }
                     
-                    
+                    var commentUser : PFUser = comment!["user"] as PFUser
+                    commentUser.fetchIfNeeded()
+                    if commentUser["profileName"] != nil {
+                        var profileName : String = commentUser["profileName"] as String
+                        cell.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
+                        cell.userNameButton.hidden = false
+                    }
+                    if commentUser["profileImage"] != nil {
+                        var profileImageFile = commentUser["profileImage"] as PFFile
+                        profileImageFile.getDataInBackgroundWithBlock {
+                            (imageData: NSData!, error: NSError!) -> Void in
+                            if error == nil {
+                                let image = UIImage(data:imageData)
+                                cell.profileImageView.image = image
+                                cell.profileImageView.hidden = false
+                            }
+                        }
+                        
+                    }
                     return cell
                     
                 }
@@ -558,6 +662,51 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     @IBAction func videoLongPressGestureRecognizerWasPressed(sender: AnyObject) {
+        if sender.state == UIGestureRecognizerState.Began {
+            holdToRecordLabel.hidden = true
+            //            var filename = "Video1"
+            //            videoPath =  "\(documentPath)/\(filename).mp4"
+            //
+            //            self.videoOutput?.startRecordingToOutputFileURL(NSURL(fileURLWithPath: self.videoPath!), recordingDelegate: self)
+            vision.startVideoCapture()
+        }
+        
+        if sender.state == UIGestureRecognizerState.Cancelled {
+            //            self.videoOutput?.stopRecording()
+            //            holdToRecordLabel.hidden = false
+            vision.endVideoCapture()
+        }
+        
+        if sender.state == UIGestureRecognizerState.Ended {
+            //            self.videoOutput?.stopRecording()
+            holdToRecordLabel.hidden = false
+            vision.endVideoCapture()
+        }
+    }
+    
+    func vision(vision: PBJVision!, capturedVideo videoDict: [NSObject : AnyObject]!, error: NSError!) {
+        
+        
+        dispatch_async(dispatch_get_main_queue(),{
+            self.videoPath = videoDict[PBJVisionVideoPathKey] as String
+            self.saveVideoComment()
+        })
+        self.minimizeCreateView()
+    }
+    
+    func captureOutput(captureOutput: AVCaptureFileOutput!, didStartRecordingToOutputFileAtURL fileURL: NSURL!, fromConnections connections: [AnyObject]!) {
+        println("Video recording started")
+    }
+    
+    func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
+        
+        
+        
+
+        println("Successfully saved video at \(outputFileURL)")
+        
+        
+        self.saveVideoComment()
     }
     
     func squareImageWithImage(image : UIImage) -> UIImage {
@@ -753,6 +902,71 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         
     }
     
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if (playingVideoCell != nil && playingVideoCell!.player != nil) {
+            if playingVideoCell!.player!.rate == 1.0 {
+                playingVideoCell!.player?.pause()
+                playingVideoCell?.playButtonIconImageView.hidden = false
+                
+                println("Pausing video")
+            }
+        }
+        
+        var actualPosition :CGFloat = scrollView.contentOffset.y
+        var contentHeight : CGFloat = scrollView.contentSize.height - 750
+        
+        //        println("Actual Position: \(actualPosition), Content Height: \(contentHeight)")
+        if (actualPosition >= contentHeight && comments.count > 0) {
+            
+            if self.maxReached == false && self.requestingObjects == false {
+                requestingObjects = true
+                requestCommentsForStory(self, offset: currentOffset)
+                self.commentsTableView.reloadData()
+            }
+        }
+    }
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        var cells = commentsTableView.visibleCells()
+        var indexPaths = commentsTableView.indexPathsForVisibleRows()
+        
+        
+        
+        var playableCells : NSMutableArray = []
+        
+        if indexPaths != nil {
+            var cellCount = indexPaths!.count
+            for (var i = 0; i < indexPaths!.count; i++) {
+                if cellCompletelyOnScreen(indexPaths![i] as NSIndexPath) {
+                    playableCells.addObject(cells[i])
+                    println("Cell at index \(i) is fully on screen")
+                } else {
+                    println("Cell at index \(i) is not fully on screen")
+                }
+                
+            }
+            
+        }
+        
+        if playableCells.count > 0 && playableCells[0].player != nil {
+            playingVideoCell = playableCells[0] as StoryVideoTableViewCell
+            
+            if playingVideoCell!.player? != nil {
+                playingVideoCell?.playButtonIconImageView.hidden = true
+                playingVideoCell!.player!.play()
+                playingVideoCell!.player!.actionAtItemEnd = .None
+                
+                
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: "restartVideoFromBeginning", name: AVPlayerItemDidPlayToEndTimeNotification, object: playingVideoCell!.player!.currentItem)
+            }
+            
+            
+            println("Playing cell")
+        }
+        
+        
+    }
+    
     func playOrPauseVideoCell(videoCell: StoryVideoTableViewCell) {
         if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 && playingVideoCell != videoCell {
             playingVideoCell?.player?.pause()
@@ -777,6 +991,125 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         
     }
     
+    func createVideoComment(videoFile : PFFile) {
+        var comment: PFObject = PFObject(className: "Comment")
+        comment["type"] = "video"
+        comment["storyObject"] = self.story!
+        if PFUser.currentUser() != nil {
+            comment["user"] = PFUser.currentUser()
+        }
+        comment["video"] = videoFile
+        
+        comment.saveInBackgroundWithBlock({
+            (success: Bool, error: NSError!) -> Void in
+            if (success) {
+                // The object has been saved.
+                println("Comment successfully saved")
+                self.vision.stopPreview()
+                self.refreshCommentsForStory()
+            } else {
+                // There was a problem, check error.description
+                println("There was an error saving the comment: \(error.description)")
+            }
+        })
+    }
     
+    func saveVideoComment() {
+        self.progressViewTrailingConstraint.constant = self.screenSize.width
+        self.view.layoutIfNeeded()
+        self.progressView.hidden = false
+        var videoFile = PFFile(name: "video.mp4", contentsAtPath: "\(self.videoPath!)")
+        
+        videoFile.saveInBackgroundWithBlock({
+            (success: Bool, error: NSError!) -> Void in
+            if (success) {
+                println("Video successfully uploaded")
+            } else {
+                println("There was an error saving the video file: \(error.description)")
+                self.progressView.hidden = true
+            }
+            
+            }, progressBlock: {
+                (percentDone: CInt) -> Void in
+                if percentDone == 100 {
+                    self.progressView.hidden = true
+                } else if percentDone != 0 {
+                    self.view.layoutIfNeeded()
+                    
+                    self.progressViewTrailingConstraint.constant = CGFloat(self.screenSize.width)*CGFloat(percentDone/100) as CGFloat
+                    
+                    
+                    UIView.animateWithDuration(0.3, animations: {
+                        self.view.layoutIfNeeded()
+                        
+                    })
+                    
+                    
+                }
+                
+        })
+        
+        if (self.story != nil) {
+            createVideoComment(videoFile)
+        }
+    }
+    
+
+    
+    @IBAction func textSubmitButtonWasTapped(sender: AnyObject) {
+        self.view.endEditing(true)
+        
+        self.minimizeCreateView()
+        self.view.layoutIfNeeded()
+        
+        
+        self.createViewHeightConstraint.constant = self.view.bounds.width + 46
+        
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            
+        })
+        
+        
+        if (story != nil) {
+            self.createTextComment()
+        }
+    }
+    func createTextComment() {
+        var comment: PFObject = PFObject(className: "Comment")
+        comment["type"] = "text"
+        comment["storyObject"] = self.story!
+        if PFUser.currentUser() != nil {
+            comment["user"] = PFUser.currentUser()
+        }
+        comment["text"] = self.createTextView.text
+        comment.saveInBackgroundWithBlock({
+            (success: Bool, error: NSError!) -> Void in
+            if (success) {
+                // The object has been saved.
+                println("Comment successfully saved")
+                self.minimizeCreateView()
+                if self.story!["thumbnailText"] == nil {
+                    self.story!["thumbnailText"] = self.createTextView.text
+                    self.story!.saveInBackground()
+                }
+                self.createTextView.text = ""
+                self.refreshCommentsForStory()
+                
+            } else {
+                // There was a problem, check error.description
+                println("There was an error saving the comment: \(error.description)")
+            }
+        })
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        //        GSProgressHUD.dismiss()
+        if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 {
+            playingVideoCell?.player?.pause()
+            playingVideoCell?.playButtonIconImageView.hidden = false
+        }
+    }
+
     
 }

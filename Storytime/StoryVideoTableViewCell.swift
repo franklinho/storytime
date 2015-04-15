@@ -16,6 +16,8 @@ protocol StoryVideoTableViewCellDelegate{
 class StoryVideoTableViewCell: UITableViewCell {
     var delegate : StoryVideoTableViewCellDelegate?
     
+    @IBOutlet weak var userNameButton: UIButton!
+    @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var timestampView: UIView!
     @IBOutlet weak var playButtonIconImageView: UIImageView!
     var player : AVPlayer?
@@ -31,6 +33,21 @@ class StoryVideoTableViewCell: UITableViewCell {
         
         timestampView.layer.cornerRadius = 5
         timestampView.clipsToBounds = true
+        
+        if profileImageView != nil {
+            profileImageView.layer.cornerRadius = 31
+            profileImageView.layer.borderWidth = 2
+            profileImageView.layer.borderColor = UIColor.darkGrayColor().CGColor
+            profileImageView.clipsToBounds = true
+        }
+        
+        if userNameButton != nil {
+            userNameButton.layer.cornerRadius = 10
+            userNameButton.clipsToBounds = true
+        }
+        
+            
+        
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
