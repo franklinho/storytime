@@ -792,6 +792,12 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 println("There was an error saving the event: \(error.description)")
             }
         })
+        if self.story!["commentsCount"] == nil {
+            self.story!["commentsCount"] = 1
+        } else {
+            self.story!["commentsCount"] = self.story!["commentsCount"] as Int + 1
+        }
+        self.story!.saveInBackground()
     }
     
     func refreshCommentsForStory() {
@@ -1012,6 +1018,13 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 println("There was an error saving the comment: \(error.description)")
             }
         })
+        
+        if self.story!["commentsCount"] == nil {
+            self.story!["commentsCount"] = 1
+        } else {
+            self.story!["commentsCount"] = self.story!["commentsCount"] as Int + 1
+        }
+        self.story!.saveInBackground()
     }
     
     func saveVideoComment() {
@@ -1101,6 +1114,13 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 println("There was an error saving the comment: \(error.description)")
             }
         })
+        
+        if self.story!["commentsCount"] == nil {
+            self.story!["commentsCount"] = 1
+        } else {
+            self.story!["commentsCount"] = self.story!["commentsCount"] as Int + 1
+        }
+        self.story!.saveInBackground()
     }
     
     override func viewWillDisappear(animated: Bool) {

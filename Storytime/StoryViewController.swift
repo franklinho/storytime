@@ -73,6 +73,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var createViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var storyTableView: UITableView!
     
+    @IBOutlet weak var commentsLabel: UILabel!
     @IBOutlet weak var cameraContainer: UIView!
     @IBOutlet weak var textContainer: UIView!
     @IBOutlet weak var videoContainer: UIView!
@@ -153,6 +154,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     let image = UIImage(data:imageData)
                     self.userProfileImage.image = image
                 }
+            }
+            
+            if self.story!["commentsCount"] != nil {
+                var commentsCount = self.story!["commentsCount"]
+                self.commentsLabel.text = "\(commentsCount) Comments"
             }
             
             self.userLabel.text = profileName as? String
@@ -770,7 +776,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     
     override func viewDidAppear(animated: Bool) {
-        
+        if self.story != nil {
+            if self.story!["commentsCount"] != nil {
+                var commentsCount = self.story!["commentsCount"]
+                self.commentsLabel.text = "\(commentsCount) Comments"
+            }
+        }
     }
     
     @IBAction func storyTableViewWasTapped(sender: AnyObject) {
