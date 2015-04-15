@@ -85,6 +85,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if newStory == true {
             self.title = "New Story"
+            self.storyTableView.hidden = true
         } else {
             if self.story != nil {
                 self.title = story!["title"] as String
@@ -315,15 +316,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print("Table returning \(self.events.count) cells")
-        if self.story != nil {
-            if maxReached == true {
-                return self.events.count
-            } else {
-                return self.events.count + 1
-            }
+        if maxReached == true {
+            return self.events.count
         } else {
-            return 0
+            return self.events.count + 1
         }
+
         
     }
     
@@ -422,35 +420,56 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             presentCreateProfileViewController()
         } else {
             if createViewExpanded == false {
-                createEvent()
+                expandCreateView()
             } else {
                 minimizeCreateView()
             }
         }
     }
     
-    func createEvent() {
+    func expandCreateView() {
+        self.view.endEditing(true)
         self.view.layoutIfNeeded()
         self.createView.hidden = false
+        self.createViewHeightConstraint.constant = self.view.bounds.width + 46
         self.createViewTopConstraint.constant = 0
-//        createViewLeadingConstraint.constant = 0
-//        createViewTrailingConstraint.constant = 0
         UIView.animateWithDuration(0.3, animations: {
             self.view.layoutIfNeeded()
             
             }, completion: {
                 (value: Bool) in
-                self.createViewExpanded = true
+                self.createView.hidden = false
+                if self.newStory != true {
+                    self.createButton!.enabled = true
+                } else {
+                    self.createButton!.enabled = false
+                }
                 self.createButton!.title = "Cancel"
-            })
+                self.createViewExpanded = true            })
         
         if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 {
             playingVideoCell?.player?.pause()
             playingVideoCell?.playButtonIconImageView.hidden = false
         }
         
+        vision.cameraMode = PBJCameraMode.Photo
+        vision.captureSessionPreset = AVCaptureSessionPresetPhoto
+        cameraSendButton.hidden = false
+        cameraSendButton.enabled = true
+        holdToRecordLabel.hidden = true
+        videoLongPressGestureRecognizer.enabled = false
+        for view in createViews {
+            (view as UIView).hidden = true
+            cameraContainer.hidden = false
+        }
+        
+        
+        vision.startPreview()
+        
         
     }
+    
+
 
     @IBAction func closeCompose(sender: AnyObject) {
         minimizeCreateView()
@@ -475,10 +494,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         videoLongPressGestureRecognizer.enabled = false
         for view in createViews {
             (view as UIView).hidden = true
-            textContainer.hidden = false
+            cameraContainer.hidden = false
         }
         
-        
+        self.storyTableView.hidden = false
     }
     
     
@@ -580,7 +599,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             })
         
         }
-
+        self.newStory = false
     }
 
     @IBAction func videoSelectorWasTapped(sender: AnyObject) {
@@ -893,7 +912,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 println("There was an error saving the event: \(error.description)")
             }
         })
-
+        self.newStory = false
     }
     
     func saveVideoEvent() {
@@ -1015,6 +1034,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 println("There was an error saving the event: \(error.description)")
             }
         })
+        self.newStory = false
     }
     
     
@@ -1338,8 +1358,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     
     func downvoteStory() {
-        println("Story upvote = \(storyUpVoted)")
-        println("Story downvote = \(storyDownVoted)")
         if storyDownVoted == true {
             self.votedStories[self.story!.objectId] = 0
             storyDownVoted = false
@@ -1564,40 +1582,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
-    func expandCreateView() {
-         self.view.endEditing(true)
-        self.view.layoutIfNeeded()
-        var createViewRect : CGRect = self.createView.bounds
-        self.createViewHeightConstraint.constant = self.view.bounds.width + 46
-        createViewTopConstraint.constant = 0
-        
-        UIView.animateWithDuration(0.3, animations: {
-            self.view.layoutIfNeeded()
-            }, completion: {
-                (value: Bool) in
-                self.createView.hidden = false
-                self.createButton!.enabled = false
-                self.createButton!.title = "Cancel"
-                self.createViewExpanded = true
-        })
-        
-        vision.cameraMode = PBJCameraMode.Photo
-        vision.captureSessionPreset = AVCaptureSessionPresetPhoto
-        cameraSendButton.hidden = false
-        cameraSendButton.enabled = true
-        holdToRecordLabel.hidden = true
-        videoLongPressGestureRecognizer.enabled = false
-        for view in createViews {
-            (view as UIView).hidden = true
-            cameraContainer.hidden = false
-        }
-        
-        
-        vision.startPreview()
-        
-        
-        
-    }
     
     
     @IBAction func titleCreateButtonWasTapped(sender: AnyObject) {
