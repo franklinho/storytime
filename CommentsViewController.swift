@@ -54,16 +54,23 @@ class CommentsViewController: UIViewController, PBJVisionDelegate, PFLogInViewCo
         profileTabBarItem = self.tabBarController?.tabBar.items?[1] as UITabBarItem
         
         self.commentsTableView.tableHeaderView = UIView(frame: CGRectMake(0.0, 0.0, self.commentsTableView.bounds.size.width, 0.01))
+        self.commentsTableView.rowHeight = screenSize.width
         
         profileImageView.layer.cornerRadius = 31
         profileImageView.layer.borderColor = UIColor.whiteColor().CGColor
         profileImageView.layer.borderWidth = 2
         profileImageView.clipsToBounds = true
 
+        holdToRecordLabel.layer.borderColor = UIColor.whiteColor().CGColor
+        holdToRecordLabel.layer.borderWidth = 3.0;
+        holdToRecordLabel.layer.cornerRadius = 17
+        holdToRecordLabel.clipsToBounds = true
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyBoardWillChange:", name: UIKeyboardWillChangeFrameNotification, object: nil)
         
         createViews = [cameraContainer, textContainer, videoContainer]
         profileTabBarItem = self.tabBarController?.tabBar.items?[1] as UITabBarItem
+        createViewHeightConstraint.constant = self.view.bounds.width + 46
         
 //        updateVotingLabels()
         
@@ -85,6 +92,30 @@ class CommentsViewController: UIViewController, PBJVisionDelegate, PFLogInViewCo
     }
     */
 
+    func keyBoardWillChange(notification: NSNotification) {
+        // Adjusts size of text view to scroll when keyboard is up
+        var keyBoardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+        self.view.convertRect(keyBoardRect, fromView: nil)
+        
+        var createViewRect : CGRect = self.createView.frame
+        
+        self.view.layoutIfNeeded()
+        
+        if CGFloat(createViewRect.origin.y) + CGFloat(createViewRect.height) > CGFloat(keyBoardRect.origin.y) {
+            println("Keyboard Rect: \(keyBoardRect)")
+            println("CreateView Rect: \(createViewRect)")
+            self.createViewHeightConstraint.constant = CGFloat(keyBoardRect.origin.y) - CGFloat(createViewRect.origin.y)
+            println("New Createview Height: \(self.createViewHeightConstraint.constant)")
+        } else {
+            self.createViewHeightConstraint.constant = self.view.bounds.width + 46
+        }
+        
+        UIView.animateWithDuration(0.1, animations: {
+            self.view.layoutIfNeeded()
+            println("Post transform createview Rect: \(createViewRect)")
+        })
+        
+    }
     
     func minimizeCreateView() {
         newCommentButton.enabled = true
@@ -292,13 +323,66 @@ class CommentsViewController: UIViewController, PBJVisionDelegate, PFLogInViewCo
     
     
     @IBAction func textButtonWasTapped(sender: AnyObject) {
+        println("Text button was tapped")
+        videoLongPressGestureRecognizer.enabled = false
+        for view in createViews {
+            (view as UIView).hidden = true
+            textContainer.hidden = false
+        }
     }
     
     @IBAction func cameraButtonWasTapped(sender: AnyObject) {
+        self.view.endEditing(true)
+        self.view.layoutIfNeeded()
+        var createViewRect : CGRect = self.createView.bounds
+        self.createViewHeightConstraint.constant = self.view.bounds.width + 46
+        
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            
+        })
+        
+//        vision.cameraMode = PBJCameraMode.Photo
+//        vision.captureSessionPreset = AVCaptureSessionPresetPhoto
+        cameraSendButton.hidden = false
+        cameraSendButton.enabled = true
+        holdToRecordLabel.hidden = true
+        videoLongPressGestureRecognizer.enabled = false
+        for view in createViews {
+            (view as UIView).hidden = true
+            cameraContainer.hidden = false
+        }
+        
+        
+//        vision.startPreview()
+
     }
     
     
     @IBAction func videoButtonWasTapped(sender: AnyObject) {
+        self.view.endEditing(true)
+        self.view.endEditing(true)
+        self.view.layoutIfNeeded()
+        var createViewRect : CGRect = self.createView.bounds
+        self.createViewHeightConstraint.constant = self.view.bounds.width + 46
+        
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            
+        })
+        
+//        vision.cameraMode = PBJCameraMode.Video
+//        vision.captureSessionPreset = AVCaptureSessionPresetMedium
+        cameraSendButton.hidden = true
+        cameraSendButton.enabled = false
+        holdToRecordLabel.hidden = false
+        videoLongPressGestureRecognizer.enabled = true
+        for view in createViews {
+            (view as UIView).hidden = true
+            cameraContainer.hidden = false
+        }
+//        vision.startPreview()
+
     }
     
     

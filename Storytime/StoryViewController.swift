@@ -624,6 +624,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             (view as UIView).hidden = true
             cameraContainer.hidden = false
         }
+        vision.startPreview()
 //        if captureSession.canSetSessionPreset(AVCaptureSessionPresetHigh){
 //            captureSession.sessionPreset = AVCaptureSessionPresetHigh
 //        }
@@ -644,7 +645,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //            captureSession.addOutput(videoOutput)
 //            println("video output added")
 //        }
-        vision.startPreview()
+        
 
     }
 
