@@ -8,11 +8,12 @@
 
 import UIKit
 
-class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate {
+class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate {
 
     @IBOutlet weak var progressView: UIView!
     
     
+    @IBOutlet weak var noCommentsLabel: UILabel!
     @IBOutlet weak var progressViewTrailingConstraint: NSLayoutConstraint!
     var currentOffset = 0
     var comments = []
@@ -164,6 +165,19 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         refreshCommentsForStory()
         
     }
+    
+    override func viewDidAppear(animated: Bool) {
+        if self.playingVideoCell != nil {
+            if self.playingVideoCell!.player? != nil {
+                self.playingVideoCell?.playButtonIconImageView.hidden = true
+                self.playingVideoCell!.player!.play()
+                self.playingVideoCell!.player!.actionAtItemEnd = .None
+                
+                
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: "restartVideoFromBeginning", name: AVPlayerItemDidPlayToEndTimeNotification, object: playingVideoCell!.player!.currentItem)
+            }
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -202,6 +216,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 comment = comments[indexPath.row] as PFObject
                 if comment!["type"] as NSString == "text" {
                     var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentTextTableViewCell") as StoryTextTableViewCell
+                    cell.delegate = self
+                    cell.comment = comment
                     cell.eventTextLabel.text = comment!["text"] as? String
                     cell.timestampLabel.text = timeSinceTimeStamp(comment!.createdAt)
                     var commentUser : PFUser = comment!["user"] as PFUser
@@ -225,6 +241,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                     return cell
                 } else if comment!["type"] as String == "photo" {
                     var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentImageTableViewCell") as StoryImageTableViewCell
+                    cell.delegate = self
+                    cell.comment = comment
                     cell.timestampLabel.text = timeSinceTimeStamp(comment!.createdAt)
                     let userImageFile = comment!["image"] as PFFile
                     userImageFile.getDataInBackgroundWithBlock {
@@ -256,8 +274,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                     return cell
                 } else {
                     var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentVideoTableViewCell") as StoryVideoTableViewCell
-                    
                     cell.delegate = self
+                    cell.comment = comment
                     
                     if cell.playerLayer != nil {
                         cell.playerLayer!.removeFromSuperlayer()
@@ -832,6 +850,12 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                         self.maxReached = true
                     }
                     
+                    if objects.count == 0 {
+                        self.noCommentsLabel.hidden = false
+                    } else {
+                        self.noCommentsLabel.hidden = true
+                    }
+                    
                     var temporaryArray : NSMutableArray = NSMutableArray(array: self.comments)
                     temporaryArray.addObjectsFromArray(objects)
                     self.comments = temporaryArray
@@ -1129,6 +1153,12 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             playingVideoCell?.player?.pause()
             playingVideoCell?.playButtonIconImageView.hidden = false
         }
+    }
+    
+    func displayUserProfileView(user: PFUser) {
+        var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as ProfileViewController
+        profileVC.user = user
+        navigationController?.pushViewController(profileVC, animated: true)
     }
 
     

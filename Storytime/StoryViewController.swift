@@ -14,6 +14,8 @@ import MediaPlayer
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate {
     
   
+    @IBOutlet weak var commentsButton: UIButton!
+    @IBOutlet var userTapGestureRecognizer: UITapGestureRecognizer!
     @IBOutlet weak var createTitleViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var cameraFlashButton: UIButton!
     var profileTabBarItem : UITabBarItem?
@@ -87,6 +89,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if newStory == true {
             self.title = "New Story"
             self.storyTableView.hidden = true
+            
         } else {
             if self.story != nil {
                 self.title = story!["title"] as String
@@ -520,6 +523,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func createTextEvent() {
         self.upVoteButton.enabled = true
         self.downVoteButton.enabled = true
+        self.userTapGestureRecognizer.enabled = false
+        self.commentsButton.enabled = false
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "text"
         event["storyObject"] = self.story!
@@ -782,6 +787,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.commentsLabel.text = "\(commentsCount) Comments"
             }
         }
+        
     }
     
     @IBAction func storyTableViewWasTapped(sender: AnyObject) {
@@ -888,6 +894,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func createVideoEvent(videoFile : PFFile) {
         self.upVoteButton.enabled = true
         self.downVoteButton.enabled = true
+        self.userTapGestureRecognizer.enabled = false
+        self.commentsButton.enabled = false
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "video"
         event["storyObject"] = self.story!
@@ -1023,6 +1031,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func createPhotoEvent(imageFile : PFFile) {
         self.upVoteButton.enabled = true
         self.downVoteButton.enabled = true
+        self.userTapGestureRecognizer.enabled = false
+        self.commentsButton.enabled = false
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "photo"
         event["storyObject"] = self.story!
@@ -1629,6 +1639,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 self.upVoteButton.enabled = false
                 self.downVoteButton.enabled = false
+                self.userTapGestureRecognizer.enabled = false
+                self.commentsButton.enabled = false
                 
                 
                 self.createButton!.enabled = true
@@ -1662,5 +1674,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 commentsVC.story = self.story!
             }
         }
+    }
+    
+    func displayUserProfileView(user: PFUser) {
+        var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as ProfileViewController
+        profileVC.user = user
+        navigationController?.pushViewController(profileVC, animated: true)
     }
 }

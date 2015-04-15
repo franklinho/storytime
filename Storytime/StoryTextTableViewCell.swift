@@ -9,8 +9,13 @@
 
 import UIKit
 
-class StoryTextTableViewCell: UITableViewCell {
+protocol StoryTextTableViewCellDelegate{
+    func displayUserProfileView(user : PFUser)
+}
 
+class StoryTextTableViewCell: UITableViewCell {
+    var comment : PFObject?
+    var delegate : StoryVideoTableViewCellDelegate?
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var userNameButton: UIButton!
     @IBOutlet weak var timestampView: UIView!
@@ -41,5 +46,11 @@ class StoryTextTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    @IBAction func showUserProfileWasTapped(sender: AnyObject) {
+        self.delegate?.displayUserProfileView(self.comment!["user"] as PFUser)
+    }
+    
+
 
 }

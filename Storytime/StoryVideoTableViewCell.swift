@@ -11,11 +11,14 @@ import AVFoundation
 
 protocol StoryVideoTableViewCellDelegate{
     func playOrPauseVideoCell(videoCell : StoryVideoTableViewCell)
+    func displayUserProfileView(user : PFUser)
 }
+
 
 class StoryVideoTableViewCell: UITableViewCell {
     var delegate : StoryVideoTableViewCellDelegate?
     
+    var comment : PFObject?
     @IBOutlet weak var userNameButton: UIButton!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var timestampView: UIView!
@@ -59,4 +62,10 @@ class StoryVideoTableViewCell: UITableViewCell {
     @IBAction func videoViewWasTapped(sender: AnyObject) {
         self.delegate?.playOrPauseVideoCell(self)
     }
+    
+    @IBAction func showUserProfileWasTapped(sender: AnyObject) {
+        self.delegate?.displayUserProfileView(self.comment!["user"] as PFUser)
+    }
+    
+
 }
