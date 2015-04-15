@@ -816,6 +816,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             self.story!["commentsCount"] = self.story!["commentsCount"] as Int + 1
         }
         self.story!.saveInBackground()
+        
+        self.noCommentsLabel.hidden = true
     }
     
     func refreshCommentsForStory() {
@@ -1049,6 +1051,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             self.story!["commentsCount"] = self.story!["commentsCount"] as Int + 1
         }
         self.story!.saveInBackground()
+        self.noCommentsLabel.hidden = true
     }
     
     func saveVideoComment() {
@@ -1145,6 +1148,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             self.story!["commentsCount"] = self.story!["commentsCount"] as Int + 1
         }
         self.story!.saveInBackground()
+        self.noCommentsLabel.hidden = true
     }
     
     override func viewWillDisappear(animated: Bool) {
