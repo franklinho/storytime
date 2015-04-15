@@ -1461,6 +1461,17 @@
                                             <outletCollection property="gestureRecognizers" destination="aCr-wU-EQw" appends="YES" id="JVn-tM-tMB"/>
                                         </connections>
                                     </label>
+                                    <button opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="p5I-v5-Dj1">
+                                        <rect key="frame" x="509" y="42" width="75" height="30"/>
+                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <state key="normal" title="Comments">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <segue destination="22L-dv-H0B" kind="show" id="bJH-j3-VYj"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.12156862745098039" green="0.12941176470588237" blue="0.14117647058823529" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -1468,6 +1479,7 @@
                                     <constraint firstAttribute="height" constant="90" id="1wG-Fn-Sxt"/>
                                     <constraint firstItem="4T8-ck-Y0C" firstAttribute="top" secondItem="zC1-cs-0xd" secondAttribute="top" constant="35" id="2Ci-gT-BwF"/>
                                     <constraint firstItem="N6n-gn-M1B" firstAttribute="leading" secondItem="0fP-OH-gNp" secondAttribute="trailing" constant="81" id="A0t-T8-p8N"/>
+                                    <constraint firstAttribute="bottom" secondItem="p5I-v5-Dj1" secondAttribute="bottom" constant="18" id="BsJ-s8-QXj"/>
                                     <constraint firstItem="N6n-gn-M1B" firstAttribute="top" secondItem="zC1-cs-0xd" secondAttribute="top" constant="8" id="Frj-c9-Xth"/>
                                     <constraint firstItem="0fP-OH-gNp" firstAttribute="leading" secondItem="zC1-cs-0xd" secondAttribute="leading" constant="10" id="Ft6-Da-CxO"/>
                                     <constraint firstItem="4T8-ck-Y0C" firstAttribute="top" secondItem="N6n-gn-M1B" secondAttribute="bottom" constant="8.5" id="H4V-7v-B6d"/>
@@ -1479,6 +1491,7 @@
                                     <constraint firstItem="4T8-ck-Y0C" firstAttribute="top" secondItem="zC1-cs-0xd" secondAttribute="top" constant="25" id="e2x-3b-4Tz"/>
                                     <constraint firstItem="Loc-lA-bxs" firstAttribute="top" secondItem="0fP-OH-gNp" secondAttribute="bottom" constant="12" id="jwk-Hi-khm"/>
                                     <constraint firstItem="0fP-OH-gNp" firstAttribute="top" secondItem="zC1-cs-0xd" secondAttribute="top" constant="-3" id="lcr-hL-nK5"/>
+                                    <constraint firstAttribute="trailing" secondItem="p5I-v5-Dj1" secondAttribute="trailing" constant="16" id="pPV-lA-cQV"/>
                                     <constraint firstAttribute="centerY" secondItem="twC-DJ-FCn" secondAttribute="centerY" id="tMP-K0-RTd"/>
                                     <constraint firstItem="Loc-lA-bxs" firstAttribute="centerX" secondItem="0fP-OH-gNp" secondAttribute="centerX" id="y4h-NE-qN1"/>
                                 </constraints>
@@ -1491,7 +1504,7 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ebf-0P-F2l" userLabel="CreateTitleView">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ebf-0P-F2l" userLabel="CreateTitleView">
                                 <rect key="frame" x="0.0" y="64" width="600" height="90"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter title here" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cHL-Ds-X6q">
@@ -1660,6 +1673,31 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2661" y="360"/>
+        </scene>
+        <!--Comments-->
+        <scene sceneID="mnh-gL-iCD">
+            <objects>
+                <viewController title="Comments" id="22L-dv-H0B" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="RVc-pz-jra"/>
+                        <viewControllerLayoutGuide type="bottom" id="Ron-Bt-vkG"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="51v-K7-ZOJ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Comments" id="xUc-f2-fnW">
+                        <barButtonItem key="rightBarButtonItem" title="+ Comment" id="JaS-B0-Bac">
+                            <color key="tintColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QKw-NZ-fQX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2661" y="1094"/>
         </scene>
         <!--Feed-->
         <scene sceneID="v7e-7g-LQy">

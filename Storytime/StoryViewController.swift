@@ -83,6 +83,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if newStory == true {
+            self.title = "New Story"
+        } else {
+            if self.story != nil {
+                self.title = story!["title"] as String
+            }
+        }
+        
         createView.hidden = true
         createTitleViewTopConstraint.constant = CGFloat(screenSize.height)/2 - CGFloat(createTitleView.bounds.height)
         profileTabBarItem = self.tabBarController?.tabBar.items?[1] as UITabBarItem
@@ -96,7 +104,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         updateVotingLabels()
         
-        createButton = UIBarButtonItem(title: "+", style: .Plain, target: self, action: "createButtonWasTapped")
+        createButton = UIBarButtonItem(title: "+ Event", style: .Plain, target: self, action: "createButtonWasTapped")
         
         if self.story != nil {
             if story!["points"] != nil {
@@ -433,7 +441,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }, completion: {
                 (value: Bool) in
                 self.createViewExpanded = true
-                self.createButton!.title = "X"
+                self.createButton!.title = "Cancel"
             })
         
         if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 {
@@ -462,7 +470,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 (value: Bool) in
                 self.createView.hidden = true
                 self.createViewExpanded = false
-                self.createButton!.title = "+"
+                self.createButton!.title = "+ Event"
         })
         videoLongPressGestureRecognizer.enabled = false
         for view in createViews {
@@ -490,6 +498,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "text"
         event["storyObject"] = self.story!
+        if PFUser.currentUser() != nil {
+            event["user"] = PFUser.currentUser()
+        }
         event["text"] = self.createTextView.text
         event.saveInBackgroundWithBlock({
             (success: Bool, error: NSError!) -> Void in
@@ -846,6 +857,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "video"
         event["storyObject"] = self.story!
+        if PFUser.currentUser() != nil {
+            event["user"] = PFUser.currentUser()
+        }
         event["video"] = videoFile
         
         event.saveInBackgroundWithBlock({
@@ -977,6 +991,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "photo"
         event["storyObject"] = self.story!
+        if PFUser.currentUser() != nil {
+            event["user"] = PFUser.currentUser()
+        }
         event["image"] = imageFile
         event.saveInBackgroundWithBlock({
             (success: Bool, error: NSError!) -> Void in
@@ -1540,7 +1557,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 (value: Bool) in
                 self.createView.hidden = false
                 self.createButton!.enabled = false
-                self.createButton!.title = "X"
+                self.createButton!.title = "Cancel"
                 self.createViewExpanded = true
         })
 
@@ -1556,6 +1573,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
         self.pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
         self.storyTitleLabel.text = self.titleTextField.text
+        self.title = self.titleTextField.text
         self.storyPointsLabel.text = "1"
         
         if  PFUser.currentUser() != nil {
