@@ -1642,4 +1642,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == "StoryViewToCommentsViewSegue") {
+            
+            var commentsVC : CommentsViewController = segue.destinationViewController as CommentsViewController
+            if self.story != nil {
+                commentsVC.story = self.story!
+            }
+        }
+    }
 }
