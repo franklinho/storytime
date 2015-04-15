@@ -15,6 +15,7 @@ class CommentsViewController: UIViewController, PBJVisionDelegate, PFLogInViewCo
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var profileTabBarItem : UITabBarItem?
 //    var votedStories : NSMutableDictionary = [:]
+    var vision : PBJVision = PBJVision.sharedInstance()
     
     @IBOutlet weak var createViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var createViewHeightConstraint: NSLayoutConstraint!
@@ -72,7 +73,15 @@ class CommentsViewController: UIViewController, PBJVisionDelegate, PFLogInViewCo
         profileTabBarItem = self.tabBarController?.tabBar.items?[1] as UITabBarItem
         createViewHeightConstraint.constant = self.view.bounds.width + 46
         
+        self.view.updateConstraints()
+        self.view.layoutIfNeeded()
 //        updateVotingLabels()
+        var previewLayer = PBJVision.sharedInstance().previewLayer
+        previewLayer.frame = cameraContainer.bounds
+        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        cameraContainer.layer.insertSublayer(previewLayer, atIndex: 0)
+        
+        
         
     }
 
@@ -179,8 +188,8 @@ class CommentsViewController: UIViewController, PBJVisionDelegate, PFLogInViewCo
 //            playingVideoCell?.playButtonIconImageView.hidden = false
 //        }
         
-//        vision.cameraMode = PBJCameraMode.Photo
-//        vision.captureSessionPreset = AVCaptureSessionPresetPhoto
+        vision.cameraMode = PBJCameraMode.Photo
+        vision.captureSessionPreset = AVCaptureSessionPresetPhoto
         cameraSendButton.hidden = false
         cameraSendButton.enabled = true
         holdToRecordLabel.hidden = true
@@ -191,7 +200,7 @@ class CommentsViewController: UIViewController, PBJVisionDelegate, PFLogInViewCo
         }
         
         
-//        vision.startPreview()
+        vision.startPreview()
         
         
     }
@@ -342,8 +351,8 @@ class CommentsViewController: UIViewController, PBJVisionDelegate, PFLogInViewCo
             
         })
         
-//        vision.cameraMode = PBJCameraMode.Photo
-//        vision.captureSessionPreset = AVCaptureSessionPresetPhoto
+        vision.cameraMode = PBJCameraMode.Photo
+        vision.captureSessionPreset = AVCaptureSessionPresetPhoto
         cameraSendButton.hidden = false
         cameraSendButton.enabled = true
         holdToRecordLabel.hidden = true
@@ -354,7 +363,7 @@ class CommentsViewController: UIViewController, PBJVisionDelegate, PFLogInViewCo
         }
         
         
-//        vision.startPreview()
+        vision.startPreview()
 
     }
     
@@ -371,8 +380,8 @@ class CommentsViewController: UIViewController, PBJVisionDelegate, PFLogInViewCo
             
         })
         
-//        vision.cameraMode = PBJCameraMode.Video
-//        vision.captureSessionPreset = AVCaptureSessionPresetMedium
+        vision.cameraMode = PBJCameraMode.Video
+        vision.captureSessionPreset = AVCaptureSessionPresetMedium
         cameraSendButton.hidden = true
         cameraSendButton.enabled = false
         holdToRecordLabel.hidden = false
@@ -381,7 +390,7 @@ class CommentsViewController: UIViewController, PBJVisionDelegate, PFLogInViewCo
             (view as UIView).hidden = true
             cameraContainer.hidden = false
         }
-//        vision.startPreview()
+        vision.startPreview()
 
     }
     
