@@ -492,6 +492,8 @@
 		DDF7AED21ADDD96E0033F487 /* flash_icon_auto.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF7AECF1ADDD96E0033F487 /* flash_icon_auto.png */; };
 		DDF7AED31ADDD96E0033F487 /* flash_icon_on.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF7AED01ADDD96E0033F487 /* flash_icon_on.png */; };
 		DDF7AED41ADDD96E0033F487 /* flash_icon_off.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF7AED11ADDD96E0033F487 /* flash_icon_off.png */; };
+		DDF7AED61ADDEC8D0033F487 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7AED51ADDEC8D0033F487 /* CommentsViewController.swift */; };
+		DDF7AED81ADDECC70033F487 /* CommentsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF7AED71ADDECC70033F487 /* CommentsTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -997,6 +999,8 @@
 		DDF7AECF1ADDD96E0033F487 /* flash_icon_auto.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flash_icon_auto.png; sourceTree = "<group>"; };
 		DDF7AED01ADDD96E0033F487 /* flash_icon_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flash_icon_on.png; sourceTree = "<group>"; };
 		DDF7AED11ADDD96E0033F487 /* flash_icon_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flash_icon_off.png; sourceTree = "<group>"; };
+		DDF7AED51ADDEC8D0033F487 /* CommentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentsViewController.swift; path = ../CommentsViewController.swift; sourceTree = "<group>"; };
+		DDF7AED71ADDECC70033F487 /* CommentsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsTableViewCell.swift; sourceTree = "<group>"; };
 		E8ECC8C0FC39FC2D49766AFB /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -1137,6 +1141,8 @@
 		DDC936871AC47CAE006D4646 /* Storytime */ = {
 			isa = PBXGroup;
 			children = (
+				DDF7AED71ADDECC70033F487 /* CommentsTableViewCell.swift */,
+				DDF7AED51ADDEC8D0033F487 /* CommentsViewController.swift */,
 				DDC9368A1AC47CAE006D4646 /* AppDelegate.swift */,
 				DDC9368F1AC47CAE006D4646 /* ViewController.swift */,
 				DDC936911AC47CAE006D4646 /* Main.storyboard */,
@@ -2248,12 +2254,14 @@
 				DDC93A171AC48FB9006D4646 /* StoryCreateTableViewCell.swift in Sources */,
 				DDC93A151AC48FAD006D4646 /* StoryVideoTableViewCell.swift in Sources */,
 				DD8C82851AD5CE1E00B9A47B /* ProfileViewController.swift in Sources */,
+				DDF7AED61ADDEC8D0033F487 /* CommentsViewController.swift in Sources */,
 				DDC93A111AC48F96006D4646 /* StoryImageTableViewCell.swift in Sources */,
 				DDC9368E1AC47CAE006D4646 /* Storytime.xcdatamodeld in Sources */,
 				DDC9368B1AC47CAE006D4646 /* AppDelegate.swift in Sources */,
 				DD9B26DE1AD8574600E6D3DE /* CustomLoginViewController.swift in Sources */,
 				DDC936AE1AC47D32006D4646 /* RankingViewController.swift in Sources */,
 				DDC93A0D1AC48589006D4646 /* RankingTableViewCell.swift in Sources */,
+				DDF7AED81ADDECC70033F487 /* CommentsTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
