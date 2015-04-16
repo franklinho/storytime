@@ -107,6 +107,7 @@
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
+      customArchiveName = "Storyweave"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

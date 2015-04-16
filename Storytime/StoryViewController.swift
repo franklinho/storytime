@@ -486,15 +486,20 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func minimizeCreateView() {
         if PFUser.currentUser() != nil {
-            var storyUser = self.story!["user"] as PFUser
-            storyUser.fetchIfNeeded()
-            var currentUser = PFUser.currentUser()
-            println("Story user is \(storyUser.username) and current user is \(currentUser.username)")
-            if  storyUser.username == currentUser.username {
-                createButton!.enabled = true
-            } else {
-                createButton!.enabled = false
+            if self.story != nil {
+                var storyUser = self.story!["user"] as PFUser
+                storyUser.fetchIfNeeded()
+                
+                var currentUser = PFUser.currentUser()
+                println("Story user is \(storyUser.username) and current user is \(currentUser.username)")
+                
+                if  storyUser.username == currentUser.username {
+                    createButton!.enabled = true
+                } else {
+                    createButton!.enabled = false
+                }
             }
+            
         }
         
         self.view.layoutIfNeeded()
