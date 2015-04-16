@@ -38,6 +38,7 @@
             <string>OpenSans-Bold</string>
             <string>OpenSans-Bold</string>
             <string>OpenSans-Bold</string>
+            <string>OpenSans-Bold</string>
         </mutableArray>
         <mutableArray key="OpenSans-ExtraBold.ttf">
             <string>OpenSans-Extrabold</string>
@@ -1217,6 +1218,12 @@
                                     <outletCollection property="gestureRecognizers" destination="OeW-2t-1ZD" appends="YES" id="5E7-OB-68y"/>
                                 </connections>
                             </tableView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Events" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N6Z-Vm-4zJ">
+                                <rect key="frame" x="237" y="283.5" width="125" height="34.5"/>
+                                <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="25"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DxK-24-jad" userLabel="CreateView">
                                 <rect key="frame" x="0.0" y="-172" width="600" height="326"/>
                                 <subviews>
@@ -1845,8 +1852,10 @@
                             <constraint firstItem="Bes-cU-TpY" firstAttribute="leading" secondItem="TJV-F8-eXr" secondAttribute="leadingMargin" constant="-16" id="cVi-rI-X1W"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Bes-cU-TpY" secondAttribute="trailing" constant="-16" id="eIq-OO-YG2"/>
                             <constraint firstAttribute="trailing" secondItem="DxK-24-jad" secondAttribute="trailing" id="ePa-QS-bap"/>
+                            <constraint firstAttribute="centerY" secondItem="N6Z-Vm-4zJ" secondAttribute="centerY" id="eaL-cV-hgh"/>
                             <constraint firstItem="zC1-cs-0xd" firstAttribute="leading" secondItem="TJV-F8-eXr" secondAttribute="leadingMargin" constant="-16" id="igI-z9-MsM"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Ebf-0P-F2l" secondAttribute="trailing" constant="-16" id="kXF-hX-sJ7"/>
+                            <constraint firstAttribute="centerX" secondItem="N6Z-Vm-4zJ" secondAttribute="centerX" id="vq7-GF-sLQ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="zC1-cs-0xd" secondAttribute="trailing" constant="-16" id="wcu-Uf-sbl"/>
                             <constraint firstItem="DxK-24-jad" firstAttribute="leading" secondItem="TJV-F8-eXr" secondAttribute="leading" id="yEl-Nw-jTH"/>
                         </constraints>
@@ -1877,6 +1886,7 @@
                         <outlet property="createViewTrailingConstraint" destination="Qaq-3q-I0I" id="p6n-sV-t6h"/>
                         <outlet property="downVoteButton" destination="Loc-lA-bxs" id="5SE-Yu-LqH"/>
                         <outlet property="holdToRecordLabel" destination="2jj-nm-h1E" id="zjk-Eq-MCm"/>
+                        <outlet property="noEventsLabel" destination="N6Z-Vm-4zJ" id="zzG-jg-bfo"/>
                         <outlet property="pointsLabel" destination="moj-b6-kOg" id="sjD-aN-DhB"/>
                         <outlet property="profileImageButton" destination="WxB-JB-VGf" id="0bX-m4-mIk"/>
                         <outlet property="progressView" destination="hjH-W7-xQN" id="QK7-li-hUH"/>
@@ -2442,7 +2452,7 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Comments" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m7z-mo-fzR">
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Comments" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m7z-mo-fzR">
                                 <rect key="frame" x="211" y="283.5" width="177.5" height="34.5"/>
                                 <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="25"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>

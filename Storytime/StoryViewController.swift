@@ -11,9 +11,10 @@ import AVFoundation
 import MediaPlayer
 
 
-class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate {
+class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate {
     
   
+    @IBOutlet weak var noEventsLabel: UILabel!
     @IBOutlet weak var profileImageButton: UIButton!
     @IBOutlet weak var commentsButton: UIButton!
     @IBOutlet var userTapGestureRecognizer: UITapGestureRecognizer!
@@ -345,11 +346,28 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 event = events[indexPath.row] as PFObject
                 if event!["type"] as NSString == "text" {
                     var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryTextTableViewCell") as StoryTextTableViewCell
+                    cell.delegate = self
+                    cell.minimizeDeleteButton()
                     cell.eventTextLabel.text = event!["text"] as? String
                     cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
+                    if PFUser.currentUser() != nil {
+                        var eventUser = event!["user"] as PFUser
+                        eventUser.fetchIfNeeded()
+                        var currentUser = PFUser.currentUser()
+                        println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
+                        if  eventUser.username == currentUser.username {
+                            cell.deleteButton!.hidden = false
+                        } else {
+                            cell.deleteButton!.hidden = true
+                        }
+                    } else {
+                        cell.deleteButton!.hidden = true
+                    }
                     return cell
                 } else if event!["type"] as String == "photo" {
                     var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryImageTableViewCell") as StoryImageTableViewCell
+                    cell.delegate = self
+                    cell.minimizeDeleteButton()
                     cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
                     let userImageFile = event!["image"] as PFFile
                     userImageFile.getDataInBackgroundWithBlock {
@@ -360,9 +378,23 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     }
                     
+                    if PFUser.currentUser() != nil {
+                        var eventUser = event!["user"] as PFUser
+                        eventUser.fetchIfNeeded()
+                        var currentUser = PFUser.currentUser()
+                        println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
+                        if  eventUser.username == currentUser.username {
+                            cell.deleteButton!.hidden = false
+                        } else {
+                            cell.deleteButton!.hidden = true
+                        }
+                    } else {
+                        cell.deleteButton!.hidden = true
+                    }
                     return cell
                 } else {
                     var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryVideoTableViewCell") as StoryVideoTableViewCell
+                    cell.minimizeDeleteButton()
                     
                     cell.delegate = self
                     
@@ -409,6 +441,19 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     }
                     
+                    if PFUser.currentUser() != nil {
+                        var eventUser = event!["user"] as PFUser
+                        eventUser.fetchIfNeeded()
+                        var currentUser = PFUser.currentUser()
+                        println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
+                        if  eventUser.username == currentUser.username {
+                            cell.deleteButton!.hidden = false
+                        } else {
+                            cell.deleteButton!.hidden = true
+                        }
+                    } else {
+                        cell.deleteButton!.hidden = true
+                    }
                     
                     return cell
                     
@@ -567,6 +612,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 println("There was an error saving the event: \(error.description)")
             }
         })
+        self.noEventsLabel.hidden = true
+        self.newStory = false
     }
 
     @IBAction func textSubmitButtonWasTapped(sender: AnyObject) {
@@ -771,6 +818,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         self.maxReached = true
                     }
                     
+                    if objects.count == 0 {
+                        self.noEventsLabel.hidden = false
+                    } else {
+                        self.noEventsLabel.hidden = true
+                    }
+                    
                     var temporaryArray : NSMutableArray = NSMutableArray(array: self.events)
                     temporaryArray.addObjectsFromArray(objects)
                     self.events = temporaryArray
@@ -950,6 +1003,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 println("There was an error saving the event: \(error.description)")
             }
         })
+        self.noEventsLabel.hidden = true
         self.newStory = false
     }
     
@@ -1076,6 +1130,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         })
         self.newStory = false
+        self.noEventsLabel.hidden = true
     }
     
     
@@ -1703,4 +1758,23 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         profileVC.user = user
         navigationController?.pushViewController(profileVC, animated: true)
     }
+    
+    func deleteCell(cell: UITableViewCell) {
+        var deleteCellIndexPath : NSIndexPath = self.storyTableView.indexPathForCell(cell)!
+        var temporaryCommentsArray = NSMutableArray(array: events)
+        temporaryCommentsArray.removeObjectAtIndex(deleteCellIndexPath.row)
+        var deletingEvent : PFObject = events[deleteCellIndexPath.row] as PFObject
+        self.events = temporaryCommentsArray
+        
+        storyTableView.beginUpdates()
+        storyTableView.deleteRowsAtIndexPaths([deleteCellIndexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+        storyTableView.endUpdates()
+        deletingEvent.deleteInBackground()
+        
+        if events.count == 0 {
+            noEventsLabel.hidden = false
+        }
+    }
+    
+    
 }

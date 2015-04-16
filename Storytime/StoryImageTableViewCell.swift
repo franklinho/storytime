@@ -10,12 +10,13 @@ import UIKit
 
 protocol StoryImageTableViewCellDelegate{
     func displayUserProfileView(user : PFUser)
+    func deleteCell(cell : UITableViewCell)
 }
 
 class StoryImageTableViewCell: UITableViewCell {
     var deleteButtonExpanded = false
     var comment : PFObject?
-    var delegate : StoryVideoTableViewCellDelegate?
+    var delegate : StoryImageTableViewCellDelegate?
     @IBOutlet weak var timestampView: UIView!
     @IBOutlet weak var timestampLabel: UILabel!
     
@@ -74,20 +75,28 @@ class StoryImageTableViewCell: UITableViewCell {
                     self.deleteButton.setTitle("Delete", forState: UIControlState.Normal)
                     self.deleteDismissButton.enabled = true
             })
+        } else {
+            self.delegate?.deleteCell(self)
         }
     }
 
     @IBAction func deleteDismissButtonWasTapped(sender: AnyObject) {
-        self.deleteButton.setTitle("X", forState: UIControlState.Normal)
-        self.contentView.layoutIfNeeded()
-        self.deleteButtonWidthConstraint.constant = 44
-        UIView.animateWithDuration(0.3, animations: {
+        minimizeDeleteButton()
+    }
+    
+    func minimizeDeleteButton() {
+        if deleteButtonExpanded == true {
+            self.deleteButton.setTitle("X", forState: UIControlState.Normal)
             self.contentView.layoutIfNeeded()
-            }, completion: {
-                (value: Bool) in
-                self.deleteButton.backgroundColor = UIColor(red: 85.0/255.0, green: 85.0/255.0, blue: 85.0/255.0, alpha: 0.75)
-                self.deleteButtonExpanded = false
-                self.deleteDismissButton.enabled = false
-        })
+            self.deleteButtonWidthConstraint.constant = 44
+            UIView.animateWithDuration(0.3, animations: {
+                self.contentView.layoutIfNeeded()
+                }, completion: {
+                    (value: Bool) in
+                    self.deleteButton.backgroundColor = UIColor(red: 85.0/255.0, green: 85.0/255.0, blue: 85.0/255.0, alpha: 0.75)
+                    self.deleteButtonExpanded = false
+                    self.deleteDismissButton.enabled = false
+            })
+        }
     }
 }

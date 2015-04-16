@@ -216,6 +216,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 comment = comments[indexPath.row] as PFObject
                 if comment!["type"] as NSString == "text" {
                     var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentTextTableViewCell") as StoryTextTableViewCell
+                    cell.minimizeDeleteButton()
                     cell.delegate = self
                     cell.comment = comment
                     cell.eventTextLabel.text = comment!["text"] as? String
@@ -238,9 +239,25 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                             }
                         }
                     }
+                    
+                    if PFUser.currentUser() != nil {
+                        var commentUser = comment!["user"] as PFUser
+                        commentUser.fetchIfNeeded()
+                        var currentUser = PFUser.currentUser()
+                        println("Comment user is \(commentUser.username) and current user is \(currentUser.username)")
+                        if  commentUser.username == currentUser.username {
+                            cell.deleteButton!.hidden = false
+                        } else {
+                            cell.deleteButton!.hidden = true
+                        }
+                    } else {
+                        cell.deleteButton!.hidden = true
+                    }
+                    
                     return cell
                 } else if comment!["type"] as String == "photo" {
                     var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentImageTableViewCell") as StoryImageTableViewCell
+                    cell.minimizeDeleteButton()
                     cell.delegate = self
                     cell.comment = comment
                     cell.timestampLabel.text = timeSinceTimeStamp(comment!.createdAt)
@@ -271,9 +288,24 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                         }
                     }
                     
+                    if PFUser.currentUser() != nil {
+                        var commentUser = comment!["user"] as PFUser
+                        commentUser.fetchIfNeeded()
+                        var currentUser = PFUser.currentUser()
+                        println("Comment user is \(commentUser.username) and current user is \(currentUser.username)")
+                        if  commentUser.username == currentUser.username {
+                            cell.deleteButton!.hidden = false
+                        } else {
+                            cell.deleteButton!.hidden = true
+                        }
+                    } else {
+                        cell.deleteButton!.hidden = true
+                    }
+                    
                     return cell
                 } else {
                     var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentVideoTableViewCell") as StoryVideoTableViewCell
+                    cell.minimizeDeleteButton()
                     cell.delegate = self
                     cell.comment = comment
                     
@@ -338,6 +370,20 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                             }
                         }
                         
+                    }
+                    
+                    if PFUser.currentUser() != nil {
+                        var commentUser = comment!["user"] as PFUser
+                        commentUser.fetchIfNeeded()
+                        var currentUser = PFUser.currentUser()
+                        println("Comment user is \(commentUser.username) and current user is \(currentUser.username)")
+                        if  commentUser.username == currentUser.username {
+                            cell.deleteButton!.hidden = false
+                        } else {
+                            cell.deleteButton!.hidden = true
+                        }
+                    } else {
+                        cell.deleteButton!.hidden = true
                     }
                     return cell
                     
@@ -1164,6 +1210,26 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as ProfileViewController
         profileVC.user = user
         navigationController?.pushViewController(profileVC, animated: true)
+    }
+    
+    func deleteCell(cell: UITableViewCell) {
+        var deleteCellIndexPath : NSIndexPath = self.commentsTableView.indexPathForCell(cell)!
+        var temporaryCommentsArray = NSMutableArray(array: comments)
+        temporaryCommentsArray.removeObjectAtIndex(deleteCellIndexPath.row)
+        var deletingComment : PFObject = comments[deleteCellIndexPath.row] as PFObject
+        self.comments = temporaryCommentsArray
+        
+        commentsTableView.beginUpdates()
+        commentsTableView.deleteRowsAtIndexPaths([deleteCellIndexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+        commentsTableView.endUpdates()
+        self.story!["commentsCount"] = self.story!["commentsCount"] as Int - 1
+        self.story!.saveInBackground()
+        deletingComment.deleteInBackground()
+        
+        if comments.count == 0 {
+            noCommentsLabel.hidden = false
+        }
+        
     }
 
     
