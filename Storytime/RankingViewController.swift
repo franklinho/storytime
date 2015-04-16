@@ -146,6 +146,11 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
 
                 }
                 
+                if story!["commentsCount"] != nil {
+                    var commentsCount = story!["commentsCount"] as Int
+                    cell.commentsButton.setTitle("  \(commentsCount) Comments  ", forState: UIControlState.Normal)
+                }
+                
                 
                 if PFUser.currentUser() != nil{
                     if PFUser.currentUser()["votedStories"] != nil {
@@ -492,6 +497,15 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.view.endEditing(true)
         self.viewTapGestureRecognizer.enabled = false
     }
+    
+    func displayCommentsViewFor(story: PFObject) {
+        var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
+        storyVC.story = story
+        storyVC.storyCreated = true
+        navigationController?.pushViewController(storyVC, animated: true)
+        storyVC.displayStoryComments()
+    }
+
 
         
 }

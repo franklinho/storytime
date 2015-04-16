@@ -350,7 +350,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.delegate = self
                     cell.minimizeDeleteButton()
                     cell.eventTextLabel.text = event!["text"] as? String
-                    cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
+                    if event!.createdAt == nil {
+                        cell.timestampLabel.text = "0s ago"
+                    } else {
+                        cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
+                    }
                     if PFUser.currentUser() != nil {
                         var eventUser = event!["user"] as PFUser
                         eventUser.fetchIfNeeded()
@@ -369,7 +373,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryImageTableViewCell") as StoryImageTableViewCell
                     cell.delegate = self
                     cell.minimizeDeleteButton()
-                    cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
+                    if event!.createdAt == nil {
+                        cell.timestampLabel.text = "0s ago"
+                    } else {
+                        cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
+                    }
                     let userImageFile = event!["image"] as PFFile
                     userImageFile.getDataInBackgroundWithBlock {
                         (imageData: NSData!, error: NSError!) -> Void in
@@ -403,7 +411,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         cell.playerLayer!.removeFromSuperlayer()
                     }
                     
-                    cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
+                    if event!.createdAt == nil {
+                        cell.timestampLabel.text = "0s ago"
+                    } else {
+                        cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
+                    }
                     
                     let videoFile = event!["video"] as PFFile
                     videoFile.getDataInBackgroundWithBlock {
@@ -596,6 +608,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             event["user"] = PFUser.currentUser()
         }
         event["text"] = self.createTextView.text
+        var temporaryEventsArray = NSMutableArray(array: self.events)
+        temporaryEventsArray.insertObject(event, atIndex: 0)
+        self.events = temporaryEventsArray
+        self.storyTableView.reloadData()
         event.saveInBackgroundWithBlock({
             (success: Bool, error: NSError!) -> Void in
             if (success) {
@@ -607,10 +623,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.story!.saveInBackground()
                 }
                 self.createTextView.text = ""
-                var temporaryCommentsArray = NSMutableArray(array: self.events)
-                temporaryCommentsArray.insertObject(event, atIndex: 0)
-                self.events = temporaryCommentsArray
-                self.storyTableView.reloadData()
+                
                 
             } else {
                 // There was a problem, check error.description
@@ -782,6 +795,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             (view as UIView).hidden = true
             textContainer.hidden = false
         }
+        self.createTextView.becomeFirstResponder()
+
     }
     
     func deleteVideoFiles() {
@@ -980,7 +995,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             event["user"] = PFUser.currentUser()
         }
         event["video"] = videoFile
-        
+        var temporaryEventsArray = NSMutableArray(array: self.events)
+        temporaryEventsArray.insertObject(event, atIndex: 0)
+        self.events = temporaryEventsArray
+        self.storyTableView.reloadData()
         event.saveInBackgroundWithBlock({
             (success: Bool, error: NSError!) -> Void in
             if (success) {
@@ -1003,10 +1021,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         
                     }
                 }
-                var temporaryCommentsArray = NSMutableArray(array: self.events)
-                temporaryCommentsArray.insertObject(event, atIndex: 0)
-                self.events = temporaryCommentsArray
-                self.storyTableView.reloadData()
+                
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the event: \(error.description)")
@@ -1123,6 +1138,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             event["user"] = PFUser.currentUser()
         }
         event["image"] = imageFile
+        var temporaryEventsArray = NSMutableArray(array: self.events)
+        temporaryEventsArray.insertObject(event, atIndex: 0)
+        self.events = temporaryEventsArray
+        self.storyTableView.reloadData()
         event.saveInBackgroundWithBlock({
             (success: Bool, error: NSError!) -> Void in
             if (success) {
@@ -1133,10 +1152,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.story!["thumbnailImage"] = imageFile
                     self.story!.save()
                 }
-                var temporaryCommentsArray = NSMutableArray(array: self.events)
-                temporaryCommentsArray.insertObject(event, atIndex: 0)
-                self.events = temporaryCommentsArray
-                self.storyTableView.reloadData()
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the event: \(error.description)")
@@ -1766,11 +1781,22 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+
+    
+    func displayStoryComments() {
+        var commentsVC : CommentsViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CommentsViewController") as CommentsViewController
+        if self.story != nil {
+            commentsVC.story = self.story!
+            navigationController?.pushViewController(commentsVC, animated: true)
+        }
+    }
+    
     func displayUserProfileView(user: PFUser) {
         var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as ProfileViewController
         profileVC.user = user
         navigationController?.pushViewController(profileVC, animated: true)
     }
+
     
     func deleteCell(cell: UITableViewCell) {
         var deleteCellIndexPath : NSIndexPath = self.storyTableView.indexPathForCell(cell)!

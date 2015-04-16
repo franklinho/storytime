@@ -39,6 +39,8 @@
             <string>OpenSans-Bold</string>
             <string>OpenSans-Bold</string>
             <string>OpenSans-Bold</string>
+            <string>OpenSans-Bold</string>
+            <string>OpenSans-Bold</string>
         </mutableArray>
         <mutableArray key="OpenSans-ExtraBold.ttf">
             <string>OpenSans-Extrabold</string>
@@ -205,6 +207,21 @@
                                                         <action selector="userLabelWasTapped:" destination="0LO-iP-4RM" eventType="touchUpInside" id="ZyP-X5-qmx"/>
                                                     </connections>
                                                 </button>
+                                                <button opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rpb-Wk-0BH" userLabel="Comments Button">
+                                                    <rect key="frame" x="477" y="302" width="110" height="44"/>
+                                                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="44" id="OSy-yr-W25"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
+                                                    <state key="normal" title="  0 Comments  ">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="commentsButtonWasTapped:" destination="0LO-iP-4RM" eventType="touchUpInside" id="FGC-nR-qYd"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="centerY" secondItem="NFr-zO-Wgx" secondAttribute="centerY" id="5n4-gp-Mfe"/>
@@ -212,6 +229,7 @@
                                                 <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="NFr-zO-Wgx" secondAttribute="trailing" constant="16" id="70E-ll-SAV"/>
                                                 <constraint firstAttribute="centerY" secondItem="v1F-Bp-sTC" secondAttribute="centerY" id="COE-8h-YAw"/>
                                                 <constraint firstItem="NFr-zO-Wgx" firstAttribute="leading" secondItem="v1F-Bp-sTC" secondAttribute="trailing" constant="16" id="F1B-F1-wuX"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Rpb-Wk-0BH" secondAttribute="trailing" constant="5" id="GbR-T5-RxZ"/>
                                                 <constraint firstItem="y2Q-Hn-dpP" firstAttribute="top" secondItem="a0k-dm-RAp" secondAttribute="topMargin" constant="5" id="Hgn-Em-iRB"/>
                                                 <constraint firstItem="TLh-u7-B54" firstAttribute="leading" secondItem="y2Q-Hn-dpP" secondAttribute="leading" id="Jns-5O-FpI"/>
                                                 <constraint firstItem="y2Q-Hn-dpP" firstAttribute="leading" secondItem="a0k-dm-RAp" secondAttribute="leadingMargin" constant="5" id="KDd-8p-AaD"/>
@@ -220,6 +238,7 @@
                                                 <constraint firstItem="8mw-Eq-eTl" firstAttribute="top" secondItem="a0k-dm-RAp" secondAttribute="top" id="Uck-Nh-ocv"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="8mw-Eq-eTl" secondAttribute="bottom" constant="10.5" id="V2b-t4-xLp"/>
                                                 <constraint firstItem="tA7-6r-RGW" firstAttribute="leading" secondItem="a0k-dm-RAp" secondAttribute="leadingMargin" constant="72" id="VnF-vd-EBr"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Rpb-Wk-0BH" secondAttribute="bottom" constant="5" id="VyQ-H1-gdA"/>
                                                 <constraint firstAttribute="bottom" secondItem="8mw-Eq-eTl" secondAttribute="bottom" id="aBp-OR-65b"/>
                                                 <constraint firstItem="TLh-u7-B54" firstAttribute="trailing" secondItem="y2Q-Hn-dpP" secondAttribute="trailing" id="eFc-PQ-IAU"/>
                                                 <constraint firstItem="v1F-Bp-sTC" firstAttribute="leading" secondItem="a0k-dm-RAp" secondAttribute="leadingMargin" constant="5" id="fgc-5Y-4fd"/>
@@ -247,6 +266,7 @@
                                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                         <gestureRecognizers/>
                                         <connections>
+                                            <outlet property="commentsButton" destination="Rpb-Wk-0BH" id="lLw-mI-23e"/>
                                             <outlet property="downvoteButton" destination="dSy-gn-lcR" id="hsD-fb-WpT"/>
                                             <outlet property="pointsLabel" destination="8HI-12-6XN" id="Vtv-nn-OAA"/>
                                             <outlet property="previewImageView" destination="8mw-Eq-eTl" id="NuP-w2-7xw"/>
@@ -724,11 +744,28 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MWX-9J-S3g" userLabel="Comments Button">
+                                                    <rect key="frame" x="477" y="302" width="110" height="44"/>
+                                                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="pZF-Ux-QLh"/>
+                                                        <constraint firstAttribute="height" constant="44" id="zCh-jw-SuV"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
+                                                    <state key="normal" title="  0 Comments  ">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="commentsButtonWasTapped:" destination="OtC-gk-5E7" eventType="touchUpInside" id="GF6-Cq-paq"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="AV1-oC-vpX" firstAttribute="top" secondItem="dI8-P4-cUR" secondAttribute="topMargin" constant="5" id="6T6-uu-1CJ"/>
                                                 <constraint firstItem="nx7-g6-eF4" firstAttribute="leading" secondItem="dVe-Vg-V6R" secondAttribute="trailing" constant="16" id="9cz-YW-dXW"/>
                                                 <constraint firstAttribute="centerY" secondItem="dVe-Vg-V6R" secondAttribute="centerY" id="Bxn-n7-cZh"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="MWX-9J-S3g" secondAttribute="trailing" constant="5" id="Cfu-G4-Qbo"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="MM2-8B-X9t" secondAttribute="trailing" constant="22" id="Cl3-yP-l1d"/>
                                                 <constraint firstAttribute="centerY" secondItem="nx7-g6-eF4" secondAttribute="centerY" id="EUe-nm-W47"/>
                                                 <constraint firstItem="xQO-dB-a8k" firstAttribute="top" secondItem="dI8-P4-cUR" secondAttribute="topMargin" constant="5" id="FNy-31-RVh"/>
@@ -739,6 +776,7 @@
                                                 <constraint firstItem="xQO-dB-a8k" firstAttribute="leading" secondItem="AV1-oC-vpX" secondAttribute="trailing" constant="10" id="PnN-96-XvR"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="nx7-g6-eF4" secondAttribute="trailing" constant="16" id="U2k-iR-RD4"/>
                                                 <constraint firstItem="dVe-Vg-V6R" firstAttribute="leading" secondItem="dI8-P4-cUR" secondAttribute="leadingMargin" constant="5" id="VqL-rl-1Zu"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="MWX-9J-S3g" secondAttribute="bottom" constant="5" id="dJE-rg-UXd"/>
                                                 <constraint firstItem="AV1-oC-vpX" firstAttribute="leading" secondItem="dI8-P4-cUR" secondAttribute="leadingMargin" constant="5" id="fXh-bx-o4p"/>
                                                 <constraint firstItem="xQO-dB-a8k" firstAttribute="leading" secondItem="dI8-P4-cUR" secondAttribute="leadingMargin" constant="72" id="imE-GD-cZq"/>
                                                 <constraint firstAttribute="trailing" secondItem="MM2-8B-X9t" secondAttribute="trailing" id="nru-Rk-8dv"/>
@@ -760,6 +798,7 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
+                                            <outlet property="commentsButton" destination="MWX-9J-S3g" id="Zve-Ft-rcw"/>
                                             <outlet property="downvoteButton" destination="zJG-5Q-vfp" id="7ZL-yn-CfN"/>
                                             <outlet property="pointsLabel" destination="frK-dD-88u" id="YU6-ha-zaF"/>
                                             <outlet property="previewImageView" destination="MM2-8B-X9t" id="FRg-O1-cQK"/>
@@ -1932,7 +1971,7 @@
         <!--Comments-->
         <scene sceneID="mnh-gL-iCD">
             <objects>
-                <viewController title="Comments" automaticallyAdjustsScrollViewInsets="NO" id="22L-dv-H0B" customClass="CommentsViewController" customModule="Storytime" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CommentsViewController" title="Comments" automaticallyAdjustsScrollViewInsets="NO" id="22L-dv-H0B" customClass="CommentsViewController" customModule="Storytime" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="RVc-pz-jra"/>
                         <viewControllerLayoutGuide type="bottom" id="Ron-Bt-vkG"/>
@@ -3100,6 +3139,6 @@
         <image name="video_icon.png" width="256" height="256"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ZfJ-zs-kTV"/>
+        <segue reference="gzv-Hc-Qwl"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -14,12 +14,14 @@ protocol RankingTableViewCellDelegate{
     func displayLoginViewController()
     func displayCreateProfileViewController()
     func displayUserProfileView(user : PFUser)
+    func displayCommentsViewFor(story : PFObject)
 }
 
 class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
     
     var delegate : RankingTableViewCellDelegate?
 
+    @IBOutlet weak var commentsButton: UIButton!
     @IBOutlet weak var rankLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var previewImageView: UIImageView!
@@ -49,6 +51,9 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
         
         titleView.layer.cornerRadius = 10
         titleView.clipsToBounds = true
+        
+        commentsButton.layer.cornerRadius = 10
+        commentsButton.clipsToBounds = true
         
         profileImageView.layer.cornerRadius = 31
         profileImageView.layer.borderWidth = 2
@@ -187,4 +192,9 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
     }
     
 
+    @IBAction func commentsButtonWasTapped(sender: AnyObject) {
+        
+        self.delegate?.displayCommentsViewFor(self.story!)
+
+    }
 }

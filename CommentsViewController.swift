@@ -220,7 +220,12 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                     cell.delegate = self
                     cell.comment = comment
                     cell.eventTextLabel.text = comment!["text"] as? String
-                    cell.timestampLabel.text = timeSinceTimeStamp(comment!.createdAt)
+                    if comment!.createdAt == nil {
+                            cell.timestampLabel.text = "0s ago"
+                    } else {
+                        cell.timestampLabel.text = timeSinceTimeStamp(comment!.createdAt)
+                    }
+                    
                     var commentUser : PFUser = comment!["user"] as PFUser
                     commentUser.fetchIfNeeded()
                     if commentUser["profileName"] != nil {
@@ -260,7 +265,11 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                     cell.minimizeDeleteButton()
                     cell.delegate = self
                     cell.comment = comment
-                    cell.timestampLabel.text = timeSinceTimeStamp(comment!.createdAt)
+                    if comment!.createdAt == nil {
+                        cell.timestampLabel.text = "0s ago"
+                    } else {
+                        cell.timestampLabel.text = timeSinceTimeStamp(comment!.createdAt)
+                    }
                     let userImageFile = comment!["image"] as PFFile
                     userImageFile.getDataInBackgroundWithBlock {
                         (imageData: NSData!, error: NSError!) -> Void in
@@ -313,7 +322,11 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                         cell.playerLayer!.removeFromSuperlayer()
                     }
                     
-                    cell.timestampLabel.text = timeSinceTimeStamp(comment!.createdAt)
+                    if comment!.createdAt == nil {
+                        cell.timestampLabel.text = "0s ago"
+                    } else {
+                        cell.timestampLabel.text = timeSinceTimeStamp(comment!.createdAt)
+                    }
                     
                     let videoFile = comment!["video"] as PFFile
                     videoFile.getDataInBackgroundWithBlock {
@@ -644,6 +657,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             (view as UIView).hidden = true
             textContainer.hidden = false
         }
+        self.createTextView.becomeFirstResponder()
     }
     
     @IBAction func cameraButtonWasTapped(sender: AnyObject) {
@@ -845,16 +859,17 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             comment["user"] = PFUser.currentUser()
         }
         comment["image"] = imageFile
+        var temporaryCommentsArray = NSMutableArray(array: self.comments)
+        temporaryCommentsArray.insertObject(comment, atIndex: 0)
+        self.comments = temporaryCommentsArray
+        self.commentsTableView.reloadData()
         comment.saveInBackgroundWithBlock({
             (success: Bool, error: NSError!) -> Void in
             if (success) {
                 // The object has been saved.
                 println("Event successfully saved")
                 self.vision.stopPreview()
-                var temporaryCommentsArray = NSMutableArray(array: self.comments)
-                temporaryCommentsArray.insertObject(comment, atIndex: 0)
-                self.comments = temporaryCommentsArray
-                self.commentsTableView.reloadData()
+                
 
             } else {
                 // There was a problem, check error.description
@@ -1082,17 +1097,17 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             comment["user"] = PFUser.currentUser()
         }
         comment["video"] = videoFile
-        
+        var temporaryCommentsArray = NSMutableArray(array: self.comments)
+        temporaryCommentsArray.insertObject(comment, atIndex: 0)
+        self.comments = temporaryCommentsArray
+        self.commentsTableView.reloadData()
         comment.saveInBackgroundWithBlock({
             (success: Bool, error: NSError!) -> Void in
             if (success) {
                 // The object has been saved.
                 println("Comment successfully saved")
                 self.vision.stopPreview()
-                var temporaryCommentsArray = NSMutableArray(array: self.comments)
-                temporaryCommentsArray.insertObject(comment, atIndex: 0)
-                self.comments = temporaryCommentsArray
-                self.commentsTableView.reloadData()
+                
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the comment: \(error.description)")
@@ -1177,6 +1192,10 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             comment["user"] = PFUser.currentUser()
         }
         comment["text"] = self.createTextView.text
+        var temporaryCommentsArray = NSMutableArray(array: self.comments)
+        temporaryCommentsArray.insertObject(comment, atIndex: 0)
+        self.comments = temporaryCommentsArray
+        self.commentsTableView.reloadData()
         
         comment.saveInBackgroundWithBlock({
             (success: Bool, error: NSError!) -> Void in
@@ -1189,10 +1208,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                     self.story!.saveInBackground()
                 }
                 self.createTextView.text = ""
-                var temporaryCommentsArray = NSMutableArray(array: self.comments)
-                temporaryCommentsArray.insertObject(comment, atIndex: 0)
-                self.comments = temporaryCommentsArray
-                self.commentsTableView.reloadData()
+                
                 
             } else {
                 // There was a problem, check error.description

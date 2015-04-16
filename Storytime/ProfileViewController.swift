@@ -138,6 +138,10 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                     cell.pointsLabel.text = "\(points)"
                 }
                 
+                if story!["commentsCount"] != nil {
+                    var commentsCount = story!["commentsCount"] as Int
+                    cell.commentsButton.setTitle("  \(commentsCount) Comments  ", forState: UIControlState.Normal)
+                }
                 
                 
                 
@@ -430,6 +434,14 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
         }
         
+    }
+    
+    func displayCommentsViewFor(story: PFObject) {
+        var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
+        storyVC.story = story
+        storyVC.storyCreated = true
+        navigationController?.pushViewController(storyVC, animated: true)
+        storyVC.displayStoryComments()
     }
 
 }
