@@ -8,6 +8,9 @@
 
 import UIKit
 import CoreData
+import Fabric
+import Crashlytics
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,7 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        
+        Fabric.with([Crashlytics()])
+
         Parse.setApplicationId("N1IU3qQJhUOkP2E93hNyISSrJu0uUsMsFjmG23bO", clientKey: "RQO2yFnxsSKsMRzUcPzhqvgGx438fzJhBFB2Jgin")
         PFFacebookUtils.initializeFacebook()
         PFTwitterUtils.initializeWithConsumerKey("C32fxiLVtibIsevg8HT2cDVpw", consumerSecret: "QDWMrdBILOAEtAGbzzVKTHGszf5V96kxsFYEGqAZCR8lhdq15a")

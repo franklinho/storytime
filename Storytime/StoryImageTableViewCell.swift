@@ -13,17 +13,21 @@ protocol StoryImageTableViewCellDelegate{
 }
 
 class StoryImageTableViewCell: UITableViewCell {
+    var deleteButtonExpanded = false
     var comment : PFObject?
     var delegate : StoryVideoTableViewCellDelegate?
     @IBOutlet weak var timestampView: UIView!
     @IBOutlet weak var timestampLabel: UILabel!
     
+    @IBOutlet weak var deleteButtonWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var userNameButton: UIButton!
     @IBOutlet weak var profileImageView: UIImageView!
 
+    @IBOutlet weak var deleteButton: UIButton!
 
     @IBOutlet weak var eventImageView: UIImageView!
     
+    @IBOutlet weak var deleteDismissButton: UIButton!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -41,6 +45,11 @@ class StoryImageTableViewCell: UITableViewCell {
             userNameButton.layer.cornerRadius = 10
             userNameButton.clipsToBounds = true
         }
+        
+        if deleteButton != nil {
+            deleteButton.layer.cornerRadius = 22
+            deleteButton.clipsToBounds = true
+        }
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
@@ -52,5 +61,33 @@ class StoryImageTableViewCell: UITableViewCell {
     @IBAction func showUserProfileWasTapped(sender: AnyObject) {
         self.delegate?.displayUserProfileView(self.comment!["user"] as PFUser)
     }
+    @IBAction func deleteButtonWasTapped(sender: AnyObject) {
+        if deleteButtonExpanded == false {
+            self.contentView.layoutIfNeeded()
+            self.deleteButtonWidthConstraint.constant = 132
+            UIView.animateWithDuration(0.3, animations: {
+                self.contentView.layoutIfNeeded()
+                }, completion: {
+                    (value: Bool) in
+                    self.deleteButton.backgroundColor = UIColor(red: 255.0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 0.75)
+                    self.deleteButtonExpanded = true
+                    self.deleteButton.setTitle("Delete", forState: UIControlState.Normal)
+                    self.deleteDismissButton.enabled = true
+            })
+        }
+    }
 
+    @IBAction func deleteDismissButtonWasTapped(sender: AnyObject) {
+        self.deleteButton.setTitle("X", forState: UIControlState.Normal)
+        self.contentView.layoutIfNeeded()
+        self.deleteButtonWidthConstraint.constant = 44
+        UIView.animateWithDuration(0.3, animations: {
+            self.contentView.layoutIfNeeded()
+            }, completion: {
+                (value: Bool) in
+                self.deleteButton.backgroundColor = UIColor(red: 85.0/255.0, green: 85.0/255.0, blue: 85.0/255.0, alpha: 0.75)
+                self.deleteButtonExpanded = false
+                self.deleteDismissButton.enabled = false
+        })
+    }
 }

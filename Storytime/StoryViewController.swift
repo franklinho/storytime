@@ -14,6 +14,7 @@ import MediaPlayer
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate {
     
   
+    @IBOutlet weak var profileImageButton: UIButton!
     @IBOutlet weak var commentsButton: UIButton!
     @IBOutlet var userTapGestureRecognizer: UITapGestureRecognizer!
     @IBOutlet weak var createTitleViewTopConstraint: NSLayoutConstraint!
@@ -538,8 +539,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func createTextEvent() {
         self.upVoteButton.enabled = true
         self.downVoteButton.enabled = true
-        self.userTapGestureRecognizer.enabled = false
-        self.commentsButton.enabled = false
+        self.userTapGestureRecognizer.enabled = true
+        self.commentsButton.enabled = true
+        self.profileImageButton.enabled = true
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "text"
         event["storyObject"] = self.story!
@@ -909,8 +911,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func createVideoEvent(videoFile : PFFile) {
         self.upVoteButton.enabled = true
         self.downVoteButton.enabled = true
-        self.userTapGestureRecognizer.enabled = false
-        self.commentsButton.enabled = false
+        self.userTapGestureRecognizer.enabled = true
+        self.commentsButton.enabled = true
+        self.profileImageButton.enabled = true
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "video"
         event["storyObject"] = self.story!
@@ -1046,8 +1049,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func createPhotoEvent(imageFile : PFFile) {
         self.upVoteButton.enabled = true
         self.downVoteButton.enabled = true
-        self.userTapGestureRecognizer.enabled = false
-        self.commentsButton.enabled = false
+        self.userTapGestureRecognizer.enabled = true
+        self.commentsButton.enabled = true
+        self.profileImageButton.enabled = true
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "photo"
         event["storyObject"] = self.story!
@@ -1090,6 +1094,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             (success: Bool, error: NSError!) -> Void in
             if (success) {
                 println("Image successfully uploaded")
+
             } else {
                 println("There was an error saving the image file: \(error.description)")
                 self.progressView.hidden = true
@@ -1657,6 +1662,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.downVoteButton.enabled = false
                 self.userTapGestureRecognizer.enabled = false
                 self.commentsButton.enabled = false
+                self.profileImageButton.enabled = false
                 
                 
                 self.createButton!.enabled = true
