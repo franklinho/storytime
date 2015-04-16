@@ -141,6 +141,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 if story!["commentsCount"] != nil {
                     var commentsCount = story!["commentsCount"] as Int
                     cell.commentsButton.setTitle("  \(commentsCount) Comments  ", forState: UIControlState.Normal)
+                } else {
+                    cell.commentsButton.setTitle("  0 Comments  ", forState: UIControlState.Normal)
                 }
                 
                 
