@@ -314,7 +314,7 @@
                                 <action selector="logOutButtonWasTapped:" destination="vXZ-lx-hvc" id="Jw8-70-DAh"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="+" id="vSc-ku-Gmx">
+                        <barButtonItem key="rightBarButtonItem" title="+ Story" id="vSc-ku-Gmx">
                             <connections>
                                 <action selector="newStoryButtonWasTapped:" destination="vXZ-lx-hvc" id="dUZ-yu-M64"/>
                             </connections>
