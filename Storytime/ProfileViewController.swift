@@ -32,7 +32,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         
         profileImageView.layer.cornerRadius = 50
-        profileImageView.layer.borderColor = UIColor.darkGrayColor().CGColor
+        profileImageView.layer.borderColor = UIColor.whiteColor().CGColor
         profileImageView.layer.borderWidth = 4
         profileImageView.clipsToBounds = true
         
