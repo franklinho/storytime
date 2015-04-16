@@ -851,16 +851,20 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 // The object has been saved.
                 println("Event successfully saved")
                 self.vision.stopPreview()
-                self.refreshCommentsForStory()
+                var temporaryCommentsArray = NSMutableArray(array: self.comments)
+                temporaryCommentsArray.insertObject(comment, atIndex: 0)
+                self.comments = temporaryCommentsArray
+                self.commentsTableView.reloadData()
+
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the event: \(error.description)")
             }
         })
-        if self.story!["commentsCount"] == nil {
-            self.story!["commentsCount"] = 1
-        } else {
+        if self.story!["commentsCount"] != nil {
             self.story!["commentsCount"] = self.story!["commentsCount"] as Int + 1
+        } else {
+            self.story!["commentsCount"] = 1
         }
         self.story!.saveInBackground()
         
@@ -1085,17 +1089,20 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 // The object has been saved.
                 println("Comment successfully saved")
                 self.vision.stopPreview()
-                self.refreshCommentsForStory()
+                var temporaryCommentsArray = NSMutableArray(array: self.comments)
+                temporaryCommentsArray.insertObject(comment, atIndex: 0)
+                self.comments = temporaryCommentsArray
+                self.commentsTableView.reloadData()
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the comment: \(error.description)")
             }
         })
         
-        if self.story!["commentsCount"] == nil {
-            self.story!["commentsCount"] = 1
-        } else {
+        if self.story!["commentsCount"] != nil {
             self.story!["commentsCount"] = self.story!["commentsCount"] as Int + 1
+        } else {
+            self.story!["commentsCount"] = 1
         }
         self.story!.saveInBackground()
         self.noCommentsLabel.hidden = true
@@ -1170,6 +1177,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             comment["user"] = PFUser.currentUser()
         }
         comment["text"] = self.createTextView.text
+        
         comment.saveInBackgroundWithBlock({
             (success: Bool, error: NSError!) -> Void in
             if (success) {
@@ -1181,7 +1189,10 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                     self.story!.saveInBackground()
                 }
                 self.createTextView.text = ""
-                self.refreshCommentsForStory()
+                var temporaryCommentsArray = NSMutableArray(array: self.comments)
+                temporaryCommentsArray.insertObject(comment, atIndex: 0)
+                self.comments = temporaryCommentsArray
+                self.commentsTableView.reloadData()
                 
             } else {
                 // There was a problem, check error.description
@@ -1189,10 +1200,10 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             }
         })
         
-        if self.story!["commentsCount"] == nil {
-            self.story!["commentsCount"] = 1
-        } else {
+        if self.story!["commentsCount"] != nil {
             self.story!["commentsCount"] = self.story!["commentsCount"] as Int + 1
+        } else {
+            self.story!["commentsCount"] = 1
         }
         self.story!.saveInBackground()
         self.noCommentsLabel.hidden = true

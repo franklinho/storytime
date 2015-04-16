@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Storytime/StoryViewController.swift"
-            timestampString = "450910442.93834"
+            timestampString = "450917003.520492"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1011"
-            endingLineNumber = "1011"
+            startingLineNumber = "1020"
+            endingLineNumber = "1020"
             landmarkName = "saveVideoEvent()"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Storytime/StoryViewController.swift"
-            timestampString = "450910442.93834"
+            timestampString = "450917003.520492"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1763"
-            endingLineNumber = "1763"
+            startingLineNumber = "1776"
+            endingLineNumber = "1776"
             landmarkName = "deleteCell(_:)"
             landmarkType = "5">
          </BreakpointContent>

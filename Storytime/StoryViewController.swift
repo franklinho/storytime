@@ -91,6 +91,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if newStory == true {
             self.title = "New Story"
             self.storyTableView.hidden = true
+            self.titleTextField.becomeFirstResponder()
             
         } else {
             if self.story != nil {
@@ -99,7 +100,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         createView.hidden = true
-        createTitleViewTopConstraint.constant = CGFloat(screenSize.height)/2 - CGFloat(createTitleView.bounds.height)
+        createTitleViewTopConstraint.constant = CGFloat(screenSize.height)/2 - CGFloat(createTitleView.bounds.height)*2
         profileTabBarItem = self.tabBarController?.tabBar.items?[1] as UITabBarItem
         
         self.storyTableView.tableHeaderView = UIView(frame: CGRectMake(0.0, 0.0, self.storyTableView.bounds.size.width, 0.01))
@@ -587,6 +588,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.userTapGestureRecognizer.enabled = true
         self.commentsButton.enabled = true
         self.profileImageButton.enabled = true
+        self.createButton!.enabled = true
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "text"
         event["storyObject"] = self.story!
@@ -605,7 +607,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.story!.saveInBackground()
                 }
                 self.createTextView.text = ""
-                self.refreshEventsForStory()
+                var temporaryCommentsArray = NSMutableArray(array: self.events)
+                temporaryCommentsArray.insertObject(event, atIndex: 0)
+                self.events = temporaryCommentsArray
+                self.storyTableView.reloadData()
                 
             } else {
                 // There was a problem, check error.description
@@ -967,6 +972,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.userTapGestureRecognizer.enabled = true
         self.commentsButton.enabled = true
         self.profileImageButton.enabled = true
+        self.createButton!.enabled = true
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "video"
         event["storyObject"] = self.story!
@@ -997,7 +1003,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         
                     }
                 }
-                self.refreshEventsForStory()
+                var temporaryCommentsArray = NSMutableArray(array: self.events)
+                temporaryCommentsArray.insertObject(event, atIndex: 0)
+                self.events = temporaryCommentsArray
+                self.storyTableView.reloadData()
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the event: \(error.description)")
@@ -1106,6 +1115,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.userTapGestureRecognizer.enabled = true
         self.commentsButton.enabled = true
         self.profileImageButton.enabled = true
+        self.createButton!.enabled = true
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "photo"
         event["storyObject"] = self.story!
@@ -1123,7 +1133,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.story!["thumbnailImage"] = imageFile
                     self.story!.save()
                 }
-                self.refreshEventsForStory()
+                var temporaryCommentsArray = NSMutableArray(array: self.events)
+                temporaryCommentsArray.insertObject(event, atIndex: 0)
+                self.events = temporaryCommentsArray
+                self.storyTableView.reloadData()
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the event: \(error.description)")
@@ -1720,7 +1733,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.profileImageButton.enabled = false
                 
                 
-                self.createButton!.enabled = true
+                self.createButton!.enabled = false
                 self.expandCreateView()
         })
         
