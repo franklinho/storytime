@@ -11,7 +11,7 @@ import AVFoundation
 import MediaPlayer
 
 
-class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate {
+class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate {
     
   
     @IBOutlet weak var noEventsLabel: UILabel!
@@ -43,7 +43,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var creatingEvent = false
     var createViewExpanded = false
     var createButton :UIBarButtonItem?
+    var settingsButton :UIBarButtonItem?
     var refreshControl : UIRefreshControl!
+    var settingsActionSheet : UIActionSheet = UIActionSheet()
     
     var currentOffset = 0
     var maxReached = false
@@ -88,6 +90,15 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        settingsActionSheet.delegate = self
+        settingsActionSheet.addButtonWithTitle("Add Authors")
+        settingsActionSheet.addButtonWithTitle("Delete Story")
+        settingsActionSheet.addButtonWithTitle("Cancel")
+        settingsActionSheet.destructiveButtonIndex = 1
+        settingsActionSheet.cancelButtonIndex = 2
+        settingsActionSheet.actionSheetStyle = UIActionSheetStyle.Automatic
+        
         if newStory == true {
             self.title = "New Story"
             self.storyTableView.hidden = true
@@ -112,7 +123,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         updateVotingLabels()
         
-        createButton = UIBarButtonItem(title: "+ Event", style: .Plain, target: self, action: "createButtonWasTapped")
+        
         
         if self.story != nil {
             if story!["points"] != nil {
@@ -141,8 +152,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         createViewHeightConstraint.constant = self.view.bounds.width + 46
         
         
+        createButton = UIBarButtonItem(title: "+ Event", style: .Plain, target: self, action: "createButtonWasTapped")
+        settingsButton = UIBarButtonItem(image: UIImage(named: "gearIcon"), style: .Plain, target: self, action: "settingsButtonWasTapped")
+        self.navigationItem.rightBarButtonItems = [ createButton!,settingsButton!]
         
-        self.navigationItem.rightBarButtonItem = createButton
+        
         if newStory == false {
             self.storyTitleLabel.text = self.story!["title"] as? String
             if story!["points"] != nil {
@@ -179,8 +193,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 println("Story user is \(storyUser.username) and current user is \(currentUser.username)")
                 if  storyUser.username == currentUser.username {
                     createButton!.enabled = true
+                    settingsButton!.enabled = true
                 } else {
                     createButton!.enabled = false
+                    settingsButton!.enabled = false
                 }
             }
         } else {
@@ -190,6 +206,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             titleView.hidden = true
             createTitleView.hidden = false
             createButton!.enabled = false
+            settingsButton!.enabled = false
 //            createButton!.title = "X"
 //            createViewExpanded = true
         }
@@ -527,8 +544,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.createView.hidden = false
                 if self.newStory != true {
                     self.createButton!.enabled = true
+                    self.settingsButton!.enabled = true
                 } else {
                     self.createButton!.enabled = false
+                    self.settingsButton!.enabled = false
                 }
                 self.createButton!.title = "Cancel"
                 self.createViewExpanded = true            })
@@ -572,8 +591,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 if  storyUser.username == currentUser.username {
                     createButton!.enabled = true
+                    settingsButton!.enabled = true
                 } else {
                     createButton!.enabled = false
+                    settingsButton!.enabled = false
                 }
             }
             
@@ -619,6 +640,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.commentsButton.enabled = true
         self.profileImageButton.enabled = true
         self.createButton!.enabled = true
+        self.settingsButton!.enabled = true
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "text"
         event["storyObject"] = self.story!
@@ -1006,6 +1028,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.commentsButton.enabled = true
         self.profileImageButton.enabled = true
         self.createButton!.enabled = true
+        self.settingsButton!.enabled = true
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "video"
         event["storyObject"] = self.story!
@@ -1149,6 +1172,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.commentsButton.enabled = true
         self.profileImageButton.enabled = true
         self.createButton!.enabled = true
+        self.settingsButton!.enabled = true
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "photo"
         event["storyObject"] = self.story!
@@ -1767,6 +1791,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 
                 self.createButton!.enabled = false
+                self.settingsButton!.enabled = false
                 self.expandCreateView()
         })
         
@@ -1830,6 +1855,39 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if events.count == 0 {
             noEventsLabel.hidden = false
+        }
+    }
+    
+    func settingsButtonWasTapped() {
+        settingsActionSheet.showInView(self.view)
+        
+        
+    }
+    
+    func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
+        if (buttonIndex == 0) {
+            println("Add authors button tapped")
+        } else if (buttonIndex == 1) {
+            println("Delete story button tapped")
+            
+            var deleteAlertView = UIAlertView(title: "Delete Story", message: "Are you sure you want to delete this story?", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Delete")
+            deleteAlertView.show()
+        } else {
+            println("Cancel button tapped")
+        }
+    }
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if (buttonIndex == 0) {
+            println("Cancel button tapped")
+        } else {
+            println("Delete button tapped")
+            if self.story != nil {
+                self.story!.deleteInBackground()
+                self.navigationController?.popToRootViewControllerAnimated(true)
+                var rootViewController = self.navigationController?.viewControllers[0] as RankingViewController
+                rootViewController.refreshStories()
+            }
         }
     }
     
