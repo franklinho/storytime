@@ -356,15 +356,21 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
                     }
                     if PFUser.currentUser() != nil {
-                        var eventUser = event!["user"] as PFUser
-                        eventUser.fetchIfNeeded()
-                        var currentUser = PFUser.currentUser()
-                        println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
-                        if  eventUser.username == currentUser.username {
-                            cell.deleteButton!.hidden = false
+                        if event!["user"] != nil {
+                            var eventUser = event!["user"] as PFUser
+                            eventUser.fetchIfNeeded()
+                            var currentUser = PFUser.currentUser()
+                            currentUser.fetchIfNeeded()
+                            println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
+                            if  eventUser.username == currentUser.username {
+                                cell.deleteButton!.hidden = false
+                            } else {
+                                cell.deleteButton!.hidden = true
+                            }
                         } else {
                             cell.deleteButton!.hidden = true
                         }
+                        
                     } else {
                         cell.deleteButton!.hidden = true
                     }
@@ -388,15 +394,21 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                     
                     if PFUser.currentUser() != nil {
-                        var eventUser = event!["user"] as PFUser
-                        eventUser.fetchIfNeeded()
-                        var currentUser = PFUser.currentUser()
-                        println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
-                        if  eventUser.username == currentUser.username {
-                            cell.deleteButton!.hidden = false
+                        if event!["user"] != nil {
+                            var eventUser = event!["user"] as PFUser
+                            eventUser.fetchIfNeeded()
+                            var currentUser = PFUser.currentUser()
+                            currentUser.fetchIfNeeded()
+                            println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
+                            if  eventUser.username == currentUser.username {
+                                cell.deleteButton!.hidden = false
+                            } else {
+                                cell.deleteButton!.hidden = true
+                            }
                         } else {
                             cell.deleteButton!.hidden = true
                         }
+                        
                     } else {
                         cell.deleteButton!.hidden = true
                     }
@@ -455,15 +467,21 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                     
                     if PFUser.currentUser() != nil {
-                        var eventUser = event!["user"] as PFUser
-                        eventUser.fetchIfNeeded()
-                        var currentUser = PFUser.currentUser()
-                        println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
-                        if  eventUser.username == currentUser.username {
-                            cell.deleteButton!.hidden = false
+                        if event!["user"] != nil {
+                            var eventUser = event!["user"] as PFUser
+                            eventUser.fetchIfNeeded()
+                            var currentUser = PFUser.currentUser()
+                            currentUser.fetchIfNeeded()
+                            println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
+                            if  eventUser.username == currentUser.username {
+                                cell.deleteButton!.hidden = false
+                            } else {
+                                cell.deleteButton!.hidden = true
+                            }
                         } else {
                             cell.deleteButton!.hidden = true
                         }
+                        
                     } else {
                         cell.deleteButton!.hidden = true
                     }
