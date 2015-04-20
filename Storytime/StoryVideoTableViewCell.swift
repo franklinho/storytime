@@ -115,5 +115,23 @@ class StoryVideoTableViewCell: UITableViewCell {
         }
     }
     
+    override func prepareForReuse() {
+        self.timestampLabel.text = "0s ago"
+        if self.userNameButton != nil {
+            self.userNameButton.setTitle("", forState: UIControlState.Normal)
+        }
+        self.deleteButton.hidden = true
+        self.minimizeDeleteButton()
+        if self.profileImageView != nil {
+            self.profileImageView.image = UIImage(named: "user_icon_scaled_white.png")
+        }
+        if self.playerLayer != nil {
+            self.playerLayer!.removeFromSuperlayer()
+        }
+        
+    }
+    
+    
+    
 
 }

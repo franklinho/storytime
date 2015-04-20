@@ -216,105 +216,22 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 comment = comments[indexPath.row] as PFObject
                 if comment!["type"] as NSString == "text" {
                     var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentTextTableViewCell") as StoryTextTableViewCell
-                    cell.minimizeDeleteButton()
+                    cell.prepareForReuse()
                     cell.delegate = self
                     cell.comment = comment
-                    cell.eventTextLabel.text = comment!["text"] as? String
-                    if comment!.createdAt == nil {
-                            cell.timestampLabel.text = "0s ago"
-                    } else {
-                        cell.timestampLabel.text = timeSinceTimeStamp(comment!.createdAt)
-                    }
-                    
-                    var commentUser : PFUser = comment!["user"] as PFUser
-                    commentUser.fetchIfNeeded()
-                    if commentUser["profileName"] != nil {
-                        var profileName : String = commentUser["profileName"] as String
-                        cell.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
-                        cell.userNameButton.hidden = false
-                    }
-                    if commentUser["profileImage"] != nil {
-                        var profileImageFile = commentUser["profileImage"] as PFFile
-                        profileImageFile.getDataInBackgroundWithBlock {
-                            (imageData: NSData!, error: NSError!) -> Void in
-                            if error == nil {
-                                let image = UIImage(data:imageData)
-                                cell.profileImageView.image = image
-                                cell.profileImageView.hidden = false
-                            }
-                        }
-                    }
-                    
-                    if PFUser.currentUser() != nil {
-                        var commentUser = comment!["user"] as PFUser
-                        commentUser.fetchIfNeeded()
-                        var currentUser = PFUser.currentUser()
-                        println("Comment user is \(commentUser.username) and current user is \(currentUser.username)")
-                        if  commentUser.username == currentUser.username {
-                            cell.deleteButton!.hidden = false
-                        } else {
-                            cell.deleteButton!.hidden = true
-                        }
-                    } else {
-                        cell.deleteButton!.hidden = true
-                    }
+                    cell.populateCellWithComment(comment!)
                     
                     return cell
                 } else if comment!["type"] as String == "photo" {
                     var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentImageTableViewCell") as StoryImageTableViewCell
-                    cell.minimizeDeleteButton()
+                    cell.prepareForReuse()
                     cell.delegate = self
                     cell.comment = comment
-                    if comment!.createdAt == nil {
-                        cell.timestampLabel.text = "0s ago"
-                    } else {
-                        cell.timestampLabel.text = timeSinceTimeStamp(comment!.createdAt)
-                    }
-                    let userImageFile = comment!["image"] as PFFile
-                    userImageFile.getDataInBackgroundWithBlock {
-                        (imageData: NSData!, error: NSError!) -> Void in
-                        if error == nil {
-                            let image = UIImage(data:imageData)
-                            cell.eventImageView.image = image
-                        }
-                    }
-                    var commentUser : PFUser = comment!["user"] as PFUser
-                    commentUser.fetchIfNeeded()
-                    if commentUser["profileName"] != nil {
-                        var profileName : String = commentUser["profileName"] as String
-                        cell.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
-                        cell.userNameButton.hidden = false
-                    }
-                    if commentUser["profileImage"] != nil {
-                        var profileImageFile = commentUser["profileImage"] as PFFile
-                        profileImageFile.getDataInBackgroundWithBlock {
-                            (imageData: NSData!, error: NSError!) -> Void in
-                            if error == nil {
-                                let image = UIImage(data:imageData)
-                                cell.profileImageView.image = image
-                                cell.profileImageView.hidden = false
-                            }
-                        }
-                    }
-                    
-                    if PFUser.currentUser() != nil {
-                        var commentUser = comment!["user"] as PFUser
-                        commentUser.fetchIfNeeded()
-                        var currentUser = PFUser.currentUser()
-                        println("Comment user is \(commentUser.username) and current user is \(currentUser.username)")
-                        if  commentUser.username == currentUser.username {
-                            cell.deleteButton!.hidden = false
-                        } else {
-                            cell.deleteButton!.hidden = true
-                        }
-                    } else {
-                        cell.deleteButton!.hidden = true
-                    }
-                    
+                    cell.populateCellWithComment(comment!)
                     return cell
                 } else {
                     var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentVideoTableViewCell") as StoryVideoTableViewCell
-                    cell.minimizeDeleteButton()
+                    cell.prepareForReuse()
                     cell.delegate = self
                     cell.comment = comment
                     
@@ -366,37 +283,36 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                     }
                     
                     var commentUser : PFUser = comment!["user"] as PFUser
-                    commentUser.fetchIfNeeded()
-                    if commentUser["profileName"] != nil {
-                        var profileName : String = commentUser["profileName"] as String
-                        cell.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
-                        cell.userNameButton.hidden = false
-                    }
-                    if commentUser["profileImage"] != nil {
-                        var profileImageFile = commentUser["profileImage"] as PFFile
-                        profileImageFile.getDataInBackgroundWithBlock {
-                            (imageData: NSData!, error: NSError!) -> Void in
-                            if error == nil {
-                                let image = UIImage(data:imageData)
-                                cell.profileImageView.image = image
-                                cell.profileImageView.hidden = false
+                    commentUser.fetchIfNeededInBackgroundWithBlock {
+                        (post: PFObject!, error: NSError!) -> Void in
+                        if commentUser["profileName"] != nil {
+                            var profileName : String = commentUser["profileName"] as String
+                            cell.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
+                            cell.userNameButton.hidden = false
+                        }
+                        if commentUser["profileImage"] != nil {
+                            var profileImageFile = commentUser["profileImage"] as PFFile
+                            profileImageFile.getDataInBackgroundWithBlock {
+                                (imageData: NSData!, error: NSError!) -> Void in
+                                if error == nil {
+                                    let image = UIImage(data:imageData)
+                                    cell.profileImageView.image = image
+                                    cell.profileImageView.hidden = false
+                                }
                             }
                         }
                         
-                    }
-                    
-                    if PFUser.currentUser() != nil {
-                        var commentUser = comment!["user"] as PFUser
-                        commentUser.fetchIfNeeded()
-                        var currentUser = PFUser.currentUser()
-                        println("Comment user is \(commentUser.username) and current user is \(currentUser.username)")
-                        if  commentUser.username == currentUser.username {
-                            cell.deleteButton!.hidden = false
+                        if PFUser.currentUser() != nil {
+                            var currentUser = PFUser.currentUser()
+                            println("Comment user is \(commentUser.username) and current user is \(currentUser.username)")
+                            if  commentUser.username == currentUser.username {
+                                cell.deleteButton!.hidden = false
+                            } else {
+                                cell.deleteButton!.hidden = true
+                            }
                         } else {
                             cell.deleteButton!.hidden = true
                         }
-                    } else {
-                        cell.deleteButton!.hidden = true
                     }
                     return cell
                     

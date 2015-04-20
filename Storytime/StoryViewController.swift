@@ -364,81 +364,25 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 event = events[indexPath.row] as PFObject
                 if event!["type"] as NSString == "text" {
                     var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryTextTableViewCell") as StoryTextTableViewCell
+                    cell.prepareForReuse()
                     cell.delegate = self
-                    cell.minimizeDeleteButton()
-                    cell.eventTextLabel.text = event!["text"] as? String
-                    if event!.createdAt == nil {
-                        cell.timestampLabel.text = "0s ago"
-                    } else {
-                        cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
-                    }
-                    if PFUser.currentUser() != nil {
-                        if event!["user"] != nil {
-                            var eventUser = event!["user"] as PFUser
-                            eventUser.fetchIfNeeded()
-                            var currentUser = PFUser.currentUser()
-                            currentUser.fetchIfNeeded()
-                            println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
-                            if  eventUser.username == currentUser.username {
-                                cell.deleteButton!.hidden = false
-                            } else {
-                                cell.deleteButton!.hidden = true
-                            }
-                        } else {
-                            cell.deleteButton!.hidden = true
-                        }
-                        
-                    } else {
-                        cell.deleteButton!.hidden = true
-                    }
+                    cell.populateCellWithEvent(event!)
+                    
                     return cell
                 } else if event!["type"] as String == "photo" {
                     var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryImageTableViewCell") as StoryImageTableViewCell
+                    cell.prepareForReuse()
                     cell.delegate = self
-                    cell.minimizeDeleteButton()
-                    if event!.createdAt == nil {
-                        cell.timestampLabel.text = "0s ago"
-                    } else {
-                        cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
-                    }
-                    let userImageFile = event!["image"] as PFFile
-                    userImageFile.getDataInBackgroundWithBlock {
-                        (imageData: NSData!, error: NSError!) -> Void in
-                        if error == nil {
-                            let image = UIImage(data:imageData)
-                            cell.eventImageView.image = image
-                        }
-                    }
+                    cell.populateCellWithEvent(event!)
                     
-                    if PFUser.currentUser() != nil {
-                        if event!["user"] != nil {
-                            var eventUser = event!["user"] as PFUser
-                            eventUser.fetchIfNeeded()
-                            var currentUser = PFUser.currentUser()
-                            currentUser.fetchIfNeeded()
-                            println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
-                            if  eventUser.username == currentUser.username {
-                                cell.deleteButton!.hidden = false
-                            } else {
-                                cell.deleteButton!.hidden = true
-                            }
-                        } else {
-                            cell.deleteButton!.hidden = true
-                        }
-                        
-                    } else {
-                        cell.deleteButton!.hidden = true
-                    }
                     return cell
                 } else {
                     var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryVideoTableViewCell") as StoryVideoTableViewCell
-                    cell.minimizeDeleteButton()
+                    cell.prepareForReuse()
                     
                     cell.delegate = self
                     
-                    if cell.playerLayer != nil {
-                        cell.playerLayer!.removeFromSuperlayer()
-                    }
+                    
                     
                     if event!.createdAt == nil {
                         cell.timestampLabel.text = "0s ago"
@@ -486,14 +430,16 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     if PFUser.currentUser() != nil {
                         if event!["user"] != nil {
                             var eventUser = event!["user"] as PFUser
-                            eventUser.fetchIfNeeded()
-                            var currentUser = PFUser.currentUser()
-                            currentUser.fetchIfNeeded()
-                            println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
-                            if  eventUser.username == currentUser.username {
-                                cell.deleteButton!.hidden = false
-                            } else {
-                                cell.deleteButton!.hidden = true
+                            eventUser.fetchIfNeededInBackgroundWithBlock {
+                                (post: PFObject!, error: NSError!) -> Void in
+                                var currentUser = PFUser.currentUser()
+                                currentUser.fetchIfNeeded()
+                                println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
+                                if  eventUser.username == currentUser.username {
+                                    cell.deleteButton!.hidden = false
+                                } else {
+                                    cell.deleteButton!.hidden = true
+                                }
                             }
                         } else {
                             cell.deleteButton!.hidden = true
@@ -1600,9 +1546,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             timeSinceEvent = oldDateFormatter.stringFromDate(timeStamp)
         }
         
-//        let timeStampDateFormatter = NSDateFormatter()
-//        timeStampDateFormatter.dateFormat = "MM/dd/yy, HH:mm aa"
-//        self.timeStamp = timeStampDateFormatter.stringFromDate(createdTimeStamp)
         return timeSinceEvent!
 
     }

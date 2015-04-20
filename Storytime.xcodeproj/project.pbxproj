@@ -261,6 +261,33 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		DD138C7F1AE572CF00C74E8A /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				DDF06E961AD4529F007D4954 /* CreateProfileViewController.swift */,
+				DD9B26DD1AD8574600E6D3DE /* CustomLoginViewController.swift */,
+				DD9B26DF1AD8578A00E6D3DE /* CustomSignUpViewController.swift */,
+				DDF7AED51ADDEC8D0033F487 /* CommentsViewController.swift */,
+				DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */,
+				DDC93A0E1AC48E22006D4646 /* StoryViewController.swift */,
+				DDC936AD1AC47D32006D4646 /* RankingViewController.swift */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		DD138C801AE572E600C74E8A /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				DDF7AED71ADDECC70033F487 /* CommentsTableViewCell.swift */,
+				DDC93A101AC48F96006D4646 /* StoryImageTableViewCell.swift */,
+				DDC93A121AC48FA2006D4646 /* StoryTextTableViewCell.swift */,
+				DDC93A141AC48FAD006D4646 /* StoryVideoTableViewCell.swift */,
+				DDC93A161AC48FB9006D4646 /* StoryCreateTableViewCell.swift */,
+				DDC93A0C1AC48589006D4646 /* RankingTableViewCell.swift */,
+			);
+			name = TableViewCells;
+			sourceTree = "<group>";
+		};
 		DDBA72131AC5FD4800D0EC97 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -348,22 +375,11 @@
 		DDC936871AC47CAE006D4646 /* Storytime */ = {
 			isa = PBXGroup;
 			children = (
-				DDF7AED71ADDECC70033F487 /* CommentsTableViewCell.swift */,
-				DDF7AED51ADDEC8D0033F487 /* CommentsViewController.swift */,
+				DD138C801AE572E600C74E8A /* TableViewCells */,
+				DD138C7F1AE572CF00C74E8A /* View Controllers */,
 				DDC9368A1AC47CAE006D4646 /* AppDelegate.swift */,
 				DDC9368F1AC47CAE006D4646 /* ViewController.swift */,
 				DDC936911AC47CAE006D4646 /* Main.storyboard */,
-				DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */,
-				DDF06E961AD4529F007D4954 /* CreateProfileViewController.swift */,
-				DD9B26DD1AD8574600E6D3DE /* CustomLoginViewController.swift */,
-				DD9B26DF1AD8578A00E6D3DE /* CustomSignUpViewController.swift */,
-				DDC93A101AC48F96006D4646 /* StoryImageTableViewCell.swift */,
-				DDC93A121AC48FA2006D4646 /* StoryTextTableViewCell.swift */,
-				DDC93A141AC48FAD006D4646 /* StoryVideoTableViewCell.swift */,
-				DDC93A161AC48FB9006D4646 /* StoryCreateTableViewCell.swift */,
-				DDC93A0E1AC48E22006D4646 /* StoryViewController.swift */,
-				DDC936AD1AC47D32006D4646 /* RankingViewController.swift */,
-				DDC93A0C1AC48589006D4646 /* RankingTableViewCell.swift */,
 				DDC936941AC47CAE006D4646 /* Images.xcassets */,
 				DDC936961AC47CAE006D4646 /* LaunchScreen.xib */,
 				DDC9368C1AC47CAE006D4646 /* Storytime.xcdatamodeld */,

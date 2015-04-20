@@ -99,4 +99,118 @@ class StoryTextTableViewCell: UITableViewCell {
             })
         }
     }
+    
+    override func prepareForReuse() {
+        self.timestampLabel.text = "0s ago"
+        if self.userNameButton != nil {
+            self.userNameButton.setTitle("", forState: UIControlState.Normal)
+        }
+        self.deleteButton.hidden = true
+        self.minimizeDeleteButton()
+        if self.profileImageView != nil {
+            self.profileImageView.image = UIImage(named: "user_icon_scaled_white.png")
+        }
+        self.eventTextLabel.text = ""
+
+    }
+    
+    
+    func populateCellWithEvent(event: PFObject) {
+        self.eventTextLabel.text = event["text"] as? String
+        if event.createdAt == nil {
+            self.timestampLabel.text = "0s ago"
+        } else {
+            self.timestampLabel.text = timeSinceTimeStamp(event.createdAt)
+        }
+        if PFUser.currentUser() != nil {
+            if event["user"] != nil {
+                var eventUser = event["user"] as PFUser
+                eventUser.fetchIfNeededInBackgroundWithBlock {
+                    (post: PFObject!, error: NSError!) -> Void in
+                    var currentUser = PFUser.currentUser()
+                    currentUser.fetchIfNeeded()
+                    println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
+                    if  eventUser.username == currentUser.username {
+                        self.deleteButton!.hidden = false
+                    } else {
+                        self.deleteButton!.hidden = true
+                    }
+                }
+            } else {
+                self.deleteButton!.hidden = true
+            }
+            
+        } else {
+            self.deleteButton!.hidden = true
+        }
+    }
+    
+    func populateCellWithComment(comment: PFObject) {
+        self.eventTextLabel.text = comment["text"] as? String
+        if comment.createdAt == nil {
+            self.timestampLabel.text = "0s ago"
+        } else {
+            self.timestampLabel.text = timeSinceTimeStamp(comment.createdAt)
+        }
+        
+        var commentUser : PFUser = comment["user"] as PFUser
+        commentUser.fetchIfNeededInBackgroundWithBlock {
+            (post: PFObject!, error: NSError!) -> Void in
+            if commentUser["profileName"] != nil {
+                var profileName : String = commentUser["profileName"] as String
+                self.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
+                self.userNameButton.hidden = false
+            }
+            if commentUser["profileImage"] != nil {
+                var profileImageFile = commentUser["profileImage"] as PFFile
+                profileImageFile.getDataInBackgroundWithBlock {
+                    (imageData: NSData!, error: NSError!) -> Void in
+                    if error == nil {
+                        let image = UIImage(data:imageData)
+                        self.profileImageView.image = image
+                        self.profileImageView.hidden = false
+                    }
+                }
+            }
+            
+            if PFUser.currentUser() != nil {
+                var currentUser = PFUser.currentUser()
+                println("Comment user is \(commentUser.username) and current user is \(currentUser.username)")
+                if  commentUser.username == currentUser.username {
+                    self.deleteButton!.hidden = false
+                } else {
+                    self.deleteButton!.hidden = true
+                }
+            } else {
+                self.deleteButton!.hidden = true
+            }
+        }
+        
+    }
+    
+    func timeSinceTimeStamp(timeStamp : NSDate) -> String {
+        // Calculate time since tweet creation
+        var secondsBetween : NSTimeInterval = NSDate().timeIntervalSinceDate(timeStamp)
+        var numberOfMinutesDouble = secondsBetween/60 as Double
+        var numberOfMinutes : Int = Int(numberOfMinutesDouble)
+        
+        //        println("\(numberOfMinutes)")
+        
+        var timeSinceEvent : String?
+        
+        if numberOfMinutes < 60 {
+            timeSinceEvent = "\(numberOfMinutes)m ago"
+        } else if numberOfMinutes < 1440 && numberOfMinutes >= 60 {
+            var hours = Int(numberOfMinutes/60)
+            timeSinceEvent = "\(hours)h ago"
+        } else {
+            let oldDateFormatter = NSDateFormatter()
+            oldDateFormatter.dateFormat = "MM/dd/yy"
+            timeSinceEvent = oldDateFormatter.stringFromDate(timeStamp)
+        }
+        
+        return timeSinceEvent!
+        
+    }
+    
 }

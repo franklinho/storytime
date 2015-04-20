@@ -116,22 +116,25 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 cell.story = story
                 cell.titleLabel.text = story!["title"] as? String
                 var storyUser : PFUser = story!["user"] as PFUser
-                storyUser.fetchIfNeeded()
-                if storyUser["profileName"] != nil {
-                    var profileName : String = storyUser["profileName"] as String
-                    cell.userButton.setTitle(profileName, forState: UIControlState.Normal)
-                }
-                
-                if storyUser["profileImage"] != nil {
-                    var profileImageFile = storyUser["profileImage"] as PFFile
-                    profileImageFile.getDataInBackgroundWithBlock {
-                        (imageData: NSData!, error: NSError!) -> Void in
-                        if error == nil {
-                            let image = UIImage(data:imageData)
-                            cell.profileImageView.image = image
+                storyUser.fetchIfNeededInBackgroundWithBlock {
+                    (post: PFObject!, error: NSError!) -> Void in
+                    if storyUser["profileName"] != nil {
+                        var profileName : String = storyUser["profileName"] as String
+                        cell.userButton.setTitle(profileName, forState: UIControlState.Normal)
+                    }
+                    
+                    if storyUser["profileImage"] != nil {
+                        var profileImageFile = storyUser["profileImage"] as PFFile
+                        profileImageFile.getDataInBackgroundWithBlock {
+                            (imageData: NSData!, error: NSError!) -> Void in
+                            if error == nil {
+                                let image = UIImage(data:imageData)
+                                cell.profileImageView.image = image
+                            }
                         }
                     }
                 }
+                
                 
                 if story!["points"] == nil {
                     var upvotes = story!["upvotes"] as Int
