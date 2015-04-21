@@ -35,7 +35,11 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
         self.userTableView.delegate = self
         self.userTableView.dataSource = self
         if self.story != nil {
-            users = self.story!["authors"] as NSArray
+            if self.story!["authors"] != nil {
+                users = self.story!["authors"] as NSArray
+            } else {
+                users = [PFUser.currentUser()]
+            }
             userTableView.reloadData()
         }
     }
@@ -205,14 +209,21 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
             var cell = tableView.dequeueReusableCellWithIdentifier("UserTableViewCell") as UserTableViewCell
             cell.populateCellWithUser(user)
             var matchCount = 0
-            for author in self.story!["authors"] as NSArray {
-                if user.objectId == author.objectId {
-                    matchCount += 1
+            if user.objectId == (story!["user"] as PFObject).objectId {
+                cell.userAddedIndicator.hidden = false
+            } else {
+                if self.story!["authors"] != nil {
+                    for author in self.story!["authors"] as NSArray {
+                        if user.objectId == author.objectId {
+                            matchCount += 1
+                        }
+                    }
+                    if matchCount > 0 {
+                        cell.userAddedIndicator.hidden = false
+                    }
                 }
             }
-            if matchCount > 0 {
-                cell.userAddedIndicator.hidden = false
-            }
+            
             return cell
         }
         

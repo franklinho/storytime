@@ -14,6 +14,7 @@ import MediaPlayer
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate {
     
   
+    @IBOutlet weak var addAuthorButton: UIButton!
     @IBOutlet weak var addUserButtonBorderView: UIView!
     @IBOutlet weak var noEventsLabel: UILabel!
     @IBOutlet weak var profileImageButton: UIButton!
@@ -197,6 +198,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     if  storyUser.username == currentUser.username {
                         self.createButton!.enabled = true
                         self.settingsButton!.enabled = true
+                        self.addAuthorButton.hidden = false
+                        self.addUserButtonBorderView.hidden = false
                     } else if self.story!["authors"] != nil {
                         var matchCount = 0
                         for author in self.story!["authors"] as [PFObject] {
@@ -207,6 +210,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         if matchCount > 0 {
                             self.createButton!.enabled = true
                             self.settingsButton!.enabled = true
+                            self.addAuthorButton.hidden = false
+                            self.addUserButtonBorderView.hidden = false
                         } else {
                             self.createButton!.enabled = false
                             self.settingsButton!.enabled = false
@@ -531,6 +536,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 if self.newStory != true {
                     self.createButton!.enabled = true
                     self.settingsButton!.enabled = true
+                    self.addAuthorButton.hidden = false
+                    self.addUserButtonBorderView.hidden = false
                 } else {
                     self.createButton!.enabled = false
                     self.settingsButton!.enabled = false
@@ -578,6 +585,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     if  storyUser.username == currentUser.username {
                         self.createButton!.enabled = true
                         self.settingsButton!.enabled = true
+                        self.addAuthorButton.hidden = false
+                        self.addUserButtonBorderView.hidden = false
                     } else if self.story!["authors"] != nil {
                         var matchCount = 0
                         for author in self.story!["authors"] as [PFObject] {
@@ -588,6 +597,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         if matchCount > 0 {
                             self.createButton!.enabled = true
                             self.settingsButton!.enabled = true
+                            self.addAuthorButton.hidden = false
+                            self.addUserButtonBorderView.hidden = false
                         } else {
                             self.createButton!.enabled = false
                             self.settingsButton!.enabled = false
@@ -643,6 +654,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.profileImageButton.enabled = true
         self.createButton!.enabled = true
         self.settingsButton!.enabled = true
+        self.addAuthorButton.hidden = false
+        self.addUserButtonBorderView.hidden = false
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "text"
         event["storyObject"] = self.story!
@@ -1031,6 +1044,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.profileImageButton.enabled = true
         self.createButton!.enabled = true
         self.settingsButton!.enabled = true
+        self.addAuthorButton.hidden = false
+        self.addUserButtonBorderView.hidden = false
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "video"
         event["storyObject"] = self.story!
@@ -1175,6 +1190,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.profileImageButton.enabled = true
         self.createButton!.enabled = true
         self.settingsButton!.enabled = true
+        self.addAuthorButton.hidden = false
+        self.addUserButtonBorderView.hidden = false
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "photo"
         event["storyObject"] = self.story!

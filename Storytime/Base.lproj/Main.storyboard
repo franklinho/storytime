@@ -1880,14 +1880,14 @@
                                             <action selector="userLabelWasTapped:" destination="nXj-xd-FNA" eventType="touchUpInside" id="uRm-u2-gAG"/>
                                         </connections>
                                     </button>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KMT-LP-uGl">
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KMT-LP-uGl">
                                         <rect key="frame" x="188.5" y="47" width="20" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="3vZ-8F-u9z"/>
                                             <constraint firstAttribute="width" constant="20" id="CbB-Xd-UZ1"/>
                                         </constraints>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VZj-1l-COb">
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VZj-1l-COb">
                                         <rect key="frame" x="176" y="35" width="44" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="NTq-Zr-UKI"/>
@@ -2072,6 +2072,7 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="addAuthorButton" destination="VZj-1l-COb" id="ctw-TD-Nsq"/>
                         <outlet property="addUserButtonBorderView" destination="KMT-LP-uGl" id="QSG-Gx-yLN"/>
                         <outlet property="cameraContainer" destination="pTw-oo-VDa" id="gVq-u3-Ki9"/>
                         <outlet property="cameraFlashButton" destination="FUC-W5-gsg" id="M3r-Rq-Lw8"/>
