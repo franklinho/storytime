@@ -25,6 +25,7 @@
 		DD70FBD31ACF16FB0002C5CC /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD70FBD21ACF16FB0002C5CC /* Parse.framework */; };
 		DD8C82851AD5CE1E00B9A47B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */; };
 		DD8C828B1AD5D52600B9A47B /* menu_icon_white.png in Resources */ = {isa = PBXBuildFile; fileRef = DD8C828A1AD5D52600B9A47B /* menu_icon_white.png */; };
+		DD9AD1C71AE6D72F00AE7EEB /* check_icon_green.png in Resources */ = {isa = PBXBuildFile; fileRef = DD9AD1C61AE6D72F00AE7EEB /* check_icon_green.png */; };
 		DD9B26DE1AD8574600E6D3DE /* CustomLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9B26DD1AD8574600E6D3DE /* CustomLoginViewController.swift */; };
 		DD9B26E01AD8578A00E6D3DE /* CustomSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9B26DF1AD8578A00E6D3DE /* CustomSignUpViewController.swift */; };
 		DD9B26E21AD85F9800E6D3DE /* storyweave_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = DD9B26E11AD85F9800E6D3DE /* storyweave_logo.png */; };
@@ -130,6 +131,7 @@
 		DD70FBD21ACF16FB0002C5CC /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = Pods/Parse/Parse.framework; sourceTree = "<group>"; };
 		DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		DD8C828A1AD5D52600B9A47B /* menu_icon_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_icon_white.png; sourceTree = "<group>"; };
+		DD9AD1C61AE6D72F00AE7EEB /* check_icon_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check_icon_green.png; sourceTree = "<group>"; };
 		DD9B26DD1AD8574600E6D3DE /* CustomLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLoginViewController.swift; sourceTree = "<group>"; };
 		DD9B26DF1AD8578A00E6D3DE /* CustomSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSignUpViewController.swift; sourceTree = "<group>"; };
 		DD9B26E11AD85F9800E6D3DE /* storyweave_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = storyweave_logo.png; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 		DDBA72141AC5FD5B00D0EC97 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				DD9AD1C61AE6D72F00AE7EEB /* check_icon_green.png */,
 				DDF7AECF1ADDD96E0033F487 /* flash_icon_auto.png */,
 				DDF7AED01ADDD96E0033F487 /* flash_icon_on.png */,
 				DDF7AED11ADDD96E0033F487 /* flash_icon_off.png */,
@@ -565,6 +568,7 @@
 				DDC936931AC47CAE006D4646 /* Main.storyboard in Resources */,
 				DDC939E61AC47FD8006D4646 /* fontello-embedded.css in Resources */,
 				DDF06E931AD33038007D4954 /* up_icon_green.png in Resources */,
+				DD9AD1C71AE6D72F00AE7EEB /* check_icon_green.png in Resources */,
 				DDC939E71AC47FD8006D4646 /* fontello-ie7-codes.css in Resources */,
 				DDC93A091AC48268006D4646 /* OpenSans-Regular.ttf in Resources */,
 				DDC93A021AC48268006D4646 /* OpenSans-Bold.ttf in Resources */,

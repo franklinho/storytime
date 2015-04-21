@@ -104,9 +104,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             return cell
         } else {
             var cell = rankingTableView.dequeueReusableCellWithIdentifier("RankingTableViewCell") as RankingTableViewCell
-            cell.upvoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
-            cell.downvoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
-            cell.pointsLabel.textColor = UIColor.whiteColor()
+            cell.prepareForReuse()
             cell.delegate = self
             
             var story : PFObject?

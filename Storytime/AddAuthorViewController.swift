@@ -34,6 +34,10 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
         
         self.userTableView.delegate = self
         self.userTableView.dataSource = self
+        if self.story != nil {
+            users = self.story!["authors"] as NSArray
+            userTableView.reloadData()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,15 +58,25 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
                         self.displayAlreadyAddedAlert()
                     }
                 } else {
-                    
+                    var cell = self.userTableView.cellForRowAtIndexPath(indexPath) as UserTableViewCell
                     if  self.story!["authors"] == nil {
                         var invitedAuthorsDict = NSMutableDictionary()
 //                        invitedAuthorsDict[storyUserProfileName] = 1
 //                        invitedAuthorsDict[selectedUserProfileName] = 0
 //                        self.story!["invitedAuthors"] = invitedAuthorsDict as NSDictionary
                         self.story!["authors"] = [self.story!["user"], selectedUser]
-                        self.story!.saveInBackground()
-                        self.dismissViewControllerAnimated(true, completion: {})
+                        
+                        cell.userAddedIndicator.alpha = 0
+                        cell.userAddedIndicator.hidden = false
+                        UIView.animateWithDuration(0.5, animations: {
+                            cell.userAddedIndicator.alpha = 1
+                            }, completion: {
+                                (value: Bool) in
+                                self.story!.saveInBackground()
+                                self.dismissViewControllerAnimated(true, completion: {})
+                        })
+                        
+                        
 
                     } else {
                         var storyAuthors = self.story!["authors"] as NSArray
@@ -80,8 +94,16 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
                             var temporaryAuthorsArray = NSMutableArray(array: storyAuthors)
                             temporaryAuthorsArray.addObject(selectedUser)
                             self.story!["authors"] = temporaryAuthorsArray as NSArray
-                            self.story!.saveInBackground()
-                            self.dismissViewControllerAnimated(true, completion: {})
+                            cell.userAddedIndicator.alpha = 0
+                            cell.userAddedIndicator.hidden = false
+                            UIView.animateWithDuration(0.5, animations: {
+                                cell.userAddedIndicator.alpha = 1
+                                }, completion: {
+                                    (value: Bool) in
+                                    self.story!.saveInBackground()
+                                    self.dismissViewControllerAnimated(true, completion: {})
+                            })
+
                         }
                         
                     }
@@ -182,6 +204,15 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
             var user = users[indexPath.row] as PFObject
             var cell = tableView.dequeueReusableCellWithIdentifier("UserTableViewCell") as UserTableViewCell
             cell.populateCellWithUser(user)
+            var matchCount = 0
+            for author in self.story!["authors"] as NSArray {
+                if user.objectId == author.objectId {
+                    matchCount += 1
+                }
+            }
+            if matchCount > 0 {
+                cell.userAddedIndicator.hidden = false
+            }
             return cell
         }
         

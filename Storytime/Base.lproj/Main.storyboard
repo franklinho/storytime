@@ -2040,7 +2040,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user_icon_scaled_white.png" translatesAutoresizingMaskIntoConstraints="NO" id="cIQ-K5-Fk6">
-                                                    <rect key="frame" x="52" y="6" width="60" height="60"/>
+                                                    <rect key="frame" x="92" y="6" width="60" height="60"/>
                                                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="60" id="73Q-mU-IPF"/>
@@ -2048,20 +2048,36 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ppA-aA-5FZ">
-                                                    <rect key="frame" x="132" y="24" width="87.5" height="23.5"/>
+                                                    <rect key="frame" x="172" y="24" width="87.5" height="23.5"/>
                                                     <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="check_icon_green.png" translatesAutoresizingMaskIntoConstraints="NO" id="nLp-aN-L2F">
+                                                    <rect key="frame" x="28" y="13.5" width="44" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="44" id="Yq0-A2-PdY"/>
+                                                        <constraint firstAttribute="height" constant="44" id="k7V-JX-a9j"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="cIQ-K5-Fk6" firstAttribute="leading" secondItem="PxK-MW-oOU" secondAttribute="leadingMargin" constant="44" id="3hd-aH-MfR"/>
+                                                <constraint firstItem="nLp-aN-L2F" firstAttribute="leading" secondItem="PxK-MW-oOU" secondAttribute="leadingMargin" constant="20" id="3GZ-Yg-jGe"/>
+                                                <constraint firstItem="cIQ-K5-Fk6" firstAttribute="leading" secondItem="PxK-MW-oOU" secondAttribute="leadingMargin" constant="120" id="3hd-aH-MfR"/>
                                                 <constraint firstAttribute="centerY" secondItem="cIQ-K5-Fk6" secondAttribute="centerY" id="MTR-m9-WTb"/>
                                                 <constraint firstItem="ppA-aA-5FZ" firstAttribute="leading" secondItem="cIQ-K5-Fk6" secondAttribute="trailing" constant="20" id="acD-ye-eSn"/>
                                                 <constraint firstAttribute="centerY" secondItem="ppA-aA-5FZ" secondAttribute="centerY" id="rip-17-nGu"/>
+                                                <constraint firstItem="cIQ-K5-Fk6" firstAttribute="leading" secondItem="nLp-aN-L2F" secondAttribute="trailing" constant="20" id="uFx-fB-Bp6"/>
+                                                <constraint firstAttribute="centerY" secondItem="nLp-aN-L2F" secondAttribute="centerY" id="zSI-ks-coR"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="3hd-aH-MfR"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="userAddedIndicator" destination="nLp-aN-L2F" id="Eda-un-PjY"/>
                                             <outlet property="userImageView" destination="cIQ-K5-Fk6" id="tXq-cj-Oad"/>
                                             <outlet property="usernameLabel" destination="ppA-aA-5FZ" id="ZZL-Kg-lC2"/>
                                         </connections>
@@ -2133,8 +2149,8 @@
                             <mask key="constraints">
                                 <exclude reference="Wvo-sB-D3M"/>
                                 <exclude reference="dRt-9s-owT"/>
-                                <exclude reference="av0-lM-mrc"/>
                                 <exclude reference="r2C-Pz-tcc"/>
+                                <exclude reference="av0-lM-mrc"/>
                             </mask>
                         </variation>
                         <connections>
@@ -3317,6 +3333,7 @@
     </scenes>
     <resources>
         <image name="camera_icon.png" width="256" height="256"/>
+        <image name="check_icon_green.png" width="256" height="256"/>
         <image name="down_icon_white.png" width="256" height="256"/>
         <image name="feedIcon" width="24" height="24"/>
         <image name="flash_icon_auto.png" width="405" height="405"/>

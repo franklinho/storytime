@@ -10,6 +10,7 @@ import UIKit
 
 class UserTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var userAddedIndicator: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var userImageView: UIImageView!
     override func awakeFromNib() {
@@ -31,22 +32,27 @@ class UserTableViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
-        self.userImageView.image = nil
+        self.userImageView.image = UIImage(named: "user_icon_scaled_white.png")
         self.usernameLabel.text = ""
+        self.userAddedIndicator.hidden = true
     }
     
     func populateCellWithUser(user:PFObject) {
-        if user["profileImage"] != nil {
-            let userImageFile = user["profileImage"] as PFFile
-            userImageFile.getDataInBackgroundWithBlock {
-                (imageData: NSData!, error: NSError!) -> Void in
-                if error == nil {
-                    let image = UIImage(data:imageData)
-                    self.userImageView.image = image
+        user.fetchIfNeededInBackgroundWithBlock {
+            (post: PFObject!, error: NSError!) -> Void in
+            if user["profileImage"] != nil {
+                let userImageFile = user["profileImage"] as PFFile
+                userImageFile.getDataInBackgroundWithBlock {
+                    (imageData: NSData!, error: NSError!) -> Void in
+                    if error == nil {
+                        let image = UIImage(data:imageData)
+                        self.userImageView.image = image
+                    }
                 }
             }
+            self.usernameLabel.text = user["profileName"] as? String
         }
-        self.usernameLabel.text = user["profileName"] as? String
+        
     }
 
 }

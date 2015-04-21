@@ -197,4 +197,18 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
         self.delegate?.displayCommentsViewFor(self.story!)
 
     }
+    
+    override func prepareForReuse() {
+        self.upvoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
+        self.downvoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
+        self.pointsLabel.textColor = UIColor.whiteColor()
+        self.profileImageView.image = UIImage(named: "user_icon_scaled_white.png")
+        self.pointsLabel.text = "0"
+        self.rankLabel.text = ""
+        self.titleLabel.text = ""
+        self.userButton.setTitle("", forState: UIControlState.Normal)
+        self.commentsButton.setTitle("  0 Comments  ", forState: UIControlState.Normal)
+        self.thumbnailTextLabel.text = ""
+        self.previewImageView.image = nil
+    }
 }
