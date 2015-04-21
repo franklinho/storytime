@@ -134,6 +134,23 @@ class StoryImageTableViewCell: UITableViewCell {
                 var eventUser = event["user"] as PFUser
                 eventUser.fetchIfNeededInBackgroundWithBlock {
                     (post: PFObject!, error: NSError!) -> Void in
+                    if eventUser["profileName"] != nil {
+                        var profileName : String = eventUser["profileName"] as String
+                        self.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
+                        self.userNameButton.hidden = false
+                    }
+                    if eventUser["profileImage"] != nil {
+                        var profileImageFile = eventUser["profileImage"] as PFFile
+                        profileImageFile.getDataInBackgroundWithBlock {
+                            (imageData: NSData!, error: NSError!) -> Void in
+                            if error == nil {
+                                let image = UIImage(data:imageData)
+                                self.profileImageView.image = image
+                                self.profileImageView.hidden = false
+                            }
+                        }
+                    }
+                    
                     var currentUser = PFUser.currentUser()
                     currentUser.fetchIfNeededInBackgroundWithBlock {
                         (post: PFObject!, error: NSError!) -> Void in

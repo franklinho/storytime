@@ -68,6 +68,9 @@
             <string>OpenSans</string>
             <string>OpenSans</string>
             <string>OpenSans</string>
+            <string>OpenSans</string>
+            <string>OpenSans</string>
+            <string>OpenSans</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -983,24 +986,64 @@
                                                         <action selector="deleteButtonWasTapped:" destination="579-Bq-XMg" eventType="touchUpInside" id="wJQ-JG-qEQ"/>
                                                     </connections>
                                                 </button>
+                                                <button hidden="YES" opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BAT-l0-JzG">
+                                                    <rect key="frame" x="80" y="17" width="36" height="44"/>
+                                                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="44" id="pD9-qD-9tp"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
+                                                    <state key="normal" title="user">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="showUserProfileWasTapped:" destination="579-Bq-XMg" eventType="touchUpInside" id="cR3-sG-lyU"/>
+                                                    </connections>
+                                                </button>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user_icon_scaled_white.png" translatesAutoresizingMaskIntoConstraints="NO" id="49q-Qd-SR3">
+                                                    <rect key="frame" x="8" y="8" width="62" height="62"/>
+                                                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="62" id="9Vo-0A-clb"/>
+                                                        <constraint firstAttribute="height" constant="62" id="wJ2-bs-4Iz"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="grs-iZ-lVG">
+                                                    <rect key="frame" x="8" y="8" width="62" height="62"/>
+                                                    <state key="normal">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="showUserProfileWasTapped:" destination="579-Bq-XMg" eventType="touchUpInside" id="VW5-Zd-Wx9"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="aKU-no-Xjj" secondAttribute="bottom" id="1Hh-H0-rMB"/>
+                                                <constraint firstItem="grs-iZ-lVG" firstAttribute="top" secondItem="49q-Qd-SR3" secondAttribute="top" id="1Hk-Zu-pqU"/>
                                                 <constraint firstAttribute="bottom" secondItem="r0m-Fw-frf" secondAttribute="bottom" id="1fI-Dl-mxK"/>
+                                                <constraint firstItem="grs-iZ-lVG" firstAttribute="leading" secondItem="49q-Qd-SR3" secondAttribute="leading" id="3yR-eA-1SF"/>
                                                 <constraint firstItem="tZm-gV-9HT" firstAttribute="top" secondItem="k8a-fD-VX3" secondAttribute="top" constant="10" id="9e5-uw-3lf"/>
                                                 <constraint firstItem="bKz-Ia-sLW" firstAttribute="leading" secondItem="k8a-fD-VX3" secondAttribute="leading" constant="10" id="CFA-Fa-u5y"/>
                                                 <constraint firstItem="r0m-Fw-frf" firstAttribute="leading" secondItem="k8a-fD-VX3" secondAttribute="leading" id="Ea9-8j-JwX"/>
                                                 <constraint firstItem="aKU-no-Xjj" firstAttribute="top" secondItem="k8a-fD-VX3" secondAttribute="topMargin" id="Nq4-Ep-omL"/>
+                                                <constraint firstItem="grs-iZ-lVG" firstAttribute="trailing" secondItem="49q-Qd-SR3" secondAttribute="trailing" id="P5U-rz-mc9"/>
                                                 <constraint firstAttribute="trailing" secondItem="tZm-gV-9HT" secondAttribute="trailing" constant="10" id="PpN-9n-rZg"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="aKU-no-Xjj" secondAttribute="bottom" constant="8" id="TV8-hJ-lVE"/>
+                                                <constraint firstItem="BAT-l0-JzG" firstAttribute="leading" secondItem="49q-Qd-SR3" secondAttribute="trailing" constant="10" id="W2U-GT-UFZ"/>
                                                 <constraint firstItem="aKU-no-Xjj" firstAttribute="leading" secondItem="k8a-fD-VX3" secondAttribute="leading" id="WPa-o5-eC8"/>
+                                                <constraint firstItem="49q-Qd-SR3" firstAttribute="top" secondItem="k8a-fD-VX3" secondAttribute="topMargin" id="XJN-eS-wr0"/>
+                                                <constraint firstItem="BAT-l0-JzG" firstAttribute="centerY" secondItem="49q-Qd-SR3" secondAttribute="centerY" id="XNu-dP-ge2"/>
                                                 <constraint firstAttribute="trailing" secondItem="aKU-no-Xjj" secondAttribute="trailing" id="YDd-4t-ZH5"/>
                                                 <constraint firstItem="aKU-no-Xjj" firstAttribute="leading" secondItem="k8a-fD-VX3" secondAttribute="leadingMargin" id="cUc-af-c6z"/>
                                                 <constraint firstAttribute="trailing" secondItem="r0m-Fw-frf" secondAttribute="trailing" id="e4S-rC-Q4P"/>
+                                                <constraint firstItem="grs-iZ-lVG" firstAttribute="bottom" secondItem="49q-Qd-SR3" secondAttribute="bottom" id="efA-L3-cMW"/>
                                                 <constraint firstItem="aKU-no-Xjj" firstAttribute="top" secondItem="k8a-fD-VX3" secondAttribute="top" id="hfr-y4-kA5"/>
                                                 <constraint firstAttribute="bottom" secondItem="bKz-Ia-sLW" secondAttribute="bottom" constant="10" id="jqB-wu-t1O"/>
                                                 <constraint firstItem="r0m-Fw-frf" firstAttribute="top" secondItem="k8a-fD-VX3" secondAttribute="top" id="kcK-fC-tbS"/>
+                                                <constraint firstItem="49q-Qd-SR3" firstAttribute="leading" secondItem="k8a-fD-VX3" secondAttribute="leadingMargin" id="oyX-Sr-xzb"/>
                                                 <constraint firstItem="bKz-Ia-sLW" firstAttribute="leading" secondItem="k8a-fD-VX3" secondAttribute="leadingMargin" constant="5" id="x9A-72-krm"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="aKU-no-Xjj" secondAttribute="trailing" constant="10" id="xJw-mV-1gN"/>
                                             </constraints>
@@ -1021,8 +1064,10 @@
                                             <outlet property="deleteButtonWidthConstraint" destination="S1X-IZ-Btt" id="sxS-IK-q1u"/>
                                             <outlet property="deleteDismissButton" destination="r0m-Fw-frf" id="P1D-lh-J6q"/>
                                             <outlet property="eventImageView" destination="aKU-no-Xjj" id="YgA-vF-d5O"/>
+                                            <outlet property="profileImageView" destination="49q-Qd-SR3" id="Xhc-xU-pZI"/>
                                             <outlet property="timestampLabel" destination="ZOr-Rv-ntf" id="8Jv-8C-X0A"/>
                                             <outlet property="timestampView" destination="tZm-gV-9HT" id="gNO-mN-ezy"/>
+                                            <outlet property="userNameButton" destination="BAT-l0-JzG" id="lUf-Sn-U4X"/>
                                             <outletCollection property="gestureRecognizers" destination="RSB-Up-0BQ" appends="YES" id="wrQ-ND-BRs"/>
                                         </connections>
                                     </tableViewCell>
@@ -1114,6 +1159,38 @@
                                                         <action selector="deleteButtonWasTapped:" destination="1Sp-W7-uAW" eventType="touchUpInside" id="jqg-vh-xoH"/>
                                                     </connections>
                                                 </button>
+                                                <button hidden="YES" opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uZ1-xx-SVX">
+                                                    <rect key="frame" x="80" y="17" width="36" height="44"/>
+                                                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="44" id="FIX-j7-nQC"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
+                                                    <state key="normal" title="user">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="showUserProfileWasTapped:" destination="1Sp-W7-uAW" eventType="touchUpInside" id="f3Y-od-5JC"/>
+                                                    </connections>
+                                                </button>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user_icon_scaled_white.png" translatesAutoresizingMaskIntoConstraints="NO" id="BsE-bS-cL5">
+                                                    <rect key="frame" x="8" y="8" width="62" height="62"/>
+                                                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="62" id="XRi-FR-3ZK"/>
+                                                        <constraint firstAttribute="width" constant="62" id="b9V-bv-eNV"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ak1-Dx-rez">
+                                                    <rect key="frame" x="8" y="8" width="62" height="62"/>
+                                                    <state key="normal">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="showUserProfileWasTapped:" destination="1Sp-W7-uAW" eventType="touchUpInside" id="DEP-91-kzS"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                             <gestureRecognizers/>
@@ -1126,13 +1203,21 @@
                                                 <constraint firstItem="lX6-HP-Kvp" firstAttribute="top" secondItem="mqd-bj-yN5" secondAttribute="top" id="Laf-cW-0ke"/>
                                                 <constraint firstItem="4aD-dW-GiR" firstAttribute="top" secondItem="mqd-bj-yN5" secondAttribute="top" id="SxY-F9-n5E"/>
                                                 <constraint firstAttribute="trailing" secondItem="4aD-dW-GiR" secondAttribute="trailing" id="Uoo-Ge-8GY"/>
+                                                <constraint firstItem="Ak1-Dx-rez" firstAttribute="trailing" secondItem="BsE-bS-cL5" secondAttribute="trailing" id="ZI4-Kx-vWM"/>
+                                                <constraint firstItem="BsE-bS-cL5" firstAttribute="leading" secondItem="mqd-bj-yN5" secondAttribute="leadingMargin" id="a8B-YQ-gau"/>
                                                 <constraint firstItem="4aD-dW-GiR" firstAttribute="leading" secondItem="mqd-bj-yN5" secondAttribute="leading" id="bDR-aZ-Zoh"/>
+                                                <constraint firstItem="Ak1-Dx-rez" firstAttribute="bottom" secondItem="BsE-bS-cL5" secondAttribute="bottom" id="dJc-Dd-dCm"/>
+                                                <constraint firstItem="BsE-bS-cL5" firstAttribute="top" secondItem="mqd-bj-yN5" secondAttribute="topMargin" id="e0H-xL-oeh"/>
+                                                <constraint firstItem="uZ1-xx-SVX" firstAttribute="centerY" secondItem="BsE-bS-cL5" secondAttribute="centerY" id="e5K-qy-uVg"/>
                                                 <constraint firstAttribute="bottom" secondItem="lX6-HP-Kvp" secondAttribute="bottom" id="gWZ-Vu-2gl"/>
                                                 <constraint firstAttribute="bottom" secondItem="iWS-uN-Y9G" secondAttribute="bottom" constant="10" id="jI7-Eh-TN1"/>
                                                 <constraint firstItem="cis-kN-nv6" firstAttribute="top" secondItem="mqd-bj-yN5" secondAttribute="top" constant="10" id="k0j-XE-Yf9"/>
                                                 <constraint firstItem="iWS-uN-Y9G" firstAttribute="leading" secondItem="mqd-bj-yN5" secondAttribute="leading" constant="10" id="khJ-XU-bkd"/>
                                                 <constraint firstItem="lX6-HP-Kvp" firstAttribute="leading" secondItem="mqd-bj-yN5" secondAttribute="leadingMargin" id="m5z-FV-Onf"/>
+                                                <constraint firstItem="uZ1-xx-SVX" firstAttribute="leading" secondItem="BsE-bS-cL5" secondAttribute="trailing" constant="10" id="mtK-Xa-slm"/>
                                                 <constraint firstAttribute="centerX" secondItem="V3A-ji-sEl" secondAttribute="centerX" id="nQF-rY-6kS"/>
+                                                <constraint firstItem="Ak1-Dx-rez" firstAttribute="top" secondItem="BsE-bS-cL5" secondAttribute="top" id="ozu-bz-cNH"/>
+                                                <constraint firstItem="Ak1-Dx-rez" firstAttribute="leading" secondItem="BsE-bS-cL5" secondAttribute="leading" id="sDq-SL-Cqc"/>
                                                 <constraint firstAttribute="bottom" secondItem="4aD-dW-GiR" secondAttribute="bottom" id="sST-Ue-bhN"/>
                                                 <constraint firstAttribute="trailing" secondItem="cis-kN-nv6" secondAttribute="trailing" constant="10" id="vud-51-QSl"/>
                                             </constraints>
@@ -1150,8 +1235,10 @@
                                             <outlet property="deleteDismissButton" destination="4aD-dW-GiR" id="Rz5-gO-yI5"/>
                                             <outlet property="playButtonIconImageView" destination="V3A-ji-sEl" id="g7K-TI-ToQ"/>
                                             <outlet property="playerView" destination="lX6-HP-Kvp" id="GSL-Sv-fQS"/>
+                                            <outlet property="profileImageView" destination="BsE-bS-cL5" id="Cql-Uw-WeE"/>
                                             <outlet property="timestampLabel" destination="J2H-ea-73u" id="rfq-WA-ath"/>
                                             <outlet property="timestampView" destination="cis-kN-nv6" id="tYC-yp-DVR"/>
+                                            <outlet property="userNameButton" destination="uZ1-xx-SVX" id="Xdb-Oe-Yhs"/>
                                             <outlet property="videoView" destination="lX6-HP-Kvp" id="uKL-ZE-M1G"/>
                                         </connections>
                                     </tableViewCell>
@@ -1218,6 +1305,38 @@
                                                         <action selector="deleteButtonWasTapped:" destination="ceY-LX-QHm" eventType="touchUpInside" id="pEq-KO-eRm"/>
                                                     </connections>
                                                 </button>
+                                                <button hidden="YES" opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wYZ-qr-XgI">
+                                                    <rect key="frame" x="80" y="17" width="36" height="44"/>
+                                                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="44" id="gCI-hc-cUC"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
+                                                    <state key="normal" title="user">
+                                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="showUserProfileWasTapped:" destination="ceY-LX-QHm" eventType="touchUpInside" id="H8f-yA-itp"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GVJ-8i-VC4">
+                                                    <rect key="frame" x="8" y="8" width="62" height="62"/>
+                                                    <state key="normal">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="showUserProfileWasTapped:" destination="ceY-LX-QHm" eventType="touchUpInside" id="u2N-ke-2US"/>
+                                                    </connections>
+                                                </button>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user_icon_scaled_white.png" translatesAutoresizingMaskIntoConstraints="NO" id="WyM-gw-LeN">
+                                                    <rect key="frame" x="8" y="8" width="62" height="62"/>
+                                                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="62" id="AOe-E3-gmZ"/>
+                                                        <constraint firstAttribute="height" constant="62" id="Ubc-ag-bKI"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
@@ -1226,17 +1345,25 @@
                                                 <constraint firstAttribute="bottomMargin" secondItem="7Fo-GF-3C7" secondAttribute="bottom" id="388-kp-0ZW"/>
                                                 <constraint firstItem="ad6-fi-eUC" firstAttribute="leading" secondItem="1hj-Eu-03B" secondAttribute="leading" id="55f-sK-61e"/>
                                                 <constraint firstAttribute="trailing" secondItem="ad6-fi-eUC" secondAttribute="trailing" id="CZQ-1b-zPb"/>
+                                                <constraint firstItem="wYZ-qr-XgI" firstAttribute="centerY" secondItem="WyM-gw-LeN" secondAttribute="centerY" id="Djr-2E-S2Q"/>
                                                 <constraint firstAttribute="bottom" secondItem="ad6-fi-eUC" secondAttribute="bottom" id="EQ8-7q-8aG"/>
+                                                <constraint firstItem="wYZ-qr-XgI" firstAttribute="leading" secondItem="WyM-gw-LeN" secondAttribute="trailing" constant="10" id="HSS-s1-COW"/>
                                                 <constraint firstAttribute="centerX" secondItem="7Fo-GF-3C7" secondAttribute="centerX" id="JhV-Hh-Tyk"/>
+                                                <constraint firstItem="WyM-gw-LeN" firstAttribute="top" secondItem="1hj-Eu-03B" secondAttribute="topMargin" id="LkC-id-Pl1"/>
                                                 <constraint firstItem="7Fo-GF-3C7" firstAttribute="leading" secondItem="1hj-Eu-03B" secondAttribute="leadingMargin" id="N7m-VL-XaK"/>
                                                 <constraint firstItem="LTw-lW-sXf" firstAttribute="leading" secondItem="1hj-Eu-03B" secondAttribute="leading" constant="10" id="SLI-2S-4GX"/>
+                                                <constraint firstItem="GVJ-8i-VC4" firstAttribute="bottom" secondItem="WyM-gw-LeN" secondAttribute="bottom" id="T6n-2n-SQn"/>
                                                 <constraint firstItem="7Fo-GF-3C7" firstAttribute="top" secondItem="Rda-5B-eCd" secondAttribute="bottom" id="TJ1-Gy-KvQ"/>
+                                                <constraint firstItem="GVJ-8i-VC4" firstAttribute="trailing" secondItem="WyM-gw-LeN" secondAttribute="trailing" id="Xie-CK-anA"/>
                                                 <constraint firstItem="Rda-5B-eCd" firstAttribute="top" secondItem="1hj-Eu-03B" secondAttribute="top" constant="10" id="Xyf-xe-rsL"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="7Fo-GF-3C7" secondAttribute="trailing" constant="10" id="aZG-0G-AD7"/>
                                                 <constraint firstAttribute="centerY" secondItem="7Fo-GF-3C7" secondAttribute="centerY" id="c1c-l3-5xp"/>
+                                                <constraint firstItem="GVJ-8i-VC4" firstAttribute="top" secondItem="WyM-gw-LeN" secondAttribute="top" id="jc8-Yq-jcT"/>
                                                 <constraint firstItem="ad6-fi-eUC" firstAttribute="top" secondItem="1hj-Eu-03B" secondAttribute="top" id="ks3-Cz-j2k"/>
                                                 <constraint firstItem="7Fo-GF-3C7" firstAttribute="top" secondItem="Rda-5B-eCd" secondAttribute="bottom" id="n1C-Ai-jZA"/>
+                                                <constraint firstItem="GVJ-8i-VC4" firstAttribute="leading" secondItem="WyM-gw-LeN" secondAttribute="leading" id="svf-tC-ffV"/>
                                                 <constraint firstAttribute="bottom" secondItem="LTw-lW-sXf" secondAttribute="bottom" constant="10" id="w8h-Ac-Iig"/>
+                                                <constraint firstItem="WyM-gw-LeN" firstAttribute="leading" secondItem="1hj-Eu-03B" secondAttribute="leadingMargin" id="wc0-lR-A6L"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="7Fo-GF-3C7" secondAttribute="trailing" id="z9E-re-wIa"/>
                                             </constraints>
                                             <variation key="default">
@@ -1254,8 +1381,10 @@
                                             <outlet property="deleteButtonWidthConstraint" destination="vQf-Lc-Yb0" id="fQ1-Yt-teh"/>
                                             <outlet property="deleteDismissButton" destination="ad6-fi-eUC" id="Afh-Rx-uVg"/>
                                             <outlet property="eventTextLabel" destination="7Fo-GF-3C7" id="PjI-uW-H7X"/>
+                                            <outlet property="profileImageView" destination="WyM-gw-LeN" id="gpF-fo-gni"/>
                                             <outlet property="timestampLabel" destination="hZ4-oq-XVh" id="lUg-Xp-cap"/>
                                             <outlet property="timestampView" destination="Rda-5B-eCd" id="3rH-ZP-MQV"/>
+                                            <outlet property="userNameButton" destination="wYZ-qr-XgI" id="42l-hI-gVr"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

@@ -197,6 +197,21 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     if  storyUser.username == currentUser.username {
                         self.createButton!.enabled = true
                         self.settingsButton!.enabled = true
+                    } else if self.story!["authors"] != nil {
+                        var matchCount = 0
+                        for author in self.story!["authors"] as [PFObject] {
+                            if author.objectId == currentUser.objectId {
+                                matchCount += 1
+                            }
+                        }
+                        if matchCount > 0 {
+                            self.createButton!.enabled = true
+                            self.settingsButton!.enabled = true
+                        } else {
+                            self.createButton!.enabled = false
+                            self.settingsButton!.enabled = false
+                            
+                        }
                     } else {
                         self.createButton!.enabled = false
                         self.settingsButton!.enabled = false
@@ -437,6 +452,23 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             var eventUser = event!["user"] as PFUser
                             eventUser.fetchIfNeededInBackgroundWithBlock {
                                 (post: PFObject!, error: NSError!) -> Void in
+                                if eventUser["profileName"] != nil {
+                                    var profileName : String = eventUser["profileName"] as String
+                                    cell.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
+                                    cell.userNameButton.hidden = false
+                                }
+                                if eventUser["profileImage"] != nil {
+                                    var profileImageFile = eventUser["profileImage"] as PFFile
+                                    profileImageFile.getDataInBackgroundWithBlock {
+                                        (imageData: NSData!, error: NSError!) -> Void in
+                                        if error == nil {
+                                            let image = UIImage(data:imageData)
+                                            cell.profileImageView.image = image
+                                            cell.profileImageView.hidden = false
+                                        }
+                                    }
+                                }
+                                
                                 var currentUser = PFUser.currentUser()
                                 currentUser.fetchIfNeededInBackgroundWithBlock {
                                     (post: PFObject!, error: NSError!) -> Void in
@@ -546,6 +578,21 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     if  storyUser.username == currentUser.username {
                         self.createButton!.enabled = true
                         self.settingsButton!.enabled = true
+                    } else if self.story!["authors"] != nil {
+                        var matchCount = 0
+                        for author in self.story!["authors"] as [PFObject] {
+                            if author.objectId == currentUser.objectId {
+                                matchCount += 1
+                            }
+                        }
+                        if matchCount > 0 {
+                            self.createButton!.enabled = true
+                            self.settingsButton!.enabled = true
+                        } else {
+                            self.createButton!.enabled = false
+                            self.settingsButton!.enabled = false
+
+                        }
                     } else {
                         self.createButton!.enabled = false
                         self.settingsButton!.enabled = false
