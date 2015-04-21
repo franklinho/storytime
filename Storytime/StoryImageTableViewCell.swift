@@ -125,7 +125,16 @@ class StoryImageTableViewCell: UITableViewCell {
             (imageData: NSData!, error: NSError!) -> Void in
             if error == nil {
                 let image = UIImage(data:imageData)
+                self.eventImageView.hidden = true
                 self.eventImageView.image = image
+                self.eventImageView.alpha = 0
+                self.eventImageView.hidden = false
+                UIView.animateWithDuration(0.3, animations: {
+                    self.eventImageView.alpha = 1
+                    }, completion: {
+                        (value: Bool) in
+                        
+                })
             }
         }
         
@@ -146,7 +155,14 @@ class StoryImageTableViewCell: UITableViewCell {
                             if error == nil {
                                 let image = UIImage(data:imageData)
                                 self.profileImageView.image = image
+                                self.profileImageView.alpha = 0
                                 self.profileImageView.hidden = false
+                                UIView.animateWithDuration(0.3, animations: {
+                                    self.profileImageView.alpha = 1
+                                    }, completion: {
+                                        (value: Bool) in
+                                        
+                                })
                             }
                         }
                     }
@@ -183,7 +199,16 @@ class StoryImageTableViewCell: UITableViewCell {
             (imageData: NSData!, error: NSError!) -> Void in
             if error == nil {
                 let image = UIImage(data:imageData)
+                self.eventImageView.hidden = true
                 self.eventImageView.image = image
+                self.eventImageView.alpha = 0
+                self.eventImageView.hidden = false
+                UIView.animateWithDuration(0.3, animations: {
+                    self.eventImageView.alpha = 1
+                    }, completion: {
+                        (value: Bool) in
+                        
+                })
             }
         }
         var commentUser : PFUser = comment["user"] as PFUser
@@ -201,7 +226,14 @@ class StoryImageTableViewCell: UITableViewCell {
                     if error == nil {
                         let image = UIImage(data:imageData)
                         self.profileImageView.image = image
+                        self.profileImageView.alpha = 0
                         self.profileImageView.hidden = false
+                        UIView.animateWithDuration(0.3, animations: {
+                            self.profileImageView.alpha = 1
+                            }, completion: {
+                                (value: Bool) in
+                                
+                        })
                     }
                 }
             }

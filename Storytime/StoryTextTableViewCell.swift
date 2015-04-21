@@ -139,7 +139,14 @@ class StoryTextTableViewCell: UITableViewCell {
                             if error == nil {
                                 let image = UIImage(data:imageData)
                                 self.profileImageView.image = image
+                                self.profileImageView.alpha = 0
                                 self.profileImageView.hidden = false
+                                UIView.animateWithDuration(0.3, animations: {
+                                    self.profileImageView.alpha = 1
+                                    }, completion: {
+                                        (value: Bool) in
+                                        
+                                })
                             }
                         }
                     }
@@ -188,7 +195,15 @@ class StoryTextTableViewCell: UITableViewCell {
                     if error == nil {
                         let image = UIImage(data:imageData)
                         self.profileImageView.image = image
+                        
+                        self.profileImageView.alpha = 0
                         self.profileImageView.hidden = false
+                        UIView.animateWithDuration(0.3, animations: {
+                            self.profileImageView.alpha = 1
+                            }, completion: {
+                                (value: Bool) in
+                                
+                        })
                     }
                 }
             }

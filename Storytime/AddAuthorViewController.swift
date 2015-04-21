@@ -81,6 +81,7 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
                         })
                         
                         
+                        
 
                     } else {
                         var storyAuthors = self.story!["authors"] as NSArray

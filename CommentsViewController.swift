@@ -297,7 +297,14 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                                 if error == nil {
                                     let image = UIImage(data:imageData)
                                     cell.profileImageView.image = image
+                                    cell.profileImageView.alpha = 0
                                     cell.profileImageView.hidden = false
+                                    UIView.animateWithDuration(0.3, animations: {
+                                        cell.profileImageView.alpha = 1
+                                        }, completion: {
+                                            (value: Bool) in
+                                            
+                                    })
                                 }
                             }
                         }

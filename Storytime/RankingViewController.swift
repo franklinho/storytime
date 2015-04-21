@@ -127,7 +127,16 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                             (imageData: NSData!, error: NSError!) -> Void in
                             if error == nil {
                                 let image = UIImage(data:imageData)
+                                cell.profileImageView.hidden = true
                                 cell.profileImageView.image = image
+                                cell.profileImageView.alpha = 0
+                                cell.profileImageView.hidden = false
+                                UIView.animateWithDuration(0.3, animations: {
+                                    cell.profileImageView.alpha = 1
+                                    }, completion: {
+                                        (value: Bool) in
+                                        
+                                })
                             }
                         }
                     }
@@ -182,7 +191,14 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                         if error == nil {
                             let image = UIImage(data:imageData)
                             cell.previewImageView.image = image
+                            cell.previewImageView.alpha = 0
                             cell.previewImageView.hidden = false
+                            UIView.animateWithDuration(0.3, animations: {
+                                cell.previewImageView.alpha = 1
+                                }, completion: {
+                                    (value: Bool) in
+                                    
+                            })
                             cell.thumbnailTextLabel.hidden = true
                         }
                     }
@@ -193,7 +209,14 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                         if error == nil {
                             let image = UIImage(data:imageData)
                             cell.previewImageView.image = image
+                            cell.previewImageView.alpha = 0
                             cell.previewImageView.hidden = false
+                            UIView.animateWithDuration(0.3, animations: {
+                                cell.previewImageView.alpha = 1
+                                }, completion: {
+                                    (value: Bool) in
+                                    
+                            })
                             cell.thumbnailTextLabel.hidden = true
                         }
                     }
