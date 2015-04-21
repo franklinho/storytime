@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		CE078F49D064E69FA88C342F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8ECC8C0FC39FC2D49766AFB /* libPods.a */; };
+		DD138C821AE58D8500C74E8A /* AddAuthorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD138C811AE58D8500C74E8A /* AddAuthorViewController.swift */; };
+		DD138C841AE58F1600C74E8A /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD138C831AE58F1600C74E8A /* UserTableViewCell.swift */; };
 		DD2E0C431ADF79D7003BB496 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2E0C411ADF79D7003BB496 /* Crashlytics.framework */; };
 		DD2E0C441ADF79D7003BB496 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2E0C421ADF79D7003BB496 /* Fabric.framework */; };
 		DD3D45AD1ACF0F31001B38BD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3D45AC1ACF0F31001B38BD /* AVFoundation.framework */; };
@@ -111,6 +113,8 @@
 /* Begin PBXFileReference section */
 		50D9B7673DE49B0BA43B5277 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A9FD829E06F375ECF0A329F6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		DD138C811AE58D8500C74E8A /* AddAuthorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAuthorViewController.swift; sourceTree = "<group>"; };
+		DD138C831AE58F1600C74E8A /* UserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		DD2E0C411ADF79D7003BB496 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		DD2E0C421ADF79D7003BB496 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		DD3D45981ACF0CAA001B38BD /* libstdc++.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.dylib"; path = "usr/lib/libstdc++.6.dylib"; sourceTree = SDKROOT; };
@@ -268,6 +272,7 @@
 				DD9B26DD1AD8574600E6D3DE /* CustomLoginViewController.swift */,
 				DD9B26DF1AD8578A00E6D3DE /* CustomSignUpViewController.swift */,
 				DDF7AED51ADDEC8D0033F487 /* CommentsViewController.swift */,
+				DD138C811AE58D8500C74E8A /* AddAuthorViewController.swift */,
 				DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */,
 				DDC93A0E1AC48E22006D4646 /* StoryViewController.swift */,
 				DDC936AD1AC47D32006D4646 /* RankingViewController.swift */,
@@ -278,6 +283,7 @@
 		DD138C801AE572E600C74E8A /* TableViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				DD138C831AE58F1600C74E8A /* UserTableViewCell.swift */,
 				DDF7AED71ADDECC70033F487 /* CommentsTableViewCell.swift */,
 				DDC93A101AC48F96006D4646 /* StoryImageTableViewCell.swift */,
 				DDC93A121AC48FA2006D4646 /* StoryTextTableViewCell.swift */,
@@ -665,10 +671,12 @@
 				DDC936901AC47CAE006D4646 /* ViewController.swift in Sources */,
 				DDF06E971AD4529F007D4954 /* CreateProfileViewController.swift in Sources */,
 				DD9B26E01AD8578A00E6D3DE /* CustomSignUpViewController.swift in Sources */,
+				DD138C821AE58D8500C74E8A /* AddAuthorViewController.swift in Sources */,
 				DDC93A171AC48FB9006D4646 /* StoryCreateTableViewCell.swift in Sources */,
 				DDC93A151AC48FAD006D4646 /* StoryVideoTableViewCell.swift in Sources */,
 				DD8C82851AD5CE1E00B9A47B /* ProfileViewController.swift in Sources */,
 				DDF7AED61ADDEC8D0033F487 /* CommentsViewController.swift in Sources */,
+				DD138C841AE58F1600C74E8A /* UserTableViewCell.swift in Sources */,
 				DDC93A111AC48F96006D4646 /* StoryImageTableViewCell.swift in Sources */,
 				DDC9368E1AC47CAE006D4646 /* Storytime.xcdatamodeld in Sources */,
 				DDC9368B1AC47CAE006D4646 /* AppDelegate.swift in Sources */,

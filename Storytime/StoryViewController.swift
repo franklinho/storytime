@@ -14,6 +14,7 @@ import MediaPlayer
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate {
     
   
+    @IBOutlet weak var addUserButtonBorderView: UIView!
     @IBOutlet weak var noEventsLabel: UILabel!
     @IBOutlet weak var profileImageButton: UIButton!
     @IBOutlet weak var commentsButton: UIButton!
@@ -90,13 +91,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        addUserButtonBorderView.layer.borderWidth = 1
+        addUserButtonBorderView.layer.borderColor = UIColor.whiteColor().CGColor
         
         settingsActionSheet.delegate = self
-        settingsActionSheet.addButtonWithTitle("Add Authors")
         settingsActionSheet.addButtonWithTitle("Delete Story")
         settingsActionSheet.addButtonWithTitle("Cancel")
-        settingsActionSheet.destructiveButtonIndex = 1
-        settingsActionSheet.cancelButtonIndex = 2
+        settingsActionSheet.destructiveButtonIndex = 0
+        settingsActionSheet.cancelButtonIndex = 1
         settingsActionSheet.actionSheetStyle = UIActionSheetStyle.Automatic
         
         if newStory == true {
@@ -167,12 +169,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             var storyUser : PFUser = self.story!["user"] as PFUser
             storyUser.fetchIfNeeded()
             var profileName = storyUser["profileName"]
-            var profileImageFile = storyUser["profileImage"] as PFFile
-            profileImageFile.getDataInBackgroundWithBlock {
-                (imageData: NSData!, error: NSError!) -> Void in
-                if error == nil {
-                    let image = UIImage(data:imageData)
-                    self.userProfileImage.image = image
+            if storyUser["profileImage"] != nil {
+                var profileImageFile = storyUser["profileImage"] as PFFile
+                profileImageFile.getDataInBackgroundWithBlock {
+                    (imageData: NSData!, error: NSError!) -> Void in
+                    if error == nil {
+                        let image = UIImage(data:imageData)
+                        self.userProfileImage.image = image
+                    }
                 }
             }
             
@@ -1707,12 +1711,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if  PFUser.currentUser() != nil {
             var storyUser = PFUser.currentUser()
             self.userLabel.text = storyUser["profileName"] as String
-            var profileImageFile = storyUser["profileImage"] as PFFile
-            profileImageFile.getDataInBackgroundWithBlock {
-                (imageData: NSData!, error: NSError!) -> Void in
-                if error == nil {
-                    let image = UIImage(data:imageData)
-                    self.userProfileImage.image = image
+            if storyUser["profileImage"] != nil {
+                var profileImageFile = storyUser["profileImage"] as PFFile
+                profileImageFile.getDataInBackgroundWithBlock {
+                    (imageData: NSData!, error: NSError!) -> Void in
+                    if error == nil {
+                        let image = UIImage(data:imageData)
+                        self.userProfileImage.image = image
+                    }
                 }
             }
         }
@@ -1764,6 +1770,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             if self.story != nil {
                 commentsVC.story = self.story!
             }
+        } else if (segue.identifier == "AddAuthorSegue"){
+            var addAuthorVC : AddAuthorViewController = segue.destinationViewController as AddAuthorViewController
+            if self.story != nil {
+                addAuthorVC.story = self.story!
+            }
         }
     }
     
@@ -1809,8 +1820,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
         if (buttonIndex == 0) {
-            println("Add authors button tapped")
-        } else if (buttonIndex == 1) {
             println("Delete story button tapped")
             
             var deleteAlertView = UIAlertView(title: "Delete Story", message: "Are you sure you want to delete this story?", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Delete")

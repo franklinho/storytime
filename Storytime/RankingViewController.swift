@@ -261,7 +261,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             navigationController?.pushViewController(storyVC, animated: true)
         }
     
-        
+    
     }
     
     func logInViewController(logInController: PFLogInViewController!, shouldBeginLogInWithUsername username: String!, password: String!) -> Bool {

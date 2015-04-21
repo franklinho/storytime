@@ -163,7 +163,7 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
         if userNameTextField.text == "" {
             usernameRequiredLabel.hidden = false
         } else {
-            var query = PFQuery(className:"User")
+            var query = PFUser.query()
             query.whereKey("canonicalProfileName", equalTo:userNameTextField.text.lowercaseString)
             query.findObjectsInBackgroundWithBlock {
                 (objects: [AnyObject]!, error: NSError!) -> Void in
@@ -201,6 +201,8 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
             }
         }
     }
+    
+
     
     
 }
