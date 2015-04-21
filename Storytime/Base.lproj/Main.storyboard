@@ -842,7 +842,7 @@
                                         </constraints>
                                     </imageView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="IUW-kG-GUB" firstAttribute="top" secondItem="2qN-Jd-2m3" secondAttribute="bottom" constant="5" id="44Q-fk-i2N"/>
                                     <constraint firstAttribute="centerX" secondItem="2qN-Jd-2m3" secondAttribute="centerX" id="eES-pS-EbX"/>
@@ -3476,6 +3476,6 @@
         <image name="video_icon.png" width="256" height="256"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="gzv-Hc-Qwl"/>
+        <segue reference="ZfJ-zs-kTV"/>
     </inferredMetricsTieBreakers>
 </document>

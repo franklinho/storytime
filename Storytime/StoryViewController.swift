@@ -390,6 +390,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 if event!["type"] as NSString == "text" {
                     var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryTextTableViewCell") as StoryTextTableViewCell
                     cell.prepareForReuse()
+                    cell.event = event
                     cell.delegate = self
                     cell.populateCellWithEvent(event!)
                     
@@ -397,6 +398,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 } else if event!["type"] as String == "photo" {
                     var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryImageTableViewCell") as StoryImageTableViewCell
                     cell.prepareForReuse()
+                    cell.event = event
                     cell.delegate = self
                     cell.populateCellWithEvent(event!)
                     
@@ -404,7 +406,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 } else {
                     var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryVideoTableViewCell") as StoryVideoTableViewCell
                     cell.prepareForReuse()
-                    
+                    cell.event = event
                     cell.delegate = self
                     
                     

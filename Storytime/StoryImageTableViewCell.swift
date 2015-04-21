@@ -16,6 +16,7 @@ protocol StoryImageTableViewCellDelegate{
 class StoryImageTableViewCell: UITableViewCell {
     var deleteButtonExpanded = false
     var comment : PFObject?
+    var event : PFObject?
     var delegate : StoryImageTableViewCellDelegate?
     @IBOutlet weak var timestampView: UIView!
     @IBOutlet weak var timestampLabel: UILabel!
@@ -60,7 +61,11 @@ class StoryImageTableViewCell: UITableViewCell {
     }
     
     @IBAction func showUserProfileWasTapped(sender: AnyObject) {
-        self.delegate?.displayUserProfileView(self.comment!["user"] as PFUser)
+        if self.comment != nil {
+            self.delegate?.displayUserProfileView(self.comment!["user"] as PFUser)
+        } else {
+            self.delegate?.displayUserProfileView(self.event!["user"] as PFUser)
+        }
     }
     @IBAction func deleteButtonWasTapped(sender: AnyObject) {
         if deleteButtonExpanded == false {
