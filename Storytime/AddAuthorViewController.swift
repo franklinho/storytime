@@ -60,25 +60,30 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
 //                        invitedAuthorsDict[storyUserProfileName] = 1
 //                        invitedAuthorsDict[selectedUserProfileName] = 0
 //                        self.story!["invitedAuthors"] = invitedAuthorsDict as NSDictionary
-                        self.story!["authors"] = [storyUserProfileName, selectedUserProfileName]
+                        self.story!["authors"] = [self.story!["user"], selectedUser]
                         self.story!.saveInBackground()
                         self.dismissViewControllerAnimated(true, completion: {})
 
                     } else {
                         var storyAuthors = self.story!["authors"] as NSArray
-                        if storyAuthors.containsObject(selectedUserProfileName) {
+                        var matchCount = 0
+                        for author in storyAuthors {
+                            if selectedUser.objectId == author.objectId {
+                                matchCount += 1
+                            }
+                        }
+                        if matchCount > 0 {
                             if self.userAlreadyAddedAlertVisible == false {
                                 self.displayAlreadyAddedAlert()
                             }
                         } else {
                             var temporaryAuthorsArray = NSMutableArray(array: storyAuthors)
-                            temporaryAuthorsArray.addObject(selectedUserProfileName)
+                            temporaryAuthorsArray.addObject(selectedUser)
                             self.story!["authors"] = temporaryAuthorsArray as NSArray
                             self.story!.saveInBackground()
                             self.dismissViewControllerAnimated(true, completion: {})
-
-                            
                         }
+                        
                     }
                 }
             }

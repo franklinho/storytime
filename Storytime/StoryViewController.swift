@@ -167,42 +167,43 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
             
             var storyUser : PFUser = self.story!["user"] as PFUser
-            storyUser.fetchIfNeeded()
-            var profileName = storyUser["profileName"]
-            if storyUser["profileImage"] != nil {
-                var profileImageFile = storyUser["profileImage"] as PFFile
-                profileImageFile.getDataInBackgroundWithBlock {
-                    (imageData: NSData!, error: NSError!) -> Void in
-                    if error == nil {
-                        let image = UIImage(data:imageData)
-                        self.userProfileImage.image = image
+            storyUser.fetchIfNeededInBackgroundWithBlock {
+                (post: PFObject!, error: NSError!) -> Void in
+                var profileName = storyUser["profileName"]
+                if storyUser["profileImage"] != nil {
+                    var profileImageFile = storyUser["profileImage"] as PFFile
+                    profileImageFile.getDataInBackgroundWithBlock {
+                        (imageData: NSData!, error: NSError!) -> Void in
+                        if error == nil {
+                            let image = UIImage(data:imageData)
+                            self.userProfileImage.image = image
+                        }
+                    }
+                }
+                
+                if self.story!["commentsCount"] != nil {
+                    var commentsCount = self.story!["commentsCount"]
+                    self.commentsLabel.text = "\(commentsCount) Comments"
+                }
+                
+                self.userLabel.text = profileName as? String
+                self.createViewTopConstraint.constant = -(self.screenSize.width + 46)
+                self.createView.hidden = true
+                self.createTitleView.hidden = true
+                self.titleView.hidden = false
+                if PFUser.currentUser() != nil {
+                    var currentUser = PFUser.currentUser()
+                    println("Story user is \(storyUser.username) and current user is \(currentUser.username)")
+                    if  storyUser.username == currentUser.username {
+                        self.createButton!.enabled = true
+                        self.settingsButton!.enabled = true
+                    } else {
+                        self.createButton!.enabled = false
+                        self.settingsButton!.enabled = false
                     }
                 }
             }
             
-            if self.story!["commentsCount"] != nil {
-                var commentsCount = self.story!["commentsCount"]
-                self.commentsLabel.text = "\(commentsCount) Comments"
-            }
-            
-            self.userLabel.text = profileName as? String
-            createViewTopConstraint.constant = -(screenSize.width + 46)
-            self.createView.hidden = true
-            createTitleView.hidden = true
-            titleView.hidden = false
-            if PFUser.currentUser() != nil {
-                var storyUser = self.story!["user"] as PFUser
-                storyUser.fetchIfNeeded()
-                var currentUser = PFUser.currentUser()
-                println("Story user is \(storyUser.username) and current user is \(currentUser.username)")
-                if  storyUser.username == currentUser.username {
-                    createButton!.enabled = true
-                    settingsButton!.enabled = true
-                } else {
-                    createButton!.enabled = false
-                    settingsButton!.enabled = false
-                }
-            }
         } else {
             createViewTopConstraint.constant = -(screenSize.width + 46)
 //            createViewTopConstraint.constant = 0
@@ -437,13 +438,16 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             eventUser.fetchIfNeededInBackgroundWithBlock {
                                 (post: PFObject!, error: NSError!) -> Void in
                                 var currentUser = PFUser.currentUser()
-                                currentUser.fetchIfNeeded()
-                                println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
-                                if  eventUser.username == currentUser.username {
-                                    cell.deleteButton!.hidden = false
-                                } else {
-                                    cell.deleteButton!.hidden = true
+                                currentUser.fetchIfNeededInBackgroundWithBlock {
+                                    (post: PFObject!, error: NSError!) -> Void in
+                                    println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
+                                    if  eventUser.username == currentUser.username {
+                                        cell.deleteButton!.hidden = false
+                                    } else {
+                                        cell.deleteButton!.hidden = true
+                                    }
                                 }
+                                
                             }
                         } else {
                             cell.deleteButton!.hidden = true
@@ -534,17 +538,18 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if PFUser.currentUser() != nil {
             if self.story != nil {
                 var storyUser = self.story!["user"] as PFUser
-                storyUser.fetchIfNeeded()
-                
-                var currentUser = PFUser.currentUser()
-                println("Story user is \(storyUser.username) and current user is \(currentUser.username)")
-                
-                if  storyUser.username == currentUser.username {
-                    createButton!.enabled = true
-                    settingsButton!.enabled = true
-                } else {
-                    createButton!.enabled = false
-                    settingsButton!.enabled = false
+                storyUser.fetchIfNeededInBackgroundWithBlock {
+                    (post: PFObject!, error: NSError!) -> Void in
+                    var currentUser = PFUser.currentUser()
+                    println("Story user is \(storyUser.username) and current user is \(currentUser.username)")
+                    
+                    if  storyUser.username == currentUser.username {
+                        self.createButton!.enabled = true
+                        self.settingsButton!.enabled = true
+                    } else {
+                        self.createButton!.enabled = false
+                        self.settingsButton!.enabled = false
+                    }
                 }
             }
             
@@ -1142,7 +1147,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.vision.stopPreview()
                 if self.story!["thumbnailImage"] == nil {
                     self.story!["thumbnailImage"] = imageFile
-                    self.story!.save()
+                    self.story!.saveInBackground()
                 }
             } else {
                 // There was a problem, check error.description

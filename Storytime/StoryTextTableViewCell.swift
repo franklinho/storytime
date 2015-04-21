@@ -128,13 +128,16 @@ class StoryTextTableViewCell: UITableViewCell {
                 eventUser.fetchIfNeededInBackgroundWithBlock {
                     (post: PFObject!, error: NSError!) -> Void in
                     var currentUser = PFUser.currentUser()
-                    currentUser.fetchIfNeeded()
-                    println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
-                    if  eventUser.username == currentUser.username {
-                        self.deleteButton!.hidden = false
-                    } else {
-                        self.deleteButton!.hidden = true
+                    currentUser.fetchIfNeededInBackgroundWithBlock {
+                        (post: PFObject!, error: NSError!) -> Void in
+                        println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
+                        if  eventUser.username == currentUser.username {
+                            self.deleteButton!.hidden = false
+                        } else {
+                            self.deleteButton!.hidden = true
+                        }
                     }
+                    
                 }
             } else {
                 self.deleteButton!.hidden = true
