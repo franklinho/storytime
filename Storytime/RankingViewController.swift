@@ -54,6 +54,12 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         self.rankingTableView.rowHeight = self.screenSize.width
         
+        if (self.rankingTableView.respondsToSelector(Selector("layoutMargins"))) {
+            self.rankingTableView.layoutMargins = UIEdgeInsetsZero;
+        }
+        
+        
+        
         // Add pull to refresh to the tableview
         self.refreshControl = UIRefreshControl()
         var pullToRefreshString = "Pull to refresh"
@@ -99,11 +105,18 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
         if indexPath.row == rankingTableView.numberOfRowsInSection(0)-1 && maxReached == false {
             var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as UITableViewCell
+            if (cell.respondsToSelector(Selector("layoutMargins"))) {
+                cell.layoutMargins = UIEdgeInsetsZero;
+            }
             return cell
         } else {
             var cell = rankingTableView.dequeueReusableCellWithIdentifier("RankingTableViewCell") as RankingTableViewCell
+            if (cell.respondsToSelector(Selector("layoutMargins"))) {
+                cell.layoutMargins = UIEdgeInsetsZero;
+            }
             cell.prepareForReuse()
             cell.delegate = self
             

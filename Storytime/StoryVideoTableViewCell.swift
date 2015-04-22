@@ -46,7 +46,7 @@ class StoryVideoTableViewCell: UITableViewCell {
         if profileImageView != nil {
             profileImageView.layer.cornerRadius = 31
             profileImageView.layer.borderWidth = 2
-            profileImageView.layer.borderColor = UIColor.darkGrayColor().CGColor
+            profileImageView.layer.borderColor = UIColor.whiteColor().CGColor
             profileImageView.clipsToBounds = true
         }
         

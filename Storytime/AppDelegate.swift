@@ -25,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Fabric.with([Crashlytics()])
 
         Parse.setApplicationId("N1IU3qQJhUOkP2E93hNyISSrJu0uUsMsFjmG23bO", clientKey: "RQO2yFnxsSKsMRzUcPzhqvgGx438fzJhBFB2Jgin")
+        PFUser.enableRevocableSessionInBackground()
         PFFacebookUtils.initializeFacebook()
         PFTwitterUtils.initializeWithConsumerKey("C32fxiLVtibIsevg8HT2cDVpw", consumerSecret: "QDWMrdBILOAEtAGbzzVKTHGszf5V96kxsFYEGqAZCR8lhdq15a")
         

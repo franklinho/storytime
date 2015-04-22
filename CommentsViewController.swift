@@ -115,6 +115,9 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         
         commentsTableView.delegate = self
         commentsTableView.dataSource = self
+        if (self.commentsTableView.respondsToSelector(Selector("layoutMargins"))) {
+            self.commentsTableView.layoutMargins = UIEdgeInsetsZero;
+        }
         
         createView.hidden = true
         profileTabBarItem = self.tabBarController?.tabBar.items?[1] as UITabBarItem
@@ -210,12 +213,18 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         var comment : PFObject?
         if indexPath.row == commentsTableView.numberOfRowsInSection(0)-1 && maxReached == false {
             var cell = tableView.dequeueReusableCellWithIdentifier("CommentSpinnerCell") as UITableViewCell
+            if (cell.respondsToSelector(Selector("layoutMargins"))) {
+                cell.layoutMargins = UIEdgeInsetsZero;
+            }
             return cell
         } else {
             if comments.count > 0 {
                 comment = comments[indexPath.row] as PFObject
                 if comment!["type"] as NSString == "text" {
                     var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentTextTableViewCell") as StoryTextTableViewCell
+                    if (cell.respondsToSelector(Selector("layoutMargins"))) {
+                        cell.layoutMargins = UIEdgeInsetsZero;
+                    }
                     cell.prepareForReuse()
                     cell.delegate = self
                     cell.comment = comment
@@ -224,6 +233,9 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                     return cell
                 } else if comment!["type"] as String == "photo" {
                     var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentImageTableViewCell") as StoryImageTableViewCell
+                    if (cell.respondsToSelector(Selector("layoutMargins"))) {
+                        cell.layoutMargins = UIEdgeInsetsZero;
+                    }
                     cell.prepareForReuse()
                     cell.delegate = self
                     cell.comment = comment
@@ -231,6 +243,9 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                     return cell
                 } else {
                     var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentVideoTableViewCell") as StoryVideoTableViewCell
+                    if (cell.respondsToSelector(Selector("layoutMargins"))) {
+                        cell.layoutMargins = UIEdgeInsetsZero;
+                    }
                     cell.prepareForReuse()
                     cell.delegate = self
                     cell.comment = comment

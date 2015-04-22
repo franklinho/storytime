@@ -19,6 +19,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     var maxReached = false
     var requestingObjects = false
     
+    @IBOutlet weak var noStoriesLabel: UILabel!
     @IBOutlet weak var storyTableView: UITableView!
     @IBOutlet weak var usernameLabel: UILabel!
     var refreshControl : UIRefreshControl!
@@ -63,6 +64,9 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         // Do any additional setup after loading the view.
         storyTableView.delegate = self
         storyTableView.dataSource = self
+        if (self.storyTableView.respondsToSelector(Selector("layoutMargins"))) {
+            self.storyTableView.layoutMargins = UIEdgeInsetsZero;
+        }
         
         storyTableView.rowHeight = self.screenSize.width
         refreshStories()
@@ -92,9 +96,15 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row == storyTableView.numberOfRowsInSection(0)-1 && maxReached == false {
             var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as UITableViewCell
+            if (cell.respondsToSelector(Selector("layoutMargins"))) {
+                cell.layoutMargins = UIEdgeInsetsZero;
+            }
             return cell
         } else {
             var cell = storyTableView.dequeueReusableCellWithIdentifier("RankingTableViewCell") as RankingTableViewCell
+            if (cell.respondsToSelector(Selector("layoutMargins"))) {
+                cell.layoutMargins = UIEdgeInsetsZero;
+            }
             cell.upvoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
             cell.downvoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
             cell.pointsLabel.textColor = UIColor.whiteColor()
@@ -245,6 +255,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                     }
                     if objects.count == 0 || objects.count < 10 {
                         self.maxReached = true
+                    }
+                    
+                    if objects.count == 0 {
+                        self.noStoriesLabel.hidden = false
+                    } else {
+                        self.noStoriesLabel.hidden = true
                     }
                     
                     var temporaryArray : NSMutableArray = NSMutableArray(array: self.stories)

@@ -147,6 +147,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         storyTableView.delegate = self
         storyTableView.dataSource = self
         
+        if (self.storyTableView.respondsToSelector(Selector("layoutMargins"))) {
+            self.storyTableView.layoutMargins = UIEdgeInsetsZero;
+        }
+        
         holdToRecordLabel.layer.borderColor = UIColor.whiteColor().CGColor
         holdToRecordLabel.layer.borderWidth = 3.0;
         holdToRecordLabel.layer.cornerRadius = 17
@@ -383,12 +387,18 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var event : PFObject?
         if indexPath.row == storyTableView.numberOfRowsInSection(0)-1 && maxReached == false {
             var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as UITableViewCell
+            if (cell.respondsToSelector(Selector("layoutMargins"))) {
+                cell.layoutMargins = UIEdgeInsetsZero;
+            }
             return cell
         } else {
             if events.count > 0 {
                 event = events[indexPath.row] as PFObject
                 if event!["type"] as NSString == "text" {
                     var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryTextTableViewCell") as StoryTextTableViewCell
+                    if (cell.respondsToSelector(Selector("layoutMargins"))) {
+                        cell.layoutMargins = UIEdgeInsetsZero;
+                    }
                     cell.prepareForReuse()
                     cell.event = event
                     cell.delegate = self
@@ -397,6 +407,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     return cell
                 } else if event!["type"] as String == "photo" {
                     var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryImageTableViewCell") as StoryImageTableViewCell
+                    if (cell.respondsToSelector(Selector("layoutMargins"))) {
+                        cell.layoutMargins = UIEdgeInsetsZero;
+                    }
                     cell.prepareForReuse()
                     cell.event = event
                     cell.delegate = self
@@ -405,6 +418,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     return cell
                 } else {
                     var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryVideoTableViewCell") as StoryVideoTableViewCell
+                    if (cell.respondsToSelector(Selector("layoutMargins"))) {
+                        cell.layoutMargins = UIEdgeInsetsZero;
+                    }
                     cell.prepareForReuse()
                     cell.event = event
                     cell.delegate = self

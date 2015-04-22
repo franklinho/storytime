@@ -34,6 +34,10 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
         
         self.userTableView.delegate = self
         self.userTableView.dataSource = self
+        if (self.userTableView.respondsToSelector(Selector("layoutMargins"))) {
+            self.userTableView.layoutMargins = UIEdgeInsetsZero;
+        }
+        
         if self.story != nil {
             if self.story!["authors"] != nil {
                 users = self.story!["authors"] as NSArray
@@ -204,10 +208,16 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row == userTableView.numberOfRowsInSection(0)-1 && maxReached == false {
             var cell = tableView.dequeueReusableCellWithIdentifier("UserSpinnerCell") as UITableViewCell
+            if (cell.respondsToSelector(Selector("layoutMargins"))) {
+                cell.layoutMargins = UIEdgeInsetsZero;
+            }
             return cell
         } else {
             var user = users[indexPath.row] as PFObject
             var cell = tableView.dequeueReusableCellWithIdentifier("UserTableViewCell") as UserTableViewCell
+            if (cell.respondsToSelector(Selector("layoutMargins"))) {
+                cell.layoutMargins = UIEdgeInsetsZero;
+            }
             cell.populateCellWithUser(user)
             var matchCount = 0
             if user.objectId == (story!["user"] as PFObject).objectId {
