@@ -271,16 +271,16 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
 
     @IBAction func newStoryButtonWasTapped(sender: AnyObject) {
-//        creatingNewStory = true
-//        if (PFUser.currentUser() == nil){
-//            presentLoginViewController()
-//        } else if (PFUser.currentUser() != nil && PFUser.currentUser()["profileName"] == nil) {
+        creatingNewStory = true
+        if (PFUser.currentUser() == nil){
+            presentLoginViewController()
+        } else if (PFUser.currentUser() != nil && PFUser.currentUser()["profileName"] == nil) {
             presentCreateProfileViewController()
-//        } else {
-//            var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
-//            storyVC.newStory = true
-//            navigationController?.pushViewController(storyVC, animated: true)
-//        }
+        } else {
+            var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
+            storyVC.newStory = true
+            navigationController?.pushViewController(storyVC, animated: true)
+        }
     
     
     }
