@@ -92,15 +92,37 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
                     
                 }
             }
+        } else if PFFacebookUtils.isLinkedWithUser(PFUser.currentUser()) {
+            var request : FBRequest = FBRequest.requestForMe()
+            request.startWithCompletionHandler{
+                (connection: FBRequestConnection!, result:AnyObject!, error: NSError!) in
+                if error == nil {
+                    println("Successfully grabbed FB user data")
+                    var userData : NSDictionary = result as NSDictionary
+                    var username = userData["name"] as String
+                    println("\(userData)")
+                    println("\(username)")
+                    self.userNameTextField.text = (userData["first_name"] as String) + (userData["last_name"] as String)
+                    var userID = userData["id"]
+                    var profileImageURL = "https://graph.facebook.com/\(userID!)/picture?width=300&height=300"
+                    println("\(profileImageURL)")
+                    self.profileImageView.setImageWithURL(NSURL(string: profileImageURL))
+                    self.profileImage = self.profileImageView.image
+                    self.profilePhotoLabel.hidden = true
+                    self.profileImageView.alpha = 0
+                    self.profileImageView.hidden = false
+                    UIView.animateWithDuration(0.3, animations: {
+                        self.profileImageView.alpha = 1
+                        }, completion: {
+                            (value: Bool) in
+                    })
+
+                } else {
+                    println("There was an error getting fb data. \(error.description)")
+                }
+            }
+ 
         }
-        
-//        NSURL *verify = [NSURL URLWithString:@"https://api.twitter.com/1/account/verify_credentials.json"];
-//        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:verify];
-//        [[PFTwitterUtils twitter] signRequest:request];
-//        NSURLResponse *response = nil;
-//        NSData *data = [NSURLConnection sendSynchronousRequest:request
-//        returningResponse:&response
-//        error:&error];
     }
 
     override func didReceiveMemoryWarning() {
@@ -218,8 +240,8 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
                         user["profileName"] = self.userNameTextField.text
                         user["canonicalProfileName"] = self.userNameTextField.text.lowercaseString
                         
-                        if self.profileImage != nil {
-                            var profileImageData = UIImageJPEGRepresentation(self.profileImage, 1.0)
+                        if self.profileImageView.image != nil {
+                            var profileImageData = UIImageJPEGRepresentation(self.profileImageView.image, 1.0)
                             var imageFile : PFFile = PFFile(name: "image.png", data: profileImageData)
                             user["profileImage"] = imageFile
                         }
