@@ -249,10 +249,10 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 if error == nil {
                     // The find succeeded.
                     println("Successfully retrieved \(objects.count) events.")
-                    for object in objects {
-                        var objectTitle = object["title"]
-                        println("This is the object's title: \(objectTitle!))")
-                    }
+//                    for object in objects {
+//                        var objectTitle = object["title"]
+//                        println("This is the object's title: \(objectTitle!))")
+//                    }
                     if objects.count == 0 || objects.count < 10 {
                         self.maxReached = true
                     }
@@ -269,7 +269,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                     self.currentOffset = self.stories.count
                     
                     self.storyTableView.reloadData()
-                    print("This is a list of all the stories \(self.stories)")
+//                    print("This is a list of all the stories \(self.stories)")
                     self.refreshControl.endRefreshing()
                     //                    if(GSProgressHUD.isVisible()) {
                     //                        GSProgressHUD.dismiss()

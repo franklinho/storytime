@@ -910,10 +910,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 if error == nil {
                     // The find succeeded.
                     println("Successfully retrieved \(objects.count) events.")
-                    for object in objects {
-                        var objectTitle = object["title"]
-                        println("This is the object's title: \(objectTitle!))")
-                    }
+//                    for object in objects {
+//                        var objectTitle = object["title"]
+//                        println("This is the object's title: \(objectTitle!))")
+//                    }
                     if objects.count == 0 || objects.count < 10 {
                         self.maxReached = true
                     }
@@ -930,7 +930,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.currentOffset = self.events.count
                     
                     self.storyTableView.reloadData()
-                    print("This is a list of all the events \(self.events)")
+//                    print("This is a list of all the events \(self.events)")
                     self.refreshControl.endRefreshing()
                     //                    if(GSProgressHUD.isVisible()) {
                     //                        GSProgressHUD.dismiss()

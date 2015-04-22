@@ -72,7 +72,7 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
 //                println(NSString(data: data, encoding: NSUTF8StringEncoding))
                 if data != nil {
                     var userJSON = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
-                    println("\(userJSON)")
+//                    println("\(userJSON)")
                     var profileImageURLString = userJSON["profile_image_url"] as String
                     var fullSizeProfileImageURLString = profileImageURLString.substringToIndex(advance(profileImageURLString.startIndex, countElements(profileImageURLString) - 11))+".png"
                     println("\(fullSizeProfileImageURLString)")
@@ -100,7 +100,7 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
                     println("Successfully grabbed FB user data")
                     var userData : NSDictionary = result as NSDictionary
                     var username = userData["name"] as String
-                    println("\(userData)")
+//                    println("\(userData)")
                     println("\(username)")
                     self.userNameTextField.text = (userData["first_name"] as String) + (userData["last_name"] as String)
                     var userID = userData["id"]
