@@ -160,6 +160,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+        
+        var rootViewController = self.window!.rootViewController as UITabBarController
+        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        if url.host == "twitterLogInSuccessful" {
+            if (PFUser.currentUser() != nil && PFUser.currentUser()["profileName"] == nil) {
+                var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
+                rootViewController.presentViewController(createProfileVC, animated: true, completion: nil)
+            }
+            
+        }
         return FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication)
     }
     
@@ -189,6 +199,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         })
         
     }
+    
+
 
 }
 

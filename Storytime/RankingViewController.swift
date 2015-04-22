@@ -376,6 +376,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     @IBAction func logOutButtonWasTapped(sender: AnyObject) {
+        self.creatingNewStory = false
         if PFUser.currentUser() != nil {
             PFUser.logOut()
             UIAlertView(title: "Logged Out", message: "You have successfully logged out.", delegate: nil, cancelButtonTitle: "OK").show()

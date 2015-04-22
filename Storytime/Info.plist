@@ -23,8 +23,11 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.franklinho.StoryTime</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>storyweave</string>
 				<string>fb1075629812464177</string>
 			</array>
 		</dict>
