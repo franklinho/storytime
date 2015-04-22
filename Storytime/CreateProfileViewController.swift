@@ -61,6 +61,46 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
         userNameTextField.delegate = self
         userNameTextField.autocorrectionType = UITextAutocorrectionType.No
         userNameTextField.autocapitalizationType = UITextAutocapitalizationType.None
+        
+        if PFTwitterUtils.isLinkedWithUser(PFUser.currentUser()) {
+            var twitterScreenName = PFTwitterUtils.twitter().screenName
+            self.userNameTextField.text = twitterScreenName
+            var profileImageURL = NSURL(string: "https://api.twitter.com/1.1/users/show.json?screen_name=\(twitterScreenName)")!
+            var request = NSMutableURLRequest(URL: profileImageURL)
+            PFTwitterUtils.twitter().signRequest(request)
+            var data = NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
+//                println(NSString(data: data, encoding: NSUTF8StringEncoding))
+                if data != nil {
+                    var userJSON = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
+                    println("\(userJSON)")
+                    var profileImageURLString = userJSON["profile_image_url"] as String
+                    var fullSizeProfileImageURLString = profileImageURLString.substringToIndex(advance(profileImageURLString.startIndex, countElements(profileImageURLString) - 11))+".png"
+                    println("\(fullSizeProfileImageURLString)")
+                    if fullSizeProfileImageURLString != "http://abs.twimg.com/sticky/default_profile_images/default_profile_1.png" {
+                        self.profileImageView.setImageWithURL(NSURL(string: fullSizeProfileImageURLString))
+                        self.profileImage = self.profileImageView.image
+                        self.profilePhotoLabel.hidden = true
+                        self.profileImageView.alpha = 0
+                        self.profileImageView.hidden = false
+                        UIView.animateWithDuration(0.3, animations: {
+                            self.profileImageView.alpha = 1
+                            }, completion: {
+                                (value: Bool) in
+                        })
+                    }
+                    
+                    
+                }
+            }
+        }
+        
+//        NSURL *verify = [NSURL URLWithString:@"https://api.twitter.com/1/account/verify_credentials.json"];
+//        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:verify];
+//        [[PFTwitterUtils twitter] signRequest:request];
+//        NSURLResponse *response = nil;
+//        NSData *data = [NSURLConnection sendSynchronousRequest:request
+//        returningResponse:&response
+//        error:&error];
     }
 
     override func didReceiveMemoryWarning() {

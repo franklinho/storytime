@@ -12,3 +12,4 @@
 #import <ParseUI/ParseUI.h>
 #import "PBJVision.h"
 #import "GSProgressHUD.h"
+#import "UIImageView+AFNetworking.h"
