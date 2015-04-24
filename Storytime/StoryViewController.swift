@@ -53,6 +53,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var maxReached = false
     var requestingObjects = false
     var previewLayer = PBJVision.sharedInstance().previewLayer
+    var photoJustCreated = false
+    var videoJustCreated = false
 
     @IBOutlet weak var pointsLabel: UILabel!
     @IBOutlet weak var upVoteButton: UIButton!
@@ -415,7 +417,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.event = event
                     cell.delegate = self
                     cell.populateCellWithEvent(event!)
-                    
+                    if indexPath.row == 0 {
+                        if photoJustCreated == true {
+                            cell.eventImageView.image = squareImageWithImage(capturedImage!)
+                        }
+                    }
                     return cell
                 } else {
                     var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryVideoTableViewCell") as! StoryVideoTableViewCell
@@ -700,6 +706,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var temporaryEventsArray = NSMutableArray(array: self.events)
         temporaryEventsArray.insertObject(event, atIndex: 0)
         self.events = temporaryEventsArray
+        self.photoJustCreated = false
+        self.videoJustCreated = false
         self.storyTableView.reloadData()
         event.saveInBackgroundWithBlock({
             (success, error) -> Void in
@@ -1091,6 +1099,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var temporaryEventsArray = NSMutableArray(array: self.events)
         temporaryEventsArray.insertObject(event, atIndex: 0)
         self.events = temporaryEventsArray
+        self.photoJustCreated = false
+        self.videoJustCreated = true
         self.storyTableView.reloadData()
         event.saveInBackgroundWithBlock({
             (success, error) -> Void in
@@ -1237,6 +1247,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var temporaryEventsArray = NSMutableArray(array: self.events)
         temporaryEventsArray.insertObject(event, atIndex: 0)
         self.events = temporaryEventsArray
+        self.photoJustCreated = true
+        self.videoJustCreated = false
         self.storyTableView.reloadData()
         event.saveInBackgroundWithBlock({
             (success, error) -> Void in

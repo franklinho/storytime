@@ -33,6 +33,9 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     var videoPath : String?
     var croppedVideoPath : String?
     var previewLayer = PBJVision.sharedInstance().previewLayer
+    var photoJustCreated = false
+    var videoJustCreated = false
+
     
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var createTextView: UITextView!
@@ -242,6 +245,11 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                     cell.delegate = self
                     cell.comment = comment
                     cell.populateCellWithComment(comment!)
+                    if indexPath.row == 0 {
+                        if photoJustCreated == true {
+                            cell.eventImageView.image = squareImageWithImage(capturedImage!)
+                        }
+                    }
                     return cell
                 } else {
                     var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentVideoTableViewCell") as! StoryVideoTableViewCell
@@ -338,6 +346,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                             cell.deleteButton!.hidden = true
                         }
                     }
+                    
+                    
                     return cell
                     
                 }
@@ -804,7 +814,10 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         var temporaryCommentsArray = NSMutableArray(array: self.comments)
         temporaryCommentsArray.insertObject(comment, atIndex: 0)
         self.comments = temporaryCommentsArray
+        self.photoJustCreated = true
+        self.videoJustCreated = false
         self.commentsTableView.reloadData()
+        
         comment.saveInBackgroundWithBlock({
             (success, error) -> Void in
             if (success) {
@@ -1042,6 +1055,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         var temporaryCommentsArray = NSMutableArray(array: self.comments)
         temporaryCommentsArray.insertObject(comment, atIndex: 0)
         self.comments = temporaryCommentsArray
+        self.photoJustCreated = false
+        self.videoJustCreated = true
         self.commentsTableView.reloadData()
         comment.saveInBackgroundWithBlock({
             (success, error) -> Void in
@@ -1137,6 +1152,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         var temporaryCommentsArray = NSMutableArray(array: self.comments)
         temporaryCommentsArray.insertObject(comment, atIndex: 0)
         self.comments = temporaryCommentsArray
+        self.photoJustCreated = false
+        self.videoJustCreated = false
         self.commentsTableView.reloadData()
         
         comment.saveInBackgroundWithBlock({
