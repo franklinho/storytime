@@ -39,13 +39,13 @@ class UserTableViewCell: UITableViewCell {
     
     func populateCellWithUser(user:PFObject) {
         user.fetchIfNeededInBackgroundWithBlock {
-            (post: PFObject!, error: NSError!) -> Void in
+            (post, error) -> Void in
             if user["profileImage"] != nil {
-                let userImageFile = user["profileImage"] as PFFile
+                let userImageFile = user["profileImage"] as! PFFile
                 userImageFile.getDataInBackgroundWithBlock {
-                    (imageData: NSData!, error: NSError!) -> Void in
+                    (imageData, error) -> Void in
                     if error == nil {
-                        let image = UIImage(data:imageData)
+                        let image = UIImage(data:imageData!)
                         self.userImageView.image = image
                     }
                 }

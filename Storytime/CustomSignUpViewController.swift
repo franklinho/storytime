@@ -16,8 +16,8 @@ class CustomSignUpViewController: PFSignUpViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.signUpView.logo.hidden = true
-        self.signUpView.backgroundColor = UIColor(red: 41.0/255.0, green: 37.0/255.0, blue: 55.0/255.0, alpha: 1.0)
+        self.signUpView!.logo!.hidden = true
+        self.signUpView!.backgroundColor = UIColor(red: 41.0/255.0, green: 37.0/255.0, blue: 55.0/255.0, alpha: 1.0)
         var storyWeaveLogo = UIImageView(image: UIImage(named: "storyweave_logo.png"))
         storyWeaveLogo.frame = CGRectMake((screenSize.width - 300) / 2, 150, 300, 300)
         self.view.addSubview(storyWeaveLogo)

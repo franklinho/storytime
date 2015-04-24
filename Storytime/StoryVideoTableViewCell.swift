@@ -75,9 +75,9 @@ class StoryVideoTableViewCell: UITableViewCell {
     
     @IBAction func showUserProfileWasTapped(sender: AnyObject) {
         if self.comment != nil {
-            self.delegate?.displayUserProfileView(self.comment!["user"] as PFUser)
+            self.delegate?.displayUserProfileView(self.comment!["user"] as! PFUser)
         } else {
-            self.delegate?.displayUserProfileView(self.event!["user"] as PFUser)
+            self.delegate?.displayUserProfileView(self.event!["user"] as! PFUser)
         }
     }
     

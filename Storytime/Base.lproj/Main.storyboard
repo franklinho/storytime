@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="X52-iy-NAO">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="X52-iy-NAO">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -219,7 +219,7 @@
                                                         <action selector="userLabelWasTapped:" destination="0LO-iP-4RM" eventType="touchUpInside" id="ZyP-X5-qmx"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rpb-Wk-0BH" userLabel="Comments Button">
+                                                <button opaque="NO" alpha="0.75" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rpb-Wk-0BH" userLabel="Comments Button">
                                                     <rect key="frame" x="477" y="302" width="110" height="44"/>
                                                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
@@ -389,7 +389,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Br-Lx-G19" userLabel="ProfilePreviewView">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Br-Lx-G19" userLabel="ProfilePreviewView">
                                 <rect key="frame" x="200" y="146" width="200" height="200"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user_icon_scaled_white.png" translatesAutoresizingMaskIntoConstraints="NO" id="dXb-aF-hmh">
@@ -483,7 +483,7 @@
                                     <outletCollection property="gestureRecognizers" destination="n4c-FE-Mk3" appends="YES" id="q7e-IR-Eps"/>
                                 </connections>
                             </view>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Choose a username (required)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WLG-do-Wgf">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Choose a username (required)" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WLG-do-Wgf">
                                 <rect key="frame" x="175" y="394" width="250" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="f1u-os-8yk"/>
@@ -492,7 +492,7 @@
                                 <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="username:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q1a-3y-C7j">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="username:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q1a-3y-C7j">
                                 <rect key="frame" x="255" y="362" width="90.5" height="23.5"/>
                                 <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -514,7 +514,7 @@
                                     <action selector="submitButtonWasTapped:" destination="ded-PO-Ujr" eventType="touchUpInside" id="sft-gN-ZHt"/>
                                 </connections>
                             </button>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="username is required" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lWo-dR-fvO">
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="username is required" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lWo-dR-fvO">
                                 <rect key="frame" x="215" y="432" width="169.5" height="23.5"/>
                                 <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
                                 <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -758,7 +758,7 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MWX-9J-S3g" userLabel="Comments Button">
+                                                <button opaque="NO" alpha="0.75" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MWX-9J-S3g" userLabel="Comments Button">
                                                     <rect key="frame" x="477" y="302" width="110" height="44"/>
                                                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
@@ -977,7 +977,7 @@
                                                         </mask>
                                                     </variation>
                                                 </view>
-                                                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r0m-Fw-frf" userLabel="deleteDismissButton">
+                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r0m-Fw-frf" userLabel="deleteDismissButton">
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="334"/>
                                                     <state key="normal">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -986,7 +986,7 @@
                                                         <action selector="deleteDismissButtonWasTapped:" destination="579-Bq-XMg" eventType="touchUpInside" id="T4i-Cc-Whs"/>
                                                     </connections>
                                                 </button>
-                                                <button hidden="YES" opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bKz-Ia-sLW">
+                                                <button hidden="YES" opaque="NO" alpha="0.75" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bKz-Ia-sLW">
                                                     <rect key="frame" x="10" y="280" width="44" height="44"/>
                                                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
@@ -1150,7 +1150,7 @@
                                                         </mask>
                                                     </variation>
                                                 </view>
-                                                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4aD-dW-GiR" userLabel="deleteDismissButton">
+                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4aD-dW-GiR" userLabel="deleteDismissButton">
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="334"/>
                                                     <state key="normal">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1159,7 +1159,7 @@
                                                         <action selector="deleteDismissButtonWasTapped:" destination="1Sp-W7-uAW" eventType="touchUpInside" id="i2F-cO-lFb"/>
                                                     </connections>
                                                 </button>
-                                                <button hidden="YES" opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iWS-uN-Y9G">
+                                                <button hidden="YES" opaque="NO" alpha="0.75" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iWS-uN-Y9G">
                                                     <rect key="frame" x="10" y="280" width="44" height="44"/>
                                                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
@@ -1264,7 +1264,7 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ceY-LX-QHm" id="1hj-Eu-03B">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Fo-GF-3C7">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Fo-GF-3C7">
                                                     <rect key="frame" x="8" y="37" width="584" height="288.5"/>
                                                     <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="25"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -1296,7 +1296,7 @@
                                                         </mask>
                                                     </variation>
                                                 </view>
-                                                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ad6-fi-eUC" userLabel="deleteDismissButton">
+                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ad6-fi-eUC" userLabel="deleteDismissButton">
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="334"/>
                                                     <state key="normal">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -1305,7 +1305,7 @@
                                                         <action selector="deleteDismissButtonWasTapped:" destination="ceY-LX-QHm" eventType="touchUpInside" id="0Uw-y3-XeG"/>
                                                     </connections>
                                                 </button>
-                                                <button hidden="YES" opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LTw-lW-sXf">
+                                                <button hidden="YES" opaque="NO" alpha="0.75" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LTw-lW-sXf">
                                                     <rect key="frame" x="10" y="280" width="44" height="44"/>
                                                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
@@ -1903,7 +1903,7 @@
                                             <constraint firstAttribute="width" constant="20" id="CbB-Xd-UZ1"/>
                                         </constraints>
                                     </view>
-                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VZj-1l-COb">
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VZj-1l-COb">
                                         <rect key="frame" x="176" y="35" width="44" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="NTq-Zr-UKI"/>
@@ -2185,7 +2185,7 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Mta-8c-o7R" id="PxK-MW-oOU">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user_icon_scaled_white.png" translatesAutoresizingMaskIntoConstraints="NO" id="cIQ-K5-Fk6">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="user_icon_scaled_white.png" translatesAutoresizingMaskIntoConstraints="NO" id="cIQ-K5-Fk6">
                                                     <rect key="frame" x="92" y="6" width="60" height="60"/>
                                                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
@@ -2234,7 +2234,7 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="N6X-lr-teM" id="7UZ-bp-Ekr">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="PnZ-Ga-X2z">
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="PnZ-Ga-X2z">
                                                     <rect key="frame" x="290" y="26" width="20" height="20"/>
                                                 </activityIndicatorView>
                                             </subviews>
@@ -2438,7 +2438,7 @@
                                                         <action selector="showUserProfileWasTapped:" destination="kAw-tL-Mzf" eventType="touchUpInside" id="b08-fU-jrx"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vfe-zq-D7F" userLabel="deleteDismissButton">
+                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vfe-zq-D7F" userLabel="deleteDismissButton">
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="334"/>
                                                     <state key="normal">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -2447,7 +2447,7 @@
                                                         <action selector="deleteDismissButtonWasTapped:" destination="kAw-tL-Mzf" eventType="touchUpInside" id="Jf8-yb-o0E"/>
                                                     </connections>
                                                 </button>
-                                                <button hidden="YES" opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tOk-u9-bv6">
+                                                <button hidden="YES" opaque="NO" alpha="0.75" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tOk-u9-bv6">
                                                     <rect key="frame" x="10" y="280" width="44" height="44"/>
                                                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
@@ -2589,7 +2589,7 @@
                                                         <action selector="showUserProfileWasTapped:" destination="fnK-am-xEg" eventType="touchUpInside" id="2vo-ZJ-BQU"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="as1-x0-4Ua" userLabel="deleteDismissButton">
+                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="as1-x0-4Ua" userLabel="deleteDismissButton">
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="334"/>
                                                     <state key="normal">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -2598,7 +2598,7 @@
                                                         <action selector="deleteDismissButtonWasTapped:" destination="fnK-am-xEg" eventType="touchUpInside" id="1oB-Io-evo"/>
                                                     </connections>
                                                 </button>
-                                                <button hidden="YES" opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bxj-M1-fa6">
+                                                <button hidden="YES" opaque="NO" alpha="0.75" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bxj-M1-fa6">
                                                     <rect key="frame" x="10" y="280" width="44" height="44"/>
                                                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
@@ -2680,7 +2680,7 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zyw-HT-bdb" id="mVc-gz-TTg">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xry-SY-tLO">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xry-SY-tLO">
                                                     <rect key="frame" x="8" y="61" width="584" height="265"/>
                                                     <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="25"/>
                                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -2748,7 +2748,7 @@
                                                         <action selector="showUserProfileWasTapped:" destination="zyw-HT-bdb" eventType="touchUpInside" id="8cz-jg-61i"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g85-1Z-vuH" userLabel="deleteDismissButton">
+                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g85-1Z-vuH" userLabel="deleteDismissButton">
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="334"/>
                                                     <state key="normal">
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -2757,7 +2757,7 @@
                                                         <action selector="deleteDismissButtonWasTapped:" destination="zyw-HT-bdb" eventType="touchUpInside" id="uyJ-Et-qGe"/>
                                                     </connections>
                                                 </button>
-                                                <button hidden="YES" opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mh2-sz-3qJ">
+                                                <button hidden="YES" opaque="NO" alpha="0.75" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mh2-sz-3qJ">
                                                     <rect key="frame" x="10" y="280" width="44" height="44"/>
                                                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
@@ -3056,7 +3056,7 @@
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="cameraSendButtonWasTapped:" destination="22L-dv-H0B" eventType="touchUpInside" id="ANK-Rl-BNV"/>
+                                                    <action selector="cameraCommentSendButtonWasTapped:" destination="22L-dv-H0B" eventType="touchUpInside" id="VCW-8g-y3h"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PBP-rC-uVw" userLabel="Switch Button">
@@ -3371,14 +3371,14 @@
                         <outlet property="thumbnailImageView" destination="xak-bT-chr" id="Zwk-do-z7k"/>
                         <outlet property="userLabel" destination="Abf-rG-O01" id="hc5-Cg-0jk"/>
                         <outlet property="videoButton" destination="A9M-5R-Nqi" id="zYr-E3-Chl"/>
+                        <outlet property="videoCommentLongPressGestureRecognizer" destination="UMw-LD-kWF" id="5IJ-Uc-3Hp"/>
                         <outlet property="videoContainer" destination="Rrb-6O-K9b" id="gDw-VT-710"/>
-                        <outlet property="videoLongPressGestureRecognizer" destination="UMw-LD-kWF" id="7DA-eQ-EsP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QKw-NZ-fQX" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <pongPressGestureRecognizer enabled="NO" allowableMovement="10" minimumPressDuration="0.10000000000000001" id="UMw-LD-kWF">
                     <connections>
-                        <action selector="videoLongPressGestureRecognizerWasPressed:" destination="22L-dv-H0B" id="RKG-fS-XLq"/>
+                        <action selector="videoCommentLongPressGestureRecognizerWasPressed:" destination="22L-dv-H0B" id="QM2-zl-QOE"/>
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>

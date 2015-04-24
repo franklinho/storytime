@@ -40,9 +40,9 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
         
         if self.story != nil {
             if self.story!["authors"] != nil {
-                users = self.story!["authors"] as NSArray
+                users = self.story!["authors"] as! NSArray
             } else {
-                users = [PFUser.currentUser()]
+                users = [PFUser.currentUser()!]
             }
             userTableView.reloadData()
         }
@@ -54,25 +54,25 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        var selectedUser = users[indexPath.row] as PFUser
-        var selectedUserProfileName = selectedUser["profileName"] as String
+        var selectedUser = users[indexPath.row] as! PFUser
+        var selectedUserProfileName = selectedUser["profileName"] as! String
         if self.story != nil {
-            var storyUser = self.story!["user"] as PFUser
+            var storyUser = self.story!["user"] as! PFUser
             storyUser.fetchIfNeededInBackgroundWithBlock{
-                (post: PFObject!, error: NSError!) -> Void in
-                var storyUserProfileName = storyUser["profileName"] as String
+                (post, error) -> Void in
+                var storyUserProfileName = storyUser["profileName"] as! String
                 if selectedUserProfileName == storyUserProfileName {
                     if self.userAlreadyAddedAlertVisible == false {
                         self.displayAlreadyAddedAlert()
                     }
                 } else {
-                    var cell = self.userTableView.cellForRowAtIndexPath(indexPath) as UserTableViewCell
+                    var cell = self.userTableView.cellForRowAtIndexPath(indexPath) as! UserTableViewCell
                     if  self.story!["authors"] == nil {
                         var invitedAuthorsDict = NSMutableDictionary()
 //                        invitedAuthorsDict[storyUserProfileName] = 1
 //                        invitedAuthorsDict[selectedUserProfileName] = 0
 //                        self.story!["invitedAuthors"] = invitedAuthorsDict as NSDictionary
-                        self.story!["authors"] = [self.story!["user"], selectedUser]
+                        self.story!["authors"] = [self.story!["user"]!, selectedUser]
                         
                         cell.userAddedIndicator.alpha = 0
                         cell.userAddedIndicator.hidden = false
@@ -88,7 +88,7 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
                         
 
                     } else {
-                        var storyAuthors = self.story!["authors"] as NSArray
+                        var storyAuthors = self.story!["authors"] as! NSArray
                         var matchCount = 0
                         for author in storyAuthors {
                             if selectedUser.objectId == author.objectId {
@@ -184,7 +184,7 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
     
     func keyBoardWillChange(notification: NSNotification) {
         // Adjusts size of text view to scroll when keyboard is up
-        var keyBoardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+        var keyBoardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
         self.view.convertRect(keyBoardRect, fromView: nil)
         
         var tableViewRect : CGRect = self.userTableView.frame
@@ -207,24 +207,24 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row == userTableView.numberOfRowsInSection(0)-1 && maxReached == false {
-            var cell = tableView.dequeueReusableCellWithIdentifier("UserSpinnerCell") as UITableViewCell
+            var cell = tableView.dequeueReusableCellWithIdentifier("UserSpinnerCell") as! UITableViewCell
             if (cell.respondsToSelector(Selector("layoutMargins"))) {
                 cell.layoutMargins = UIEdgeInsetsZero;
             }
             return cell
         } else {
-            var user = users[indexPath.row] as PFObject
-            var cell = tableView.dequeueReusableCellWithIdentifier("UserTableViewCell") as UserTableViewCell
+            var user = users[indexPath.row] as! PFObject
+            var cell = tableView.dequeueReusableCellWithIdentifier("UserTableViewCell") as! UserTableViewCell
             if (cell.respondsToSelector(Selector("layoutMargins"))) {
                 cell.layoutMargins = UIEdgeInsetsZero;
             }
             cell.populateCellWithUser(user)
             var matchCount = 0
-            if user.objectId == (story!["user"] as PFObject).objectId {
+            if user.objectId == (story!["user"] as! PFObject).objectId {
                 cell.userAddedIndicator.hidden = false
             } else {
                 if self.story!["authors"] != nil {
-                    for author in self.story!["authors"] as NSArray {
+                    for author in self.story!["authors"] as! NSArray {
                         if user.objectId == author.objectId {
                             matchCount += 1
                         }
@@ -260,7 +260,7 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
         self.maxReached = false
         
         
-        var query = PFUser.query()
+        var query = PFUser.query()!
         println("\(self.userSearchBar.text.lowercaseString)")
         var string = self.userSearchBar.text as String
         query.whereKey("canonicalProfileName", containsString: string.lowercaseString)
@@ -274,17 +274,17 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
         print("Query skipping \(self.currentOffset) users")
         query.skip = self.currentOffset
         query.findObjectsInBackgroundWithBlock {
-            (objects: [AnyObject]!, error: NSError!) -> Void in
+            (objects, error) -> Void in
             if error == nil {
                 // The find succeeded.
-                println("Successfully retrieved \(objects.count) users.")
+                println("Successfully retrieved \(objects!.count) users.")
             
-                if objects.count == 0 || objects.count < 20 {
+                if objects!.count == 0 || objects!.count < 20 {
                     self.maxReached = true
                 }
                 
                 var temporaryArray : NSMutableArray = NSMutableArray(array: self.users)
-                temporaryArray.addObjectsFromArray(objects)
+                temporaryArray.addObjectsFromArray(objects!)
                 self.users = temporaryArray
                 self.currentOffset = self.users.count
                 
@@ -292,7 +292,7 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
                 self.requestingUsers = false
             } else {
                 // Log details of the failure
-                println("Error: \(error) \(error.userInfo!)")
+                println("Error: \(error!) \(error!.userInfo!)")
 
             }
         }

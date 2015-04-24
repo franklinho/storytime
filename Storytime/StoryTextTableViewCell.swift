@@ -60,9 +60,9 @@ class StoryTextTableViewCell: UITableViewCell {
     
     @IBAction func showUserProfileWasTapped(sender: AnyObject) {
         if self.comment != nil {
-            self.delegate?.displayUserProfileView(self.comment!["user"] as PFUser)
+            self.delegate?.displayUserProfileView(self.comment!["user"] as! PFUser)
         } else {
-            self.delegate?.displayUserProfileView(self.event!["user"] as PFUser)
+            self.delegate?.displayUserProfileView(self.event!["user"] as! PFUser)
         }
     }
     
@@ -125,24 +125,24 @@ class StoryTextTableViewCell: UITableViewCell {
         if event.createdAt == nil {
             self.timestampLabel.text = "0s ago"
         } else {
-            self.timestampLabel.text = timeSinceTimeStamp(event.createdAt)
+            self.timestampLabel.text = timeSinceTimeStamp(event.createdAt!)
         }
         if PFUser.currentUser() != nil {
             if event["user"] != nil {
-                var eventUser = event["user"] as PFUser
+                var eventUser = event["user"] as! PFUser
                 eventUser.fetchIfNeededInBackgroundWithBlock {
-                    (post: PFObject!, error: NSError!) -> Void in
+                    (post, error) -> Void in
                     if eventUser["profileName"] != nil {
-                        var profileName : String = eventUser["profileName"] as String
+                        var profileName : String = eventUser["profileName"] as! String
                         self.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
                         self.userNameButton.hidden = false
                     }
                     if eventUser["profileImage"] != nil {
-                        var profileImageFile = eventUser["profileImage"] as PFFile
+                        var profileImageFile = eventUser["profileImage"] as! PFFile
                         profileImageFile.getDataInBackgroundWithBlock {
-                            (imageData: NSData!, error: NSError!) -> Void in
+                            (imageData, error) -> Void in
                             if error == nil {
-                                let image = UIImage(data:imageData)
+                                let image = UIImage(data:imageData!)
                                 self.profileImageView.image = image
                                 self.profileImageView.alpha = 0
                                 self.profileImageView.hidden = false
@@ -156,9 +156,9 @@ class StoryTextTableViewCell: UITableViewCell {
                         }
                     }
                     
-                    var currentUser = PFUser.currentUser()
+                    var currentUser = PFUser.currentUser()!
                     currentUser.fetchIfNeededInBackgroundWithBlock {
-                        (post: PFObject!, error: NSError!) -> Void in
+                        (post, error) -> Void in
                         println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
                         if  eventUser.username == currentUser.username {
                             self.deleteButton!.hidden = false
@@ -182,23 +182,23 @@ class StoryTextTableViewCell: UITableViewCell {
         if comment.createdAt == nil {
             self.timestampLabel.text = "0s ago"
         } else {
-            self.timestampLabel.text = timeSinceTimeStamp(comment.createdAt)
+            self.timestampLabel.text = timeSinceTimeStamp(comment.createdAt!)
         }
         
-        var commentUser : PFUser = comment["user"] as PFUser
+        var commentUser : PFUser = comment["user"] as! PFUser
         commentUser.fetchIfNeededInBackgroundWithBlock {
-            (post: PFObject!, error: NSError!) -> Void in
+            (post, error) -> Void in
             if commentUser["profileName"] != nil {
-                var profileName : String = commentUser["profileName"] as String
+                var profileName : String = commentUser["profileName"] as! String
                 self.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
                 self.userNameButton.hidden = false
             }
             if commentUser["profileImage"] != nil {
-                var profileImageFile = commentUser["profileImage"] as PFFile
+                var profileImageFile = commentUser["profileImage"] as! PFFile
                 profileImageFile.getDataInBackgroundWithBlock {
-                    (imageData: NSData!, error: NSError!) -> Void in
+                    (imageData, error) -> Void in
                     if error == nil {
-                        let image = UIImage(data:imageData)
+                        let image = UIImage(data:imageData!)
                         self.profileImageView.image = image
                         
                         self.profileImageView.alpha = 0
@@ -214,7 +214,7 @@ class StoryTextTableViewCell: UITableViewCell {
             }
             
             if PFUser.currentUser() != nil {
-                var currentUser = PFUser.currentUser()
+                var currentUser = PFUser.currentUser()!
                 println("Comment user is \(commentUser.username) and current user is \(currentUser.username)")
                 if  commentUser.username == currentUser.username {
                     self.deleteButton!.hidden = false

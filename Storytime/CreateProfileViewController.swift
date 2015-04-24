@@ -63,18 +63,18 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
         userNameTextField.autocapitalizationType = UITextAutocapitalizationType.None
         
         if PFTwitterUtils.isLinkedWithUser(PFUser.currentUser()) {
-            var twitterScreenName = PFTwitterUtils.twitter().screenName
+            var twitterScreenName = PFTwitterUtils.twitter()!.screenName
             self.userNameTextField.text = twitterScreenName
             var profileImageURL = NSURL(string: "https://api.twitter.com/1.1/users/show.json?screen_name=\(twitterScreenName)")!
             var request = NSMutableURLRequest(URL: profileImageURL)
-            PFTwitterUtils.twitter().signRequest(request)
-            var data = NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
+            PFTwitterUtils.twitter()!.signRequest(request)
+            var data: Void = NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
 //                println(NSString(data: data, encoding: NSUTF8StringEncoding))
                 if data != nil {
-                    var userJSON = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
+                    var userJSON = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: nil) as! NSDictionary
 //                    println("\(userJSON)")
-                    var profileImageURLString = userJSON["profile_image_url"] as String
-                    var fullSizeProfileImageURLString = profileImageURLString.substringToIndex(advance(profileImageURLString.startIndex, countElements(profileImageURLString) - 11))+".png"
+                    var profileImageURLString = userJSON["profile_image_url"] as! String
+                    var fullSizeProfileImageURLString = profileImageURLString.substringToIndex(advance(profileImageURLString.startIndex, count(profileImageURLString) - 11))+".png"
                     println("\(fullSizeProfileImageURLString)")
                     if fullSizeProfileImageURLString != "http://abs.twimg.com/sticky/default_profile_images/default_profile_1.png" {
                         self.profileImageView.setImageWithURL(NSURL(string: fullSizeProfileImageURLString))
@@ -92,17 +92,17 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
                     
                 }
             }
-        } else if PFFacebookUtils.isLinkedWithUser(PFUser.currentUser()) {
+        } else if PFFacebookUtils.isLinkedWithUser(PFUser.currentUser()!) {
             var request : FBRequest = FBRequest.requestForMe()
             request.startWithCompletionHandler{
                 (connection: FBRequestConnection!, result:AnyObject!, error: NSError!) in
                 if error == nil {
                     println("Successfully grabbed FB user data")
-                    var userData : NSDictionary = result as NSDictionary
-                    var username = userData["name"] as String
+                    var userData : NSDictionary = result as! NSDictionary
+                    var username = userData["name"] as! String
 //                    println("\(userData)")
                     println("\(username)")
-                    self.userNameTextField.text = (userData["first_name"] as String) + (userData["last_name"] as String)
+                    self.userNameTextField.text = (userData["first_name"] as! String) + (userData["last_name"] as! String)
                     var userID = userData["id"]
                     var profileImageURL = "https://graph.facebook.com/\(userID!)/picture?width=300&height=300"
                     println("\(profileImageURL)")
@@ -178,11 +178,12 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
             
         }
     }
+    
 
 
     func vision(vision: PBJVision!, capturedPhoto photoDict: [NSObject : AnyObject]!, error: NSError!) {
-        var capturedImage = photoDict[PBJVisionPhotoImageKey] as UIImage
-        var squareImage = squareImageWithImage(capturedImage)
+        var capturedImage = photoDict[PBJVisionPhotoImageKey] as? UIImage
+        var squareImage = squareImageWithImage(capturedImage!)
         profileImage = squareImage
         profileImageView.image = squareImage
     }
@@ -226,17 +227,17 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
             usernameRequiredLabel.hidden = false
         } else {
             var query = PFUser.query()
-            query.whereKey("canonicalProfileName", equalTo:userNameTextField.text.lowercaseString)
-            query.findObjectsInBackgroundWithBlock {
-                (objects: [AnyObject]!, error: NSError!) -> Void in
+            query!.whereKey("canonicalProfileName", equalTo:userNameTextField.text.lowercaseString)
+            query!.findObjectsInBackgroundWithBlock {
+                (objects, error) -> Void in
                 if error == nil {
                     // The find succeeded.
-                    println("Successfully retrieved \(objects.count) usernames.")
+                    println("Successfully retrieved \(objects!.count) usernames.")
                     // Do something with the found objects
-                    if objects.count > 0 {
+                    if objects!.count > 0 {
                         self.usernameTakenLabel.hidden = false
                     } else {
-                        var user = PFUser.currentUser()
+                        var user = PFUser.currentUser()!
                         user["profileName"] = self.userNameTextField.text
                         user["canonicalProfileName"] = self.userNameTextField.text.lowercaseString
                         
@@ -247,7 +248,7 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
                         }
                         
                         user.saveInBackgroundWithBlock {
-                            (success: Bool, error: NSError!) -> Void in
+                            (success, error) -> Void in
                             if (success) {
                                 // The object has been saved.
                                 self.dismissViewControllerAnimated(true, completion: nil)
@@ -258,7 +259,7 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
                     }
                 } else {
                     // Log details of the failure
-                    println("Error: \(error) \(error.userInfo!)")
+                    println("Error: \(error) \(error!.userInfo!)")
                 }
             }
         }

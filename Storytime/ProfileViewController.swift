@@ -29,7 +29,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as UITabBarItem
+        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as! UITabBarItem
 
         
         profileImageView.layer.cornerRadius = 50
@@ -46,13 +46,13 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         
         if user != nil {
-            usernameLabel.text = user!["profileName"] as String
+            usernameLabel.text = user!["profileName"] as! String
             if user!["profileImage"] != nil {
-                var profileImageFile = user!["profileImage"] as PFFile
+                var profileImageFile = user!["profileImage"] as! PFFile
                 profileImageFile.getDataInBackgroundWithBlock {
-                    (imageData: NSData!, error: NSError!) -> Void in
+                    (imageData, error) -> Void in
                     if error == nil {
-                        let image = UIImage(data:imageData)
+                        let image = UIImage(data:imageData!)
                         self.profileImageView.image = image
                     }
                 }
@@ -76,7 +76,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.refreshControl = UIRefreshControl()
         var pullToRefreshString = "Pull to refresh"
         var pullToRefreshAttributedString : NSMutableAttributedString = NSMutableAttributedString(string: pullToRefreshString)
-        pullToRefreshAttributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, countElements(pullToRefreshString)))
+        pullToRefreshAttributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, count(pullToRefreshString)))
         self.refreshControl.attributedTitle = pullToRefreshAttributedString
         self.refreshControl.addTarget(self, action: "refreshStories", forControlEvents: UIControlEvents.ValueChanged)
         self.storyTableView.addSubview(refreshControl)
@@ -95,13 +95,13 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row == storyTableView.numberOfRowsInSection(0)-1 && maxReached == false {
-            var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as UITableViewCell
+            var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as! UITableViewCell
             if (cell.respondsToSelector(Selector("layoutMargins"))) {
                 cell.layoutMargins = UIEdgeInsetsZero;
             }
             return cell
         } else {
-            var cell = storyTableView.dequeueReusableCellWithIdentifier("RankingTableViewCell") as RankingTableViewCell
+            var cell = storyTableView.dequeueReusableCellWithIdentifier("RankingTableViewCell") as! RankingTableViewCell
             if (cell.respondsToSelector(Selector("layoutMargins"))) {
                 cell.layoutMargins = UIEdgeInsetsZero;
             }
@@ -116,19 +116,19 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 story = stories[indexPath.row] as? PFObject
                 cell.story = story
                 cell.titleLabel.text = story!["title"] as? String
-                var storyUser : PFUser = story!["user"] as PFUser
+                var storyUser : PFUser = story!["user"] as! PFUser
                 storyUser.fetchIfNeeded()
                 if storyUser["profileName"] != nil {
-                    var profileName : String = storyUser["profileName"] as String
+                    var profileName : String = storyUser["profileName"] as! String
                     cell.userButton.setTitle(profileName, forState: UIControlState.Normal)
                 }
                 
                 if storyUser["profileImage"] != nil {
-                    var profileImageFile = storyUser["profileImage"] as PFFile
+                    var profileImageFile = storyUser["profileImage"] as! PFFile
                     profileImageFile.getDataInBackgroundWithBlock {
-                        (imageData: NSData!, error: NSError!) -> Void in
+                        (imageData, error) -> Void in
                         if error == nil {
-                            let image = UIImage(data:imageData)
+                            let image = UIImage(data:imageData!)
                             cell.profileImageView.image = image
                         }
                     }
@@ -149,7 +149,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 }
                 
                 if story!["commentsCount"] != nil {
-                    var commentsCount = story!["commentsCount"] as Int
+                    var commentsCount = story!["commentsCount"] as! Int
                     cell.commentsButton.setTitle("  \(commentsCount) Comments  ", forState: UIControlState.Normal)
                 } else {
                     cell.commentsButton.setTitle("  0 Comments  ", forState: UIControlState.Normal)
@@ -158,14 +158,14 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
                 
                 if PFUser.currentUser() != nil{
-                    if PFUser.currentUser()["votedStories"] != nil {
-                        self.votedStories = PFUser.currentUser()["votedStories"] as NSMutableDictionary
-                        if votedStories[story!.objectId] != nil{
-                            if votedStories[story!.objectId] as Int == 1 {
+                    if PFUser.currentUser()!["votedStories"] != nil {
+                        self.votedStories = PFUser.currentUser()!["votedStories"] as! NSMutableDictionary
+                        if votedStories[story!.objectId!] != nil{
+                            if votedStories[story!.objectId!] as! Int == 1 {
                                 cell.storyUpVoted = true
                                 cell.upvoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
                                 cell.pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
-                            } else if votedStories[story!.objectId] as Int == -1 {
+                            } else if votedStories[story!.objectId!] as! Int == -1 {
                                 cell.storyDownVoted = true
                                 cell.downvoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
                                 cell.pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
@@ -178,22 +178,22 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
                 cell.previewImageView.hidden = true
                 if story!["thumbnailImage"] != nil {
-                    let imageFile = story!["thumbnailImage"] as PFFile
+                    let imageFile = story!["thumbnailImage"] as! PFFile
                     imageFile.getDataInBackgroundWithBlock {
-                        (imageData: NSData!, error: NSError!) -> Void in
+                        (imageData, error) -> Void in
                         if error == nil {
-                            let image = UIImage(data:imageData)
+                            let image = UIImage(data:imageData!)
                             cell.previewImageView.image = image
                             cell.previewImageView.hidden = false
                             cell.thumbnailTextLabel.hidden = true
                         }
                     }
                 } else if story!["thumbnailVideoScreenCap"] != nil {
-                    let imageFile = story!["thumbnailVideoScreenCap"] as PFFile
+                    let imageFile = story!["thumbnailVideoScreenCap"] as! PFFile
                     imageFile.getDataInBackgroundWithBlock {
-                        (imageData: NSData!, error: NSError!) -> Void in
+                        (imageData, error) -> Void in
                         if error == nil {
-                            let image = UIImage(data:imageData)
+                            let image = UIImage(data:imageData!)
                             cell.previewImageView.image = image
                             cell.previewImageView.hidden = false
                             cell.thumbnailTextLabel.hidden = true
@@ -202,7 +202,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 } else if story!["thumbnailText"] != nil {
                     cell.previewImageView.hidden = true
                     cell.thumbnailTextLabel.hidden = false
-                    cell.thumbnailTextLabel.text = story!["thumbnailText"] as String
+                    cell.thumbnailTextLabel.text = story!["thumbnailText"] as! String
                 }
                 
                 cell.rankLabel.text = "\(indexPath.row+1)."
@@ -234,7 +234,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         dispatch_async(dispatch_get_main_queue(),{
             var query = PFQuery(className:"Story")
-            query.whereKey("user", equalTo: self.user)
+            query.whereKey("user", equalTo: self.user!)
             query.orderByDescending("points")
             query.addDescendingOrder("createdAt")
             query.limit = 10
@@ -245,26 +245,26 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             print("Query skipping \(self.currentOffset) stories")
             query.skip = self.currentOffset
             query.findObjectsInBackgroundWithBlock {
-                (objects: [AnyObject]!, error: NSError!) -> Void in
+                (objects, error) -> Void in
                 if error == nil {
                     // The find succeeded.
-                    println("Successfully retrieved \(objects.count) events.")
+                    println("Successfully retrieved \(objects!.count) events.")
 //                    for object in objects {
 //                        var objectTitle = object["title"]
 //                        println("This is the object's title: \(objectTitle!))")
 //                    }
-                    if objects.count == 0 || objects.count < 10 {
+                    if objects!.count == 0 || objects!.count < 10 {
                         self.maxReached = true
                     }
                     
-                    if objects.count == 0 {
+                    if objects!.count == 0 {
                         self.noStoriesLabel.hidden = false
                     } else {
                         self.noStoriesLabel.hidden = true
                     }
                     
                     var temporaryArray : NSMutableArray = NSMutableArray(array: self.stories)
-                    temporaryArray.addObjectsFromArray(objects)
+                    temporaryArray.addObjectsFromArray(objects!)
                     self.stories = temporaryArray
                     self.currentOffset = self.stories.count
                     
@@ -277,7 +277,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                     self.requestingObjects = false
                 } else {
                     // Log details of the failure
-                    println("Error: \(error) \(error.userInfo!)")
+                    println("Error: \(error!) \(error!.userInfo!)")
                     self.refreshControl.endRefreshing()
                     //                    if(GSProgressHUD.isVisible()) {
                     //                        GSProgressHUD.dismiss()
@@ -298,7 +298,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func displayUserProfileView(user: PFUser) {
-        var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as ProfileViewController
+        var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
         profileVC.user = user
         navigationController?.pushViewController(profileVC, animated: true)
     }
@@ -306,7 +306,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     func presentLoginViewController() {
         var loginViewController : CustomLoginViewController = CustomLoginViewController()
         loginViewController.delegate = self
-        loginViewController.facebookPermissions = NSArray(array: ["public_profile","user_friends"])
+        loginViewController.facebookPermissions = NSArray(array: ["public_profile","user_friends"]) as [AnyObject]
         loginViewController.fields = PFLogInFields.Twitter | PFLogInFields.Facebook | PFLogInFields.DismissButton
 //        loginViewController.fields = PFLogInFields.Twitter | PFLogInFields.DismissButton
         
@@ -320,14 +320,14 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func presentCreateProfileViewController() {
-        var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
+        var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
         self.presentViewController(createProfileVC, animated: true, completion: nil)
         
     }
     
     
     func logInViewController(logInController: PFLogInViewController!, shouldBeginLogInWithUsername username: String!, password: String!) -> Bool {
-        if ((username != nil && password != nil && countElements(username) != 0 && countElements(password) != 0) ) {
+        if ((username != nil && password != nil && count(username) != 0 && count(password) != 0) ) {
             return true
         }
         
@@ -341,8 +341,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.storyTableView.reloadData()
         profileTabBarItem!.enabled = true
         
-        if PFUser.currentUser()["profileName"] == nil {
-            var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
+        if PFUser.currentUser()!["profileName"] == nil {
+            var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         } else {
             //            if self.creatingNewStory == true {
@@ -366,7 +366,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         var informationComplete : Bool = true
         
         for (key,value) in info {
-            var field : NSString = info["key"] as NSString
+            var field : NSString = info["key"] as! NSString
             if (field.length == 0) {
                 informationComplete = false
                 break
@@ -386,8 +386,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.storyTableView.reloadData()
         profileTabBarItem!.enabled = true
         
-        if PFUser.currentUser()["profileName"] == nil {
-            var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
+        if PFUser.currentUser()!["profileName"] == nil {
+            var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         } else {
             //            if self.creatingNewStory == true {
@@ -409,11 +409,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == "ProfileRankingTableViewCellToStoryVCSegue") {
             
-            var storyVC : StoryViewController = segue.destinationViewController as StoryViewController
+            var storyVC : StoryViewController = segue.destinationViewController as! StoryViewController
             var storyIndex = storyTableView!.indexPathForSelectedRow()?.row
             var selectedStory : PFObject?
 
-            selectedStory = stories[storyIndex!] as PFObject
+            selectedStory = stories[storyIndex!] as! PFObject
             storyVC.story = selectedStory
             storyVC.storyCreated = true
 
@@ -455,7 +455,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func displayCommentsViewFor(story: PFObject) {
-        var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as StoryViewController
+        var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as! StoryViewController
         storyVC.story = story
         storyVC.storyCreated = true
         navigationController?.pushViewController(storyVC, animated: true)

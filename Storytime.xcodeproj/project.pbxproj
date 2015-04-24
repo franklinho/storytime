@@ -816,7 +816,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/parse-library-1.7.0",
 					/Users/fho/Documents/FacebookSDK,
 					"$(PROJECT_DIR)/FacebookSDK",
 					"$(PROJECT_DIR)",
@@ -842,7 +841,6 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/parse-library-1.7.0",
 					/Users/fho/Documents/FacebookSDK,
 					"$(PROJECT_DIR)/FacebookSDK",
 					"$(PROJECT_DIR)",

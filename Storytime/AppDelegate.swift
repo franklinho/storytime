@@ -102,7 +102,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var applicationDocumentsDirectory: NSURL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "franklinho.Storytime" in the application's documents Application Support directory.
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-        return urls[urls.count-1] as NSURL
+        return urls[urls.count-1] as! NSURL
     }()
 
     lazy var managedObjectModel: NSManagedObjectModel = {
@@ -162,11 +162,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
         
-        var rootViewController = self.window!.rootViewController as UITabBarController
+        var rootViewController = self.window!.rootViewController as! UITabBarController
         let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         if url.host == "twitterLogInSuccessful" {
-            if (PFUser.currentUser() != nil && PFUser.currentUser()["profileName"] == nil) {
-                var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
+            if (PFUser.currentUser() != nil && PFUser.currentUser()!["profileName"] == nil) {
+                var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
                 rootViewController.presentViewController(createProfileVC, animated: true, completion: nil)
             }
             

@@ -20,32 +20,37 @@ PODS:
   - AFNetworking/UIKit (2.5.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - Bolts (1.1.4)
+  - Bolts (1.1.5):
+    - Bolts/AppLinks (= 1.1.5)
+    - Bolts/Tasks (= 1.1.5)
+  - Bolts/AppLinks (1.1.5):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.1.5)
   - Facebook-iOS-SDK (3.23.2):
     - Bolts (~> 1.0)
   - GSProgressHUD (0.3)
-  - Parse (1.7.0):
+  - Parse (1.7.1):
     - Bolts (~> 1.1)
-  - ParseFacebookUtils (1.7.0):
+  - ParseFacebookUtils (1.7.1):
     - Facebook-iOS-SDK (~> 3.23)
-    - Parse (~> 1.7.0)
-  - PBJVision (0.4.0)
+    - Parse (~> 1.7.1)
+  - PBJVision (0.4.1)
 
 DEPENDENCIES:
   - AFNetworking
   - Facebook-iOS-SDK (= 3.23.2)
   - GSProgressHUD
-  - Parse (= 1.7.0)
+  - Parse (= 1.7.1)
   - ParseFacebookUtils
   - PBJVision
 
 SPEC CHECKSUMS:
   AFNetworking: e1d86c2a96bb5d2e7408da36149806706ee122fe
-  Bolts: f8e2f94edbf9fec7bb8de5ecaaa3aa6b7de6f64e
+  Bolts: aac24961496d504aa56fc267cde95162a71bac39
   Facebook-iOS-SDK: cd87f0b2f0c1d9574b44e8fa2baacc275524bac3
   GSProgressHUD: 4fc9672ec9c7f752acf1b1bffefa3d86ba38426a
-  Parse: 3c2d4e6ade7b59d31c0bc8106340c6b81b31bc0f
-  ParseFacebookUtils: f0c954253a65e945d7cb73400c33bc661f516b85
-  PBJVision: aa3d9f584324e099898fb83977a815f0ecb7ba5a
+  Parse: fa8ec29de6d82035635986c11946299fb1b38316
+  ParseFacebookUtils: fa09adf78372b589163b5a71a34d6ebc7eb83395
+  PBJVision: 1d7fb2d44d41eff64cd641ba2b63024da9ab2deb
 
 COCOAPODS: 0.36.3

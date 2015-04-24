@@ -35,7 +35,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var stillImageOutput : AVCaptureStillImageOutput?
     var videoOutput : AVCaptureMovieFileOutput?
     var capturedImage : UIImage?
-    var documentPath : NSString = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as NSString
+    var documentPath : NSString = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! NSString
     var videoPath : String?
     var croppedVideoPath : String?
     var vision : PBJVision = PBJVision.sharedInstance()
@@ -52,6 +52,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var currentOffset = 0
     var maxReached = false
     var requestingObjects = false
+    var previewLayer = PBJVision.sharedInstance().previewLayer
 
     @IBOutlet weak var pointsLabel: UILabel!
     @IBOutlet weak var upVoteButton: UIButton!
@@ -109,13 +110,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
         } else {
             if self.story != nil {
-                self.title = story!["title"] as String
+                self.title = story!["title"] as! String
             }
         }
         
         createView.hidden = true
         createTitleViewTopConstraint.constant = CGFloat(screenSize.height)/2 - CGFloat(createTitleView.bounds.height)*2
-        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as UITabBarItem
+        profileTabBarItem = (self.tabBarController?.tabBar.items?[1] as! UITabBarItem)
         
         self.storyTableView.tableHeaderView = UIView(frame: CGRectMake(0.0, 0.0, self.storyTableView.bounds.size.width, 0.01))
         
@@ -171,16 +172,16 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.storyPointsLabel.text = "\(points!)"
             }
             
-            var storyUser : PFUser = self.story!["user"] as PFUser
+            var storyUser : PFUser = self.story!["user"] as! PFUser
             storyUser.fetchIfNeededInBackgroundWithBlock {
-                (post: PFObject!, error: NSError!) -> Void in
+                (user, error) -> Void in
                 var profileName = storyUser["profileName"]
                 if storyUser["profileImage"] != nil {
-                    var profileImageFile = storyUser["profileImage"] as PFFile
+                    var profileImageFile = storyUser["profileImage"] as! PFFile
                     profileImageFile.getDataInBackgroundWithBlock {
-                        (imageData: NSData!, error: NSError!) -> Void in
+                        (imageData, error) -> Void in
                         if error == nil {
-                            let image = UIImage(data:imageData)
+                            let image = UIImage(data:imageData!)
                             self.userProfileImage.image = image
                         }
                     }
@@ -188,7 +189,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 if self.story!["commentsCount"] != nil {
                     var commentsCount = self.story!["commentsCount"]
-                    self.commentsLabel.text = "\(commentsCount) Comments"
+                    self.commentsLabel.text = "\(commentsCount!) Comments"
                 }
                 
                 self.userLabel.text = profileName as? String
@@ -198,16 +199,16 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.titleView.hidden = false
                 if PFUser.currentUser() != nil {
                     var currentUser = PFUser.currentUser()
-                    println("Story user is \(storyUser.username) and current user is \(currentUser.username)")
-                    if  storyUser.username == currentUser.username {
+                    println("Story user is \(storyUser.username) and current user is \(currentUser!.username)")
+                    if  storyUser.username == currentUser!.username {
                         self.createButton!.enabled = true
                         self.settingsButton!.enabled = true
                         self.addAuthorButton.hidden = false
                         self.addUserButtonBorderView.hidden = false
                     } else if self.story!["authors"] != nil {
                         var matchCount = 0
-                        for author in self.story!["authors"] as [PFObject] {
-                            if author.objectId == currentUser.objectId {
+                        for author in self.story!["authors"] as! [PFObject] {
+                            if author.objectId == currentUser!.objectId {
                                 matchCount += 1
                             }
                         }
@@ -271,7 +272,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.view.updateConstraints()
         self.view.layoutIfNeeded()
         
-        var previewLayer = PBJVision.sharedInstance().previewLayer
+        
         previewLayer.frame = cameraContainer.bounds
         previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         cameraContainer.layer.insertSublayer(previewLayer, atIndex: 0)
@@ -293,7 +294,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.refreshControl = UIRefreshControl()
         var pullToRefreshString = "Pull to refresh"
         var pullToRefreshAttributedString : NSMutableAttributedString = NSMutableAttributedString(string: pullToRefreshString)
-        pullToRefreshAttributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, countElements(pullToRefreshString)))
+        pullToRefreshAttributedString.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, count(pullToRefreshString)))
         self.refreshControl.attributedTitle = pullToRefreshAttributedString
         self.refreshControl.addTarget(self, action: "refreshEventsForStory", forControlEvents: UIControlEvents.ValueChanged)
         self.storyTableView.addSubview(refreshControl)
@@ -302,16 +303,16 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func updateVotingLabels() {
         if PFUser.currentUser() != nil{
-            if PFUser.currentUser()["votedStories"] != nil {
-                self.votedStories = PFUser.currentUser()["votedStories"] as NSMutableDictionary
+            if PFUser.currentUser()!["votedStories"] != nil {
+                self.votedStories = PFUser.currentUser()!["votedStories"] as! NSMutableDictionary
                 if self.story != nil {
-                    if votedStories[self.story!.objectId] != nil {
+                    if votedStories[self.story!.objectId!] != nil {
                         if self.story != nil{
-                            if votedStories[self.story!.objectId] as Int == 1 {
+                            if votedStories[self.story!.objectId!] as! Int == 1 {
                                 storyUpVoted = true
                                 upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
                                 pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
-                            } else if votedStories[self.story!.objectId] as Int == -1 {
+                            } else if votedStories[self.story!.objectId!] as! Int == -1 {
                                 storyDownVoted = true
                                 downVoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
                                 pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
@@ -386,16 +387,16 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var event : PFObject?
         if indexPath.row == storyTableView.numberOfRowsInSection(0)-1 && maxReached == false {
-            var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as UITableViewCell
+            var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as! UITableViewCell
             if (cell.respondsToSelector(Selector("layoutMargins"))) {
                 cell.layoutMargins = UIEdgeInsetsZero;
             }
             return cell
         } else {
             if events.count > 0 {
-                event = events[indexPath.row] as PFObject
-                if event!["type"] as NSString == "text" {
-                    var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryTextTableViewCell") as StoryTextTableViewCell
+                event = events[indexPath.row] as! PFObject
+                if event!["type"] as! NSString == "text" {
+                    var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryTextTableViewCell") as! StoryTextTableViewCell
                     if (cell.respondsToSelector(Selector("layoutMargins"))) {
                         cell.layoutMargins = UIEdgeInsetsZero;
                     }
@@ -405,8 +406,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.populateCellWithEvent(event!)
                     
                     return cell
-                } else if event!["type"] as String == "photo" {
-                    var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryImageTableViewCell") as StoryImageTableViewCell
+                } else if event!["type"] as! String == "photo" {
+                    var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryImageTableViewCell") as! StoryImageTableViewCell
                     if (cell.respondsToSelector(Selector("layoutMargins"))) {
                         cell.layoutMargins = UIEdgeInsetsZero;
                     }
@@ -417,7 +418,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     
                     return cell
                 } else {
-                    var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryVideoTableViewCell") as StoryVideoTableViewCell
+                    var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryVideoTableViewCell") as! StoryVideoTableViewCell
                     if (cell.respondsToSelector(Selector("layoutMargins"))) {
                         cell.layoutMargins = UIEdgeInsetsZero;
                     }
@@ -430,19 +431,19 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     if event!.createdAt == nil {
                         cell.timestampLabel.text = "0s ago"
                     } else {
-                        cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt)
+                        cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt!)
                     }
                     
-                    let videoFile = event!["video"] as PFFile
+                    let videoFile = event!["video"] as! PFFile
                     videoFile.getDataInBackgroundWithBlock {
-                        (videoData: NSData!, error: NSError!) -> Void in
+                        (videoData, error) -> Void in
                         if error == nil {
                             var path = "\(self.documentPath)/\(indexPath.row).mp4"
                             if (NSFileManager.defaultManager().fileExistsAtPath(path)) {
                                 NSFileManager.defaultManager().removeItemAtPath(path, error: nil)
                             }
                             
-                            videoData.writeToFile(path, atomically: true)
+                            videoData!.writeToFile(path, atomically: true)
                             println("File now at \(path)")
                             var movieURL = NSURL(fileURLWithPath: path)
                             cell.player = AVPlayer(URL: movieURL)
@@ -472,20 +473,20 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     
                     if PFUser.currentUser() != nil {
                         if event!["user"] != nil {
-                            var eventUser = event!["user"] as PFUser
+                            var eventUser = event!["user"] as! PFUser
                             eventUser.fetchIfNeededInBackgroundWithBlock {
-                                (post: PFObject!, error: NSError!) -> Void in
+                                (post, error) -> Void in
                                 if eventUser["profileName"] != nil {
-                                    var profileName : String = eventUser["profileName"] as String
+                                    var profileName : String = eventUser["profileName"] as! String
                                     cell.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
                                     cell.userNameButton.hidden = false
                                 }
                                 if eventUser["profileImage"] != nil {
-                                    var profileImageFile = eventUser["profileImage"] as PFFile
+                                    var profileImageFile = eventUser["profileImage"] as! PFFile
                                     profileImageFile.getDataInBackgroundWithBlock {
-                                        (imageData: NSData!, error: NSError!) -> Void in
+                                        (imageData, error) -> Void in
                                         if error == nil {
-                                            let image = UIImage(data:imageData)
+                                            let image = UIImage(data:imageData!)
                                             cell.profileImageView.image = image
                                             cell.profileImageView.alpha = 0
                                             cell.profileImageView.hidden = false
@@ -500,10 +501,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 }
                                 
                                 var currentUser = PFUser.currentUser()
-                                currentUser.fetchIfNeededInBackgroundWithBlock {
-                                    (post: PFObject!, error: NSError!) -> Void in
-                                    println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
-                                    if  eventUser.username == currentUser.username {
+                                currentUser!.fetchIfNeededInBackgroundWithBlock {
+                                    (post, error) -> Void in
+                                    println("Event user is \(eventUser.username) and current user is \(currentUser!.username)")
+                                    if  eventUser.username == currentUser!.username {
                                         cell.deleteButton!.hidden = false
                                     } else {
                                         cell.deleteButton!.hidden = true
@@ -533,16 +534,19 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     func createButtonWasTapped() {
-        if (PFUser.currentUser() == nil){
-            presentLoginViewController()
-        } else if (PFUser.currentUser() != nil && PFUser.currentUser()["profileName"] == nil) {
-            presentCreateProfileViewController()
-        } else {
-            if createViewExpanded == false {
-                expandCreateView()
+        if PFUser.currentUser() != nil {
+            if PFUser.currentUser()!["profileName"] != nil {
+                if self.createViewExpanded == true {
+                    self.minimizeCreateView()
+                } else {
+                    self.expandCreateView()
+                }
             } else {
-                minimizeCreateView()
+                presentCreateProfileViewController()
             }
+            
+        } else {
+            presentLoginViewController()
         }
     }
     
@@ -552,6 +556,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.createView.hidden = false
         self.createViewHeightConstraint.constant = self.view.bounds.width + 46
         self.createViewTopConstraint.constant = 0
+        
+        cameraContainer.layer.insertSublayer(previewLayer, atIndex: 0)
         UIView.animateWithDuration(0.3, animations: {
             self.view.layoutIfNeeded()
             
@@ -577,12 +583,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         vision.cameraMode = PBJCameraMode.Photo
         vision.captureSessionPreset = AVCaptureSessionPresetPhoto
+        
         cameraSendButton.hidden = false
         cameraSendButton.enabled = true
         holdToRecordLabel.hidden = true
         videoLongPressGestureRecognizer.enabled = false
         for view in createViews {
-            (view as UIView).hidden = true
+            (view as! UIView).hidden = true
             cameraContainer.hidden = false
         }
         
@@ -601,21 +608,21 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func minimizeCreateView() {
         if PFUser.currentUser() != nil {
             if self.story != nil {
-                var storyUser = self.story!["user"] as PFUser
+                var storyUser = self.story!["user"] as! PFUser
                 storyUser.fetchIfNeededInBackgroundWithBlock {
-                    (post: PFObject!, error: NSError!) -> Void in
+                    (post, error) -> Void in
                     var currentUser = PFUser.currentUser()
-                    println("Story user is \(storyUser.username) and current user is \(currentUser.username)")
+                    println("Story user is \(storyUser.username) and current user is \(currentUser!.username)")
                     
-                    if  storyUser.username == currentUser.username {
+                    if  storyUser.username == currentUser!.username {
                         self.createButton!.enabled = true
                         self.settingsButton!.enabled = true
                         self.addAuthorButton.hidden = false
                         self.addUserButtonBorderView.hidden = false
                     } else if self.story!["authors"] != nil {
                         var matchCount = 0
-                        for author in self.story!["authors"] as [PFObject] {
-                            if author.objectId == currentUser.objectId {
+                        for author in self.story!["authors"] as! [PFObject] {
+                            if author.objectId == currentUser!.objectId {
                                 matchCount += 1
                             }
                         }
@@ -650,10 +657,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.createView.hidden = true
                 self.createViewExpanded = false
                 self.createButton!.title = "+ Event"
+                self.vision.stopPreview()
+                self.vision.endVideoCapture()
         })
         videoLongPressGestureRecognizer.enabled = false
         for view in createViews {
-            (view as UIView).hidden = true
+            (view as! UIView).hidden = true
             cameraContainer.hidden = false
         }
         
@@ -693,7 +702,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.events = temporaryEventsArray
         self.storyTableView.reloadData()
         event.saveInBackgroundWithBlock({
-            (success: Bool, error: NSError!) -> Void in
+            (success, error) -> Void in
             if (success) {
                 // The object has been saved.
                 println("Event successfully saved")
@@ -707,7 +716,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
             } else {
                 // There was a problem, check error.description
-                println("There was an error saving the event: \(error.description)")
+                println("There was an error saving the event: \(error!.description)")
             }
         })
         self.noEventsLabel.hidden = true
@@ -744,21 +753,21 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             story!["points"] = points
 
             story!.saveInBackgroundWithBlock({
-                (success: Bool, error: NSError!) -> Void in
+                (success, error) -> Void in
                 if (success) {
                     // The object has been saved.
                     println("Story and event successfully saved")
                     self.storyTitleLabel.text = self.story!["title"] as? String
-                    if  PFUser.currentUser()["profileName"] != nil {
-                        self.userLabel.text = PFUser.currentUser()!["profileName"] as String
+                    if  PFUser.currentUser()!["profileName"] != nil {
+                        self.userLabel.text = PFUser.currentUser()!["profileName"] as! String
                     }
                                         var upvotes = self.story!["upvotes"] as? Int
                     var downvotes = self.story!["downvotes"] as? Int
                     self.storyUpVoted = true
                     self.storyDownVoted = false
-                    self.votedStories[self.story!.objectId] = 1
-                    PFUser.currentUser()["votedStories"] = self.votedStories
-                    PFUser.currentUser().saveInBackground()
+                    self.votedStories[self.story!.objectId!] = 1
+                    PFUser.currentUser()!["votedStories"] = self.votedStories
+                    PFUser.currentUser()!.saveInBackground()
                     self.upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
                     self.pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
                     self.storyPointsLabel.text = "\(points)"
@@ -767,7 +776,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.createTextEvent()
                 } else {
                     // There was a problem, check error.description
-                    println("There was an error saving the story: \(error.description)")
+                    println("There was an error saving the story: \(error!.description)")
                 }
             })
         
@@ -794,7 +803,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         holdToRecordLabel.hidden = false
         videoLongPressGestureRecognizer.enabled = true
         for view in createViews {
-            (view as UIView).hidden = true
+            (view as! UIView).hidden = true
             cameraContainer.hidden = false
         }
         vision.startPreview()
@@ -841,7 +850,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         holdToRecordLabel.hidden = true
         videoLongPressGestureRecognizer.enabled = false
         for view in createViews {
-            (view as UIView).hidden = true
+            (view as! UIView).hidden = true
             cameraContainer.hidden = false
         }
 
@@ -872,7 +881,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         println("Text button was tapped")
         videoLongPressGestureRecognizer.enabled = false
         for view in createViews {
-            (view as UIView).hidden = true
+            (view as! UIView).hidden = true
             textContainer.hidden = false
         }
         self.createTextView.becomeFirstResponder()
@@ -880,7 +889,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func deleteVideoFiles() {
-        var documentFiles = NSFileManager.defaultManager().contentsOfDirectoryAtPath(documentPath, error: nil)
+        var documentFiles = NSFileManager.defaultManager().contentsOfDirectoryAtPath(documentPath as String, error: nil)
         for file in documentFiles! {
             NSFileManager.defaultManager().removeItemAtPath("\(documentPath)/file", error: nil)
         }
@@ -895,7 +904,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         dispatch_async(dispatch_get_main_queue(),{
             var query = PFQuery(className:"Event")
-            query.whereKey("storyObject", equalTo:self.story)
+            query.whereKey("storyObject", equalTo:self.story!)
             query.orderByDescending("createdAt")
 
             query.limit = 10
@@ -906,26 +915,26 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             print("Query skipping \(self.currentOffset) stories")
             query.skip = self.currentOffset
             query.findObjectsInBackgroundWithBlock {
-                (objects: [AnyObject]!, error: NSError!) -> Void in
+                (objects, error) -> Void in
                 if error == nil {
                     // The find succeeded.
-                    println("Successfully retrieved \(objects.count) events.")
+                    println("Successfully retrieved \(objects!.count) events.")
 //                    for object in objects {
 //                        var objectTitle = object["title"]
 //                        println("This is the object's title: \(objectTitle!))")
 //                    }
-                    if objects.count == 0 || objects.count < 10 {
+                    if objects!.count == 0 || objects!.count < 10 {
                         self.maxReached = true
                     }
                     
-                    if objects.count == 0 {
+                    if objects!.count == 0 {
                         self.noEventsLabel.hidden = false
                     } else {
                         self.noEventsLabel.hidden = true
                     }
                     
                     var temporaryArray : NSMutableArray = NSMutableArray(array: self.events)
-                    temporaryArray.addObjectsFromArray(objects)
+                    temporaryArray.addObjectsFromArray(objects!)
                     self.events = temporaryArray
                     self.currentOffset = self.events.count
                     
@@ -938,7 +947,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.requestingObjects = false
                 } else {
                     // Log details of the failure
-                    println("Error: \(error) \(error.userInfo!)")
+                    println("Error: \(error!) \(error!.userInfo!)")
                     self.refreshControl.endRefreshing()
                     //                    if(GSProgressHUD.isVisible()) {
                     //                        GSProgressHUD.dismiss()
@@ -954,9 +963,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if self.story != nil {
             if self.story!["commentsCount"] != nil {
                 var commentsCount = self.story!["commentsCount"]
-                self.commentsLabel.text = "\(commentsCount) Comments"
+                self.commentsLabel.text = "\(commentsCount!) Comments"
             }
         }
+        self.vision.delegate = self
         
     }
     
@@ -992,7 +1002,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         
         dispatch_async(dispatch_get_main_queue(),{
-            self.videoPath = videoDict[PBJVisionVideoPathKey] as String
+            self.videoPath = videoDict[PBJVisionVideoPathKey] as! String
             self.saveVideoEvent()
         })
         self.minimizeCreateView()
@@ -1083,7 +1093,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.events = temporaryEventsArray
         self.storyTableView.reloadData()
         event.saveInBackgroundWithBlock({
-            (success: Bool, error: NSError!) -> Void in
+            (success, error) -> Void in
             if (success) {
                 // The object has been saved.
                 println("Event successfully saved")
@@ -1107,7 +1117,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
             } else {
                 // There was a problem, check error.description
-                println("There was an error saving the event: \(error.description)")
+                println("There was an error saving the event: \(error!.description)")
             }
         })
         self.noEventsLabel.hidden = true
@@ -1121,11 +1131,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var videoFile = PFFile(name: "video.mp4", contentsAtPath: "\(self.videoPath!)")
         
         videoFile.saveInBackgroundWithBlock({
-            (success: Bool, error: NSError!) -> Void in
+            (success, error) -> Void in
                 if (success) {
                     println("Video successfully uploaded")
                 } else {
-                    println("There was an error saving the video file: \(error.description)")
+                    println("There was an error saving the video file: \(error!.description)")
                     self.progressView.hidden = true
                 }
         
@@ -1163,21 +1173,21 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             var points = upvotes - downvotes
             story!["points"] = points
             self.story!.saveInBackgroundWithBlock({
-                (success: Bool, error: NSError!) -> Void in
+                (success, error) -> Void in
                 if (success) {
                     // The object has been saved.
                     self.storyTitleLabel.text = self.story!["title"] as? String
-                    if  PFUser.currentUser()["profileName"] != nil {
-                        self.userLabel.text = PFUser.currentUser()!["profileName"] as String
+                    if  PFUser.currentUser()!["profileName"] != nil {
+                        self.userLabel.text = PFUser.currentUser()!["profileName"] as! String
                     }
                     var upvotes = self.story!["upvotes"] as? Int
                     var downvotes = self.story!["downvotes"] as? Int
                     self.storyPointsLabel.text = "\(points)"
                     self.storyUpVoted = true
                     self.storyDownVoted = false
-                    self.votedStories[self.story!.objectId] = 1
-                    PFUser.currentUser()["votedStories"] = self.votedStories
-                    PFUser.currentUser().saveInBackground()
+                    self.votedStories[self.story!.objectId!] = 1
+                    PFUser.currentUser()!["votedStories"] = self.votedStories
+                    PFUser.currentUser()!.saveInBackground()
                     self.upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
                     self.pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
                     self.createTitleView.hidden = true
@@ -1185,7 +1195,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.createVideoEvent(videoFile)
                 } else {
                     // There was a problem, check error.description
-                    println("There was an error saving the story: \(error.description)")
+                    println("There was an error saving the story: \(error!.description)")
                 }
             })
             
@@ -1193,7 +1203,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func vision(vision: PBJVision!, capturedPhoto photoDict: [NSObject : AnyObject]!, error: NSError!) {
-        capturedImage = photoDict[PBJVisionPhotoImageKey] as UIImage
+        capturedImage = photoDict[PBJVisionPhotoImageKey] as! UIImage
         dispatch_async(dispatch_get_main_queue(),{
             self.savePhotoEvent()
         })
@@ -1229,7 +1239,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.events = temporaryEventsArray
         self.storyTableView.reloadData()
         event.saveInBackgroundWithBlock({
-            (success: Bool, error: NSError!) -> Void in
+            (success, error) -> Void in
             if (success) {
                 // The object has been saved.
                 println("Event successfully saved")
@@ -1240,7 +1250,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             } else {
                 // There was a problem, check error.description
-                println("There was an error saving the event: \(error.description)")
+                println("There was an error saving the event: \(error!.description)")
             }
         })
         self.newStory = false
@@ -1260,12 +1270,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var imageFile : PFFile = PFFile(name: "image.png", data: squareImageData)
         
         imageFile.saveInBackgroundWithBlock({
-            (success: Bool, error: NSError!) -> Void in
+            (success, error) -> Void in
             if (success) {
                 println("Image successfully uploaded")
 
             } else {
-                println("There was an error saving the image file: \(error.description)")
+                println("There was an error saving the image file: \(error!.description)")
                 self.progressView.hidden = true
             }
             
@@ -1304,21 +1314,21 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             var points = upvotes - downvotes
             story!["points"] = points
             self.story!.saveInBackgroundWithBlock({
-                (success: Bool, error: NSError!) -> Void in
+                (success, error) -> Void in
                 if (success) {
                     // The object has been saved.
                     self.storyTitleLabel.text = self.story!["title"] as? String
-                    var storyUser : PFUser = PFUser.currentUser() as PFUser
-                    var profileName : String = storyUser["profileName"] as String
+                    var storyUser : PFUser = PFUser.currentUser()! as PFUser
+                    var profileName : String = storyUser["profileName"] as! String
                     self.userLabel.text = profileName as String
                     var upvotes = self.story!["upvotes"] as? Int
                     var downvotes = self.story!["downvotes"] as? Int
                     self.storyPointsLabel.text = "\(points)"
                     self.storyUpVoted = true
                     self.storyDownVoted = false
-                    self.votedStories[self.story!.objectId] = 1
-                    PFUser.currentUser()["votedStories"] = self.votedStories
-                    PFUser.currentUser().saveInBackground()
+                    self.votedStories[self.story!.objectId!] = 1
+                    PFUser.currentUser()!["votedStories"] = self.votedStories
+                    PFUser.currentUser()!.saveInBackground()
                     self.upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
                     self.pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
                     self.createTitleView.hidden = true
@@ -1326,7 +1336,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.createPhotoEvent(imageFile)
                 } else {
                     // There was a problem, check error.description
-                    println("There was an error saving the story: \(error.description)")
+                    println("There was an error saving the story: \(error!.description)")
                 }
             })
             
@@ -1426,7 +1436,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if indexPaths != nil {
             var cellCount = indexPaths!.count
             for (var i = 0; i < indexPaths!.count; i++) {
-                if cellCompletelyOnScreen(indexPaths![i] as NSIndexPath) {
+                if cellCompletelyOnScreen(indexPaths![i] as! NSIndexPath) {
                     playableCells.addObject(cells[i])
                     println("Cell at index \(i) is fully on screen")
                 } else {
@@ -1438,10 +1448,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         if playableCells.count > 0 && playableCells[0].player != nil {
-            playingVideoCell = playableCells[0] as StoryVideoTableViewCell
+            playingVideoCell = playableCells[0] as! StoryVideoTableViewCell
             
-            if playingVideoCell!.player? != nil {
-                playingVideoCell?.playButtonIconImageView.hidden = true
+            if playingVideoCell!.player != nil {
+                playingVideoCell!.playButtonIconImageView.hidden = true
                 playingVideoCell!.player!.play()
                 playingVideoCell!.player!.actionAtItemEnd = .None
                 
@@ -1483,7 +1493,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func keyBoardWillChange(notification: NSNotification) {
         // Adjusts size of text view to scroll when keyboard is up
-        var keyBoardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+        var keyBoardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
         self.view.convertRect(keyBoardRect, fromView: nil)
         
         var createViewRect : CGRect = self.createView.frame
@@ -1526,34 +1536,34 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func upvoteStory() {
         if storyUpVoted == true {
-            self.votedStories[self.story!.objectId] = 0
+            self.votedStories[self.story!.objectId!] = 0
             storyUpVoted = false
             upVoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
             pointsLabel.textColor = UIColor.whiteColor()
-            self.story!["upvotes"] = self.story!["upvotes"] as Int - 1
-            var upvotes = story!["upvotes"] as Int
-            var downvotes = story!["downvotes"] as Int
+            self.story!["upvotes"] = self.story!["upvotes"] as! Int - 1
+            var upvotes = story!["upvotes"] as! Int
+            var downvotes = story!["downvotes"] as! Int
             self.story!["points"] = upvotes - downvotes
         } else if storyDownVoted == true {
-            self.votedStories[self.story!.objectId] = 1
+            self.votedStories[self.story!.objectId!] = 1
             storyUpVoted = true
             storyDownVoted = false
             upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
             downVoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
             pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
-            self.story!["upvotes"] = self.story!["upvotes"] as Int + 1
-            self.story!["downvotes"] = self.story!["downvotes"] as Int - 1
-            var upvotes = story!["upvotes"] as Int
-            var downvotes = story!["downvotes"] as Int
+            self.story!["upvotes"] = self.story!["upvotes"] as! Int + 1
+            self.story!["downvotes"] = self.story!["downvotes"] as! Int - 1
+            var upvotes = story!["upvotes"] as! Int
+            var downvotes = story!["downvotes"] as! Int
             self.story!["points"] = upvotes - downvotes
         }else {
-            self.votedStories[self.story!.objectId] = 1
+            self.votedStories[self.story!.objectId!] = 1
             storyUpVoted = true
             upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
             pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
-            self.story!["upvotes"] = self.story!["upvotes"] as Int + 1
-            var upvotes = story!["upvotes"] as Int
-            var downvotes = story!["downvotes"] as Int
+            self.story!["upvotes"] = self.story!["upvotes"] as! Int + 1
+            var upvotes = story!["upvotes"] as! Int
+            var downvotes = story!["downvotes"] as! Int
             self.story!["points"] = upvotes - downvotes
         }
         
@@ -1563,43 +1573,43 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             pointsLabel.text = "\(points!)"
         }
         
-        PFUser.currentUser()["votedStories"] = self.votedStories
-        PFUser.currentUser().saveInBackground()
+        PFUser.currentUser()!["votedStories"] = self.votedStories
+        PFUser.currentUser()!.saveInBackground()
     }
 
     
     func downvoteStory() {
         if storyDownVoted == true {
-            self.votedStories[self.story!.objectId] = 0
+            self.votedStories[self.story!.objectId!] = 0
             storyDownVoted = false
             downVoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
             pointsLabel.textColor = UIColor.whiteColor()
-            self.story!["downvotes"] = self.story!["downvotes"] as Int - 1
-            var upvotes = story!["upvotes"] as Int
-            var downvotes = story!["downvotes"] as Int
+            self.story!["downvotes"] = self.story!["downvotes"] as! Int - 1
+            var upvotes = story!["upvotes"] as! Int
+            var downvotes = story!["downvotes"] as! Int
             self.story!["points"] = upvotes - downvotes
             
         } else if storyUpVoted == true {
-            self.votedStories[self.story!.objectId] = -1
+            self.votedStories[self.story!.objectId!] = -1
             storyDownVoted = true
             storyUpVoted = false
             downVoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
             upVoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
             pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
-            self.story!["downvotes"] = self.story!["downvotes"] as Int + 1
-            self.story!["upvotes"] = self.story!["upvotes"] as Int - 1
-            var upvotes = story!["upvotes"] as Int
-            var downvotes = story!["downvotes"] as Int
+            self.story!["downvotes"] = self.story!["downvotes"] as! Int + 1
+            self.story!["upvotes"] = self.story!["upvotes"] as! Int - 1
+            var upvotes = story!["upvotes"] as! Int
+            var downvotes = story!["downvotes"] as! Int
             self.story!["points"] = upvotes - downvotes
             
         }else {
-            self.votedStories[self.story!.objectId] = -1
+            self.votedStories[self.story!.objectId!] = -1
             storyDownVoted = true
             downVoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
             pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
-            self.story!["downvotes"] = self.story!["downvotes"] as Int + 1
-            var upvotes = story!["upvotes"] as Int
-            var downvotes = story!["downvotes"] as Int
+            self.story!["downvotes"] = self.story!["downvotes"] as! Int + 1
+            var upvotes = story!["upvotes"] as! Int
+            var downvotes = story!["downvotes"] as! Int
             self.story!["points"] = upvotes - downvotes
             
         }
@@ -1610,8 +1620,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             pointsLabel.text = "\(points!)"
         }
         
-        PFUser.currentUser()["votedStories"] = self.votedStories
-        PFUser.currentUser().saveInBackground()
+        PFUser.currentUser()!["votedStories"] = self.votedStories
+        PFUser.currentUser()!.saveInBackground()
     }
 
     
@@ -1651,7 +1661,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func presentLoginViewController() {
         var loginViewController : CustomLoginViewController = CustomLoginViewController()
         loginViewController.delegate = self
-        loginViewController.facebookPermissions = NSArray(array: ["public_profile","user_friends"])
+        loginViewController.facebookPermissions = NSArray(array: ["public_profile","user_friends"]) as [AnyObject]
         loginViewController.fields = PFLogInFields.Twitter | PFLogInFields.Facebook | PFLogInFields.DismissButton
 //        loginViewController.fields = PFLogInFields.Twitter | PFLogInFields.DismissButton
         
@@ -1665,13 +1675,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func presentCreateProfileViewController() {
-        var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
+        var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
         self.presentViewController(createProfileVC, animated: true, completion: nil)
         
     }
     
     func logInViewController(logInController: PFLogInViewController!, shouldBeginLogInWithUsername username: String!, password: String!) -> Bool {
-        if ((username != nil && password != nil && countElements(username) != 0 && countElements(password) != 0) ) {
+        if ((username != nil && password != nil && count(username) != 0 && count(password) != 0) ) {
             return true
         }
         
@@ -1685,8 +1695,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         updateVotingLabels()
         profileTabBarItem!.enabled = true
         
-        if PFUser.currentUser()["profileName"] == nil {
-            var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
+        if PFUser.currentUser()!["profileName"] == nil {
+            var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         } else {
 //            if self.creatingNewStory == true {
@@ -1710,7 +1720,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var informationComplete : Bool = true
         
         for (key,value) in info {
-            var field : NSString = info["key"] as NSString
+            var field : NSString = info["key"] as! NSString
             if (field.length == 0) {
                 informationComplete = false
                 break
@@ -1730,8 +1740,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         updateVotingLabels()
         profileTabBarItem!.enabled = true
         
-        if PFUser.currentUser()["profileName"] == nil {
-            var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as CreateProfileViewController
+        if PFUser.currentUser()!["profileName"] == nil {
+            var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         } else {
 //            if self.creatingNewStory == true {
@@ -1752,7 +1762,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     @IBAction func userLabelWasTapped(sender: AnyObject) {
-        var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as ProfileViewController
+        var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
         profileVC.user = self.story!["user"] as? PFUser
         navigationController?.pushViewController(profileVC, animated: true)
 
@@ -1765,6 +1775,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             playingVideoCell?.player?.pause()
             playingVideoCell?.playButtonIconImageView.hidden = false
         }
+        self.minimizeCreateView()
     }
     
     func playOrPauseVideoCell(videoCell: StoryVideoTableViewCell) {
@@ -1803,14 +1814,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.storyPointsLabel.text = "1"
         
         if  PFUser.currentUser() != nil {
-            var storyUser = PFUser.currentUser()
-            self.userLabel.text = storyUser["profileName"] as String
+            var storyUser = PFUser.currentUser()!
+            self.userLabel.text = storyUser["profileName"] as! String
             if storyUser["profileImage"] != nil {
-                var profileImageFile = storyUser["profileImage"] as PFFile
+                var profileImageFile = storyUser["profileImage"] as! PFFile
                 profileImageFile.getDataInBackgroundWithBlock {
-                    (imageData: NSData!, error: NSError!) -> Void in
+                    (imageData, error) -> Void in
                     if error == nil {
-                        let image = UIImage(data:imageData)
+                        let image = UIImage(data:imageData!)
                         self.userProfileImage.image = image
                     }
                 }
@@ -1860,12 +1871,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == "StoryViewToCommentsViewSegue") {
             
-            var commentsVC : CommentsViewController = segue.destinationViewController as CommentsViewController
+            var commentsVC : CommentsViewController = segue.destinationViewController as! CommentsViewController
             if self.story != nil {
                 commentsVC.story = self.story!
             }
         } else if (segue.identifier == "AddAuthorSegue"){
-            var addAuthorVC : AddAuthorViewController = segue.destinationViewController as AddAuthorViewController
+            var addAuthorVC : AddAuthorViewController = segue.destinationViewController as! AddAuthorViewController
             if self.story != nil {
                 addAuthorVC.story = self.story!
             }
@@ -1875,7 +1886,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     
     func displayStoryComments() {
-        var commentsVC : CommentsViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CommentsViewController") as CommentsViewController
+        var commentsVC : CommentsViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CommentsViewController") as! CommentsViewController
         if self.story != nil {
             commentsVC.story = self.story!
             navigationController?.pushViewController(commentsVC, animated: true)
@@ -1883,7 +1894,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func displayUserProfileView(user: PFUser) {
-        var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as ProfileViewController
+        var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
         profileVC.user = user
         navigationController?.pushViewController(profileVC, animated: true)
     }
@@ -1893,7 +1904,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var deleteCellIndexPath : NSIndexPath = self.storyTableView.indexPathForCell(cell)!
         var temporaryCommentsArray = NSMutableArray(array: events)
         temporaryCommentsArray.removeObjectAtIndex(deleteCellIndexPath.row)
-        var deletingEvent : PFObject = events[deleteCellIndexPath.row] as PFObject
+        var deletingEvent : PFObject = events[deleteCellIndexPath.row] as! PFObject
         self.events = temporaryCommentsArray
         
         storyTableView.beginUpdates()
@@ -1931,7 +1942,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             if self.story != nil {
                 self.story!.deleteInBackground()
                 self.navigationController?.popToRootViewControllerAnimated(true)
-                var rootViewController = self.navigationController?.viewControllers[0] as RankingViewController
+                var rootViewController = self.navigationController?.viewControllers[0] as! RankingViewController
                 rootViewController.refreshStories()
             }
         }
