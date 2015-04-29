@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="X52-iy-NAO">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="X52-iy-NAO">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -3304,6 +3304,7 @@
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="gDV-wW-xGx" firstAttribute="top" secondItem="RVc-pz-jra" secondAttribute="bottom" id="9dI-54-maa"/>
                             <constraint firstItem="gDV-wW-xGx" firstAttribute="top" secondItem="eGt-DE-1P2" secondAttribute="bottom" id="9jY-TO-WTJ"/>
@@ -3337,6 +3338,9 @@
                                 <exclude reference="SaE-12-XzC"/>
                             </mask>
                         </variation>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="D1J-UV-GVa" appends="YES" id="kU8-db-xKC"/>
+                        </connections>
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Comments" id="xUc-f2-fnW">
@@ -3355,6 +3359,7 @@
                         <outlet property="cameraSendButton" destination="X3N-1J-yRW" id="Q5a-kA-7as"/>
                         <outlet property="cameraSwitchButton" destination="PBP-rC-uVw" id="qoC-8I-UhC"/>
                         <outlet property="commentsTableView" destination="gDV-wW-xGx" id="iJK-NY-Ule"/>
+                        <outlet property="commentsTableViewTapGestureRecognizer" destination="D1J-UV-GVa" id="pHa-GF-flZ"/>
                         <outlet property="createTextView" destination="Ltc-om-CbH" id="5j7-hd-OJ3"/>
                         <outlet property="createView" destination="eGt-DE-1P2" id="fh1-O6-QpJ"/>
                         <outlet property="createViewHeightConstraint" destination="BmB-6G-TEZ" id="iW5-cA-Jg2"/>
@@ -3381,6 +3386,11 @@
                         <action selector="videoCommentLongPressGestureRecognizerWasPressed:" destination="22L-dv-H0B" id="QM2-zl-QOE"/>
                     </connections>
                 </pongPressGestureRecognizer>
+                <tapGestureRecognizer enabled="NO" id="D1J-UV-GVa">
+                    <connections>
+                        <action selector="commentsTableViewTapGestureRecognizerWasTapped:" destination="22L-dv-H0B" id="8Gy-kT-4KA"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2661" y="1094"/>
         </scene>

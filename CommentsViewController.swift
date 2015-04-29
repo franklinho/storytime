@@ -10,6 +10,7 @@ import UIKit
 
 class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate {
 
+    @IBOutlet var commentsTableViewTapGestureRecognizer: UITapGestureRecognizer!
     @IBOutlet weak var progressView: UIView!
     
     
@@ -839,6 +840,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         self.story!.saveInBackground()
         
         self.noCommentsLabel.hidden = true
+        self.commentsTableViewTapGestureRecognizer.enabled = false
     }
     
     func refreshCommentsForStory() {
@@ -875,8 +877,10 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                     
                     if objects!.count == 0 {
                         self.noCommentsLabel.hidden = false
+                        self.commentsTableViewTapGestureRecognizer.enabled = true
                     } else {
                         self.noCommentsLabel.hidden = true
+                        self.commentsTableViewTapGestureRecognizer.enabled = false
                     }
                     
                     var temporaryArray : NSMutableArray = NSMutableArray(array: self.comments)
@@ -1078,6 +1082,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         }
         self.story!.saveInBackground()
         self.noCommentsLabel.hidden = true
+        self.commentsTableViewTapGestureRecognizer.enabled = false
     }
     
     func saveVideoComment() {
@@ -1182,6 +1187,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         }
         self.story!.saveInBackground()
         self.noCommentsLabel.hidden = true
+        self.commentsTableViewTapGestureRecognizer.enabled = false
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -1215,9 +1221,13 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         
         if comments.count == 0 {
             noCommentsLabel.hidden = false
+            self.commentsTableViewTapGestureRecognizer.enabled = true
         }
         
     }
 
+    @IBAction func commentsTableViewTapGestureRecognizerWasTapped(sender: AnyObject) {
+        self.expandCreateView()
+    }
     
 }

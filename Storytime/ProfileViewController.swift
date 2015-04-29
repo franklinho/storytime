@@ -145,7 +145,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
                 if story!["points"] != nil {
                     var points = story!["points"]
-                    cell.pointsLabel.text = "\(points)"
+                    cell.pointsLabel.text = "\(points!)"
                 }
                 
                 if story!["commentsCount"] != nil {
