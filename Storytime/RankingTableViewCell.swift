@@ -125,7 +125,7 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
                     if self.story != nil {
                         self.story!.saveInBackground()
                         var points = self.story!["points"]
-                        pointsLabel.text = "\(points)"
+                        pointsLabel.text = "\(points!)"
                     }
                     
                     PFUser.currentUser()!["votedStories"] = self.votedStories
@@ -176,7 +176,7 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
                     if self.story != nil {
                         self.story!.saveInBackground()
                         var points = self.story!["points"]
-                        pointsLabel.text = "\(points)"
+                        pointsLabel.text = "\(points!)"
                     }
                     
                     PFUser.currentUser()!["votedStories"] = self.votedStories
