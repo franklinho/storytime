@@ -127,35 +127,35 @@ class StoryTextTableViewCell: UITableViewCell {
         } else {
             self.timestampLabel.text = timeSinceTimeStamp(event.createdAt!)
         }
-        if PFUser.currentUser() != nil {
-            if event["user"] != nil {
-                var eventUser = event["user"] as! PFUser
-                eventUser.fetchIfNeededInBackgroundWithBlock {
-                    (post, error) -> Void in
-                    if eventUser["profileName"] != nil {
-                        var profileName : String = eventUser["profileName"] as! String
-                        self.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
-                        self.userNameButton.hidden = false
-                    }
-                    if eventUser["profileImage"] != nil {
-                        var profileImageFile = eventUser["profileImage"] as! PFFile
-                        profileImageFile.getDataInBackgroundWithBlock {
-                            (imageData, error) -> Void in
-                            if error == nil {
-                                let image = UIImage(data:imageData!)
-                                self.profileImageView.image = image
-                                self.profileImageView.alpha = 0
-                                self.profileImageView.hidden = false
-                                UIView.animateWithDuration(0.3, animations: {
-                                    self.profileImageView.alpha = 1
-                                    }, completion: {
-                                        (value: Bool) in
-                                        
-                                })
-                            }
+        
+        if event["user"] != nil {
+            var eventUser = event["user"] as! PFUser
+            eventUser.fetchIfNeededInBackgroundWithBlock {
+                (post, error) -> Void in
+                if eventUser["profileName"] != nil {
+                    var profileName : String = eventUser["profileName"] as! String
+                    self.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
+                    self.userNameButton.hidden = false
+                }
+                if eventUser["profileImage"] != nil {
+                    var profileImageFile = eventUser["profileImage"] as! PFFile
+                    profileImageFile.getDataInBackgroundWithBlock {
+                        (imageData, error) -> Void in
+                        if error == nil {
+                            let image = UIImage(data:imageData!)
+                            self.profileImageView.image = image
+                            self.profileImageView.alpha = 0
+                            self.profileImageView.hidden = false
+                            UIView.animateWithDuration(0.3, animations: {
+                                self.profileImageView.alpha = 1
+                                }, completion: {
+                                    (value: Bool) in
+                                    
+                            })
                         }
                     }
-                    
+                }
+                if PFUser.currentUser() != nil {
                     var currentUser = PFUser.currentUser()!
                     currentUser.fetchIfNeededInBackgroundWithBlock {
                         (post, error) -> Void in
@@ -166,15 +166,16 @@ class StoryTextTableViewCell: UITableViewCell {
                             self.deleteButton!.hidden = true
                         }
                     }
-                    
+                } else {
+                    self.deleteButton!.hidden = true
                 }
-            } else {
-                self.deleteButton!.hidden = true
+                
             }
-            
         } else {
             self.deleteButton!.hidden = true
         }
+        
+        
     }
     
     func populateCellWithComment(comment: PFObject) {

@@ -2333,7 +2333,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="gDV-wW-xGx" userLabel="Comments Table View">
-                                <rect key="frame" x="0.0" y="154" width="600" height="402"/>
+                                <rect key="frame" x="0.0" y="480" width="600" height="76"/>
                                 <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="separatorColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -2846,19 +2846,19 @@
                                 </prototypes>
                             </tableView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Comments" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m7z-mo-fzR">
-                                <rect key="frame" x="211" y="283.5" width="177.5" height="34.5"/>
+                                <rect key="frame" x="211" y="283" width="178" height="35"/>
                                 <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="25"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eGt-DE-1P2" userLabel="CreateView">
-                                <rect key="frame" x="0.0" y="-172" width="600" height="326"/>
+                                <rect key="frame" x="0.0" y="154" width="600" height="326"/>
                                 <subviews>
                                     <view hidden="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="748" translatesAutoresizingMaskIntoConstraints="NO" id="Rrb-6O-K9b" userLabel="VideoContainer">
                                         <rect key="frame" x="0.0" y="46" width="600" height="280"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Video" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dRp-dh-OkP" userLabel="Video">
-                                                <rect key="frame" x="278" y="130" width="43.5" height="20.5"/>
+                                                <rect key="frame" x="278" y="130" width="44" height="21"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -2872,7 +2872,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="UHG-hp-H7E" userLabel="TextSelection">
-                                        <rect key="frame" x="400" y="0.0" width="199.5" height="46"/>
+                                        <rect key="frame" x="400" y="0.0" width="200" height="46"/>
                                         <subviews>
                                             <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="text_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="Btf-fO-kav">
                                                 <rect key="frame" x="78" y="1" width="44" height="44"/>
@@ -2896,10 +2896,10 @@
                                         </variation>
                                     </view>
                                     <view contentMode="scaleToFill" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="vLd-nS-bqi" userLabel="CameraSelection">
-                                        <rect key="frame" x="0.0" y="0.0" width="199.5" height="46"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="200" height="46"/>
                                         <subviews>
-                                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="camera_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="50n-DN-4Yx">
-                                                <rect key="frame" x="78" y="1" width="44.5" height="44"/>
+                                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" misplaced="YES" image="camera_icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="50n-DN-4Yx">
+                                                <rect key="frame" x="78" y="1" width="45" height="44"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="44" id="pyY-Lh-Nxl"/>
                                                     <constraint firstAttribute="height" relation="lessThanOrEqual" priority="999" constant="44" id="rb8-uK-Ydx"/>
@@ -3113,7 +3113,7 @@
                                         </connections>
                                     </view>
                                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BFv-cj-2YZ" userLabel="Text Button">
-                                        <rect key="frame" x="400" y="0.0" width="199.5" height="45.5"/>
+                                        <rect key="frame" x="400" y="0.0" width="200" height="46"/>
                                         <state key="normal">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -3123,7 +3123,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SgO-m7-lbr" userLabel="Camera Button">
-                                        <rect key="frame" x="0.0" y="0.0" width="199.5" height="45.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="200" height="46"/>
                                         <state key="normal">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -3133,7 +3133,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A9M-5R-Nqi" userLabel="Video Button">
-                                        <rect key="frame" x="200" y="0.0" width="200" height="45.5"/>
+                                        <rect key="frame" x="200" y="0.0" width="200" height="46"/>
                                         <state key="normal">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -3265,13 +3265,13 @@
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Story Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zVV-iJ-aU4">
-                                        <rect key="frame" x="176" y="19" width="87" height="23.5"/>
+                                        <rect key="frame" x="176" y="19" width="87" height="24"/>
                                         <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="user" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Abf-rG-O01">
-                                        <rect key="frame" x="176" y="31" width="33.5" height="44"/>
+                                        <rect key="frame" x="176" y="31" width="34" height="44"/>
                                         <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="44" id="CCp-mW-LoN"/>
@@ -3320,7 +3320,7 @@
                             <constraint firstItem="fHz-46-A2u" firstAttribute="leading" secondItem="51v-K7-ZOJ" secondAttribute="leadingMargin" id="V8E-6c-AC9"/>
                             <constraint firstAttribute="centerY" secondItem="m7z-mo-fzR" secondAttribute="centerY" id="VdR-p0-wtL"/>
                             <constraint firstItem="eGt-DE-1P2" firstAttribute="leading" secondItem="51v-K7-ZOJ" secondAttribute="leading" id="WcF-t2-Php"/>
-                            <constraint firstItem="eGt-DE-1P2" firstAttribute="top" secondItem="x9b-Se-tAO" secondAttribute="bottom" constant="-326" id="Y0i-nR-hsG"/>
+                            <constraint firstItem="eGt-DE-1P2" firstAttribute="top" secondItem="x9b-Se-tAO" secondAttribute="bottom" id="Y0i-nR-hsG"/>
                             <constraint firstAttribute="trailing" secondItem="eGt-DE-1P2" secondAttribute="trailing" id="atK-gm-hKX"/>
                             <constraint firstAttribute="trailing" secondItem="fHz-46-A2u" secondAttribute="trailing" id="d0Z-pd-xJY"/>
                             <constraint firstItem="Ron-Bt-vkG" firstAttribute="top" secondItem="gDV-wW-xGx" secondAttribute="bottom" id="dQ3-dG-3gp"/>

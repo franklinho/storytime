@@ -440,88 +440,110 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         cell.timestampLabel.text = timeSinceTimeStamp(event!.createdAt!)
                     }
                     
-                    let videoFile = event!["video"] as! PFFile
-                    videoFile.getDataInBackgroundWithBlock {
-                        (videoData, error) -> Void in
-                        if error == nil {
-                            var path = "\(self.documentPath)/\(indexPath.row).mp4"
-                            if (NSFileManager.defaultManager().fileExistsAtPath(path)) {
-                                NSFileManager.defaultManager().removeItemAtPath(path, error: nil)
-                            }
+                    if indexPath.row == 0  && videoJustCreated == true {
+                        var movieURL = NSURL(fileURLWithPath: self.videoPath!)
+                        cell.player = AVPlayer(URL: movieURL)
+                        
+                        
+                        cell.playerLayer = AVPlayerLayer(player: cell.player!)
+                        cell.playerLayer!.frame = CGRectMake(0, 0, self.screenSize.width, self.screenSize.width)
+                        cell.playerLayer!.videoGravity = AVLayerVideoGravityResizeAspect
+                        cell.playerLayer!.needsDisplayOnBoundsChange = true
+                        
+                        cell.contentView.layer.insertSublayer(cell.playerLayer!, atIndex: 0)
+                        cell.contentView.layer.needsDisplayOnBoundsChange = true
+                        
+                        if self.cellCompletelyOnScreen(indexPath){
+                            self.playingVideoCell = cell
+                            self.playingVideoCell?.playButtonIconImageView.hidden = true
+                            self.playingVideoCell!.player!.play()
+                            self.playingVideoCell!.player!.actionAtItemEnd = .None
                             
-                            videoData!.writeToFile(path, atomically: true)
-                            println("File now at \(path)")
-                            var movieURL = NSURL(fileURLWithPath: path)
-                            cell.player = AVPlayer(URL: movieURL)
                             
-                            
-                            cell.playerLayer = AVPlayerLayer(player: cell.player!)
-                            cell.playerLayer!.frame = CGRectMake(0, 0, self.screenSize.width, self.screenSize.width)
-                            cell.playerLayer!.videoGravity = AVLayerVideoGravityResizeAspect
-                            cell.playerLayer!.needsDisplayOnBoundsChange = true
-                            
-                            cell.contentView.layer.insertSublayer(cell.playerLayer!, atIndex: 0)
-                            cell.contentView.layer.needsDisplayOnBoundsChange = true
-                            
-                            if self.cellCompletelyOnScreen(indexPath){
-                                self.playingVideoCell = cell
-                                self.playingVideoCell?.playButtonIconImageView.hidden = true
-                                self.playingVideoCell!.player!.play()
-                                self.playingVideoCell!.player!.actionAtItemEnd = .None
+                            NSNotificationCenter.defaultCenter().addObserver(self, selector: "restartVideoFromBeginning", name: AVPlayerItemDidPlayToEndTimeNotification, object: self.playingVideoCell!.player!.currentItem)
+                        }
+                    } else {
+                        let videoFile = event!["video"] as! PFFile
+                        videoFile.getDataInBackgroundWithBlock {
+                            (videoData, error) -> Void in
+                            if error == nil {
+                                var path = "\(self.documentPath)/\(indexPath.row).mp4"
+                                if (NSFileManager.defaultManager().fileExistsAtPath(path)) {
+                                    NSFileManager.defaultManager().removeItemAtPath(path, error: nil)
+                                }
+                                
+                                videoData!.writeToFile(path, atomically: true)
+                                println("File now at \(path)")
+                                var movieURL = NSURL(fileURLWithPath: path)
+                                cell.player = AVPlayer(URL: movieURL)
                                 
                                 
-                                NSNotificationCenter.defaultCenter().addObserver(self, selector: "restartVideoFromBeginning", name: AVPlayerItemDidPlayToEndTimeNotification, object: self.playingVideoCell!.player!.currentItem)
+                                cell.playerLayer = AVPlayerLayer(player: cell.player!)
+                                cell.playerLayer!.frame = CGRectMake(0, 0, self.screenSize.width, self.screenSize.width)
+                                cell.playerLayer!.videoGravity = AVLayerVideoGravityResizeAspect
+                                cell.playerLayer!.needsDisplayOnBoundsChange = true
+                                
+                                cell.contentView.layer.insertSublayer(cell.playerLayer!, atIndex: 0)
+                                cell.contentView.layer.needsDisplayOnBoundsChange = true
+                                
+                                if self.cellCompletelyOnScreen(indexPath){
+                                    self.playingVideoCell = cell
+                                    self.playingVideoCell?.playButtonIconImageView.hidden = true
+                                    self.playingVideoCell!.player!.play()
+                                    self.playingVideoCell!.player!.actionAtItemEnd = .None
+                                    
+                                    
+                                    NSNotificationCenter.defaultCenter().addObserver(self, selector: "restartVideoFromBeginning", name: AVPlayerItemDidPlayToEndTimeNotification, object: self.playingVideoCell!.player!.currentItem)
+                                }
+                                
+                                
                             }
-                            
-                            
                         }
                     }
                     
-                    if PFUser.currentUser() != nil {
-                        if event!["user"] != nil {
-                            var eventUser = event!["user"] as! PFUser
-                            eventUser.fetchIfNeededInBackgroundWithBlock {
-                                (post, error) -> Void in
-                                if eventUser["profileName"] != nil {
-                                    var profileName : String = eventUser["profileName"] as! String
-                                    cell.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
-                                    cell.userNameButton.hidden = false
-                                }
-                                if eventUser["profileImage"] != nil {
-                                    var profileImageFile = eventUser["profileImage"] as! PFFile
-                                    profileImageFile.getDataInBackgroundWithBlock {
-                                        (imageData, error) -> Void in
-                                        if error == nil {
-                                            let image = UIImage(data:imageData!)
-                                            cell.profileImageView.image = image
-                                            cell.profileImageView.alpha = 0
-                                            cell.profileImageView.hidden = false
-                                            UIView.animateWithDuration(0.3, animations: {
-                                                cell.profileImageView.alpha = 1
-                                                }, completion: {
-                                                    (value: Bool) in
-                                                    
-                                            })
-                                        }
+                    if event!["user"] != nil {
+                        var eventUser = event!["user"] as! PFUser
+                        eventUser.fetchIfNeededInBackgroundWithBlock {
+                            (post, error) -> Void in
+                            if eventUser["profileName"] != nil {
+                                var profileName : String = eventUser["profileName"] as! String
+                                cell.userNameButton.setTitle("  \(profileName)  ", forState: UIControlState.Normal)
+                                cell.userNameButton.hidden = false
+                            }
+                            if eventUser["profileImage"] != nil {
+                                var profileImageFile = eventUser["profileImage"] as! PFFile
+                                profileImageFile.getDataInBackgroundWithBlock {
+                                    (imageData, error) -> Void in
+                                    if error == nil {
+                                        let image = UIImage(data:imageData!)
+                                        cell.profileImageView.image = image
+                                        cell.profileImageView.alpha = 0
+                                        cell.profileImageView.hidden = false
+                                        UIView.animateWithDuration(0.3, animations: {
+                                            cell.profileImageView.alpha = 1
+                                            }, completion: {
+                                                (value: Bool) in
+                                                
+                                        })
                                     }
                                 }
-                                
-                                var currentUser = PFUser.currentUser()
-                                currentUser!.fetchIfNeededInBackgroundWithBlock {
+                            }
+                            if PFUser.currentUser() != nil {
+                                var currentUser = PFUser.currentUser()!
+                                currentUser.fetchIfNeededInBackgroundWithBlock {
                                     (post, error) -> Void in
-                                    println("Event user is \(eventUser.username) and current user is \(currentUser!.username)")
-                                    if  eventUser.username == currentUser!.username {
+                                    println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
+                                    if  eventUser.username == currentUser.username {
                                         cell.deleteButton!.hidden = false
                                     } else {
                                         cell.deleteButton!.hidden = true
                                     }
                                 }
-                                
+                            } else {
+                                cell.deleteButton!.hidden = true
                             }
-                        } else {
-                            cell.deleteButton!.hidden = true
+                            
                         }
-                        
                     } else {
                         cell.deleteButton!.hidden = true
                     }
@@ -1913,6 +1935,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     
     func deleteCell(cell: UITableViewCell) {
+        if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 {
+            playingVideoCell?.player?.pause()
+            playingVideoCell?.playButtonIconImageView.hidden = false
+        }
         var deleteCellIndexPath : NSIndexPath = self.storyTableView.indexPathForCell(cell)!
         var temporaryCommentsArray = NSMutableArray(array: events)
         temporaryCommentsArray.removeObjectAtIndex(deleteCellIndexPath.row)
