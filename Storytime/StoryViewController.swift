@@ -761,7 +761,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     })
                 }
                 
-                
+                println("Adding storychannel: \(self.story!.objectId!)")
                 self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
                 var currentChannels = self.installation["channels"]
                 println("Story ID: \(self.story!.objectId!), Current Channels: \(currentChannels!)")
@@ -1186,7 +1186,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     })
                 }
                 
-                
+                println("Adding storychannel: \(self.story!.objectId!)")
                 self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
                 self.installation.saveInBackground()
                 self.vision.stopPreview()
@@ -1366,7 +1366,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 
                 
-                
+                println("Adding storychannel: \(self.story!.objectId!)")
                 self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
                 self.installation.saveInBackground()
                 self.vision.stopPreview()

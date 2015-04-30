@@ -716,9 +716,24 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     
 
     @IBAction func cameraFlashButtonWasTapped(sender: AnyObject) {
+        if vision.flashMode == PBJFlashMode.Auto {
+            vision.flashMode = PBJFlashMode.On
+            cameraFlashButton.setImage(UIImage(named: "flash_icon_on.png"), forState: UIControlState.Normal)
+        } else if vision.flashMode == PBJFlashMode.On {
+            vision.flashMode = PBJFlashMode.Off
+            cameraFlashButton.setImage(UIImage(named: "flash_icon_off.png"), forState: UIControlState.Normal)
+        } else {
+            vision.flashMode = PBJFlashMode.Auto
+            cameraFlashButton.setImage(UIImage(named: "flash_icon_auto.png"), forState: UIControlState.Normal)
+        }
     }
     
     @IBAction func cameraSwitchButtonWasTapped(sender: AnyObject) {
+        if vision.cameraDevice == PBJCameraDevice.Back {
+            vision.cameraDevice = PBJCameraDevice.Front
+        } else {
+            vision.cameraDevice = PBJCameraDevice.Back
+        }
     }
     
     

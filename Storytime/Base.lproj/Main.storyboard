@@ -3082,7 +3082,7 @@
                                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="cameraFlashButtonWasTapped:" destination="22L-dv-H0B" eventType="touchUpInside" id="Wch-0e-PYq"/>
+                                                    <action selector="cameraFlashButtonWasTapped:" destination="22L-dv-H0B" eventType="touchUpInside" id="aYO-G4-2Zj"/>
                                                 </connections>
                                             </button>
                                         </subviews>
