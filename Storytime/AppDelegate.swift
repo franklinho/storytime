@@ -13,12 +13,13 @@ import Crashlytics
 
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
 
     var window: UIWindow?
     var mask : CALayer?
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var vc : UIViewController?
+    var mostRecentUserInfo : [NSObject : AnyObject]?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
@@ -274,9 +275,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-        PFPush.handlePush(userInfo)
+        println("Application state: \(application.applicationState.rawValue)")
         println("UserInfo : \(userInfo)")
         
+        self.mostRecentUserInfo = userInfo
+        var state = application.applicationState.rawValue
+        
+        if (state == 0) {
+            //app is in foreground
+            //the push is in your control
+            var rootViewController = self.window!.rootViewController as! UITabBarController
+            var navController = rootViewController.selectedViewController as! UINavigationController
+            var currentController = navController.topViewController
+            var alertString = userInfo["aps"]!["alert"]
+            var notificationAlertView = UIAlertView(title: "Storytime", message: alertString as! String, delegate: self, cancelButtonTitle: "Dismiss", otherButtonTitles: "View")
+            notificationAlertView.delegate = self
+            notificationAlertView.show()
+//            PFPush.handlePush(userInfo)
+        } else {
+            //app is in background:
+            //iOS is responsible for displaying push alerts, banner etc..
+            self.activatePushResponse(self.mostRecentUserInfo!)
+        }
+        
+        
+        
+        
+    }
+    
+
+    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+        application.registerForRemoteNotifications()
+    }
+
+    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
+        println("Failed to register for remote notification. \(error.description)")
+    }
+
+    func activatePushResponse(userInfo : [NSObject : AnyObject]) {
         var storyID = userInfo["storyID"]
         var comment = userInfo["comment"]
         println("\(storyID)")
@@ -297,19 +333,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
-        
     }
     
-
-    func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
-        application.registerForRemoteNotifications()
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if (buttonIndex == 0) {
+            println("Dismiss button tapped")
+        } else {
+            println("View button tapped")
+            self.activatePushResponse(self.mostRecentUserInfo!)
+        }
     }
-
-    func application(application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: NSError) {
-        println("Failed to register for remote notification. \(error.description)")
-    }
-
-    
     
 }
 
