@@ -853,6 +853,25 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             if (success) {
                 // The object has been saved.
                 println("Event successfully saved")
+                
+                var currentUserProfileName = PFUser.currentUser()!["profileName"]
+                var storyTitle = self.story!["title"]
+                let data = [
+                    "alert" : "\(currentUserProfileName!) has added a photo comment to the story: \(storyTitle!)",
+                    "storyID" : self.story!.objectId!
+                ]
+                let push = PFPush()
+                push.setChannel("\(self.story!.objectId!)")
+                push.setData(data)
+                push.sendPushInBackgroundWithBlock({
+                    (success, error) -> Void in
+                    if success == true {
+                        println("Push query successful")
+                    } else {
+                        println("Push encountered error: \(error!.description)")
+                    }
+                })
+                
                 self.vision.stopPreview()
                 
 
@@ -1096,6 +1115,25 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             if (success) {
                 // The object has been saved.
                 println("Comment successfully saved")
+                
+                var currentUserProfileName = PFUser.currentUser()!["profileName"]
+                var storyTitle = self.story!["title"]
+                let data = [
+                    "alert" : "\(currentUserProfileName!) has added a video comment to the story: \(storyTitle!)",
+                    "storyID" : self.story!.objectId!
+                ]
+                let push = PFPush()
+                push.setChannel("\(self.story!.objectId!)")
+                push.setData(data)
+                push.sendPushInBackgroundWithBlock({
+                    (success, error) -> Void in
+                    if success == true {
+                        println("Push query successful")
+                    } else {
+                        println("Push encountered error: \(error!.description)")
+                    }
+                })
+                
                 self.vision.stopPreview()
                 
             } else {
@@ -1195,6 +1233,25 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             if (success) {
                 // The object has been saved.
                 println("Comment successfully saved")
+                
+                var currentUserProfileName = PFUser.currentUser()!["profileName"]
+                var storyTitle = self.story!["title"]
+                let data = [
+                    "alert" : "\(currentUserProfileName!) has added a comment to the story: \(storyTitle!)",
+                    "storyID" : self.story!.objectId!
+                ]
+                let push = PFPush()
+                push.setChannel("\(self.story!.objectId!)")
+                push.setData(data)
+                push.sendPushInBackgroundWithBlock({
+                    (success, error) -> Void in
+                    if success == true {
+                        println("Push query successful")
+                    } else {
+                        println("Push encountered error: \(error!.description)")
+                    }
+                })
+                
                 self.minimizeCreateView()
                 if self.story!["thumbnailText"] == nil {
                     self.story!["thumbnailText"] = self.createTextView.text

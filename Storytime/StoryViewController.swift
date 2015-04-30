@@ -736,6 +736,28 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             if (success) {
                 // The object has been saved.
                 println("Event successfully saved")
+                
+                var currentUserProfileName = PFUser.currentUser()!["profileName"]
+                var storyTitle = self.story!["title"]
+                let data = [
+                    "alert" : "\(currentUserProfileName!) has added a post to the story: \(storyTitle!)",
+                    "storyID" : self.story!.objectId!
+                ]
+                let push = PFPush()
+                push.setChannel("\(self.story!.objectId!)")
+                push.setData(data)
+                push.sendPushInBackgroundWithBlock({
+                    (success, error) -> Void in
+                    if success == true {
+                        println("Push query successful")
+                    } else {
+                        println("Push encountered error: \(error!.description)")
+                    }
+                })
+                
+                let installation = PFInstallation.currentInstallation()
+                installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
+                installation.saveInBackground()
                 self.minimizeCreateView()
                 if self.story!["thumbnailText"] == nil {
                     self.story!["thumbnailText"] = self.createTextView.text
@@ -804,10 +826,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.createTitleView.hidden = true
                     self.titleView.hidden = false
                     self.createTextEvent()
-                    let installation = PFInstallation.currentInstallation()
-                    installation["user"] = PFUser.currentUser()!.objectId!
-                    installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
-                    installation.saveInBackground()
+                    
                 } else {
                     // There was a problem, check error.description
                     println("There was an error saving the story: \(error!.description)")
@@ -1133,6 +1152,28 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             if (success) {
                 // The object has been saved.
                 println("Event successfully saved")
+                
+                var currentUserProfileName = PFUser.currentUser()!["profileName"]
+                var storyTitle = self.story!["title"]
+                let data = [
+                    "alert" : "\(currentUserProfileName!) has added a video to the story: \(storyTitle!)",
+                    "storyID" : self.story!.objectId!
+                ]
+                let push = PFPush()
+                push.setChannel("\(self.story!.objectId!)")
+                push.setData(data)
+                push.sendPushInBackgroundWithBlock({
+                    (success, error) -> Void in
+                    if success == true {
+                        println("Push query successful")
+                    } else {
+                        println("Push encountered error: \(error!.description)")
+                    }
+                })
+                
+                let installation = PFInstallation.currentInstallation()
+                installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
+                installation.saveInBackground()
                 self.vision.stopPreview()
                 if self.story!["thumbnailVideoScreenCap"] == nil {
                     if self.story!["thumbnailImage"] == nil {
@@ -1230,10 +1271,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.titleView.hidden = false
                     self.createVideoEvent(videoFile)
                     
-                    let installation = PFInstallation.currentInstallation()
-                    installation["user"] = PFUser.currentUser()!.objectId!
-                    installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
-                    installation.saveInBackground()
+                    
                 } else {
                     // There was a problem, check error.description
                     println("There was an error saving the story: \(error!.description)")
@@ -1286,6 +1324,29 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             if (success) {
                 // The object has been saved.
                 println("Event successfully saved")
+                
+                var currentUserProfileName = PFUser.currentUser()!["profileName"]
+                var storyTitle = self.story!["title"]
+                let data = [
+                    "alert" : "\(currentUserProfileName!) has added a photo to the story: \(storyTitle!)",
+                    "storyID" : self.story!.objectId!
+                ]
+                let push = PFPush()
+                push.setChannel("\(self.story!.objectId!)")
+                push.setData(data)
+                push.sendPushInBackgroundWithBlock({
+                    (success, error) -> Void in
+                    if success == true {
+                        println("Push query successful")
+                    } else {
+                        println("Push encountered error: \(error!.description)")
+                    }
+                })
+                
+                
+                let installation = PFInstallation.currentInstallation()
+                installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
+                installation.saveInBackground()
                 self.vision.stopPreview()
                 if self.story!["thumbnailImage"] == nil {
                     self.story!["thumbnailImage"] = imageFile
@@ -1378,12 +1439,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.titleView.hidden = false
                     self.createPhotoEvent(imageFile)
                     
-                    let installation = PFInstallation.currentInstallation()
-                    installation["user"] = PFUser.currentUser()!.objectId!
-                    installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
-                    var currentChannels = installation["channels"]
-                    println("Current Channels : \(currentChannels!)")
-                    installation.saveInBackground()
+                    
                 } else {
                     // There was a problem, check error.description
                     println("There was an error saving the story: \(error!.description)")
