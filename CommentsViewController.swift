@@ -13,7 +13,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet var commentsTableViewTapGestureRecognizer: UITapGestureRecognizer!
     @IBOutlet weak var progressView: UIView!
     
-    
+    var installation = PFInstallation.currentInstallation()
     @IBOutlet weak var noCommentsLabel: UILabel!
     @IBOutlet weak var progressViewTrailingConstraint: NSLayoutConstraint!
     var currentOffset = 0
@@ -539,8 +539,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         self.dismissViewControllerAnimated(true, completion: nil)
 //        updateVotingLabels()
         profileTabBarItem!.enabled = true
-        PFInstallation.currentInstallation()["user"] = PFUser.currentUser()
-        PFInstallation.currentInstallation().saveInBackground()
+        self.installation["user"] = user
+        self.installation.saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
@@ -585,8 +585,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         self.dismissViewControllerAnimated(true, completion: nil)
 //        updateVotingLabels()
         profileTabBarItem!.enabled = true
-        PFInstallation.currentInstallation()["user"] = PFUser.currentUser()
-        PFInstallation.currentInstallation().saveInBackground()
+        self.installation["user"] = user
+        self.installation.saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
@@ -853,15 +853,18 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             if (success) {
                 // The object has been saved.
                 println("Event successfully saved")
-                
+                let pushQuery = PFInstallation.query()!
+                pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
+                pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
                 var currentUserProfileName = PFUser.currentUser()!["profileName"]
                 var storyTitle = self.story!["title"]
                 let data = [
                     "alert" : "\(currentUserProfileName!) has added a photo comment to the story: \(storyTitle!)",
-                    "storyID" : self.story!.objectId!
+                    "storyID" : self.story!.objectId!,
+                    "comment" : "true"
                 ]
                 let push = PFPush()
-                push.setChannel("\(self.story!.objectId!)")
+                push.setQuery(pushQuery)
                 push.setData(data)
                 push.sendPushInBackgroundWithBlock({
                     (success, error) -> Void in
@@ -1115,15 +1118,18 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             if (success) {
                 // The object has been saved.
                 println("Comment successfully saved")
-                
+                let pushQuery = PFInstallation.query()!
+                pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
+                pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
                 var currentUserProfileName = PFUser.currentUser()!["profileName"]
                 var storyTitle = self.story!["title"]
                 let data = [
                     "alert" : "\(currentUserProfileName!) has added a video comment to the story: \(storyTitle!)",
-                    "storyID" : self.story!.objectId!
+                    "storyID" : self.story!.objectId!,
+                    "comment" : "true"
                 ]
                 let push = PFPush()
-                push.setChannel("\(self.story!.objectId!)")
+                push.setQuery(pushQuery)
                 push.setData(data)
                 push.sendPushInBackgroundWithBlock({
                     (success, error) -> Void in
@@ -1233,15 +1239,18 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             if (success) {
                 // The object has been saved.
                 println("Comment successfully saved")
-                
+                let pushQuery = PFInstallation.query()!
+                pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
+                pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
                 var currentUserProfileName = PFUser.currentUser()!["profileName"]
                 var storyTitle = self.story!["title"]
                 let data = [
                     "alert" : "\(currentUserProfileName!) has added a comment to the story: \(storyTitle!)",
-                    "storyID" : self.story!.objectId!
+                    "storyID" : self.story!.objectId!,
+                    "comment" : "true"
                 ]
                 let push = PFPush()
-                push.setChannel("\(self.story!.objectId!)")
+                push.setQuery(pushQuery)
                 push.setData(data)
                 push.sendPushInBackgroundWithBlock({
                     (success, error) -> Void in

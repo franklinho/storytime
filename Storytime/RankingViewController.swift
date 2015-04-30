@@ -328,7 +328,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         logOutButton.title = "Log Out"
         profileTabBarItem!.enabled = true
         
-        PFInstallation.currentInstallation()["user"] = PFUser.currentUser()
+        PFInstallation.currentInstallation()["user"] = user
         PFInstallation.currentInstallation().saveInBackground()
         
         if PFUser.currentUser()!["profileName"] == nil {
@@ -372,7 +372,6 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     override func viewDidAppear(animated: Bool) {
-        
         if PFUser.currentUser() != nil {
             logOutButton.title = "Log Out"
         } else {
@@ -385,8 +384,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.rankingTableView.reloadData()
         logOutButton.title = "Log Out"
         profileTabBarItem!.enabled = true
-        PFInstallation.currentInstallation()["user"] = PFUser.currentUser()
+        
+        PFInstallation.currentInstallation()["user"] = user
         PFInstallation.currentInstallation().saveInBackground()
+        
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
@@ -505,6 +506,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewWillAppear(animated: Bool) {
         self.rankingTableView.reloadData()
+        
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {

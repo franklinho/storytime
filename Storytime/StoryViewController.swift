@@ -13,7 +13,7 @@ import MediaPlayer
 
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate {
     
-  
+    let installation = PFInstallation.currentInstallation()
     @IBOutlet weak var addAuthorButton: UIButton!
     @IBOutlet weak var addUserButtonBorderView: UIView!
     @IBOutlet weak var noEventsLabel: UILabel!
@@ -737,27 +737,36 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 // The object has been saved.
                 println("Event successfully saved")
                 
-                var currentUserProfileName = PFUser.currentUser()!["profileName"]
-                var storyTitle = self.story!["title"]
-                let data = [
-                    "alert" : "\(currentUserProfileName!) has added a post to the story: \(storyTitle!)",
-                    "storyID" : self.story!.objectId!
-                ]
-                let push = PFPush()
-                push.setChannel("\(self.story!.objectId!)")
-                push.setData(data)
-                push.sendPushInBackgroundWithBlock({
-                    (success, error) -> Void in
-                    if success == true {
-                        println("Push query successful")
-                    } else {
-                        println("Push encountered error: \(error!.description)")
-                    }
-                })
+                if self.newStory == false {
+                    let pushQuery = PFInstallation.query()!
+                    pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
+                    pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
+                    
+                    var currentUserProfileName = PFUser.currentUser()!["profileName"]
+                    var storyTitle = self.story!["title"]
+                    let data = [
+                        "alert" : "\(currentUserProfileName!) has added a post to the story: \(storyTitle!)",
+                        "storyID" : self.story!.objectId!
+                    ]
+                    let push = PFPush()
+                    push.setQuery(pushQuery)
+                    push.setData(data)
+                    push.sendPushInBackgroundWithBlock({
+                        (success, error) -> Void in
+                        if success == true {
+                            println("Push query successful")
+                        } else {
+                            println("Push encountered error: \(error!.description)")
+                        }
+                    })
+                }
                 
-                let installation = PFInstallation.currentInstallation()
-                installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
-                installation.saveInBackground()
+                
+                self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
+                var currentChannels = self.installation["channels"]
+                println("Story ID: \(self.story!.objectId!), Current Channels: \(currentChannels!)")
+                self.installation.saveInBackground()
+                
                 self.minimizeCreateView()
                 if self.story!["thumbnailText"] == nil {
                     self.story!["thumbnailText"] = self.createTextView.text
@@ -790,21 +799,21 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         })
 
         
-        if (story != nil) {
+        if (self.story != nil) {
             self.createTextEvent()
         } else {
             
-            story = PFObject(className: "Story")
-            story!["title"] = titleTextField.text
-            story!["user"] = PFUser.currentUser()
+            self.story = PFObject(className: "Story")
+            self.story!["title"] = titleTextField.text
+            self.story!["user"] = PFUser.currentUser()
             var upvotes = 1
             var downvotes = 0
-            story!["upvotes"] = upvotes
-            story!["downvotes"] = downvotes
+            self.story!["upvotes"] = upvotes
+            self.story!["downvotes"] = downvotes
             var points = upvotes - downvotes
-            story!["points"] = points
+            self.story!["points"] = points
 
-            story!.saveInBackgroundWithBlock({
+            self.story!.saveInBackgroundWithBlock({
                 (success, error) -> Void in
                 if (success) {
                     // The object has been saved.
@@ -1153,27 +1162,33 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 // The object has been saved.
                 println("Event successfully saved")
                 
-                var currentUserProfileName = PFUser.currentUser()!["profileName"]
-                var storyTitle = self.story!["title"]
-                let data = [
-                    "alert" : "\(currentUserProfileName!) has added a video to the story: \(storyTitle!)",
-                    "storyID" : self.story!.objectId!
-                ]
-                let push = PFPush()
-                push.setChannel("\(self.story!.objectId!)")
-                push.setData(data)
-                push.sendPushInBackgroundWithBlock({
-                    (success, error) -> Void in
-                    if success == true {
-                        println("Push query successful")
-                    } else {
-                        println("Push encountered error: \(error!.description)")
-                    }
-                })
+                if self.newStory == false {
+                    let pushQuery = PFInstallation.query()!
+                    pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
+                    pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
+                    
+                    var currentUserProfileName = PFUser.currentUser()!["profileName"]
+                    var storyTitle = self.story!["title"]
+                    let data = [
+                        "alert" : "\(currentUserProfileName!) has added a video to the story: \(storyTitle!)",
+                        "storyID" : self.story!.objectId!
+                    ]
+                    let push = PFPush()
+                    push.setQuery(pushQuery)
+                    push.setData(data)
+                    push.sendPushInBackgroundWithBlock({
+                        (success, error) -> Void in
+                        if success == true {
+                            println("Push query successful")
+                        } else {
+                            println("Push encountered error: \(error!.description)")
+                        }
+                    })
+                }
                 
-                let installation = PFInstallation.currentInstallation()
-                installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
-                installation.saveInBackground()
+                
+                self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
+                self.installation.saveInBackground()
                 self.vision.stopPreview()
                 if self.story!["thumbnailVideoScreenCap"] == nil {
                     if self.story!["thumbnailImage"] == nil {
@@ -1245,10 +1260,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.story!["user"] = PFUser.currentUser()
             var upvotes = 1
             var downvotes = 0
-            story!["upvotes"] = upvotes
-            story!["downvotes"] = downvotes
+            self.story!["upvotes"] = upvotes
+            self.story!["downvotes"] = downvotes
             var points = upvotes - downvotes
-            story!["points"] = points
+            self.story!["points"] = points
             self.story!.saveInBackgroundWithBlock({
                 (success, error) -> Void in
                 if (success) {
@@ -1325,28 +1340,35 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 // The object has been saved.
                 println("Event successfully saved")
                 
-                var currentUserProfileName = PFUser.currentUser()!["profileName"]
-                var storyTitle = self.story!["title"]
-                let data = [
-                    "alert" : "\(currentUserProfileName!) has added a photo to the story: \(storyTitle!)",
-                    "storyID" : self.story!.objectId!
-                ]
-                let push = PFPush()
-                push.setChannel("\(self.story!.objectId!)")
-                push.setData(data)
-                push.sendPushInBackgroundWithBlock({
-                    (success, error) -> Void in
-                    if success == true {
-                        println("Push query successful")
-                    } else {
-                        println("Push encountered error: \(error!.description)")
-                    }
-                })
+                if self.newStory == false {
+                    let pushQuery = PFInstallation.query()!
+                    pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
+                    pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
+                    
+                    var currentUserProfileName = PFUser.currentUser()!["profileName"]
+                    var storyTitle = self.story!["title"]
+                    let data = [
+                        "alert" : "\(currentUserProfileName!) has added a photo to the story: \(storyTitle!)",
+                        "storyID" : self.story!.objectId!
+                    ]
+                    let push = PFPush()
+                    push.setQuery(pushQuery)
+                    push.setData(data)
+                    push.sendPushInBackgroundWithBlock({
+                        (success, error) -> Void in
+                        if success == true {
+                            println("Push query successful")
+                        } else {
+                            println("Push encountered error: \(error!.description)")
+                        }
+                    })
+                }
                 
                 
-                let installation = PFInstallation.currentInstallation()
-                installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
-                installation.saveInBackground()
+                
+                
+                self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
+                self.installation.saveInBackground()
                 self.vision.stopPreview()
                 if self.story!["thumbnailImage"] == nil {
                     self.story!["thumbnailImage"] = imageFile
@@ -1413,10 +1435,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.story!["user"] = PFUser.currentUser()
             var upvotes = 1
             var downvotes = 0
-            story!["upvotes"] = upvotes
-            story!["downvotes"] = downvotes
+            self.story!["upvotes"] = upvotes
+            self.story!["downvotes"] = downvotes
             var points = upvotes - downvotes
-            story!["points"] = points
+            self.story!["points"] = points
             self.story!.saveInBackgroundWithBlock({
                 (success, error) -> Void in
                 if (success) {
@@ -1800,8 +1822,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.dismissViewControllerAnimated(true, completion: nil)
         updateVotingLabels()
         profileTabBarItem!.enabled = true
-        PFInstallation.currentInstallation()["user"] = PFUser.currentUser()
-        PFInstallation.currentInstallation().saveInBackground()
+        installation["user"] = user
+        installation.saveInBackground()
+        
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
@@ -1846,8 +1869,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.dismissViewControllerAnimated(true, completion: nil)
         updateVotingLabels()
         profileTabBarItem!.enabled = true
-        PFInstallation.currentInstallation()["user"] = PFUser.currentUser()
-        PFInstallation.currentInstallation().saveInBackground()
+        installation["user"] = user
+        installation.saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
@@ -2052,15 +2075,28 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         } else {
             println("Delete button tapped")
             if self.story != nil {
-                let installation = PFInstallation.currentInstallation()
-                installation.removeObject("\(self.story!.objectId!)", forKey: "channels")
-                var currentChannels = installation["channels"]
-                println("Current Channels : \(currentChannels!)")
-                installation.saveInBackground()
-                self.story!.deleteInBackground()
-                self.navigationController?.popToRootViewControllerAnimated(true)
-                var rootViewController = self.navigationController?.viewControllers[0] as! RankingViewController
-                rootViewController.refreshStories()
+                
+                var channels = installation["channels"] as! Array<String>
+                if contains(channels, "\(self.story!.objectId!)") {
+                    installation.removeObject("\(self.story!.objectId!)", forKey: "channels")
+                    var currentChannels = installation["channels"]
+                    println("Current Channels : \(currentChannels!)")
+                    installation.saveInBackground()
+                }
+                
+                self.story!.deleteInBackgroundWithBlock({
+                    (success, error) -> Void in
+                    if (success) {
+                        self.navigationController?.popToRootViewControllerAnimated(true)
+                        var rankingViewController = self.navigationController?.viewControllers[0] as? RankingViewController
+                        if rankingViewController != nil {
+                            rankingViewController!.refreshStories()
+                        }
+                    } else {
+                        println("There was an error deleting the story: \(error!.description)")
+                    }
+                    
+                })
             }
         }
     }

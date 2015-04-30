@@ -87,6 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             var notificationPayload : NSDictionary = launchOptions![UIApplicationLaunchOptionsRemoteNotificationKey] as! NSDictionary
             
             var storyID = notificationPayload["storyID"] as! String
+            var comment = notificationPayload["comment"]
             var targetStory : PFObject = PFObject(withoutDataWithClassName: "Story", objectId: storyID)
             
             targetStory.fetchIfNeededInBackgroundWithBlock {
@@ -98,6 +99,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 var rootViewController = self.window!.rootViewController as! UITabBarController
                 var navController = rootViewController.selectedViewController as! UINavigationController
                 navController.pushViewController(storyVC, animated: true)
+                if comment != nil {
+                    if comment as! String == "true" {
+                        storyVC.displayStoryComments()
+                    }
+                }
             }
             
             
@@ -272,6 +278,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         println("UserInfo : \(userInfo)")
         
         var storyID = userInfo["storyID"]
+        var comment = userInfo["comment"]
         println("\(storyID)")
         var targetStory : PFObject = PFObject(withoutDataWithClassName: "Story", objectId: "\(storyID!)")
         
@@ -284,12 +291,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             var rootViewController = self.window!.rootViewController as! UITabBarController
             var navController = rootViewController.selectedViewController as! UINavigationController
             navController.pushViewController(storyVC, animated: true)
+            if comment != nil {
+                if comment  as! String == "true"{
+                    storyVC.displayStoryComments()
+                }
+            }
         }
-            
-            
-            
         
     }
+    
 
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
         application.registerForRemoteNotifications()
