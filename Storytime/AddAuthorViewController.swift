@@ -80,8 +80,20 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
                             cell.userAddedIndicator.alpha = 1
                             }, completion: {
                                 (value: Bool) in
-                                self.story!.saveInBackground()
+                                self.story!.saveInBackgroundWithBlock({
+                                    (success, error) -> Void in
+                                        if (success) {
+                                            // The object has been saved.
+                                            self.sendPushNotificationToUser(selectedUser)
+                                            
+                                            
+                                        } else {
+                                            // There was a problem, check error.description
+                                            println("There was an error saving the story: \(error!.description)")
+                                        }
+                                    })
                                 self.dismissViewControllerAnimated(true, completion: {})
+                                
                         })
                         
                         
@@ -109,7 +121,18 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
                                 cell.userAddedIndicator.alpha = 1
                                 }, completion: {
                                     (value: Bool) in
-                                    self.story!.saveInBackground()
+                                    self.story!.saveInBackgroundWithBlock({
+                                        (success, error) -> Void in
+                                        if (success) {
+                                            // The object has been saved.
+                                            self.sendPushNotificationToUser(selectedUser)
+                                            
+
+                                        } else {
+                                            // There was a problem, check error.description
+                                            println("There was an error saving the story: \(error!.description)")
+                                        }
+                                    })
                                     self.dismissViewControllerAnimated(true, completion: {})
                             })
 
@@ -316,6 +339,31 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
             }
         }
         
+    }
+    
+    func sendPushNotificationToUser(user : PFUser) {
+        var pushQuery : PFQuery = PFInstallation.query()!
+        pushQuery.whereKey("user", equalTo: user.objectId!)
+        var currentUserProfileName = PFUser.currentUser()!["profileName"]
+        var storyTitle = self.story!["title"]
+        
+        let data = [
+            "alert" : "\(currentUserProfileName!) has added you to the story: \(storyTitle!)",
+            "storyID" : self.story!.objectId!
+        ]
+        let push = PFPush()
+        //                                            push.setMessage("\(currentUserProfileName!) has added you to the story: \(storyTitle!)")
+        push.setQuery(pushQuery)
+        push.setData(data)
+        push.sendPushInBackgroundWithBlock({
+            (success, error) -> Void in
+            if success == true {
+                println("Push query successful")
+            } else {
+                println("Push encountered error: \(error!.description)")
+            }
+        })
+
     }
 
 }

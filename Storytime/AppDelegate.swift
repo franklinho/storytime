@@ -82,7 +82,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             [NSForegroundColorAttributeName: systemColor]
         
         UITabBar.appearance().selectedImageTintColor = systemColor
+        println("Launch Options : \(launchOptions)")
+        if launchOptions != nil {
+            var notificationPayload : NSDictionary = launchOptions![UIApplicationLaunchOptionsRemoteNotificationKey] as! NSDictionary
+            
+            var storyID = notificationPayload["storyID"] as! String
+            var targetStory : PFObject = PFObject(withoutDataWithClassName: "Story", objectId: storyID)
+            
+            targetStory.fetchIfNeededInBackgroundWithBlock {
+                (user, error) -> Void in
+                var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as! StoryViewController
+                storyVC.story = targetStory
+                storyVC.refreshEventsForStory()
+                
+                var rootViewController = self.window!.rootViewController as! UITabBarController
+                var navController = rootViewController.selectedViewController as! UINavigationController
+                navController.pushViewController(storyVC, animated: true)
+            }
+            
+            
+            
+        }
+        
 
+
+        
+//        NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
+//        
+//        // Create a pointer to the Photo object
+//        NSString *photoId = [notificationPayload objectForKey:@"p"];
+//        PFObject *targetPhoto = [PFObject objectWithoutDataWithClassName:@"Photo"
+//        objectId:photoId];
+//        
+//        // Fetch photo object
+//        [targetPhoto fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+//        // Show photo view controller
+//        if (!error && [PFUser currentUser]) {
+//        PhotoVC *viewController = [[PhotoVC alloc] initWithPhoto:object];
+//        [self.navController pushViewController:viewController animated:YES];
+//        }
+//        }];
+        
         
         return true
     }
@@ -220,12 +260,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         let installation = PFInstallation.currentInstallation()
         installation.setDeviceTokenFromData(deviceToken)
+        if PFUser.currentUser() != nil {
+            installation["user"] = PFUser.currentUser()!.objectId!
+        }
         installation.addUniqueObject("global", forKey: "channels")
         installation.saveInBackground()
     }
     
     func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
         PFPush.handlePush(userInfo)
+        println("UserInfo : \(userInfo)")
+        
+        var storyID = userInfo["storyID"]
+        println("\(storyID)")
+        var targetStory : PFObject = PFObject(withoutDataWithClassName: "Story", objectId: "\(storyID!)")
+        
+        targetStory.fetchIfNeededInBackgroundWithBlock {
+            (user, error) -> Void in
+            var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as! StoryViewController
+            storyVC.story = targetStory
+            storyVC.refreshEventsForStory()
+            
+            var rootViewController = self.window!.rootViewController as! UITabBarController
+            var navController = rootViewController.selectedViewController as! UINavigationController
+            navController.pushViewController(storyVC, animated: true)
+        }
+            
+            
+            
+        
     }
 
     func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {

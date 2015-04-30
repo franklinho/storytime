@@ -804,6 +804,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.createTitleView.hidden = true
                     self.titleView.hidden = false
                     self.createTextEvent()
+                    let installation = PFInstallation.currentInstallation()
+                    installation["user"] = PFUser.currentUser()!.objectId!
+                    installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
+                    installation.saveInBackground()
                 } else {
                     // There was a problem, check error.description
                     println("There was an error saving the story: \(error!.description)")
@@ -1225,6 +1229,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.createTitleView.hidden = true
                     self.titleView.hidden = false
                     self.createVideoEvent(videoFile)
+                    
+                    let installation = PFInstallation.currentInstallation()
+                    installation["user"] = PFUser.currentUser()!.objectId!
+                    installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
+                    installation.saveInBackground()
                 } else {
                     // There was a problem, check error.description
                     println("There was an error saving the story: \(error!.description)")
@@ -1368,6 +1377,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.createTitleView.hidden = true
                     self.titleView.hidden = false
                     self.createPhotoEvent(imageFile)
+                    
+                    let installation = PFInstallation.currentInstallation()
+                    installation["user"] = PFUser.currentUser()!.objectId!
+                    installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
+                    var currentChannels = installation["channels"]
+                    println("Current Channels : \(currentChannels!)")
+                    installation.saveInBackground()
                 } else {
                     // There was a problem, check error.description
                     println("There was an error saving the story: \(error!.description)")
@@ -1728,7 +1744,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.dismissViewControllerAnimated(true, completion: nil)
         updateVotingLabels()
         profileTabBarItem!.enabled = true
-        
+        PFInstallation.currentInstallation()["user"] = PFUser.currentUser()
+        PFInstallation.currentInstallation().saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
@@ -1773,7 +1790,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.dismissViewControllerAnimated(true, completion: nil)
         updateVotingLabels()
         profileTabBarItem!.enabled = true
-        
+        PFInstallation.currentInstallation()["user"] = PFUser.currentUser()
+        PFInstallation.currentInstallation().saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
@@ -1978,6 +1996,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         } else {
             println("Delete button tapped")
             if self.story != nil {
+                let installation = PFInstallation.currentInstallation()
+                installation.removeObject("\(self.story!.objectId!)", forKey: "channels")
+                var currentChannels = installation["channels"]
+                println("Current Channels : \(currentChannels!)")
+                installation.saveInBackground()
                 self.story!.deleteInBackground()
                 self.navigationController?.popToRootViewControllerAnimated(true)
                 var rootViewController = self.navigationController?.viewControllers[0] as! RankingViewController

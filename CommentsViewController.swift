@@ -539,7 +539,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         self.dismissViewControllerAnimated(true, completion: nil)
 //        updateVotingLabels()
         profileTabBarItem!.enabled = true
-        
+        PFInstallation.currentInstallation()["user"] = PFUser.currentUser()
+        PFInstallation.currentInstallation().saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
@@ -584,7 +585,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         self.dismissViewControllerAnimated(true, completion: nil)
 //        updateVotingLabels()
         profileTabBarItem!.enabled = true
-        
+        PFInstallation.currentInstallation()["user"] = PFUser.currentUser()
+        PFInstallation.currentInstallation().saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)

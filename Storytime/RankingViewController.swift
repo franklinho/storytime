@@ -38,6 +38,11 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             profileTabBarItem!.enabled = false
         }
         
+        if PFUser.currentUser() != nil {
+            PFInstallation.currentInstallation()["user"] = PFUser.currentUser()!.objectId!
+            PFInstallation.currentInstallation().saveInBackground()
+        }
+
 
         // Do any additional setup after loading the view.
         
@@ -314,6 +319,9 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         logOutButton.title = "Log Out"
         profileTabBarItem!.enabled = true
         
+        PFInstallation.currentInstallation()["user"] = PFUser.currentUser()
+        PFInstallation.currentInstallation().saveInBackground()
+        
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
@@ -368,6 +376,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.rankingTableView.reloadData()
         logOutButton.title = "Log Out"
         profileTabBarItem!.enabled = true
+        PFInstallation.currentInstallation()["user"] = PFUser.currentUser()
+        PFInstallation.currentInstallation().saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)

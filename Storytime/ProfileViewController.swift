@@ -340,7 +340,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.dismissViewControllerAnimated(true, completion: nil)
         self.storyTableView.reloadData()
         profileTabBarItem!.enabled = true
-        
+        PFInstallation.currentInstallation()["user"] = PFUser.currentUser()
+        PFInstallation.currentInstallation().saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
@@ -385,7 +386,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.dismissViewControllerAnimated(true, completion: nil)
         self.storyTableView.reloadData()
         profileTabBarItem!.enabled = true
-        
+        PFInstallation.currentInstallation()["user"] = PFUser.currentUser()
+        PFInstallation.currentInstallation().saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
             self.presentViewController(createProfileVC, animated: true, completion: nil)
