@@ -185,6 +185,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 if PFUser.currentUser() != nil{
                     if PFUser.currentUser()!["votedStories"] != nil {
                         self.votedStories = PFUser.currentUser()!["votedStories"] as! NSMutableDictionary
+                        println("Voted Stories: \(self.votedStories)")
                         if votedStories[story!.objectId!] != nil{
                             if votedStories[story!.objectId!] as! Int == 1 {
                                 cell.storyUpVoted = true
@@ -194,7 +195,13 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                                 cell.storyDownVoted = true
                                 cell.downvoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
                                 cell.pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
+                            } else {
+                                cell.storyUpVoted = false
+                                cell.storyDownVoted = false
                             }
+                        } else {
+                            cell.storyUpVoted = false
+                            cell.storyDownVoted = false
                         }
                     }
                 }
@@ -248,6 +255,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 
                 
             }
+            
+            println("Story Title: \(cell.titleLabel.text), objectID \(cell.story!.objectId), upvoted: \(cell.storyUpVoted), downvoted: \(cell.storyDownVoted)")
             
             return cell
         }
