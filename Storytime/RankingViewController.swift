@@ -15,27 +15,29 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     var votedStories : NSMutableDictionary = [:]
     var creatingNewStory = false
     var refreshControl : UIRefreshControl!
-    var profileTabBarItem : UITabBarItem?
+//    var profileTabBarItem : UITabBarItem?
     var currentOffset = 0
     var maxReached = false
     var requestingObjects = false
+    var hamburgerVC : HamburgerViewController?
+
     @IBOutlet var viewTapGestureRecognizer: UITapGestureRecognizer!
     
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var logOutButton: UIBarButtonItem!
+//    @IBOutlet weak var logOutButton: UIBarButtonItem!
     
     @IBOutlet weak var rankingTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
         viewTapGestureRecognizer.enabled = false
         searchBar.delegate = self
-        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as! UITabBarItem
+//        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as! UITabBarItem
         
         
         if PFUser.currentUser() == nil {
-            logOutButton.title = "Log In"
-            profileTabBarItem!.enabled = false
+//            logOutButton.title = "Log In"
+            hamburgerVC!.profileButton.enabled = false
         }
         
         if PFUser.currentUser() != nil {
@@ -325,8 +327,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         self.rankingTableView.reloadData()
-        logOutButton.title = "Log Out"
-        profileTabBarItem!.enabled = true
+        hamburgerVC!.refreshLoginLabels()
+        hamburgerVC!.profileButton.enabled = true
         
         PFInstallation.currentInstallation()["user"] = user
         PFInstallation.currentInstallation().saveInBackground()
@@ -372,18 +374,18 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     override func viewDidAppear(animated: Bool) {
-        if PFUser.currentUser() != nil {
-            logOutButton.title = "Log Out"
-        } else {
-            logOutButton.title = "Log In"
-        }
+//        if PFUser.currentUser() != nil {
+//            logOutButton.title = "Log Out"
+//        } else {
+//            logOutButton.title = "Log In"
+//        }
     }
     
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         self.rankingTableView.reloadData()
-        logOutButton.title = "Log Out"
-        profileTabBarItem!.enabled = true
+        hamburgerVC!.refreshLoginLabels()
+        hamburgerVC!.profileButton.enabled = true
         
         PFInstallation.currentInstallation()["user"] = user
         PFInstallation.currentInstallation().saveInBackground()
@@ -408,20 +410,20 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         println("User dismissed the signupviewcontroller")
     }
     
-    @IBAction func logOutButtonWasTapped(sender: AnyObject) {
-        self.creatingNewStory = false
-        if PFUser.currentUser() != nil {
-            PFUser.logOut()
-            UIAlertView(title: "Logged Out", message: "You have successfully logged out.", delegate: nil, cancelButtonTitle: "OK").show()
-            self.votedStories = [:] as NSMutableDictionary
-            self.rankingTableView.reloadData()
-            self.logOutButton.title = "Log In"
-            profileTabBarItem!.enabled = false
-        } else {
-            presentLoginViewController()
-        }
-        
-    }
+//    @IBAction func logOutButtonWasTapped(sender: AnyObject) {
+//        self.creatingNewStory = false
+//        if PFUser.currentUser() != nil {
+//            PFUser.logOut()
+//            UIAlertView(title: "Logged Out", message: "You have successfully logged out.", delegate: nil, cancelButtonTitle: "OK").show()
+//            self.votedStories = [:] as NSMutableDictionary
+//            self.rankingTableView.reloadData()
+//            self.logOutButton.title = "Log In"
+////            profileTabBarItem!.enabled = false
+//        } else {
+//            presentLoginViewController()
+//        }
+//        
+//    }
     func refreshStories() {
 
         requestStories(self, offset: 0)
@@ -567,6 +569,15 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         storyVC.displayStoryComments()
     }
 
+    @IBAction func menuButtonWasTapped(sender: AnyObject) {
+
+
+        if hamburgerVC!.hamburgerShowing == true {
+            hamburgerVC!.hideHamburgerMenu()
+        } else {
+            hamburgerVC!.showHamburgerMenu()
+        }
+    }
 
         
 }

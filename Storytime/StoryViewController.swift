@@ -13,6 +13,7 @@ import MediaPlayer
 
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate {
     
+    var hamburgerVC : HamburgerViewController?
     let installation = PFInstallation.currentInstallation()
     @IBOutlet weak var addAuthorButton: UIButton!
     @IBOutlet weak var addUserButtonBorderView: UIView!
@@ -22,7 +23,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet var userTapGestureRecognizer: UITapGestureRecognizer!
     @IBOutlet weak var createTitleViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var cameraFlashButton: UIButton!
-    var profileTabBarItem : UITabBarItem?
+//    var profileTabBarItem : UITabBarItem?
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var newStory : Bool = false
     var storyCreated : Bool = false
@@ -95,6 +96,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
         addUserButtonBorderView.layer.borderWidth = 1
         addUserButtonBorderView.layer.borderColor = UIColor.whiteColor().CGColor
         
@@ -118,7 +120,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         createView.hidden = true
         createTitleViewTopConstraint.constant = CGFloat(screenSize.height)/2 - CGFloat(createTitleView.bounds.height)*2
-        profileTabBarItem = (self.tabBarController?.tabBar.items?[1] as! UITabBarItem)
+//        profileTabBarItem = (self.tabBarController?.tabBar.items?[1] as! UITabBarItem)
         
         self.storyTableView.tableHeaderView = UIView(frame: CGRectMake(0.0, 0.0, self.storyTableView.bounds.size.width, 0.01))
         
@@ -1821,7 +1823,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         updateVotingLabels()
-        profileTabBarItem!.enabled = true
+        hamburgerVC!.profileButton.enabled = true
+        hamburgerVC!.refreshLoginLabels()
         installation["user"] = user
         installation.saveInBackground()
         
@@ -1868,7 +1871,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         updateVotingLabels()
-        profileTabBarItem!.enabled = true
+        hamburgerVC!.profileButton.enabled = true
+        hamburgerVC!.refreshLoginLabels()
         installation["user"] = user
         installation.saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {

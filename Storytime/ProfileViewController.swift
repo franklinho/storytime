@@ -23,13 +23,15 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var storyTableView: UITableView!
     @IBOutlet weak var usernameLabel: UILabel!
     var refreshControl : UIRefreshControl!
-    var profileTabBarItem : UITabBarItem?
+    var hamburgerVC : HamburgerViewController?
+//    var profileTabBarItem : UITabBarItem?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as! UITabBarItem
+        hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
+
+//        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as! UITabBarItem
 
         
         profileImageView.layer.cornerRadius = 50
@@ -339,7 +341,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         self.storyTableView.reloadData()
-        profileTabBarItem!.enabled = true
+        hamburgerVC!.profileButton.enabled = true
+        hamburgerVC!.refreshLoginLabels()
         PFInstallation.currentInstallation()["user"] = user
         PFInstallation.currentInstallation().saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
@@ -385,7 +388,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         self.storyTableView.reloadData()
-        profileTabBarItem!.enabled = true
+        hamburgerVC!.profileButton.enabled = true
+        hamburgerVC!.refreshLoginLabels()
         PFInstallation.currentInstallation()["user"] = user
         PFInstallation.currentInstallation().saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
@@ -464,4 +468,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         storyVC.displayStoryComments()
     }
 
+    @IBAction func menuButtonWasTapped(sender: AnyObject) {
+        if hamburgerVC!.hamburgerShowing == true {
+            hamburgerVC!.hideHamburgerMenu()
+        } else {
+            hamburgerVC!.showHamburgerMenu()
+        }
+    }
 }

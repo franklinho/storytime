@@ -22,7 +22,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     var createViewExpanded = false
     var createViews = []
     let screenSize: CGRect = UIScreen.mainScreen().bounds
-    var profileTabBarItem : UITabBarItem?
+//    var profileTabBarItem : UITabBarItem?
 //    var votedStories : NSMutableDictionary = [:]
     var vision : PBJVision = PBJVision.sharedInstance()
     var capturedImage : UIImage?
@@ -36,6 +36,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     var previewLayer = PBJVision.sharedInstance().previewLayer
     var photoJustCreated = false
     var videoJustCreated = false
+    var hamburgerVC : HamburgerViewController?
 
     
     @IBOutlet weak var thumbnailImageView: UIImageView!
@@ -73,7 +74,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
+        hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
         if story != nil {
             
             if story!["thumbnailImage"] != nil {
@@ -125,7 +126,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         }
         
         createView.hidden = true
-        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as! UITabBarItem
+//        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as! UITabBarItem
         
         self.commentsTableView.tableHeaderView = UIView(frame: CGRectMake(0.0, 0.0, self.commentsTableView.bounds.size.width, 0.01))
         self.commentsTableView.rowHeight = screenSize.width
@@ -148,7 +149,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyBoardWillChange:", name: UIKeyboardWillChangeFrameNotification, object: nil)
         
         createViews = [cameraContainer, textContainer, videoContainer]
-        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as! UITabBarItem
+//        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as! UITabBarItem
         createViewHeightConstraint.constant = self.view.bounds.width + 46
         createViewTopConstraint.constant = -(screenSize.width + 46)
         
@@ -538,7 +539,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
 //        updateVotingLabels()
-        profileTabBarItem!.enabled = true
+        hamburgerVC!.profileButton.enabled = true
+        hamburgerVC!.refreshLoginLabels()
         self.installation["user"] = user
         self.installation.saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
@@ -584,7 +586,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
 //        updateVotingLabels()
-        profileTabBarItem!.enabled = true
+        hamburgerVC!.profileButton.enabled = true
+        hamburgerVC!.refreshLoginLabels()
         self.installation["user"] = user
         self.installation.saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
