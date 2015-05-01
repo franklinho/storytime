@@ -344,6 +344,7 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
     func sendPushNotificationToUser(user : PFUser) {
         var pushQuery : PFQuery = PFInstallation.query()!
         pushQuery.whereKey("user", equalTo: user.objectId!)
+        pushQuery.whereKey("storyNotificationsOn", equalTo: true)
         var currentUserProfileName = PFUser.currentUser()!["profileName"]
         var storyTitle = self.story!["title"]
         

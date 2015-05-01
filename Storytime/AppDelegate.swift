@@ -23,6 +23,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        
+        
+        
         Fabric.with([Crashlytics()])
 
         Parse.setApplicationId("N1IU3qQJhUOkP2E93hNyISSrJu0uUsMsFjmG23bO", clientKey: "RQO2yFnxsSKsMRzUcPzhqvgGx438fzJhBFB2Jgin")
@@ -72,6 +76,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
 //        
 //        self.window!.makeKeyAndVisible()
 //        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let installation = PFInstallation.currentInstallation()
+        
+        if defaults.objectForKey("storyNotificationsOn") == nil {
+            defaults.setBool(true, forKey: "storyNotificationsOn")
+            installation["storyNotificationsOn"] = true
+        }
+        
+        if defaults.objectForKey("commentNotificationsOn") == nil {
+            defaults.setBool(true, forKey: "commentNotificationsOn")
+            installation["commentNotificationsOn"] = true
+        }
+        
+        if installation["storyNotificationsOn"] == nil {
+            installation["storyNotificationsOn"] = true
+        }
+        
+        if installation["commentNotificationsOn"] == nil {
+            installation["commentNotificationsOn"] = true
+        }
+        
+        
+        
+        installation.saveInBackground()
         
         var systemColor = UIColor(red: 41.0/255.0, green: 37.0/255.0, blue: 55.0/255.0, alpha: 1.0)
         
@@ -97,8 +125,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
                 storyVC.story = targetStory
                 storyVC.refreshEventsForStory()
                 
-                var rootViewController = self.window!.rootViewController as! UITabBarController
-                var navController = rootViewController.selectedViewController as! UINavigationController
+                var rootViewController = self.window!.rootViewController as! HamburgerViewController
+                var rankingVC : UINavigationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("RankingNavigationViewController") as! UINavigationController
+
+                rootViewController.activeViewController = rankingVC
+                var navController = rootViewController.activeViewController as! UINavigationController
                 navController.pushViewController(storyVC, animated: true)
                 if comment != nil {
                     if comment as! String == "true" {
@@ -287,9 +318,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
         if (state == 0) {
             //app is in foreground
             //the push is in your control
-            var rootViewController = self.window!.rootViewController as! UITabBarController
-            var navController = rootViewController.selectedViewController as! UINavigationController
-            var currentController = navController.topViewController
+//            var rootViewController = self.window!.rootViewController as! HamburgerViewController
+//            rootViewController.activeViewController = rootViewController.viewControllers.first
+//            var navController = rootViewController.activeViewController as! UINavigationController
+//            var currentController = navController.topViewController
             var alertString = userInfo["aps"]!["alert"]
             var notificationAlertView = UIAlertView(title: "Storytime", message: alertString as! String, delegate: self, cancelButtonTitle: "Dismiss", otherButtonTitles: "View")
             notificationAlertView.delegate = self
@@ -327,8 +359,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
             storyVC.story = targetStory
             storyVC.refreshEventsForStory()
             
-            var rootViewController = self.window!.rootViewController as! UITabBarController
-            var navController = rootViewController.selectedViewController as! UINavigationController
+            var rootViewController = self.window!.rootViewController as! HamburgerViewController
+            var rankingVC : UINavigationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("RankingNavigationViewController") as! UINavigationController
+            rootViewController.activeViewController = rankingVC
+            var navController = rootViewController.activeViewController as! UINavigationController
             navController.pushViewController(storyVC, animated: true)
             if comment != nil {
                 if comment  as! String == "true"{

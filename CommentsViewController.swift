@@ -874,6 +874,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 let pushQuery = PFInstallation.query()!
                 pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
                 pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
+                pushQuery.whereKey("commentNotificationsOn", notEqualTo: false)
                 var currentUserProfileName = PFUser.currentUser()!["profileName"]
                 var storyTitle = self.story!["title"]
                 let data = [
@@ -1139,6 +1140,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 let pushQuery = PFInstallation.query()!
                 pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
                 pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
+                pushQuery.whereKey("commentNotificationsOn", notEqualTo: false)
                 var currentUserProfileName = PFUser.currentUser()!["profileName"]
                 var storyTitle = self.story!["title"]
                 let data = [
@@ -1260,6 +1262,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 let pushQuery = PFInstallation.query()!
                 pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
                 pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
+                pushQuery.whereKey("commentNotificationsOn", notEqualTo: false)
                 var currentUserProfileName = PFUser.currentUser()!["profileName"]
                 var storyTitle = self.story!["title"]
                 let data = [

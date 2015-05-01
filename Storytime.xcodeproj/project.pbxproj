@@ -20,6 +20,7 @@
 		DD3D45B71ACF0F63001B38BD /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3D45B61ACF0F63001B38BD /* OpenGLES.framework */; };
 		DD3D45B91ACF0F68001B38BD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3D45B81ACF0F68001B38BD /* UIKit.framework */; };
 		DD3D460B1ACF1255001B38BD /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = DD3D460A1ACF1255001B38BD /* Podfile */; };
+		DD42B7211AF4192E0001565A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD42B7201AF4192E0001565A /* SettingsViewController.swift */; };
 		DD49B4201ACF13970027F2C9 /* libstdc++.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3D45981ACF0CAA001B38BD /* libstdc++.6.dylib */; };
 		DD4A77241AF3DF5300573585 /* HamburgerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4A77231AF3DF5300573585 /* HamburgerViewController.swift */; };
 		DD70FBD11ACF16DE0002C5CC /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD70FBD01ACF16DE0002C5CC /* ParseUI.framework */; };
@@ -128,6 +129,7 @@
 		DD3D45B61ACF0F63001B38BD /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		DD3D45B81ACF0F68001B38BD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DD3D460A1ACF1255001B38BD /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		DD42B7201AF4192E0001565A /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		DD4A77231AF3DF5300573585 /* HamburgerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HamburgerViewController.swift; sourceTree = "<group>"; };
 		DD70FBD01ACF16DE0002C5CC /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
 		DD70FBD21ACF16FB0002C5CC /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = Pods/Parse/Parse.framework; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 		DD138C7F1AE572CF00C74E8A /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				DD42B7201AF4192E0001565A /* SettingsViewController.swift */,
 				DDF06E961AD4529F007D4954 /* CreateProfileViewController.swift */,
 				DD9B26DD1AD8574600E6D3DE /* CustomLoginViewController.swift */,
 				DD9B26DF1AD8578A00E6D3DE /* CustomSignUpViewController.swift */,
@@ -677,6 +680,7 @@
 				DDC93A131AC48FA2006D4646 /* StoryTextTableViewCell.swift in Sources */,
 				DDC93A0F1AC48E22006D4646 /* StoryViewController.swift in Sources */,
 				DDC936901AC47CAE006D4646 /* ViewController.swift in Sources */,
+				DD42B7211AF4192E0001565A /* SettingsViewController.swift in Sources */,
 				DDF06E971AD4529F007D4954 /* CreateProfileViewController.swift in Sources */,
 				DD9B26E01AD8578A00E6D3DE /* CustomSignUpViewController.swift in Sources */,
 				DD138C821AE58D8500C74E8A /* AddAuthorViewController.swift in Sources */,

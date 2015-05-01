@@ -743,6 +743,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     let pushQuery = PFInstallation.query()!
                     pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
                     pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
+                    pushQuery.whereKey("storyNotificationsOn", notEqualTo: false)
                     
                     var currentUserProfileName = PFUser.currentUser()!["profileName"]
                     var storyTitle = self.story!["title"]
@@ -1168,6 +1169,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     let pushQuery = PFInstallation.query()!
                     pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
                     pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
+                    pushQuery.whereKey("storyNotificationsOn", notEqualTo: false)
+                    
                     
                     var currentUserProfileName = PFUser.currentUser()!["profileName"]
                     var storyTitle = self.story!["title"]
@@ -1346,6 +1349,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     let pushQuery = PFInstallation.query()!
                     pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
                     pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
+                    pushQuery.whereKey("storyNotificationsOn", notEqualTo: false)
                     
                     var currentUserProfileName = PFUser.currentUser()!["profileName"]
                     var storyTitle = self.story!["title"]

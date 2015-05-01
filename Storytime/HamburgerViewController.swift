@@ -23,6 +23,7 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
     
     @IBOutlet weak var userImageView: UIImageView!
     
+    @IBOutlet weak var settingsButton: UIButton!
     @IBOutlet weak var mentionsButton: UIButton!
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var contentView: UIView!
@@ -120,6 +121,9 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
         } else if sender == blueButton{
             self.activeViewController = viewControllers[1]
             //            println("Blue button")
+        } else if sender == settingsButton{
+            var settingsVC : SettingsViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("SettingsViewController") as! SettingsViewController
+            self.presentViewController(settingsVC, animated: true, completion: nil)
         } else {
             println("Unknown button")
         }
@@ -156,7 +160,7 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
                 self.userNameLabel.text = PFUser.currentUser()!["profileName"] as! String
                 self.userImageView.layer.cornerRadius = 24
                 self.userImageView.layer.borderWidth = 2
-                self.userImageView.layer.borderColor = UIColor.darkGrayColor().CGColor
+                self.userImageView.layer.borderColor = UIColor.whiteColor().CGColor
                 self.userImageView.clipsToBounds = true
                 
                 if user["profileImage"] != nil {
