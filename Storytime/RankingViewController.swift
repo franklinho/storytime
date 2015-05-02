@@ -33,7 +33,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         newStoryButton.layer.cornerRadius = 40
         newStoryButton.clipsToBounds = true
-        newStoryButton.layer.shadowColor = UIColor.blackColor().CGColor
+        newStoryButton.layer.shadowColor = UIColor.whiteColor().CGColor
         newStoryButton.layer.shadowOffset = CGSizeMake(5, 5)
         newStoryButton.layer.shadowRadius = 5
         newStoryButton.layer.shadowOpacity = 1.0
@@ -449,7 +449,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             }
             query.orderByDescending("points")
             query.addDescendingOrder("createdAt")
-            query.limit = 10
+            query.limit = 5
             if offset == 0 {
                 self.stories = []
                 self.currentOffset = 0
@@ -465,7 +465,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
 //                        var objectTitle = object["title"]
 //                        println("This is the object's title: \(objectTitle!))")
 //                    }
-                    if objects!.count == 0 || objects!.count < 10 {
+                    if objects!.count == 0 || objects!.count < 5 {
                         self.maxReached = true
                     }
                     

@@ -221,6 +221,7 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         self.upvoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
         self.downvoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
         self.pointsLabel.textColor = UIColor.whiteColor()

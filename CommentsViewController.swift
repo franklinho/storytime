@@ -80,7 +80,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         
         newCommentButton.layer.cornerRadius = 40
         newCommentButton.clipsToBounds = true
-        newCommentButton.layer.shadowColor = UIColor.blackColor().CGColor
+        newCommentButton.layer.shadowColor = UIColor.whiteColor().CGColor
         newCommentButton.layer.shadowOffset = CGSizeMake(5, 5)
         newCommentButton.layer.shadowRadius = 5
         newCommentButton.layer.shadowOpacity = 1.0
@@ -954,7 +954,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             query.whereKey("storyObject", equalTo:self.story!)
             query.orderByDescending("createdAt")
             
-            query.limit = 10
+            query.limit = 5
             if offset == 0 {
                 self.comments = []
                 self.currentOffset = 0
@@ -970,22 +970,24 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
 //                        var objectTitle = object["title"]
 //                        println("This is the object's title: \(objectTitle!))")
 //                    }
-                    if objects!.count == 0 || objects!.count < 10 {
+                    if objects!.count == 0 || objects!.count < 5 {
                         self.maxReached = true
                     }
                     
-                    if objects!.count == 0 {
+                    
+                    
+                    var temporaryArray : NSMutableArray = NSMutableArray(array: self.comments)
+                    temporaryArray.addObjectsFromArray(objects!)
+                    self.comments = temporaryArray
+                    self.currentOffset = self.comments.count
+                    
+                    if self.comments.count == 0 {
                         self.noCommentsLabel.hidden = false
                         self.commentsTableViewTapGestureRecognizer.enabled = true
                     } else {
                         self.noCommentsLabel.hidden = true
                         self.commentsTableViewTapGestureRecognizer.enabled = false
                     }
-                    
-                    var temporaryArray : NSMutableArray = NSMutableArray(array: self.comments)
-                    temporaryArray.addObjectsFromArray(objects!)
-                    self.comments = temporaryArray
-                    self.currentOffset = self.comments.count
                     
                     self.commentsTableView.reloadData()
 //                    print("This is a list of all the comments \(self.comments)")

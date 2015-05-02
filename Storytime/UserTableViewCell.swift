@@ -32,6 +32,7 @@ class UserTableViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         self.userImageView.image = UIImage(named: "user_icon_scaled_white.png")
         self.usernameLabel.text = ""
         self.userAddedIndicator.hidden = true

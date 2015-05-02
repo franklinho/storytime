@@ -101,7 +101,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         createButton.layer.cornerRadius = 40
         createButton.clipsToBounds = true
-        createButton.layer.shadowColor = UIColor.blackColor().CGColor
+        createButton.layer.shadowColor = UIColor.whiteColor().CGColor
         createButton.layer.shadowOffset = CGSizeMake(5, 5)
         createButton.layer.shadowRadius = 5
         createButton.layer.shadowOpacity = 1.0
@@ -994,7 +994,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             query.whereKey("storyObject", equalTo:self.story!)
             query.orderByDescending("createdAt")
 
-            query.limit = 10
+            query.limit = 5
             if offset == 0 {
                 self.events = []
                 self.currentOffset = 0
@@ -1010,19 +1010,21 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //                        var objectTitle = object["title"]
 //                        println("This is the object's title: \(objectTitle!))")
 //                    }
-                    if objects!.count == 0 || objects!.count < 10 {
+                    if objects!.count == 0 || objects!.count < 5 {
                         self.maxReached = true
                     }
                     
-                    if objects!.count == 0 {
-                        self.noEventsLabel.hidden = false
-                    } else {
-                        self.noEventsLabel.hidden = true
-                    }
+                    
                     
                     var temporaryArray : NSMutableArray = NSMutableArray(array: self.events)
                     temporaryArray.addObjectsFromArray(objects!)
                     self.events = temporaryArray
+                    
+                    if self.events.count == 0 {
+                        self.noEventsLabel.hidden = false
+                    } else {
+                        self.noEventsLabel.hidden = true
+                    }
                     self.currentOffset = self.events.count
                     
                     self.storyTableView.reloadData()

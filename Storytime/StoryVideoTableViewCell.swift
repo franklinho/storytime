@@ -121,6 +121,7 @@ class StoryVideoTableViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         self.timestampLabel.text = "0s ago"
         if self.userNameButton != nil {
             self.userNameButton.setTitle("", forState: UIControlState.Normal)
