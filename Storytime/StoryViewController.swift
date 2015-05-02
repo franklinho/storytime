@@ -356,6 +356,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
 
         vision.cameraOrientation = PBJCameraOrientation.Portrait
+        vision.cameraMode = PBJCameraMode.Photo
         vision.focusMode = PBJFocusMode.ContinuousAutoFocus
         vision.outputFormat = PBJOutputFormat.Square
         vision.maximumCaptureDuration = CMTimeMakeWithSeconds(10, 600)
@@ -708,7 +709,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //                self.createButton!.title = "+ Event"
                 self.createButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Normal)
                 self.vision.stopPreview()
-                self.vision.endVideoCapture()
+//                self.vision.endVideoCapture()
         })
         videoLongPressGestureRecognizer.enabled = false
         for view in createViews {
