@@ -10,6 +10,7 @@ import UIKit
 
 class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate {
 
+    @IBOutlet weak var createViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet var commentsTableViewTapGestureRecognizer: UITapGestureRecognizer!
     @IBOutlet weak var progressView: UIView!
     
@@ -41,7 +42,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBOutlet weak var thumbnailImageView: UIImageView!
     @IBOutlet weak var createTextView: UITextView!
-    @IBOutlet weak var createViewTopConstraint: NSLayoutConstraint!
+//    @IBOutlet weak var createViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var createViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var storyImageView: UIImageView!
     @IBOutlet weak var profileImageView: UIImageView!
@@ -67,13 +68,23 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet var videoCommentLongPressGestureRecognizer: UILongPressGestureRecognizer!
 
     
-    @IBOutlet weak var newCommentButton: UIBarButtonItem!
+    @IBOutlet weak var newCommentButton: UIButton!
+//    @IBOutlet weak var newCommentButton: UIBarButtonItem!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        newCommentButton.layer.cornerRadius = 30
+        newCommentButton.clipsToBounds = true
+        newCommentButton.layer.shadowColor = UIColor.blackColor().CGColor
+        newCommentButton.layer.shadowOffset = CGSizeMake(5, 5)
+        newCommentButton.layer.shadowRadius = 5
+        newCommentButton.layer.shadowOpacity = 1.0
+        
+        
         hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
         if story != nil {
             
@@ -151,7 +162,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         createViews = [cameraContainer, textContainer, videoContainer]
 //        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as! UITabBarItem
         createViewHeightConstraint.constant = self.view.bounds.width + 46
-        createViewTopConstraint.constant = -(screenSize.width + 46)
+        createViewBottomConstraint.constant = -(screenSize.width + 46)
         
         self.view.updateConstraints()
         self.view.layoutIfNeeded()
@@ -173,6 +184,12 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
 
         refreshCommentsForStory()
         
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        self.createViewBottomConstraint.constant = -(screenSize.width + 46)
+        self.createViewHeightConstraint.constant = self.view.bounds.width + 46
+        self.view.layoutIfNeeded()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -410,9 +427,11 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         if CGFloat(createViewRect.origin.y) + CGFloat(createViewRect.height) > CGFloat(keyBoardRect.origin.y) {
             println("Keyboard Rect: \(keyBoardRect)")
             println("CreateView Rect: \(createViewRect)")
+            self.createViewBottomConstraint.constant = keyBoardRect.height
             self.createViewHeightConstraint.constant = CGFloat(keyBoardRect.origin.y) - CGFloat(createViewRect.origin.y)
             println("New Createview Height: \(self.createViewHeightConstraint.constant)")
         } else {
+            self.createViewBottomConstraint.constant = 0
             self.createViewHeightConstraint.constant = self.view.bounds.width + 46
         }
         
@@ -428,7 +447,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         
         self.view.layoutIfNeeded()
         
-        self.createViewTopConstraint.constant = -(screenSize.width + 46)
+        self.createViewBottomConstraint.constant = -(screenSize.width + 46)
         //        createViewLeadingConstraint.constant = screenSize.width/4
         //        createViewTrailingConstraint.constant = screenSize.width/4
         UIView.animateWithDuration(0.3, animations: {
@@ -437,7 +456,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 (value: Bool) in
                 self.createView.hidden = true
                 self.createViewExpanded = false
-                self.newCommentButton!.title = "+ Comment"
+//                self.newCommentButton!.title = "+ Comment"
+                self.newCommentButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Normal)
                 self.vision.stopPreview()
                 self.vision.endVideoCapture()
         })
@@ -454,6 +474,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     @IBAction func newCommentButtonWasTapped(sender: AnyObject) {
+        pauseVideoIfPlaying()
+        self.view.endEditing(true)
         if (PFUser.currentUser() == nil){
             presentLoginViewController()
         } else if (PFUser.currentUser() != nil && PFUser.currentUser()!["profileName"] == nil) {
@@ -472,14 +494,15 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         self.view.layoutIfNeeded()
         self.createView.hidden = false
         self.createViewHeightConstraint.constant = self.view.bounds.width + 46
-        self.createViewTopConstraint.constant = 0
+        self.createViewBottomConstraint.constant = 0
         UIView.animateWithDuration(0.3, animations: {
             self.view.layoutIfNeeded()
             
             }, completion: {
                 (value: Bool) in
                 self.createView.hidden = false
-                self.newCommentButton!.title = "Cancel"
+//                self.newCommentButton!.title = "Cancel"
+                self.newCommentButton.setImage(UIImage(named: "cancelIcon"), forState: UIControlState.Normal)
                 self.createViewExpanded = true            })
         
 //        if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 {
@@ -1308,10 +1331,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewWillDisappear(animated: Bool) {
         //        GSProgressHUD.dismiss()
-        if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 {
-            playingVideoCell?.player?.pause()
-            playingVideoCell?.playButtonIconImageView.hidden = false
-        }
+        pauseVideoIfPlaying()
+        self.view.endEditing(true)
         self.minimizeCreateView()
     }
     
@@ -1348,6 +1369,13 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
 
     @IBAction func commentsTableViewTapGestureRecognizerWasTapped(sender: AnyObject) {
         self.expandCreateView()
+    }
+    
+    func pauseVideoIfPlaying() {
+        if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 {
+            playingVideoCell?.player?.pause()
+            playingVideoCell?.playButtonIconImageView.hidden = false
+        }
     }
     
 }

@@ -13,6 +13,7 @@ import MediaPlayer
 
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate {
     
+    @IBOutlet weak var createButton: UIButton!
     var hamburgerVC : HamburgerViewController?
     let installation = PFInstallation.currentInstallation()
     @IBOutlet weak var addAuthorButton: UIButton!
@@ -45,7 +46,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var storyDownVoted = false
     var creatingEvent = false
     var createViewExpanded = false
-    var createButton :UIBarButtonItem?
+//    var createButton :UIBarButtonItem?
     var settingsButton :UIBarButtonItem?
     var refreshControl : UIRefreshControl!
     var settingsActionSheet : UIActionSheet = UIActionSheet()
@@ -79,7 +80,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var titleTextField: UITextField!
 
 
-    @IBOutlet weak var createViewTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var createViewBottomConstraint: NSLayoutConstraint!
+
     @IBOutlet weak var createViewTrailingConstraint: NSLayoutConstraint!
     @IBOutlet weak var createViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var createViewHeightConstraint: NSLayoutConstraint!
@@ -95,6 +97,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var progressViewTrailingConstraint: NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        createButton.layer.cornerRadius = 30
+        createButton.clipsToBounds = true
+        createButton.layer.shadowColor = UIColor.blackColor().CGColor
+        createButton.layer.shadowOffset = CGSizeMake(5, 5)
+        createButton.layer.shadowRadius = 5
+        createButton.layer.shadowOpacity = 1.0
+
         
         hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
         addUserButtonBorderView.layer.borderWidth = 1
@@ -164,10 +174,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         createViewHeightConstraint.constant = self.view.bounds.width + 46
         
         
-        createButton = UIBarButtonItem(title: "+ Event", style: .Plain, target: self, action: "createButtonWasTapped")
+//        createButton = UIBarButtonItem(title: "+ Event", style: .Plain, target: self, action: "createButtonWasTapped")
         settingsButton = UIBarButtonItem(image: UIImage(named: "gearIcon"), style: .Plain, target: self, action: "settingsButtonWasTapped")
-        self.navigationItem.rightBarButtonItems = [ createButton!,settingsButton!]
-        
+        self.navigationItem.rightBarButtonItem = settingsButton!
         
         if newStory == false {
             self.storyTitleLabel.text = self.story!["title"] as? String
@@ -197,7 +206,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
                 
                 self.userLabel.text = profileName as? String
-                self.createViewTopConstraint.constant = -(self.screenSize.width + 46)
+                self.createViewBottomConstraint.constant = -(self.screenSize.width + 46)
                 self.createView.hidden = true
                 self.createTitleView.hidden = true
                 self.titleView.hidden = false
@@ -205,7 +214,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     var currentUser = PFUser.currentUser()
                     println("Story user is \(storyUser.username) and current user is \(currentUser!.username)")
                     if  storyUser.username == currentUser!.username {
-                        self.createButton!.enabled = true
+                        self.createButton!.hidden = false
                         self.settingsButton!.enabled = true
                         self.addAuthorButton.hidden = false
                         self.addUserButtonBorderView.hidden = false
@@ -217,29 +226,29 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             }
                         }
                         if matchCount > 0 {
-                            self.createButton!.enabled = true
+                            self.createButton!.hidden = false
                             self.settingsButton!.enabled = true
                             self.addAuthorButton.hidden = false
                             self.addUserButtonBorderView.hidden = false
                         } else {
-                            self.createButton!.enabled = false
+                            self.createButton!.hidden = true
                             self.settingsButton!.enabled = false
                             
                         }
                     } else {
-                        self.createButton!.enabled = false
+                        self.createButton!.hidden = true
                         self.settingsButton!.enabled = false
                     }
                 }
             }
             
         } else {
-            createViewTopConstraint.constant = -(screenSize.width + 46)
+            createViewBottomConstraint.constant = -(screenSize.width + 46)
 //            createViewTopConstraint.constant = 0
 //            self.createView.hidden = false
             titleView.hidden = true
             createTitleView.hidden = false
-            createButton!.enabled = false
+            createButton!.hidden = true
             settingsButton!.enabled = false
 //            createButton!.title = "X"
 //            createViewExpanded = true
@@ -562,8 +571,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
+    @IBAction func createButtonWasTapped(sender: AnyObject) {
+        createButtonWasTapped()
+    }
     
     func createButtonWasTapped() {
+        pauseVideoIfPlaying()
+        self.view.endEditing(true)
         if PFUser.currentUser() != nil {
             if PFUser.currentUser()!["profileName"] != nil {
                 if self.createViewExpanded == true {
@@ -585,7 +599,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.view.layoutIfNeeded()
         self.createView.hidden = false
         self.createViewHeightConstraint.constant = self.view.bounds.width + 46
-        self.createViewTopConstraint.constant = 0
+        self.createViewBottomConstraint.constant = 0
         
         cameraContainer.layer.insertSublayer(previewLayer, atIndex: 0)
         UIView.animateWithDuration(0.3, animations: {
@@ -595,16 +609,19 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 (value: Bool) in
                 self.createView.hidden = false
                 if self.newStory != true {
-                    self.createButton!.enabled = true
+                    self.createButton!.hidden = false
                     self.settingsButton!.enabled = true
                     self.addAuthorButton.hidden = false
                     self.addUserButtonBorderView.hidden = false
                 } else {
-                    self.createButton!.enabled = false
+                    self.createButton!.hidden = true
                     self.settingsButton!.enabled = false
                 }
-                self.createButton!.title = "Cancel"
-                self.createViewExpanded = true            })
+//                self.createButton!.title = "Cancel"
+                self.createButton.setImage(UIImage(named: "cancelIcon"), forState: UIControlState.Normal)
+
+                self.createViewExpanded = true
+            })
         
         if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 {
             playingVideoCell?.player?.pause()
@@ -645,7 +662,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     println("Story user is \(storyUser.username) and current user is \(currentUser!.username)")
                     
                     if  storyUser.username == currentUser!.username {
-                        self.createButton!.enabled = true
+                        self.createButton!.hidden = false
                         self.settingsButton!.enabled = true
                         self.addAuthorButton.hidden = false
                         self.addUserButtonBorderView.hidden = false
@@ -657,17 +674,17 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             }
                         }
                         if matchCount > 0 {
-                            self.createButton!.enabled = true
+                            self.createButton!.hidden = false
                             self.settingsButton!.enabled = true
                             self.addAuthorButton.hidden = false
                             self.addUserButtonBorderView.hidden = false
                         } else {
-                            self.createButton!.enabled = false
+                            self.createButton!.hidden = true
                             self.settingsButton!.enabled = false
 
                         }
                     } else {
-                        self.createButton!.enabled = false
+                        self.createButton!.hidden = true
                         self.settingsButton!.enabled = false
                     }
                 }
@@ -677,7 +694,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         self.view.layoutIfNeeded()
         
-        self.createViewTopConstraint.constant = -(screenSize.width + 46)
+        self.createViewBottomConstraint.constant = -(screenSize.width + 46)
         //        createViewLeadingConstraint.constant = screenSize.width/4
         //        createViewTrailingConstraint.constant = screenSize.width/4
         UIView.animateWithDuration(0.3, animations: {
@@ -686,7 +703,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 (value: Bool) in
                 self.createView.hidden = true
                 self.createViewExpanded = false
-                self.createButton!.title = "+ Event"
+//                self.createButton!.title = "+ Event"
+                self.createButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Normal)
                 self.vision.stopPreview()
                 self.vision.endVideoCapture()
         })
@@ -716,7 +734,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.userTapGestureRecognizer.enabled = true
         self.commentsButton.enabled = true
         self.profileImageButton.enabled = true
-        self.createButton!.enabled = true
+        self.createButton!.hidden = false
         self.settingsButton!.enabled = true
         self.addAuthorButton.hidden = false
         self.addUserButtonBorderView.hidden = false
@@ -1023,6 +1041,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
 
+    override func viewWillAppear(animated: Bool) {
+        self.createViewBottomConstraint.constant = -(screenSize.width + 46)
+        self.createViewHeightConstraint.constant = self.view.bounds.width + 46
+        self.view.layoutIfNeeded()
+    }
     
     override func viewDidAppear(animated: Bool) {
         if self.story != nil {
@@ -1142,7 +1165,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.userTapGestureRecognizer.enabled = true
         self.commentsButton.enabled = true
         self.profileImageButton.enabled = true
-        self.createButton!.enabled = true
+        self.createButton!.hidden = false
         self.settingsButton!.enabled = true
         self.addAuthorButton.hidden = false
         self.addUserButtonBorderView.hidden = false
@@ -1322,7 +1345,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.userTapGestureRecognizer.enabled = true
         self.commentsButton.enabled = true
         self.profileImageButton.enabled = true
-        self.createButton!.enabled = true
+        self.createButton!.hidden = false
         self.settingsButton!.enabled = true
         self.addAuthorButton.hidden = false
         self.addUserButtonBorderView.hidden = false
@@ -1637,9 +1660,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if CGFloat(createViewRect.origin.y) + CGFloat(createViewRect.height) > CGFloat(keyBoardRect.origin.y) {
             println("Keyboard Rect: \(keyBoardRect)")
             println("CreateView Rect: \(createViewRect)")
+            self.createViewBottomConstraint.constant = keyBoardRect.height
             self.createViewHeightConstraint.constant = CGFloat(keyBoardRect.origin.y) - CGFloat(createViewRect.origin.y)
             println("New Createview Height: \(self.createViewHeightConstraint.constant)")
         } else {
+            self.createViewBottomConstraint.constant = 0
             self.createViewHeightConstraint.constant = self.view.bounds.width + 46
         }
         
@@ -1910,11 +1935,16 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewWillDisappear(animated: Bool) {
 //        GSProgressHUD.dismiss()
+        pauseVideoIfPlaying()
+        self.view.endEditing(true)
+        self.minimizeCreateView()
+    }
+    
+    func pauseVideoIfPlaying() {
         if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 {
             playingVideoCell?.player?.pause()
             playingVideoCell?.playButtonIconImageView.hidden = false
         }
-        self.minimizeCreateView()
     }
     
     func playOrPauseVideoCell(videoCell: StoryVideoTableViewCell) {
@@ -1983,7 +2013,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.profileImageButton.enabled = false
                 
                 
-                self.createButton!.enabled = false
+                self.createButton!.hidden = true
                 self.settingsButton!.enabled = false
                 self.expandCreateView()
         })

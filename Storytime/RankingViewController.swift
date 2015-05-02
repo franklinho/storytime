@@ -10,6 +10,7 @@ import UIKit
 
 class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, RankingTableViewCellDelegate, UISearchBarDelegate {
 
+    @IBOutlet weak var newStoryButton: UIButton!
     var stories = []
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var votedStories : NSMutableDictionary = [:]
@@ -29,6 +30,14 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var rankingTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        newStoryButton.layer.cornerRadius = 30
+        newStoryButton.clipsToBounds = true
+        newStoryButton.layer.shadowColor = UIColor.blackColor().CGColor
+        newStoryButton.layer.shadowOffset = CGSizeMake(5, 5)
+        newStoryButton.layer.shadowRadius = 5
+        newStoryButton.layer.shadowOpacity = 1.0
+        
         hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
         viewTapGestureRecognizer.enabled = false
         searchBar.delegate = self
