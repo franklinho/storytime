@@ -13,6 +13,7 @@ import MediaPlayer
 
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate {
     
+    @IBOutlet weak var recordingActivityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var createButton: UIButton!
     var hamburgerVC : HamburgerViewController?
     let installation = PFInstallation.currentInstallation()
@@ -98,7 +99,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        createButton.layer.cornerRadius = 30
+        createButton.layer.cornerRadius = 40
         createButton.clipsToBounds = true
         createButton.layer.shadowColor = UIColor.blackColor().CGColor
         createButton.layer.shadowOffset = CGSizeMake(5, 5)
@@ -634,6 +635,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         cameraSendButton.hidden = false
         cameraSendButton.enabled = true
         holdToRecordLabel.hidden = true
+        recordingActivityIndicator.hidden = true
         videoLongPressGestureRecognizer.enabled = false
         for view in createViews {
             (view as! UIView).hidden = true
@@ -884,6 +886,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         cameraSendButton.hidden = true
         cameraSendButton.enabled = false
         holdToRecordLabel.hidden = false
+        recordingActivityIndicator.hidden = true
         videoLongPressGestureRecognizer.enabled = true
         for view in createViews {
             (view as! UIView).hidden = true
@@ -931,6 +934,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         cameraSendButton.hidden = false
         cameraSendButton.enabled = true
         holdToRecordLabel.hidden = true
+        recordingActivityIndicator.hidden = true
         videoLongPressGestureRecognizer.enabled = false
         for view in createViews {
             (view as! UIView).hidden = true
@@ -1066,6 +1070,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBAction func videoLongPressGestureRecognizerWasTapped(sender: AnyObject) {
         if sender.state == UIGestureRecognizerState.Began {
             holdToRecordLabel.hidden = true
+            recordingActivityIndicator.hidden = false
 //            var filename = "Video1"
 //            videoPath =  "\(documentPath)/\(filename).mp4"
 //
@@ -1082,6 +1087,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if sender.state == UIGestureRecognizerState.Ended {
 //            self.videoOutput?.stopRecording()
             holdToRecordLabel.hidden = false
+            recordingActivityIndicator.hidden = true
             vision.endVideoCapture()
         }
     }

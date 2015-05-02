@@ -10,6 +10,7 @@ import UIKit
 
 class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate {
 
+    @IBOutlet weak var recordingActivityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var createViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet var commentsTableViewTapGestureRecognizer: UITapGestureRecognizer!
     @IBOutlet weak var progressView: UIView!
@@ -77,7 +78,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
 
         // Do any additional setup after loading the view.
         
-        newCommentButton.layer.cornerRadius = 30
+        newCommentButton.layer.cornerRadius = 40
         newCommentButton.clipsToBounds = true
         newCommentButton.layer.shadowColor = UIColor.blackColor().CGColor
         newCommentButton.layer.shadowOffset = CGSizeMake(5, 5)
@@ -515,6 +516,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         cameraSendButton.hidden = false
         cameraSendButton.enabled = true
         holdToRecordLabel.hidden = true
+        recordingActivityIndicator.hidden = true
         videoCommentLongPressGestureRecognizer.enabled = false
         for view in createViews {
             (view as! UIView).hidden = true
@@ -684,6 +686,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         cameraSendButton.hidden = false
         cameraSendButton.enabled = true
         holdToRecordLabel.hidden = true
+        recordingActivityIndicator.hidden = true
         videoCommentLongPressGestureRecognizer.enabled = false
         for view in createViews {
             (view as! UIView).hidden = true
@@ -713,6 +716,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         cameraSendButton.hidden = true
         cameraSendButton.enabled = false
         holdToRecordLabel.hidden = false
+        recordingActivityIndicator.hidden = true
         videoCommentLongPressGestureRecognizer.enabled = true
         for view in createViews {
             (view as! UIView).hidden = true
@@ -766,6 +770,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     @IBAction func videoCommentLongPressGestureRecognizerWasPressed(sender: AnyObject) {
         if sender.state == UIGestureRecognizerState.Began {
             holdToRecordLabel.hidden = true
+            recordingActivityIndicator.hidden = false
             //            var filename = "Video1"
             //            videoPath =  "\(documentPath)/\(filename).mp4"
             //
@@ -782,6 +787,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         if sender.state == UIGestureRecognizerState.Ended {
             //            self.videoOutput?.stopRecording()
             holdToRecordLabel.hidden = false
+            recordingActivityIndicator.hidden = true
             vision.endVideoCapture()
         }
     }

@@ -31,7 +31,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        newStoryButton.layer.cornerRadius = 30
+        newStoryButton.layer.cornerRadius = 40
         newStoryButton.clipsToBounds = true
         newStoryButton.layer.shadowColor = UIColor.blackColor().CGColor
         newStoryButton.layer.shadowOffset = CGSizeMake(5, 5)
