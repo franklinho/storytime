@@ -520,7 +520,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MGY-73-xEg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-370" y="-340"/>
+            <point key="canvasLocation" x="378" y="-340"/>
         </scene>
         <!--Create Profile View Controller-->
         <scene sceneID="0ph-9r-eJm">
@@ -750,7 +750,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="337" y="-337"/>
+            <point key="canvasLocation" x="1157" y="-340"/>
         </scene>
         <!--Profile-->
         <scene sceneID="tdP-N2-xCY">
@@ -3924,7 +3924,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-385" y="371"/>
+            <point key="canvasLocation" x="378" y="383"/>
         </scene>
     </scenes>
     <resources>

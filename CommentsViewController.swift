@@ -429,7 +429,11 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             println("Keyboard Rect: \(keyBoardRect)")
             println("CreateView Rect: \(createViewRect)")
             self.createViewBottomConstraint.constant = keyBoardRect.height
-            self.createViewHeightConstraint.constant = CGFloat(keyBoardRect.origin.y) - CGFloat(createViewRect.origin.y)
+            if CGFloat(keyBoardRect.origin.y) - CGFloat(createViewRect.origin.y) < 140 {
+                self.createViewHeightConstraint.constant = 140
+            } else {
+                self.createViewHeightConstraint.constant = CGFloat(keyBoardRect.origin.y) - CGFloat(createViewRect.origin.y)
+            }
             println("New Createview Height: \(self.createViewHeightConstraint.constant)")
         } else {
             self.createViewBottomConstraint.constant = 0
