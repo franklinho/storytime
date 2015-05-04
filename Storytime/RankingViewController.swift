@@ -8,7 +8,8 @@
 
 import UIKit
 
-class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, RankingTableViewCellDelegate, UISearchBarDelegate, CreateProfileViewControllerDelegate {
+class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, RankingTableViewCellDelegate, UISearchBarDelegate, CreateProfileViewControllerDelegate, RankingSwitchDelegate {
+
 
     @IBOutlet weak var newStoryButton: UIButton!
     var stories = []
@@ -21,6 +22,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     var maxReached = false
     var requestingObjects = false
     var hamburgerVC : HamburgerViewController?
+    var rankingSwitch : RankingSwitch?
+
 
     @IBOutlet var viewTapGestureRecognizer: UITapGestureRecognizer!
     
@@ -30,6 +33,13 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     @IBOutlet weak var rankingTableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        rankingSwitch = NSBundle.mainBundle().loadNibNamed("SwitchView", owner: self, options: nil)[0] as! RankingSwitch
+        rankingSwitch?.delegate = self
+        
+//        MyViewClass* myViewObject = [[[NSBundle mainBundle] loadNibNamed:@"MyViewClassNib" owner:self options:nil] objectAtIndex:0]
+
+        self.navigationItem.titleView = rankingSwitch
         
         newStoryButton.layer.cornerRadius = 40
         newStoryButton.clipsToBounds = true
@@ -88,6 +98,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
 //        GSProgressHUD.show()
         self.currentOffset = 0
         requestStories(self,offset: currentOffset)
+    }
+    
+    func rankingSwitchWasTapped() {
+        self.refreshStories()
     }
 
     override func didReceiveMemoryWarning() {
@@ -456,9 +470,16 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 var string = self.searchBar.text as String
                 query.whereKey("title", matchesRegex: string, modifiers: "i")
             }
-            query.orderByDescending("rankingValue")
-            query.addDescendingOrder("points")
-            query.addDescendingOrder("createdAt")
+            
+            if self.rankingSwitch?.hot == true {
+                query.orderByDescending("rankingValue")
+                query.addDescendingOrder("points")
+                query.addDescendingOrder("createdAt")
+            } else {
+                query.orderByDescending("createdAt")
+                query.addDescendingOrder("points")
+            }
+            
             query.limit = 5
             if offset == 0 {
                 self.stories = []

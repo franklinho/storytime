@@ -23,6 +23,8 @@
 		DD42B7211AF4192E0001565A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD42B7201AF4192E0001565A /* SettingsViewController.swift */; };
 		DD49B4201ACF13970027F2C9 /* libstdc++.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3D45981ACF0CAA001B38BD /* libstdc++.6.dylib */; };
 		DD4A77241AF3DF5300573585 /* HamburgerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4A77231AF3DF5300573585 /* HamburgerViewController.swift */; };
+		DD60BCFD1AF7FA5F000755E6 /* SwitchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD60BCFC1AF7FA5F000755E6 /* SwitchView.xib */; };
+		DD60BCFF1AF7FBA6000755E6 /* RankingSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD60BCFE1AF7FBA6000755E6 /* RankingSwitch.swift */; };
 		DD70FBD11ACF16DE0002C5CC /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD70FBD01ACF16DE0002C5CC /* ParseUI.framework */; };
 		DD70FBD31ACF16FB0002C5CC /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD70FBD21ACF16FB0002C5CC /* Parse.framework */; };
 		DD8C82851AD5CE1E00B9A47B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */; };
@@ -131,6 +133,8 @@
 		DD3D460A1ACF1255001B38BD /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		DD42B7201AF4192E0001565A /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		DD4A77231AF3DF5300573585 /* HamburgerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HamburgerViewController.swift; sourceTree = "<group>"; };
+		DD60BCFC1AF7FA5F000755E6 /* SwitchView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwitchView.xib; sourceTree = "<group>"; };
+		DD60BCFE1AF7FBA6000755E6 /* RankingSwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingSwitch.swift; sourceTree = "<group>"; };
 		DD70FBD01ACF16DE0002C5CC /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
 		DD70FBD21ACF16FB0002C5CC /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = Pods/Parse/Parse.framework; sourceTree = "<group>"; };
 		DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -394,7 +398,9 @@
 				DD138C7F1AE572CF00C74E8A /* View Controllers */,
 				DDC9368A1AC47CAE006D4646 /* AppDelegate.swift */,
 				DDC9368F1AC47CAE006D4646 /* ViewController.swift */,
+				DD60BCFE1AF7FBA6000755E6 /* RankingSwitch.swift */,
 				DDC936911AC47CAE006D4646 /* Main.storyboard */,
+				DD60BCFC1AF7FA5F000755E6 /* SwitchView.xib */,
 				DDC936941AC47CAE006D4646 /* Images.xcassets */,
 				DDC936961AC47CAE006D4646 /* LaunchScreen.xib */,
 				DDC9368C1AC47CAE006D4646 /* Storytime.xcdatamodeld */,
@@ -595,6 +601,7 @@
 				DDC939EC1AC47FD8006D4646 /* fontello.svg in Resources */,
 				DDC939EF1AC47FD8006D4646 /* LICENSE.txt in Resources */,
 				DDC93A0A1AC48268006D4646 /* OpenSans-Semibold.ttf in Resources */,
+				DD60BCFD1AF7FA5F000755E6 /* SwitchView.xib in Resources */,
 				DDF7AED31ADDD96E0033F487 /* flash_icon_on.png in Resources */,
 				DD9B26E21AD85F9800E6D3DE /* storyweave_logo.png in Resources */,
 				DDC93A041AC48268006D4646 /* OpenSans-ExtraBold.ttf in Resources */,
@@ -687,6 +694,7 @@
 				DDC93A171AC48FB9006D4646 /* StoryCreateTableViewCell.swift in Sources */,
 				DDC93A151AC48FAD006D4646 /* StoryVideoTableViewCell.swift in Sources */,
 				DD8C82851AD5CE1E00B9A47B /* ProfileViewController.swift in Sources */,
+				DD60BCFF1AF7FBA6000755E6 /* RankingSwitch.swift in Sources */,
 				DDF7AED61ADDEC8D0033F487 /* CommentsViewController.swift in Sources */,
 				DD138C841AE58F1600C74E8A /* UserTableViewCell.swift in Sources */,
 				DDC93A111AC48F96006D4646 /* StoryImageTableViewCell.swift in Sources */,

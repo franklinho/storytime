@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="OpenSans-Bold.ttf">
+            <string>OpenSans-Bold</string>
+            <string>OpenSans-Bold</string>
+            <string>OpenSans-Bold</string>
+            <string>OpenSans-Bold</string>
+        </mutableArray>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" restorationIdentifier="RankingSwitch" id="iN0-l3-epB" customClass="RankingSwitch" customModule="Storytime" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="200" height="36"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hot" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QkA-0I-5c5">
+                    <rect key="frame" x="36" y="8" width="28" height="21"/>
+                    <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recent" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZC0-06-eeE">
+                    <rect key="frame" x="124" y="8" width="52" height="21"/>
+                    <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UpD-wA-nGx">
+                    <rect key="frame" x="2" y="2" width="96" height="32"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hot" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OCv-wV-6KV">
+                            <rect key="frame" x="34" y="6" width="28" height="21"/>
+                            <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recent" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sbD-JW-v7e">
+                            <rect key="frame" x="22" y="6" width="52" height="21"/>
+                            <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="centerY" secondItem="sbD-JW-v7e" secondAttribute="centerY" id="4Mp-nb-WsA"/>
+                        <constraint firstAttribute="centerX" secondItem="OCv-wV-6KV" secondAttribute="centerX" id="8Ad-VZ-csg"/>
+                        <constraint firstAttribute="height" constant="32" id="KlB-9o-SC3"/>
+                        <constraint firstAttribute="centerY" secondItem="OCv-wV-6KV" secondAttribute="centerY" id="RWf-zg-JFT"/>
+                        <constraint firstAttribute="centerX" secondItem="sbD-JW-v7e" secondAttribute="centerX" id="ldo-yW-SRu"/>
+                        <constraint firstAttribute="width" constant="96" id="mye-Ji-2hI"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.12156862745098039" green="0.047058823529411764" blue="0.16470588235294117" alpha="1" colorSpace="calibratedRGB"/>
+            <gestureRecognizers/>
+            <constraints>
+                <constraint firstItem="UpD-wA-nGx" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="2" id="4Il-ji-iAu"/>
+                <constraint firstAttribute="centerY" secondItem="ZC0-06-eeE" secondAttribute="centerY" id="9Wj-Tf-LFe"/>
+                <constraint firstItem="QkA-0I-5c5" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="36" id="E5u-Cg-gXj"/>
+                <constraint firstAttribute="trailing" secondItem="ZC0-06-eeE" secondAttribute="trailing" constant="24" id="JqK-hN-QiX"/>
+                <constraint firstAttribute="centerY" secondItem="UpD-wA-nGx" secondAttribute="centerY" id="ach-qf-dPf"/>
+                <constraint firstAttribute="centerY" secondItem="QkA-0I-5c5" secondAttribute="centerY" id="uaM-G5-itg"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="hotLabel" destination="OCv-wV-6KV" id="UI6-pN-lhw"/>
+                <outlet property="recentLabel" destination="sbD-JW-v7e" id="bnX-gO-ejg"/>
+                <outlet property="switchLeadingConstraint" destination="4Il-ji-iAu" id="mxE-Ad-bjK"/>
+                <outlet property="thumbView" destination="UpD-wA-nGx" id="mYQ-Ln-UNx"/>
+                <outletCollection property="gestureRecognizers" destination="xnG-mI-kku" appends="YES" id="89i-lh-td6"/>
+            </connections>
+        </view>
+        <tapGestureRecognizer id="xnG-mI-kku">
+            <connections>
+                <action selector="didTapRankingSwitch:" destination="iN0-l3-epB" id="sVa-Qk-FFd"/>
+            </connections>
+        </tapGestureRecognizer>
+    </objects>
+</document>
