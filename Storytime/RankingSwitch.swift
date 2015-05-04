@@ -40,22 +40,21 @@ class RankingSwitch: UIView {
             self.switchLeadingConstraint.constant = 102
             UIView.animateWithDuration(0.3, animations: {
                 self.layoutIfNeeded()
-                
+                self.hotLabel.alpha = 0.5
+                self.recentLabel.alpha = 1
                 }, completion: {
                     (value: Bool) in
-                    self.hotLabel.hidden = true
-                    self.recentLabel.hidden = false
+                    
                     self.hot = false
             })
         } else {
             self.switchLeadingConstraint.constant = 2
             UIView.animateWithDuration(0.2, animations: {
                 self.layoutIfNeeded()
-                
+                self.hotLabel.alpha = 1
+                self.recentLabel.alpha = 0.5
                 }, completion: {
                     (value: Bool) in
-                    self.recentLabel.hidden = true
-                    self.hotLabel.hidden = false
                     self.hot = true
             })
         }

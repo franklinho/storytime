@@ -7,8 +7,6 @@
         <mutableArray key="OpenSans-Bold.ttf">
             <string>OpenSans-Bold</string>
             <string>OpenSans-Bold</string>
-            <string>OpenSans-Bold</string>
-            <string>OpenSans-Bold</string>
         </mutableArray>
     </customFonts>
     <objects>
@@ -18,7 +16,15 @@
             <rect key="frame" x="0.0" y="0.0" width="200" height="36"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hot" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QkA-0I-5c5">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UpD-wA-nGx">
+                    <rect key="frame" x="2" y="2" width="96" height="32"/>
+                    <color key="backgroundColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="32" id="KlB-9o-SC3"/>
+                        <constraint firstAttribute="width" constant="96" id="mye-Ji-2hI"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hot" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QkA-0I-5c5">
                     <rect key="frame" x="36" y="8" width="28" height="21"/>
                     <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -30,32 +36,6 @@
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UpD-wA-nGx">
-                    <rect key="frame" x="2" y="2" width="96" height="32"/>
-                    <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hot" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OCv-wV-6KV">
-                            <rect key="frame" x="34" y="6" width="28" height="21"/>
-                            <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recent" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sbD-JW-v7e">
-                            <rect key="frame" x="22" y="6" width="52" height="21"/>
-                            <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                    </subviews>
-                    <color key="backgroundColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="centerY" secondItem="sbD-JW-v7e" secondAttribute="centerY" id="4Mp-nb-WsA"/>
-                        <constraint firstAttribute="centerX" secondItem="OCv-wV-6KV" secondAttribute="centerX" id="8Ad-VZ-csg"/>
-                        <constraint firstAttribute="height" constant="32" id="KlB-9o-SC3"/>
-                        <constraint firstAttribute="centerY" secondItem="OCv-wV-6KV" secondAttribute="centerY" id="RWf-zg-JFT"/>
-                        <constraint firstAttribute="centerX" secondItem="sbD-JW-v7e" secondAttribute="centerX" id="ldo-yW-SRu"/>
-                        <constraint firstAttribute="width" constant="96" id="mye-Ji-2hI"/>
-                    </constraints>
-                </view>
             </subviews>
             <color key="backgroundColor" red="0.12156862745098039" green="0.047058823529411764" blue="0.16470588235294117" alpha="1" colorSpace="calibratedRGB"/>
             <gestureRecognizers/>
@@ -72,8 +52,8 @@
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="hotLabel" destination="OCv-wV-6KV" id="UI6-pN-lhw"/>
-                <outlet property="recentLabel" destination="sbD-JW-v7e" id="bnX-gO-ejg"/>
+                <outlet property="hotLabel" destination="QkA-0I-5c5" id="Uyx-Ov-I8m"/>
+                <outlet property="recentLabel" destination="ZC0-06-eeE" id="Wlb-2m-W7w"/>
                 <outlet property="switchLeadingConstraint" destination="4Il-ji-iAu" id="mxE-Ad-bjK"/>
                 <outlet property="thumbView" destination="UpD-wA-nGx" id="mYQ-Ln-UNx"/>
                 <outletCollection property="gestureRecognizers" destination="xnG-mI-kku" appends="YES" id="89i-lh-td6"/>
