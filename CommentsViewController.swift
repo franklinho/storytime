@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate {
+class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, CreateProfileViewControllerDelegate {
 
     @IBOutlet weak var recordingActivityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var createViewBottomConstraint: NSLayoutConstraint!
@@ -551,8 +551,15 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func presentCreateProfileViewController() {
         var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
+        createProfileVC.delegate = self
         self.presentViewController(createProfileVC, animated: true, completion: nil)
         
+    }
+    
+    func didCreateProfile() {
+        var navVC = self.parentViewController as! UINavigationController
+        var hamburgerVC = navVC.parentViewController as! HamburgerViewController
+        hamburgerVC.refreshLoginLabels()
     }
 
     func logInViewController(logInController: PFLogInViewController!, shouldBeginLogInWithUsername username: String!, password: String!) -> Bool {
@@ -574,6 +581,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         self.installation.saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
+            createProfileVC.delegate = self
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         } else {
             //            if self.creatingNewStory == true {
@@ -621,6 +629,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         self.installation.saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
+            createProfileVC.delegate = self
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         } else {
             //            if self.creatingNewStory == true {

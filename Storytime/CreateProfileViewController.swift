@@ -8,8 +8,13 @@
 
 import UIKit
 
-class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFieldDelegate {
+protocol CreateProfileViewControllerDelegate{
+    func didCreateProfile()
+}
 
+class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFieldDelegate {
+    var delegate : CreateProfileViewControllerDelegate?
+    @IBOutlet weak var submitActivityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var profilePhotoLabel: UILabel!
     @IBOutlet weak var profilePreviewView: UIView!
@@ -65,7 +70,7 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
         if PFTwitterUtils.isLinkedWithUser(PFUser.currentUser()) {
             var twitterScreenName = PFTwitterUtils.twitter()!.screenName
             self.userNameTextField.text = twitterScreenName
-            var profileImageURL = NSURL(string: "https://api.twitter.com/1.1/users/show.json?screen_name=\(twitterScreenName)")!
+            var profileImageURL = NSURL(string: "https://api.twitter.com/1.1/users/show.json?screen_name=\(twitterScreenName!)")!
             var request = NSMutableURLRequest(URL: profileImageURL)
             PFTwitterUtils.twitter()!.signRequest(request)
             var data: Void = NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue()) {(response, data, error) in
@@ -220,11 +225,15 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
     
     
     @IBAction func submitButtonWasTapped(sender: AnyObject) {
+        submitButton.hidden = true
+        submitActivityIndicator.hidden = false
         self.view.endEditing(true)
         usernameRequiredLabel.hidden = true
         usernameTakenLabel.hidden = true
         if userNameTextField.text == "" {
             usernameRequiredLabel.hidden = false
+            submitActivityIndicator.hidden = true
+            submitButton.hidden = false
         } else {
             var query = PFUser.query()
             query!.whereKey("canonicalProfileName", equalTo:userNameTextField.text.lowercaseString)
@@ -236,22 +245,26 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
                     // Do something with the found objects
                     if objects!.count > 0 {
                         self.usernameTakenLabel.hidden = false
+                        self.submitActivityIndicator.hidden = true
+                        self.submitButton.hidden = false
                     } else {
-                        var user = PFUser.currentUser()!
-                        user["profileName"] = self.userNameTextField.text
-                        user["canonicalProfileName"] = self.userNameTextField.text.lowercaseString
+//                        var user = PFUser.currentUser()!
+                        PFUser.currentUser()!["profileName"] = self.userNameTextField.text
+                        PFUser.currentUser()!["canonicalProfileName"] = self.userNameTextField.text.lowercaseString
                         
                         if self.profileImageView.image != nil {
                             var profileImageData = UIImageJPEGRepresentation(self.profileImageView.image, 1.0)
                             var imageFile : PFFile = PFFile(name: "image.png", data: profileImageData)
-                            user["profileImage"] = imageFile
+                            PFUser.currentUser()!["profileImage"] = imageFile
                         }
                         
-                        user.saveInBackgroundWithBlock {
+                        PFUser.currentUser()!.saveInBackgroundWithBlock {
                             (success, error) -> Void in
                             if (success) {
                                 // The object has been saved.
+                                self.delegate?.didCreateProfile()
                                 self.dismissViewControllerAnimated(true, completion: nil)
+                                
                             } else {
                                 // There was a problem, check error.description
                             }
@@ -260,6 +273,8 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
                 } else {
                     // Log details of the failure
                     println("Error: \(error) \(error!.userInfo!)")
+                    self.submitActivityIndicator.hidden = true
+                    self.submitButton.hidden = false
                 }
             }
         }

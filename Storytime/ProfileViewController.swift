@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, RankingTableViewCellDelegate,PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
+class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, RankingTableViewCellDelegate,PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, CreateProfileViewControllerDelegate {
 
     var stories = []
     let screenSize: CGRect = UIScreen.mainScreen().bounds
@@ -323,8 +323,15 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func presentCreateProfileViewController() {
         var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
+        createProfileVC.delegate = self
         self.presentViewController(createProfileVC, animated: true, completion: nil)
         
+    }
+    
+    func didCreateProfile() {
+        var navVC = self.parentViewController as! UINavigationController
+        var hamburgerVC = navVC.parentViewController as! HamburgerViewController
+        hamburgerVC.refreshLoginLabels()
     }
     
     
@@ -347,6 +354,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         PFInstallation.currentInstallation().saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
+            createProfileVC.delegate = self
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         } else {
             //            if self.creatingNewStory == true {
@@ -394,6 +402,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         PFInstallation.currentInstallation().saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
+            createProfileVC.delegate = self
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         } else {
             //            if self.creatingNewStory == true {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
+class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, CreateProfileViewControllerDelegate {
     
     
     @IBOutlet weak var profileButton: UIButton!
@@ -69,7 +69,7 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
     
     func showHamburgerMenu() {
         UIView.animateWithDuration(0.35, animations: {
-            self.centerConstraint.constant = -200
+            self.centerConstraint.constant = -225
             self.view.layoutIfNeeded()
             self.hamburgerShowing = true
             self.contentViewTapGestureRecognizer.enabled = true
@@ -117,10 +117,22 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
     @IBAction func didTapButton(sender: UIButton) {
         if sender == redButton {
             self.activeViewController = viewControllers.first
-            //            println("Red Button")
+            var currentVC = self.activeViewController as! UINavigationController
+            var rankingVC = currentVC.visibleViewController as! RankingViewController
+            rankingVC.refreshStories()
         } else if sender == blueButton{
-            self.activeViewController = viewControllers[1]
-            //            println("Blue button")
+            if PFUser.currentUser() != nil {
+                if PFUser.currentUser()!["profileName"] != nil {
+                    self.activeViewController = viewControllers[1]
+                    var currentVC = self.activeViewController as! UINavigationController
+                    var profileVC = currentVC.visibleViewController as! ProfileViewController
+                    profileVC.refreshStories()
+                } else {
+                    presentCreateProfileViewController()
+                }
+            } else {
+                presentLoginViewController()
+            }
         } else if sender == settingsButton{
             var settingsVC : SettingsViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("SettingsViewController") as! SettingsViewController
             self.presentViewController(settingsVC, animated: true, completion: nil)
@@ -217,6 +229,7 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
     
     func presentCreateProfileViewController() {
         var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
+        createProfileVC.delegate = self
         self.presentViewController(createProfileVC, animated: true, completion: nil)
         
     }
@@ -293,6 +306,10 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
     
     func signUpViewControllerDidCancelSignUp(signUpController: PFSignUpViewController!) {
         println("User dismissed the signupviewcontroller")
+    }
+    
+    func didCreateProfile() {
+        self.refreshLoginLabels()
     }
 
 }

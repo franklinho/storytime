@@ -1,0 +1,14 @@
+{
+  "global": {
+    "parseVersion": "1.4.2"
+  },
+  "applications": {
+    "Storytime": {
+      "applicationId": "N1IU3qQJhUOkP2E93hNyISSrJu0uUsMsFjmG23bO",
+      "masterKey": "xtsjOMttZZ9YhFULDmFufS7uvVyuAFf9CtZgb1di"
+    },
+    "_default": {
+      "link": "Storytime"
+    }
+  }
+}

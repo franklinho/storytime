@@ -11,7 +11,7 @@ import AVFoundation
 import MediaPlayer
 
 
-class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate {
+class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate, CreateProfileViewControllerDelegate {
     
     @IBOutlet weak var recordingActivityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var createButton: UIButton!
@@ -98,6 +98,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var progressViewTrailingConstraint: NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         createButton.layer.cornerRadius = 40
         createButton.clipsToBounds = true
@@ -836,7 +838,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.story!["downvotes"] = downvotes
             var points = upvotes - downvotes
             self.story!["points"] = points
-
+            self.story!["rankingValue"] = rankingAlgo(1, downvotes: 0, time: NSDate())
             self.story!.saveInBackgroundWithBlock({
                 (success, error) -> Void in
                 if (success) {
@@ -1301,6 +1303,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.story!["downvotes"] = downvotes
             var points = upvotes - downvotes
             self.story!["points"] = points
+            self.story!["rankingValue"] = rankingAlgo(1, downvotes: 0, time: NSDate())
             self.story!.saveInBackgroundWithBlock({
                 (success, error) -> Void in
                 if (success) {
@@ -1477,6 +1480,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.story!["downvotes"] = downvotes
             var points = upvotes - downvotes
             self.story!["points"] = points
+            self.story!["rankingValue"] = rankingAlgo(1, downvotes: 0, time: NSDate())
             self.story!.saveInBackgroundWithBlock({
                 (success, error) -> Void in
                 if (success) {
@@ -1850,8 +1854,15 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func presentCreateProfileViewController() {
         var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
+        createProfileVC.delegate = self
         self.presentViewController(createProfileVC, animated: true, completion: nil)
         
+    }
+    
+    func didCreateProfile() {
+        var navVC = self.parentViewController as! UINavigationController
+        var hamburgerVC = navVC.parentViewController as! HamburgerViewController
+        hamburgerVC.refreshLoginLabels()
     }
     
     func logInViewController(logInController: PFLogInViewController!, shouldBeginLogInWithUsername username: String!, password: String!) -> Bool {
@@ -1874,6 +1885,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
+            createProfileVC.delegate = self
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         } else {
 //            if self.creatingNewStory == true {
@@ -1921,6 +1933,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         installation.saveInBackground()
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
+            createProfileVC.delegate = self
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         } else {
 //            if self.creatingNewStory == true {
@@ -2152,6 +2165,24 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 })
             }
         }
+    }
+    
+    func rankingAlgo(upvotes: Int, downvotes: Int, time: NSDate) -> Double {
+        var nowEpochSeconds = time.timeIntervalSince1970
+        var seconds_since_founding = Double(abs(nowEpochSeconds - 1134028003))
+        var s = Double(upvotes - downvotes)
+        var order = log10(Double(max(abs(s),1)))
+        
+        var sign = 0
+        if (s > 0) {
+            sign = 1
+        } else if (s < 0) {
+            sign = -1
+        }
+        var signOrder = Double(sign) * order
+        var degradedSeconds = seconds_since_founding/45000
+        var finalRankingValue = signOrder + Double(degradedSeconds)
+        return finalRankingValue
     }
     
     

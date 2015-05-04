@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, RankingTableViewCellDelegate, UISearchBarDelegate {
+class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, RankingTableViewCellDelegate, UISearchBarDelegate, CreateProfileViewControllerDelegate {
 
     @IBOutlet weak var newStoryButton: UIButton!
     var stories = []
@@ -304,10 +304,17 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func presentCreateProfileViewController() {
         var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
+        createProfileVC.delegate = self
         self.presentViewController(createProfileVC, animated: true, completion: nil)
 
     }
 
+    func didCreateProfile() {
+        var navVC = self.parentViewController as! UINavigationController
+        var hamburgerVC = navVC.parentViewController as! HamburgerViewController
+        hamburgerVC.refreshLoginLabels()
+    }
+    
     @IBAction func newStoryButtonWasTapped(sender: AnyObject) {
         creatingNewStory = true
         if (PFUser.currentUser() == nil){
@@ -344,6 +351,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
+            createProfileVC.delegate = self
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         } else {
             if self.creatingNewStory == true {
@@ -401,6 +409,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
+            createProfileVC.delegate = self
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         } else {
             if self.creatingNewStory == true {
@@ -447,7 +456,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 var string = self.searchBar.text as String
                 query.whereKey("title", matchesRegex: string, modifiers: "i")
             }
-            query.orderByDescending("points")
+            query.orderByDescending("rankingValue")
+            query.addDescendingOrder("points")
             query.addDescendingOrder("createdAt")
             query.limit = 5
             if offset == 0 {
