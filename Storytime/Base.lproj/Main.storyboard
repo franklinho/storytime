@@ -352,14 +352,12 @@
                             </searchBar>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oav-fm-jT1">
                                 <rect key="frame" x="499" y="500" width="80" height="80"/>
-                                <color key="backgroundColor" red="0.39990506692247291" green="0.096472853367663522" blue="0.57450887551010088" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="80" id="9Fh-uw-2cp"/>
                                     <constraint firstAttribute="height" constant="80" id="T7n-To-Oya"/>
                                 </constraints>
-                                <state key="normal" image="plusIcon">
-                                    <color key="titleShadowColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
+                                <state key="normal" image="plusIcon"/>
                                 <connections>
                                     <action selector="newStoryButtonWasTapped:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="yD5-Dq-ySr"/>
                                 </connections>
@@ -2228,18 +2226,62 @@
                                     <constraint firstAttribute="height" constant="5" id="S3d-hD-f6B"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cTh-k1-IVB" userLabel="expandedButtonView">
+                                <rect key="frame" x="400" y="500" width="80" height="80"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SWv-Ts-coe" userLabel="TextButton">
+                                        <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="80" id="BJk-4g-y9R"/>
+                                            <constraint firstAttribute="width" constant="80" id="hc0-lP-C9V"/>
+                                        </constraints>
+                                        <state key="normal" image="text_icon.png"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ctN-Bd-nRn" userLabel="VideoButton">
+                                        <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="80" id="3g1-Mj-URl"/>
+                                            <constraint firstAttribute="height" constant="80" id="geO-IL-d8a"/>
+                                        </constraints>
+                                        <state key="normal" image="video_icon.png"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2iX-Od-j6m" userLabel="CameraButton">
+                                        <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="80" id="ayc-4X-ZBw"/>
+                                            <constraint firstAttribute="height" constant="80" id="scL-YL-hfN"/>
+                                        </constraints>
+                                        <state key="normal" image="camera_icon.png"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerX" secondItem="ctN-Bd-nRn" secondAttribute="centerX" id="BSn-oE-7NK"/>
+                                    <constraint firstAttribute="centerY" secondItem="2iX-Od-j6m" secondAttribute="centerY" id="C4K-73-jdK"/>
+                                    <constraint firstAttribute="centerY" secondItem="SWv-Ts-coe" secondAttribute="centerY" id="H7e-f1-Iil"/>
+                                    <constraint firstAttribute="centerX" secondItem="2iX-Od-j6m" secondAttribute="centerX" id="S9k-NF-GSk"/>
+                                    <constraint firstAttribute="width" constant="80" id="gSu-5w-44S"/>
+                                    <constraint firstAttribute="centerY" secondItem="ctN-Bd-nRn" secondAttribute="centerY" id="hFg-TQ-mnw"/>
+                                    <constraint firstAttribute="height" constant="80" id="nb8-c8-qu3"/>
+                                    <constraint firstAttribute="centerX" secondItem="SWv-Ts-coe" secondAttribute="centerX" id="nxa-lU-Emk"/>
+                                </constraints>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ptd-dv-Z1u">
                                 <rect key="frame" x="499" y="500" width="80" height="80"/>
-                                <color key="backgroundColor" red="0.39990506689999999" green="0.09647285337" blue="0.57450887549999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                <gestureRecognizers/>
                                 <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="80" id="I3O-Wo-DCl"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="QkA-ND-Neg"/>
                                     <constraint firstAttribute="width" constant="80" id="axr-Vw-acA"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="ffF-va-gbV"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="mGM-HZ-H5p"/>
                                     <constraint firstAttribute="height" constant="80" id="pxZ-ly-Cmz"/>
                                 </constraints>
-                                <state key="normal" image="plusIcon">
-                                    <color key="titleShadowColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
+                                <state key="normal" image="plusIcon"/>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="ffF-va-gbV"/>
@@ -2248,16 +2290,19 @@
                                 </variation>
                                 <connections>
                                     <action selector="createButtonWasTapped:" destination="nXj-xd-FNA" eventType="touchUpInside" id="PoG-TO-NdA"/>
+                                    <outletCollection property="gestureRecognizers" destination="GcC-sz-HAS" appends="YES" id="K3W-gB-Qjp"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstItem="ptd-dv-Z1u" firstAttribute="centerX" secondItem="cTh-k1-IVB" secondAttribute="centerX" id="3vj-tb-FaE"/>
                             <constraint firstItem="Bes-cU-TpY" firstAttribute="top" secondItem="zC1-cs-0xd" secondAttribute="bottom" id="4EB-C2-WSb"/>
                             <constraint firstItem="zC1-cs-0xd" firstAttribute="top" secondItem="z5O-jy-g3q" secondAttribute="bottom" id="7Sq-7f-PNh"/>
                             <constraint firstItem="DxK-24-jad" firstAttribute="top" secondItem="ptd-dv-Z1u" secondAttribute="bottom" constant="20" id="BlH-aL-RQg"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ptd-dv-Z1u" secondAttribute="trailing" constant="5" id="DNc-sU-VCd"/>
                             <constraint firstItem="f9M-XW-drY" firstAttribute="top" secondItem="Bes-cU-TpY" secondAttribute="bottom" id="Jse-kw-cEK"/>
+                            <constraint firstItem="ptd-dv-Z1u" firstAttribute="centerY" secondItem="cTh-k1-IVB" secondAttribute="centerY" id="KDj-B0-LvQ"/>
                             <constraint firstItem="Ebf-0P-F2l" firstAttribute="leading" secondItem="TJV-F8-eXr" secondAttribute="leadingMargin" constant="-16" id="LPq-ez-sJt"/>
                             <constraint firstAttribute="trailing" secondItem="hjH-W7-xQN" secondAttribute="trailing" id="Ouc-7q-uGX"/>
                             <constraint firstItem="zC1-cs-0xd" firstAttribute="height" secondItem="Ebf-0P-F2l" secondAttribute="height" id="QXu-V6-mZZ"/>
@@ -2291,6 +2336,7 @@
                         <outlet property="commentsButton" destination="p5I-v5-Dj1" id="B4s-6c-Mlc"/>
                         <outlet property="commentsLabel" destination="R8u-mP-E1b" id="N6a-L3-ZTP"/>
                         <outlet property="createButton" destination="ptd-dv-Z1u" id="4bU-A6-nfS"/>
+                        <outlet property="createButtonLongPressGestureRecognizer" destination="GcC-sz-HAS" id="vRB-Iz-zyR"/>
                         <outlet property="createTextView" destination="ok8-qV-o6M" id="Dpw-sE-bNC"/>
                         <outlet property="createTitleView" destination="Ebf-0P-F2l" id="eSq-Rx-Otj"/>
                         <outlet property="createTitleViewTopConstraint" destination="VeO-Hm-KVu" id="eYb-SV-iku"/>
@@ -2298,6 +2344,16 @@
                         <outlet property="createViewBottomConstraint" destination="RjV-Xy-g5g" id="dcI-oC-J3K"/>
                         <outlet property="createViewHeightConstraint" destination="10X-Td-fSv" id="Hsc-Jt-XIJ"/>
                         <outlet property="downVoteButton" destination="Loc-lA-bxs" id="5SE-Yu-LqH"/>
+                        <outlet property="expandedButtonView" destination="cTh-k1-IVB" id="eBw-Bd-Zdi"/>
+                        <outlet property="expandedButtonViewHeightConstraint" destination="nb8-c8-qu3" id="EEU-4h-wmN"/>
+                        <outlet property="expandedButtonViewWidthConstraint" destination="gSu-5w-44S" id="RRa-nt-4vl"/>
+                        <outlet property="expandedCameraButton" destination="2iX-Od-j6m" id="opj-as-7SY"/>
+                        <outlet property="expandedCameraXAlignmentConstraint" destination="S9k-NF-GSk" id="sfW-ZW-9AX"/>
+                        <outlet property="expandedTextButton" destination="SWv-Ts-coe" id="yC9-79-8ES"/>
+                        <outlet property="expandedTextYAlignmentConstraint" destination="H7e-f1-Iil" id="7AU-Hr-ooe"/>
+                        <outlet property="expandedVideoButton" destination="ctN-Bd-nRn" id="fi3-G1-D5k"/>
+                        <outlet property="expandedVideoXAlignmentConstraint" destination="BSn-oE-7NK" id="LCM-XT-srp"/>
+                        <outlet property="expandedVideoYAlignmentConstraint" destination="hFg-TQ-mnw" id="HHc-c5-BBN"/>
                         <outlet property="holdToRecordLabel" destination="2jj-nm-h1E" id="zjk-Eq-MCm"/>
                         <outlet property="noEventsLabel" destination="N6Z-Vm-4zJ" id="zzG-jg-bfo"/>
                         <outlet property="pointsLabel" destination="moj-b6-kOg" id="sjD-aN-DhB"/>
@@ -2340,6 +2396,11 @@
                         <action selector="userLabelWasTapped:" destination="nXj-xd-FNA" id="6Sa-Dp-sCZ"/>
                     </connections>
                 </tapGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="GcC-sz-HAS">
+                    <connections>
+                        <action selector="createButtonWasHeld:" destination="nXj-xd-FNA" id="NgP-00-BYG"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2661" y="360"/>
         </scene>
@@ -3502,18 +3563,60 @@
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="5" id="XHu-14-zq9"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iaG-qp-laL" userLabel="expandedButtonView">
+                                <rect key="frame" x="499" y="500" width="80" height="80"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DF7-Sh-aQp" userLabel="TextButton">
+                                        <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="80" id="6MI-6m-grl"/>
+                                            <constraint firstAttribute="width" constant="80" id="yH0-Xo-7FZ"/>
+                                        </constraints>
+                                        <state key="normal" image="text_icon.png"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EIV-qI-cKI" userLabel="VideoButton">
+                                        <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="80" id="3uh-je-nBC"/>
+                                            <constraint firstAttribute="width" constant="80" id="Ta4-g4-O18"/>
+                                        </constraints>
+                                        <state key="normal" image="video_icon.png"/>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nUw-5s-da5" userLabel="CameraButton">
+                                        <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                        <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="80" id="7WZ-w2-PVG"/>
+                                            <constraint firstAttribute="height" constant="80" id="Ty5-8U-UDr"/>
+                                        </constraints>
+                                        <state key="normal" image="camera_icon.png"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerX" secondItem="EIV-qI-cKI" secondAttribute="centerX" id="2xS-1v-dyX"/>
+                                    <constraint firstAttribute="centerY" secondItem="nUw-5s-da5" secondAttribute="centerY" id="Flu-wm-BLY"/>
+                                    <constraint firstAttribute="height" constant="80" id="R8J-8w-HJp"/>
+                                    <constraint firstAttribute="centerY" secondItem="EIV-qI-cKI" secondAttribute="centerY" id="f9H-cC-49g"/>
+                                    <constraint firstAttribute="centerY" secondItem="DF7-Sh-aQp" secondAttribute="centerY" id="fLL-Xe-oLn"/>
+                                    <constraint firstAttribute="centerX" secondItem="DF7-Sh-aQp" secondAttribute="centerX" id="fUM-X9-bHB"/>
+                                    <constraint firstAttribute="centerX" secondItem="nUw-5s-da5" secondAttribute="centerX" id="faE-V2-9MI"/>
+                                    <constraint firstAttribute="width" constant="80" id="sjS-Qc-LZB"/>
+                                </constraints>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Unv-c0-6Pi">
                                 <rect key="frame" x="499" y="500" width="80" height="80"/>
-                                <color key="backgroundColor" red="0.39990506689999999" green="0.09647285337" blue="0.57450887549999996" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="80" id="5YN-M7-led"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="6t6-jA-oNS"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="iHP-dS-pjI"/>
                                     <constraint firstAttribute="height" constant="80" id="wOF-6U-A9i"/>
                                 </constraints>
-                                <state key="normal" image="plusIcon">
-                                    <color key="titleShadowColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
+                                <state key="normal" image="plusIcon"/>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="6t6-jA-oNS"/>
@@ -3522,12 +3625,14 @@
                                 </variation>
                                 <connections>
                                     <action selector="newCommentButtonWasTapped:" destination="22L-dv-H0B" eventType="touchUpInside" id="IUd-vB-JUz"/>
+                                    <outletCollection property="gestureRecognizers" destination="Lmu-7b-Iyx" appends="YES" id="XOg-Fd-L9C"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="iaG-qp-laL" firstAttribute="centerY" secondItem="Unv-c0-6Pi" secondAttribute="centerY" id="6pb-7c-Pwg"/>
                             <constraint firstItem="x9b-Se-tAO" firstAttribute="leading" secondItem="51v-K7-ZOJ" secondAttribute="leading" id="Ae4-w0-eNh"/>
                             <constraint firstAttribute="trailing" secondItem="gDV-wW-xGx" secondAttribute="trailing" id="ETn-Dt-c4X"/>
                             <constraint firstAttribute="trailing" secondItem="x9b-Se-tAO" secondAttribute="trailing" id="IFY-pD-DsZ"/>
@@ -3540,6 +3645,7 @@
                             <constraint firstAttribute="trailing" secondItem="fHz-46-A2u" secondAttribute="trailing" id="d0Z-pd-xJY"/>
                             <constraint firstItem="eGt-DE-1P2" firstAttribute="top" secondItem="Unv-c0-6Pi" secondAttribute="bottom" constant="20" id="dNS-4c-729"/>
                             <constraint firstItem="Ron-Bt-vkG" firstAttribute="top" secondItem="gDV-wW-xGx" secondAttribute="bottom" id="dQ3-dG-3gp"/>
+                            <constraint firstItem="iaG-qp-laL" firstAttribute="centerX" secondItem="Unv-c0-6Pi" secondAttribute="centerX" id="fDu-CX-07l"/>
                             <constraint firstAttribute="centerX" secondItem="m7z-mo-fzR" secondAttribute="centerX" id="fNT-qN-Jt6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Unv-c0-6Pi" secondAttribute="trailing" constant="5" id="fqR-zg-adK"/>
                             <constraint firstAttribute="bottom" secondItem="eGt-DE-1P2" secondAttribute="bottom" constant="-326" id="iOL-Zf-knX"/>
@@ -3565,6 +3671,16 @@
                         <outlet property="createView" destination="eGt-DE-1P2" id="fh1-O6-QpJ"/>
                         <outlet property="createViewBottomConstraint" destination="iOL-Zf-knX" id="sz0-oN-HI5"/>
                         <outlet property="createViewHeightConstraint" destination="BmB-6G-TEZ" id="iW5-cA-Jg2"/>
+                        <outlet property="expandedButtonView" destination="iaG-qp-laL" id="6eE-jo-dLi"/>
+                        <outlet property="expandedButtonViewHeightConstraint" destination="R8J-8w-HJp" id="MIh-As-r5h"/>
+                        <outlet property="expandedButtonViewWidthConstraint" destination="sjS-Qc-LZB" id="bEK-Ha-zqr"/>
+                        <outlet property="expandedCameraButton" destination="nUw-5s-da5" id="1gI-5X-WwE"/>
+                        <outlet property="expandedCameraButtonXAlignmentConstraint" destination="faE-V2-9MI" id="GQh-Vs-pcG"/>
+                        <outlet property="expandedTextButton" destination="DF7-Sh-aQp" id="sLk-JV-MuA"/>
+                        <outlet property="expandedTextButtonYAlignmentConstraint" destination="fLL-Xe-oLn" id="Yxu-0x-NzD"/>
+                        <outlet property="expandedVideoButton" destination="EIV-qI-cKI" id="FH5-32-y7T"/>
+                        <outlet property="expandedVideoButtonXAlignmentConstraint" destination="2xS-1v-dyX" id="X68-ZC-O94"/>
+                        <outlet property="expandedVideoButtonYAlignmentConstraint" destination="f9H-cC-49g" id="Heo-QG-0AX"/>
                         <outlet property="holdToRecordLabel" destination="Vfn-SU-fuv" id="ty0-Oc-Ojn"/>
                         <outlet property="newCommentButton" destination="Unv-c0-6Pi" id="dft-nD-Zq1"/>
                         <outlet property="noCommentsLabel" destination="m7z-mo-fzR" id="ljQ-aI-Tkl"/>
@@ -3593,6 +3709,11 @@
                         <action selector="commentsTableViewTapGestureRecognizerWasTapped:" destination="22L-dv-H0B" id="8Gy-kT-4KA"/>
                     </connections>
                 </tapGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="Lmu-7b-Iyx">
+                    <connections>
+                        <action selector="createButtonWasHeld:" destination="22L-dv-H0B" id="Qpa-M7-LJc"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2661" y="1094"/>
         </scene>

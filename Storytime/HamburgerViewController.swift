@@ -118,6 +118,7 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
         if sender == redButton {
             self.activeViewController = viewControllers.first
             var currentVC = self.activeViewController as! UINavigationController
+            currentVC.popToRootViewControllerAnimated(true)
             var rankingVC = currentVC.visibleViewController as! RankingViewController
             rankingVC.refreshStories()
         } else if sender == profileButton{
@@ -125,6 +126,7 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
                 if PFUser.currentUser()!["profileName"] != nil {
                     self.activeViewController = viewControllers[1]
                     var currentVC = self.activeViewController as! UINavigationController
+                    currentVC.popToRootViewControllerAnimated(true)
                     var profileVC = currentVC.visibleViewController as! ProfileViewController
                     profileVC.refreshStories()
                 } else {
@@ -139,6 +141,7 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
         } else {
             println("Unknown button")
         }
+
         
         UIView.animateWithDuration(0.35, animations: {
             self.centerConstraint.constant = 0

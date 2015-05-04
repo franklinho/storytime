@@ -43,10 +43,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         newStoryButton.layer.cornerRadius = 40
         newStoryButton.clipsToBounds = true
-        newStoryButton.layer.shadowColor = UIColor.whiteColor().CGColor
-        newStoryButton.layer.shadowOffset = CGSizeMake(5, 5)
-        newStoryButton.layer.shadowRadius = 5
-        newStoryButton.layer.shadowOpacity = 1.0
+        
         
         hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
         viewTapGestureRecognizer.enabled = false

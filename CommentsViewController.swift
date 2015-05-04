@@ -10,6 +10,16 @@ import UIKit
 
 class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, CreateProfileViewControllerDelegate {
 
+    @IBOutlet weak var expandedCameraButtonXAlignmentConstraint: NSLayoutConstraint!
+    @IBOutlet weak var expandedTextButtonYAlignmentConstraint: NSLayoutConstraint!
+    @IBOutlet weak var expandedVideoButtonXAlignmentConstraint: NSLayoutConstraint!
+    @IBOutlet weak var expandedVideoButtonYAlignmentConstraint: NSLayoutConstraint!
+    @IBOutlet weak var expandedButtonView: UIView!
+    @IBOutlet weak var expandedCameraButton: UIButton!
+    @IBOutlet weak var expandedVideoButton: UIButton!
+    @IBOutlet weak var expandedTextButton: UIButton!
+    @IBOutlet weak var expandedButtonViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var expandedButtonViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var recordingActivityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var createViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet var commentsTableViewTapGestureRecognizer: UITapGestureRecognizer!
@@ -78,12 +88,11 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
 
         // Do any additional setup after loading the view.
         
+        expandedButtonView.layer.cornerRadius = 40
+        expandedButtonView.clipsToBounds = true
+        
         newCommentButton.layer.cornerRadius = 40
         newCommentButton.clipsToBounds = true
-        newCommentButton.layer.shadowColor = UIColor.whiteColor().CGColor
-        newCommentButton.layer.shadowOffset = CGSizeMake(5, 5)
-        newCommentButton.layer.shadowRadius = 5
-        newCommentButton.layer.shadowOpacity = 1.0
         
         
         hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
@@ -487,14 +496,14 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             presentCreateProfileViewController()
         } else {
             if createViewExpanded == false {
-                expandCreateView()
+                expandCreateView(true)
             } else {
                 minimizeCreateView()
             }
         }
     }
     
-    func expandCreateView() {
+    func expandCreateView(defaultBehavior : Bool) {
         self.view.endEditing(true)
         self.view.layoutIfNeeded()
         self.createView.hidden = false
@@ -515,20 +524,22 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
 //            playingVideoCell?.playButtonIconImageView.hidden = false
 //        }
         
-        vision.cameraMode = PBJCameraMode.Photo
-        vision.captureSessionPreset = AVCaptureSessionPresetPhoto
-        cameraSendButton.hidden = false
-        cameraSendButton.enabled = true
-        holdToRecordLabel.hidden = true
-        recordingActivityIndicator.hidden = true
-        videoCommentLongPressGestureRecognizer.enabled = false
-        for view in createViews {
-            (view as! UIView).hidden = true
-            cameraContainer.hidden = false
+        if defaultBehavior == true {
+            vision.cameraMode = PBJCameraMode.Photo
+            vision.captureSessionPreset = AVCaptureSessionPresetPhoto
+            cameraSendButton.hidden = false
+            cameraSendButton.enabled = true
+            holdToRecordLabel.hidden = true
+            recordingActivityIndicator.hidden = true
+            videoCommentLongPressGestureRecognizer.enabled = false
+            for view in createViews {
+                (view as! UIView).hidden = true
+                cameraContainer.hidden = false
+            }
+            
+            
+            vision.startPreview()
         }
-        
-        
-        vision.startPreview()
         
         
     }
@@ -1389,7 +1400,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     }
 
     @IBAction func commentsTableViewTapGestureRecognizerWasTapped(sender: AnyObject) {
-        self.expandCreateView()
+        self.expandCreateView(true)
     }
     
     func pauseVideoIfPlaying() {
@@ -1398,5 +1409,100 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             playingVideoCell?.playButtonIconImageView.hidden = false
         }
     }
+    
+    @IBAction func createButtonWasHeld(sender: AnyObject) {
+        pauseVideoIfPlaying()
+        if sender.state == UIGestureRecognizerState.Began {
+            println("CreateButton was held")
+            expandButtonView()
+        }
+        
+        if sender.state == UIGestureRecognizerState.Cancelled {
+            
+        }
+        
+        if sender.state == UIGestureRecognizerState.Ended {
+            var touch = (((sender as! UILongPressGestureRecognizer).valueForKey("_touches") as! NSArray)[0] as! UITouch).locationInView(self.view) as! CGPoint
+            println("Touch: \(touch), CreateButton: \(self.newCommentButton.frame), Camera Button: \(self.expandedCameraButton.convertRect(expandedCameraButton.frame, toView: nil)), Video Button: \(self.expandedVideoButton.convertRect(expandedVideoButton.frame, toView: nil)), Text: \(self.expandedTextButton.convertRect(expandedTextButton.frame, toView: nil))")
+            
+            
+            
+            
+            if CGRectContainsPoint(self.newCommentButton.frame, touch) || CGRectContainsPoint(self.expandedCameraButton.convertRect(self.expandedCameraButton.bounds, toView: nil), touch) {
+                self.expandCreateView(true)
+            }
+            
+            if CGRectContainsPoint(self.expandedVideoButton.convertRect(self.expandedVideoButton.bounds, toView: nil), touch) {
+                self.expandCreateView(false)
+                self.videoButtonWasTapped(self)
+            }
+            
+            
+            if CGRectContainsPoint(self.expandedTextButton.convertRect(self.expandedTextButton.bounds, toView: nil), touch) {
+                self.expandCreateView(false)
+                self.textButtonWasTapped(self)
+            }
+            
+            minimizeButtonView()
+            
+        }
+
+    }
+    func expandButtonView(){
+        var anim1 = CABasicAnimation(keyPath: "cornerRadius")
+        anim1.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        anim1.fromValue = 40
+        self.expandedButtonView.layer.cornerRadius = 220
+        anim1.toValue = 220
+        anim1.duration = 0.3
+        
+        
+        self.expandedButtonViewHeightConstraint.constant = 440
+        self.expandedButtonViewWidthConstraint.constant = 440
+        self.expandedCameraButtonXAlignmentConstraint.constant = 150
+        self.expandedTextButtonYAlignmentConstraint.constant = 150
+        self.expandedVideoButtonXAlignmentConstraint.constant = 110
+        self.expandedVideoButtonYAlignmentConstraint.constant = 110
+        
+        self.expandedButtonView.layer.addAnimation(anim1, forKey: "cornerRadius")
+        UIView.animateWithDuration(0.3, animations: {
+            
+            self.view.layoutIfNeeded()
+            //            self.expandedButtonView.transform = CGAffineTransformMakeScale(3,3)
+            }, completion: {
+                (value: Bool) in
+                
+                
+        })
+    }
+    
+    func minimizeButtonView() {
+        var anim1 = CABasicAnimation(keyPath: "cornerRadius")
+        anim1.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        anim1.fromValue = 220
+        self.expandedButtonView.layer.cornerRadius = 40
+        anim1.toValue = 40
+        anim1.duration = 0.3
+        
+        self.expandedButtonViewHeightConstraint.constant = 80
+        self.expandedButtonViewWidthConstraint.constant = 80
+        self.expandedCameraButtonXAlignmentConstraint.constant = 0
+        self.expandedTextButtonYAlignmentConstraint.constant = 0
+        self.expandedVideoButtonXAlignmentConstraint.constant = 0
+        self.expandedVideoButtonYAlignmentConstraint.constant = 0
+        
+        self.expandedButtonView.layer.addAnimation(anim1, forKey: "cornerRadius")
+        UIView.animateWithDuration(0.3, animations: {
+            
+            self.view.layoutIfNeeded()
+            //            self.expandedButtonView.transform = CGAffineTransformMakeScale(1,1)
+            }, completion: {
+                (value: Bool) in
+                
+                
+        })
+    }
+
+    
     
 }

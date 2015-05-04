@@ -12,7 +12,18 @@ import MediaPlayer
 
 
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate, CreateProfileViewControllerDelegate {
+    @IBOutlet var createButtonLongPressGestureRecognizer: UILongPressGestureRecognizer!
     
+    @IBOutlet weak var expandedCameraButton: UIButton!
+    @IBOutlet weak var expandedVideoButton: UIButton!
+    @IBOutlet weak var expandedTextButton: UIButton!
+    @IBOutlet weak var expandedVideoYAlignmentConstraint: NSLayoutConstraint!
+    @IBOutlet weak var expandedVideoXAlignmentConstraint: NSLayoutConstraint!
+    @IBOutlet weak var expandedTextYAlignmentConstraint: NSLayoutConstraint!
+    @IBOutlet weak var expandedCameraXAlignmentConstraint: NSLayoutConstraint!
+    @IBOutlet weak var expandedButtonViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var expandedButtonViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var expandedButtonView: UIView!
     @IBOutlet weak var recordingActivityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var createButton: UIButton!
     var hamburgerVC : HamburgerViewController?
@@ -99,14 +110,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        expandedButtonView.layer.cornerRadius = 40
+        expandedButtonView.clipsToBounds = true
         
         createButton.layer.cornerRadius = 40
         createButton.clipsToBounds = true
-        createButton.layer.shadowColor = UIColor.whiteColor().CGColor
-        createButton.layer.shadowOffset = CGSizeMake(5, 5)
-        createButton.layer.shadowRadius = 5
-        createButton.layer.shadowOpacity = 1.0
+       
 
         
         hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
@@ -587,7 +596,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 if self.createViewExpanded == true {
                     self.minimizeCreateView()
                 } else {
-                    self.expandCreateView()
+                    self.expandCreateView(true)
                 }
             } else {
                 presentCreateProfileViewController()
@@ -598,7 +607,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    func expandCreateView() {
+    func expandCreateView(defaultBehavior : Bool) {
         self.view.endEditing(true)
         self.view.layoutIfNeeded()
         self.createView.hidden = false
@@ -627,26 +636,25 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.createViewExpanded = true
             })
         
-        if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 {
-            playingVideoCell?.player?.pause()
-            playingVideoCell?.playButtonIconImageView.hidden = false
+        pauseVideoIfPlaying()
+        
+        if defaultBehavior == true {
+            vision.cameraMode = PBJCameraMode.Photo
+            vision.captureSessionPreset = AVCaptureSessionPresetPhoto
+            
+            cameraSendButton.hidden = false
+            cameraSendButton.enabled = true
+            holdToRecordLabel.hidden = true
+            recordingActivityIndicator.hidden = true
+            videoLongPressGestureRecognizer.enabled = false
+            for view in createViews {
+                (view as! UIView).hidden = true
+                cameraContainer.hidden = false
+            }
+            
+            
+            vision.startPreview()
         }
-        
-        vision.cameraMode = PBJCameraMode.Photo
-        vision.captureSessionPreset = AVCaptureSessionPresetPhoto
-        
-        cameraSendButton.hidden = false
-        cameraSendButton.enabled = true
-        holdToRecordLabel.hidden = true
-        recordingActivityIndicator.hidden = true
-        videoLongPressGestureRecognizer.enabled = false
-        for view in createViews {
-            (view as! UIView).hidden = true
-            cameraContainer.hidden = false
-        }
-        
-        
-        vision.startPreview()
         
         
     }
@@ -2043,8 +2051,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 self.createButton!.hidden = true
                 self.settingsButton!.enabled = false
-                self.expandCreateView()
+                self.expandCreateView(true)
         })
+        
         
         
         
@@ -2184,6 +2193,97 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var finalRankingValue = signOrder + Double(degradedSeconds)
         return finalRankingValue
     }
+    func expandButtonView(){
+        var anim1 = CABasicAnimation(keyPath: "cornerRadius")
+        anim1.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        anim1.fromValue = 40
+        self.expandedButtonView.layer.cornerRadius = 220
+        anim1.toValue = 220
+        anim1.duration = 0.3
+        
+        
+        self.expandedButtonViewHeightConstraint.constant = 440
+        self.expandedButtonViewWidthConstraint.constant = 440
+        self.expandedCameraXAlignmentConstraint.constant = 150
+        self.expandedTextYAlignmentConstraint.constant = 150
+        self.expandedVideoXAlignmentConstraint.constant = 110
+        self.expandedVideoYAlignmentConstraint.constant = 110
+        
+        self.expandedButtonView.layer.addAnimation(anim1, forKey: "cornerRadius")
+        UIView.animateWithDuration(0.3, animations: {
+            
+            self.view.layoutIfNeeded()
+//            self.expandedButtonView.transform = CGAffineTransformMakeScale(3,3)
+            }, completion: {
+                (value: Bool) in
+                
+                
+        })
+    }
     
+    func minimizeButtonView() {
+        var anim1 = CABasicAnimation(keyPath: "cornerRadius")
+        anim1.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        anim1.fromValue = 220
+        self.expandedButtonView.layer.cornerRadius = 40
+        anim1.toValue = 40
+        anim1.duration = 0.3
+        
+        self.expandedButtonViewHeightConstraint.constant = 80
+        self.expandedButtonViewWidthConstraint.constant = 80
+        self.expandedCameraXAlignmentConstraint.constant = 0
+        self.expandedTextYAlignmentConstraint.constant = 0
+        self.expandedVideoXAlignmentConstraint.constant = 0
+        self.expandedVideoYAlignmentConstraint.constant = 0
+        
+        self.expandedButtonView.layer.addAnimation(anim1, forKey: "cornerRadius")
+        UIView.animateWithDuration(0.3, animations: {
+            
+            self.view.layoutIfNeeded()
+//            self.expandedButtonView.transform = CGAffineTransformMakeScale(1,1)
+            }, completion: {
+                (value: Bool) in
+                
+                
+        })
+    }
+    
+    @IBAction func createButtonWasHeld(sender: AnyObject) {
+        pauseVideoIfPlaying()
+        if sender.state == UIGestureRecognizerState.Began {
+            println("CreateButton was held")
+            expandButtonView()
+        }
+        
+        if sender.state == UIGestureRecognizerState.Cancelled {
+            
+        }
+        
+        if sender.state == UIGestureRecognizerState.Ended {
+            var touch = (((sender as! UILongPressGestureRecognizer).valueForKey("_touches") as! NSArray)[0] as! UITouch).locationInView(self.view) as! CGPoint
+            println("Touch: \(touch), CreateButton: \(self.createButton.frame), Camera Button: \(self.expandedCameraButton.convertRect(expandedCameraButton.frame, toView: nil)), Video Button: \(self.expandedVideoButton.convertRect(expandedVideoButton.frame, toView: nil)), Text: \(self.expandedTextButton.convertRect(expandedTextButton.frame, toView: nil))")
+            
+            
+            
+            
+            if CGRectContainsPoint(self.createButton.frame, touch) || CGRectContainsPoint(self.expandedCameraButton.convertRect(self.expandedCameraButton.bounds, toView: nil), touch) {
+                self.expandCreateView(true)
+            }
+            
+            if CGRectContainsPoint(self.expandedVideoButton.convertRect(self.expandedVideoButton.bounds, toView: nil), touch) {
+                self.expandCreateView(false)
+                self.videoSelectorWasTapped(self)
+            }
+            
+            
+            if CGRectContainsPoint(self.expandedTextButton.convertRect(self.expandedTextButton.bounds, toView: nil), touch) {
+                self.expandCreateView(false)
+                self.textSelectorWasTapped(self)
+            }
+
+            minimizeButtonView()
+            
+        }
+    }
     
 }
