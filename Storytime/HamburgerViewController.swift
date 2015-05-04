@@ -27,7 +27,6 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
     @IBOutlet weak var mentionsButton: UIButton!
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var blueButton: UIButton!
     @IBOutlet weak var redButton: UIButton!
     @IBOutlet weak var centerConstraint: NSLayoutConstraint!
     
@@ -85,6 +84,7 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
     }
     
     override func viewDidLoad() {
+        self.profileButton.enabled = true
         var rankingVC : UINavigationController = sb.instantiateViewControllerWithIdentifier("RankingNavigationViewController") as! UINavigationController
         var profileVC : UINavigationController = sb.instantiateViewControllerWithIdentifier("ProfileNavigationViewController") as! UINavigationController
 //        var mentionsVC : TwitterNavigationController  = sb.instantiateViewControllerWithIdentifier("StatusesViewController") as! TwitterNavigationController
@@ -120,7 +120,7 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
             var currentVC = self.activeViewController as! UINavigationController
             var rankingVC = currentVC.visibleViewController as! RankingViewController
             rankingVC.refreshStories()
-        } else if sender == blueButton{
+        } else if sender == profileButton{
             if PFUser.currentUser() != nil {
                 if PFUser.currentUser()!["profileName"] != nil {
                     self.activeViewController = viewControllers[1]
@@ -207,7 +207,7 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
         UIAlertView(title: "Logged Out", message: "You have successfully logged out.", delegate: nil, cancelButtonTitle: "OK").show()
         self.refreshLoginLabels()
 
-        self.profileButton.enabled = false
+//        self.profileButton.enabled = false
         (self.activeViewController as! UINavigationController).visibleViewController.viewDidLoad()
     }
     

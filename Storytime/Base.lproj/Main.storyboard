@@ -3899,7 +3899,6 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="blueButton" destination="hGx-02-IFT" id="Ico-bD-nrO"/>
                         <outlet property="centerConstraint" destination="dbz-RS-8oq" id="qbR-VV-FUh"/>
                         <outlet property="contentView" destination="2ok-nP-kNG" id="Upp-eH-NG9"/>
                         <outlet property="contentViewTapGestureRecognizer" destination="67Z-bh-zrV" id="DFG-y8-45W"/>

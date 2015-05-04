@@ -44,10 +44,10 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
 //        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as! UITabBarItem
         
         
-        if PFUser.currentUser() == nil {
-//            logOutButton.title = "Log In"
-            hamburgerVC!.profileButton.enabled = false
-        }
+//        if PFUser.currentUser() == nil {
+////            logOutButton.title = "Log In"
+//            hamburgerVC!.profileButton.enabled = false
+//        }
         
         if PFUser.currentUser() != nil {
             PFInstallation.currentInstallation()["user"] = PFUser.currentUser()!.objectId!
@@ -344,7 +344,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.dismissViewControllerAnimated(true, completion: nil)
         self.rankingTableView.reloadData()
         hamburgerVC!.refreshLoginLabels()
-        hamburgerVC!.profileButton.enabled = true
+//        hamburgerVC!.profileButton.enabled = true
         
         PFInstallation.currentInstallation()["user"] = user
         PFInstallation.currentInstallation().saveInBackground()
@@ -402,7 +402,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.dismissViewControllerAnimated(true, completion: nil)
         self.rankingTableView.reloadData()
         hamburgerVC!.refreshLoginLabels()
-        hamburgerVC!.profileButton.enabled = true
+//        hamburgerVC!.profileButton.enabled = true
         
         PFInstallation.currentInstallation()["user"] = user
         PFInstallation.currentInstallation().saveInBackground()

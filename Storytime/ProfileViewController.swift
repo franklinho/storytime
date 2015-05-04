@@ -348,7 +348,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         self.storyTableView.reloadData()
-        hamburgerVC!.profileButton.enabled = true
+//        hamburgerVC!.profileButton.enabled = true
         hamburgerVC!.refreshLoginLabels()
         PFInstallation.currentInstallation()["user"] = user
         PFInstallation.currentInstallation().saveInBackground()
@@ -396,7 +396,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         self.storyTableView.reloadData()
-        hamburgerVC!.profileButton.enabled = true
+//        hamburgerVC!.profileButton.enabled = true
         hamburgerVC!.refreshLoginLabels()
         PFInstallation.currentInstallation()["user"] = user
         PFInstallation.currentInstallation().saveInBackground()

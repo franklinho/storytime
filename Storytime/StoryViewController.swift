@@ -1878,7 +1878,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         updateVotingLabels()
-        hamburgerVC!.profileButton.enabled = true
+//        hamburgerVC!.profileButton.enabled = true
         hamburgerVC!.refreshLoginLabels()
         installation["user"] = user
         installation.saveInBackground()
@@ -1927,7 +1927,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
         updateVotingLabels()
-        hamburgerVC!.profileButton.enabled = true
+//        hamburgerVC!.profileButton.enabled = true
         hamburgerVC!.refreshLoginLabels()
         installation["user"] = user
         installation.saveInBackground()

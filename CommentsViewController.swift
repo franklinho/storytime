@@ -575,7 +575,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
 //        updateVotingLabels()
-        hamburgerVC!.profileButton.enabled = true
+//        hamburgerVC!.profileButton.enabled = true
         hamburgerVC!.refreshLoginLabels()
         self.installation["user"] = user
         self.installation.saveInBackground()
@@ -623,7 +623,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
         self.dismissViewControllerAnimated(true, completion: nil)
 //        updateVotingLabels()
-        hamburgerVC!.profileButton.enabled = true
+//        hamburgerVC!.profileButton.enabled = true
         hamburgerVC!.refreshLoginLabels()
         self.installation["user"] = user
         self.installation.saveInBackground()
