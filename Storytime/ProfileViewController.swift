@@ -68,14 +68,24 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             if PFUser.currentUser() != nil {
                 if PFUser.currentUser()!["following"] != nil {
-                    var followingArray = PFUser.currentUser()!["following"] as! Array<String>
-                    if contains(followingArray, self.user!["profileName"] as! String) {
+                    
+                    var followCount = 0
+                    if PFUser.currentUser()!["following"] != nil {
+                        var followingArray = PFUser.currentUser()!["following"] as! Array<PFUser>
+                        for followingUser : PFUser in followingArray {
+                            if followingUser.objectId == self.user!.objectId {
+                                followCount += 1
+                            }
+                        }
+                    }
+                    
+                    if followCount > 0 {
                         self.followButton.setTitle("  Unfollow", forState: UIControlState.Normal)
                         self.followButton.setImage(nil, forState: UIControlState.Normal)
                         self.followButton.backgroundColor = UIColor.darkGrayColor()
                         self.following = true
-                        
                     }
+                    
                 }
             }
 
@@ -507,7 +517,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBAction func followButtonWasTapped(sender: AnyObject) {
         if self.following == false {
             if PFUser.currentUser() != nil {
-                PFUser.currentUser()!.addUniqueObject(self.user!["profileName"]!, forKey: "following")
+                PFUser.currentUser()!.addUniqueObject(self.user!, forKey: "following")
                 PFUser.currentUser()!.saveInBackgroundWithBlock({(success, error) -> Void in
                     if success {
                         self.following = true
@@ -523,7 +533,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 self.presentLoginViewController()
             }
         } else {
-            PFUser.currentUser()!.removeObject(self.user!["profileName"]!, forKey: "following")
+            PFUser.currentUser()!.removeObject(self.user!, forKey: "following")
             PFUser.currentUser()!.saveInBackgroundWithBlock({(success, error) -> Void in
                 if success {
                     self.following = false

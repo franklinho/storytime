@@ -35,28 +35,35 @@ class RankingSwitch: UIView {
     }
 
     @IBAction func didTapRankingSwitch(sender: AnyObject) {
-        self.delegate?.rankingSwitchWasTapped()
-        if hot == true {
-            self.switchLeadingConstraint.constant = 102
-            UIView.animateWithDuration(0.3, animations: {
-                self.layoutIfNeeded()
-                self.hotLabel.alpha = 0.5
-                self.recentLabel.alpha = 1
-                }, completion: {
-                    (value: Bool) in
-                    
-                    self.hot = false
-            })
+        if PFUser.currentUser() != nil {
+            if hot == true {
+                self.switchLeadingConstraint.constant = 102
+                UIView.animateWithDuration(0.3, animations: {
+                    self.layoutIfNeeded()
+                    self.hotLabel.alpha = 0.5
+                    self.recentLabel.alpha = 1
+                    }, completion: {
+                        (value: Bool) in
+                        
+                        self.hot = false
+                        self.delegate?.rankingSwitchWasTapped()
+                })
+            } else {
+                self.switchLeadingConstraint.constant = 2
+                UIView.animateWithDuration(0.2, animations: {
+                    self.layoutIfNeeded()
+                    self.hotLabel.alpha = 1
+                    self.recentLabel.alpha = 0.5
+                    }, completion: {
+                        (value: Bool) in
+                        self.hot = true
+                        self.delegate?.rankingSwitchWasTapped()
+                })
+            }
+
         } else {
-            self.switchLeadingConstraint.constant = 2
-            UIView.animateWithDuration(0.2, animations: {
-                self.layoutIfNeeded()
-                self.hotLabel.alpha = 1
-                self.recentLabel.alpha = 0.5
-                }, completion: {
-                    (value: Bool) in
-                    self.hot = true
-            })
+            self.delegate?.rankingSwitchWasTapped()
         }
+        
     }
 }

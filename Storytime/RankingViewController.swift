@@ -98,7 +98,11 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func rankingSwitchWasTapped() {
-        self.refreshStories()
+        if PFUser.currentUser() != nil {
+            self.refreshStories()
+        } else {
+            self.presentLoginViewController()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -109,7 +113,16 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print("Table returning \(self.stories.count) cells")
         if maxReached == true {
-            return self.stories.count
+            if rankingSwitch!.hot == false {
+                if self.stories.count > 0 {
+                    return self.stories.count
+                } else {
+                    return self.stories.count + 1
+                }
+            } else {
+                return self.stories.count
+            }
+            
         } else {
             return self.stories.count + 1
         }
@@ -135,6 +148,12 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         if indexPath.row == rankingTableView.numberOfRowsInSection(0)-1 && maxReached == false {
             var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as! UITableViewCell
+            if (cell.respondsToSelector(Selector("layoutMargins"))) {
+                cell.layoutMargins = UIEdgeInsetsZero;
+            }
+            return cell
+        } else if indexPath.row == rankingTableView.numberOfRowsInSection(0)-1 && self.stories.count == 0 && rankingSwitch!.hot == false {
+            var cell = tableView.dequeueReusableCellWithIdentifier("FollowUsersCell") as! UITableViewCell
             if (cell.respondsToSelector(Selector("layoutMargins"))) {
                 cell.layoutMargins = UIEdgeInsetsZero;
             }
@@ -467,14 +486,11 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 var string = self.searchBar.text as String
                 query.whereKey("title", matchesRegex: string, modifiers: "i")
             }
-            
-            if self.rankingSwitch?.hot == true {
-                query.orderByDescending("rankingValue")
-                query.addDescendingOrder("points")
-                query.addDescendingOrder("createdAt")
-            } else {
-                query.orderByDescending("createdAt")
-                query.addDescendingOrder("points")
+            query.orderByDescending("rankingValue")
+            query.addDescendingOrder("points")
+            query.addDescendingOrder("createdAt")
+            if self.rankingSwitch?.hot == false {
+                query.whereKey("user", containedIn: PFUser.currentUser()!["following"] as! [PFUser])
             }
             
             query.limit = 5
