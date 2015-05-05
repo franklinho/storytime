@@ -211,7 +211,11 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
         self.refreshLoginLabels()
 
 //        self.profileButton.enabled = false
+        (self.activeViewController as! UINavigationController).popToRootViewControllerAnimated(true)
+        
         (self.activeViewController as! UINavigationController).visibleViewController.viewDidLoad()
+        
+        hideHamburgerMenu()
     }
     
     func presentLoginViewController() {

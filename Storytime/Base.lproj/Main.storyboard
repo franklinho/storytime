@@ -47,13 +47,14 @@
             <string>OpenSans-Bold</string>
             <string>OpenSans-Bold</string>
             <string>OpenSans-Bold</string>
+            <string>OpenSans-Bold</string>
+            <string>OpenSans-Bold</string>
         </mutableArray>
         <mutableArray key="OpenSans-ExtraBold.ttf">
             <string>OpenSans-Extrabold</string>
             <string>OpenSans-Extrabold</string>
         </mutableArray>
         <mutableArray key="OpenSans-Regular.ttf">
-            <string>OpenSans</string>
             <string>OpenSans</string>
             <string>OpenSans</string>
             <string>OpenSans</string>
@@ -786,8 +787,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ory-Wm-nvm">
-                                <rect key="frame" x="0.0" y="235" width="600" height="316"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="ory-Wm-nvm">
+                                <rect key="frame" x="0.0" y="194" width="600" height="406"/>
                                 <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="separatorColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -817,8 +818,8 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OtC-gk-5E7" id="dI8-P4-cUR">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MM2-8B-X9t">
-                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="358.5"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MM2-8B-X9t">
+                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="359"/>
                                                 </imageView>
                                                 <view alpha="0.75" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dVe-Vg-V6R" userLabel="VoteView">
                                                     <rect key="frame" x="13" y="112" width="55" height="135"/>
@@ -850,7 +851,7 @@
                                                             </connections>
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="frK-dD-88u">
-                                                            <rect key="frame" x="20" y="50" width="15" height="35.5"/>
+                                                            <rect key="frame" x="20" y="50" width="15" height="36"/>
                                                             <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="26"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -872,7 +873,7 @@
                                                     <rect key="frame" x="85" y="13" width="153" height="61.5"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Story Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oHh-EH-aRu">
-                                                            <rect key="frame" x="50" y="8" width="87" height="23.5"/>
+                                                            <rect key="frame" x="50" y="8" width="87" height="24"/>
                                                             <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -997,35 +998,58 @@
                                 </prototypes>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kv5-x0-yDV">
-                                <rect key="frame" x="0.0" y="64" width="600" height="171"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="130"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IUW-kG-GUB">
-                                        <rect key="frame" x="243" y="129" width="113.5" height="33"/>
-                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="24"/>
+                                        <rect key="frame" x="250" y="18" width="121" height="33"/>
+                                        <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="24"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user_icon_scaled_white.png" translatesAutoresizingMaskIntoConstraints="NO" id="2qN-Jd-2m3">
-                                        <rect key="frame" x="250" y="24" width="100" height="100"/>
+                                        <rect key="frame" x="130" y="14" width="100" height="100"/>
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="2OV-Fd-nEm"/>
                                             <constraint firstAttribute="width" constant="100" id="kfb-93-HMm"/>
                                         </constraints>
                                     </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jAr-8W-P2B">
+                                        <rect key="frame" x="250" y="59" width="136" height="44"/>
+                                        <color key="backgroundColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="136" id="Rs8-eX-0JS"/>
+                                            <constraint firstAttribute="height" constant="44" id="pQZ-1l-Tf2"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="21"/>
+                                        <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                                        <state key="normal" title="  Follow" image="plusIcon">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="followButtonWasTapped:" destination="oPv-Ie-cqB" eventType="touchUpInside" id="PFv-f6-S9Q"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="IUW-kG-GUB" firstAttribute="top" secondItem="2qN-Jd-2m3" secondAttribute="bottom" constant="5" id="44Q-fk-i2N"/>
-                                    <constraint firstAttribute="centerX" secondItem="2qN-Jd-2m3" secondAttribute="centerX" id="eES-pS-EbX"/>
-                                    <constraint firstItem="2qN-Jd-2m3" firstAttribute="top" secondItem="Kv5-x0-yDV" secondAttribute="top" constant="24" id="fCV-hH-Gl3"/>
+                                    <constraint firstItem="IUW-kG-GUB" firstAttribute="top" secondItem="Kv5-x0-yDV" secondAttribute="top" constant="18" id="AOk-7M-h4I"/>
+                                    <constraint firstItem="IUW-kG-GUB" firstAttribute="leading" secondItem="2qN-Jd-2m3" secondAttribute="trailing" constant="20" id="J6s-47-KXB"/>
+                                    <constraint firstAttribute="centerX" secondItem="2qN-Jd-2m3" secondAttribute="centerX" constant="120" id="eES-pS-EbX"/>
+                                    <constraint firstItem="2qN-Jd-2m3" firstAttribute="top" secondItem="Kv5-x0-yDV" secondAttribute="top" constant="14" id="fCV-hH-Gl3"/>
+                                    <constraint firstItem="jAr-8W-P2B" firstAttribute="top" secondItem="IUW-kG-GUB" secondAttribute="bottom" constant="8" id="hjK-dg-uYZ"/>
                                     <constraint firstItem="IUW-kG-GUB" firstAttribute="top" secondItem="2qN-Jd-2m3" secondAttribute="bottom" constant="8" id="hs9-Yq-TUf"/>
+                                    <constraint firstItem="jAr-8W-P2B" firstAttribute="leading" secondItem="2qN-Jd-2m3" secondAttribute="trailing" constant="20" id="jcc-fM-X7q"/>
                                     <constraint firstAttribute="centerX" secondItem="IUW-kG-GUB" secondAttribute="centerX" id="vR7-sx-ryz"/>
-                                    <constraint firstAttribute="height" constant="171" id="xsb-LZ-gZJ"/>
+                                    <constraint firstAttribute="height" constant="130" id="xsb-LZ-gZJ"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="44Q-fk-i2N"/>
                                         <exclude reference="hs9-Yq-TUf"/>
+                                        <exclude reference="vR7-sx-ryz"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -1064,9 +1088,11 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="followButton" destination="jAr-8W-P2B" id="GUk-OW-bky"/>
                         <outlet property="noStoriesLabel" destination="XSL-FQ-tMs" id="UVx-jf-Bqb"/>
                         <outlet property="profileImageView" destination="2qN-Jd-2m3" id="Xed-90-KzF"/>
                         <outlet property="storyTableView" destination="ory-Wm-nvm" id="EhU-2W-xWw"/>
+                        <outlet property="userNameTopConstraint" destination="AOk-7M-h4I" id="LuA-rT-CmC"/>
                         <outlet property="usernameLabel" destination="IUW-kG-GUB" id="726-ZP-bC9"/>
                     </connections>
                 </viewController>
@@ -4092,6 +4118,6 @@
         <image name="video_icon.png" width="256" height="256"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="gzv-Hc-Qwl"/>
+        <segue reference="ZfJ-zs-kTV"/>
     </inferredMetricsTieBreakers>
 </document>

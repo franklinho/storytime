@@ -10,6 +10,8 @@ import UIKit
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, RankingTableViewCellDelegate,PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, CreateProfileViewControllerDelegate {
 
+    @IBOutlet weak var userNameTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var followButton: UIButton!
     var stories = []
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var votedStories : NSMutableDictionary = [:]
@@ -24,6 +26,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var usernameLabel: UILabel!
     var refreshControl : UIRefreshControl!
     var hamburgerVC : HamburgerViewController?
+    var following = false
 //    var profileTabBarItem : UITabBarItem?
     
     
@@ -32,7 +35,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
 
 //        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as! UITabBarItem
-
+        followButton.layer.cornerRadius = 22
+        followButton.clipsToBounds = true
         
         profileImageView.layer.cornerRadius = 50
         profileImageView.layer.borderColor = UIColor.whiteColor().CGColor
@@ -42,6 +46,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         if user == nil {
             if PFUser.currentUser() != nil {
                 user = PFUser.currentUser()
+                self.followButton.hidden = true
+                self.userNameTopConstraint.constant = 47
             } else {
                 presentLoginViewController()
             }
@@ -60,8 +66,22 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 }
             }
             
+            if PFUser.currentUser() != nil {
+                if PFUser.currentUser()!["following"] != nil {
+                    var followingArray = PFUser.currentUser()!["following"] as! Array<String>
+                    if contains(followingArray, self.user!["profileName"] as! String) {
+                        self.followButton.setTitle("  Unfollow", forState: UIControlState.Normal)
+                        self.followButton.setImage(nil, forState: UIControlState.Normal)
+                        self.followButton.backgroundColor = UIColor.darkGrayColor()
+                        self.following = true
+                        
+                    }
+                }
+            }
 
         }
+        
+        
 
         // Do any additional setup after loading the view.
         storyTableView.delegate = self
@@ -483,5 +503,39 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         } else {
             hamburgerVC!.showHamburgerMenu()
         }
+    }
+    @IBAction func followButtonWasTapped(sender: AnyObject) {
+        if self.following == false {
+            if PFUser.currentUser() != nil {
+                PFUser.currentUser()!.addUniqueObject(self.user!["profileName"]!, forKey: "following")
+                PFUser.currentUser()!.saveInBackgroundWithBlock({(success, error) -> Void in
+                    if success {
+                        self.following = true
+                    } else {
+                        println("There was an error: \(error!.description)")
+                    }
+                })
+                self.followButton.setTitle("  Unfollow", forState: UIControlState.Normal)
+                self.followButton.setImage(nil, forState: UIControlState.Normal)
+                self.followButton.backgroundColor = UIColor.darkGrayColor()
+                
+            } else {
+                self.presentLoginViewController()
+            }
+        } else {
+            PFUser.currentUser()!.removeObject(self.user!["profileName"]!, forKey: "following")
+            PFUser.currentUser()!.saveInBackgroundWithBlock({(success, error) -> Void in
+                if success {
+                    self.following = false
+                } else {
+                    println("There was an error: \(error!.description)")
+                }
+            })
+            self.followButton.setTitle("  Follow", forState: UIControlState.Normal)
+            self.followButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Normal)
+            self.followButton.backgroundColor = UIColor.purpleColor()
+            
+        }
+        
     }
 }

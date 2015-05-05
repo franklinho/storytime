@@ -227,6 +227,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     println("Story user is \(storyUser.username) and current user is \(currentUser!.username)")
                     if  storyUser.username == currentUser!.username {
                         self.createButton!.hidden = false
+                        self.expandedButtonView.hidden = false
                         self.settingsButton!.enabled = true
                         self.addAuthorButton.hidden = false
                         self.addUserButtonBorderView.hidden = false
@@ -239,16 +240,19 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                         if matchCount > 0 {
                             self.createButton!.hidden = false
+                            self.expandedButtonView.hidden = false
                             self.settingsButton!.enabled = true
                             self.addAuthorButton.hidden = false
                             self.addUserButtonBorderView.hidden = false
                         } else {
                             self.createButton!.hidden = true
+                            self.expandedButtonView.hidden = true
                             self.settingsButton!.enabled = false
                             
                         }
                     } else {
                         self.createButton!.hidden = true
+                        self.expandedButtonView.hidden = true
                         self.settingsButton!.enabled = false
                     }
                 }
@@ -261,6 +265,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             titleView.hidden = true
             createTitleView.hidden = false
             createButton!.hidden = true
+            self.expandedButtonView.hidden = true
             settingsButton!.enabled = false
 //            createButton!.title = "X"
 //            createViewExpanded = true
@@ -623,11 +628,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.createView.hidden = false
                 if self.newStory != true {
                     self.createButton!.hidden = false
+                    self.expandedButtonView.hidden = false
                     self.settingsButton!.enabled = true
                     self.addAuthorButton.hidden = false
                     self.addUserButtonBorderView.hidden = false
                 } else {
                     self.createButton!.hidden = true
+                    self.expandedButtonView.hidden = true
                     self.settingsButton!.enabled = false
                 }
 //                self.createButton!.title = "Cancel"
@@ -676,6 +683,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     
                     if  storyUser.username == currentUser!.username {
                         self.createButton!.hidden = false
+                        self.expandedButtonView.hidden = false
                         self.settingsButton!.enabled = true
                         self.addAuthorButton.hidden = false
                         self.addUserButtonBorderView.hidden = false
@@ -688,16 +696,19 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                         if matchCount > 0 {
                             self.createButton!.hidden = false
+                            self.expandedButtonView.hidden = false
                             self.settingsButton!.enabled = true
                             self.addAuthorButton.hidden = false
                             self.addUserButtonBorderView.hidden = false
                         } else {
                             self.createButton!.hidden = true
+                            self.expandedButtonView.hidden = true
                             self.settingsButton!.enabled = false
 
                         }
                     } else {
                         self.createButton!.hidden = true
+                        self.expandedButtonView.hidden = true
                         self.settingsButton!.enabled = false
                     }
                 }
@@ -748,6 +759,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.commentsButton.enabled = true
         self.profileImageButton.enabled = true
         self.createButton!.hidden = false
+        self.expandedButtonView.hidden = false
         self.settingsButton!.enabled = true
         self.addAuthorButton.hidden = false
         self.addUserButtonBorderView.hidden = false
@@ -797,6 +809,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 println("Adding storychannel: \(self.story!.objectId!)")
                 self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
+                self.story!.addUniqueObject(PFUser.currentUser()!, forKey: "posters")
+                self.story!.saveInBackground()
                 var currentChannels = self.installation["channels"]
                 println("Story ID: \(self.story!.objectId!), Current Channels: \(currentChannels!)")
                 self.installation.saveInBackground()
@@ -1004,7 +1018,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             var query = PFQuery(className:"Event")
             query.whereKey("storyObject", equalTo:self.story!)
             query.orderByDescending("createdAt")
-
             query.limit = 5
             if offset == 0 {
                 self.events = []
@@ -1185,6 +1198,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.commentsButton.enabled = true
         self.profileImageButton.enabled = true
         self.createButton!.hidden = false
+        self.expandedButtonView.hidden = false
         self.settingsButton!.enabled = true
         self.addAuthorButton.hidden = false
         self.addUserButtonBorderView.hidden = false
@@ -1234,6 +1248,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
                 
                 println("Adding storychannel: \(self.story!.objectId!)")
+                self.story!.addUniqueObject(PFUser.currentUser()!, forKey: "posters")
+                self.story!.saveInBackground()
                 self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
                 self.installation.saveInBackground()
                 self.vision.stopPreview()
@@ -1366,6 +1382,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.commentsButton.enabled = true
         self.profileImageButton.enabled = true
         self.createButton!.hidden = false
+        self.expandedButtonView.hidden = false
         self.settingsButton!.enabled = true
         self.addAuthorButton.hidden = false
         self.addUserButtonBorderView.hidden = false
@@ -1416,6 +1433,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 
                 println("Adding storychannel: \(self.story!.objectId!)")
+                self.story!.addUniqueObject(PFUser.currentUser()!, forKey: "posters")
+                self.story!.saveInBackground()
                 self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
                 self.installation.saveInBackground()
                 self.vision.stopPreview()
@@ -2050,6 +2069,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 
                 self.createButton!.hidden = true
+                self.expandedButtonView.hidden = true
                 self.settingsButton!.enabled = false
                 self.expandCreateView(true)
         })
