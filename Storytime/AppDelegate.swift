@@ -102,15 +102,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
         installation.saveInBackground()
         
         var systemColor = UIColor(red: 41.0/255.0, green: 37.0/255.0, blue: 55.0/255.0, alpha: 1.0)
+        var navigationBarAppearace = UINavigationBar.appearance()
         
-        UINavigationBar.appearance().backgroundColor = UIColor(red: 49.0/255.0, green: 49.0/255.0, blue: 78.0/255.0, alpha: 1.0)
-        UINavigationBar.appearance().barTintColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
-        UINavigationBar.appearance().tintColor = systemColor
-        UIBarButtonItem.appearance().tintColor = systemColor
-        UINavigationBar.appearance().titleTextAttributes =
-            [NSForegroundColorAttributeName: systemColor]
+        navigationBarAppearace.tintColor = UIColor.whiteColor()
+        navigationBarAppearace.barTintColor = UIColor.purpleColor()
+        navigationBarAppearace.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.whiteColor()]
+        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         
-        UITabBar.appearance().selectedImageTintColor = systemColor
+//        UINavigationBar.appearance().backgroundColor = UIColor(red: 49.0/255.0, green: 49.0/255.0, blue: 78.0/255.0, alpha: 1.0)
+//        UINavigationBar.appearance().barTintColor = UIColor(red: 247.0/255.0, green: 247.0/255.0, blue: 247.0/255.0, alpha: 1.0)
+//        UIBarButtonItem.appearance().tintColor = systemColor
+//        UINavigationBar.appearance().titleTextAttributes =
+//            [NSForegroundColorAttributeName: systemColor]
+        
+//        UITabBar.appearance().selectedImageTintColor = systemColor
         println("Launch Options : \(launchOptions)")
         if launchOptions != nil {
             var notificationPayload : NSDictionary = launchOptions![UIApplicationLaunchOptionsRemoteNotificationKey] as! NSDictionary

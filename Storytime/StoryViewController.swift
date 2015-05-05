@@ -12,8 +12,10 @@ import MediaPlayer
 
 
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate, CreateProfileViewControllerDelegate {
+    @IBOutlet weak var titleViewTopConstraint: NSLayoutConstraint!
     @IBOutlet var createButtonLongPressGestureRecognizer: UILongPressGestureRecognizer!
     
+    var lastContentOffset : CGFloat = 0
     @IBOutlet weak var expandedCameraButton: UIButton!
     @IBOutlet weak var expandedVideoButton: UIButton!
     @IBOutlet weak var expandedTextButton: UIButton!
@@ -1599,6 +1601,25 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //    }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
+        
+        if scrollView.contentOffset.y == 0 {
+            self.titleViewTopConstraint.constant = 0
+        } else {
+            if (self.lastContentOffset > scrollView.contentOffset.y) {
+                self.titleViewTopConstraint.constant = 0
+            } else if (self.lastContentOffset < scrollView.contentOffset.y) {
+                self.titleViewTopConstraint.constant = -90
+            }
+        }
+        
+        UIView.animateWithDuration(0.2, animations: {
+            self.view.layoutIfNeeded()
+            }, completion: {
+                (value: Bool) in
+                
+        })
+
+        
         if (playingVideoCell != nil && playingVideoCell!.player != nil) {
             if playingVideoCell!.player!.rate == 1.0 {
                 playingVideoCell!.player?.pause()

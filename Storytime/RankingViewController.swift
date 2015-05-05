@@ -10,7 +10,9 @@ import UIKit
 
 class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, RankingTableViewCellDelegate, UISearchBarDelegate, CreateProfileViewControllerDelegate, RankingSwitchDelegate {
 
+    var lastContentOffset : CGFloat = 0
 
+    @IBOutlet weak var searchBarTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var newStoryButton: UIButton!
     var stories = []
     let screenSize: CGRect = UIScreen.mainScreen().bounds
@@ -566,6 +568,26 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
+        if scrollView.contentOffset.y == 0 {
+            self.searchBarTopConstraint.constant = 0
+        } else {
+            if (self.lastContentOffset > scrollView.contentOffset.y) {
+                self.searchBarTopConstraint.constant = 0
+            } else if (self.lastContentOffset < scrollView.contentOffset.y) {
+                self.searchBarTopConstraint.constant = -44
+            }
+        }
+
+        UIView.animateWithDuration(0.2, animations: {
+            self.view.layoutIfNeeded()
+            }, completion: {
+                (value: Bool) in
+                
+        })
+        
+        self.lastContentOffset = scrollView.contentOffset.y
+        
+        
         
         var actualPosition :CGFloat = scrollView.contentOffset.y
         var contentHeight : CGFloat = scrollView.contentSize.height - 750
@@ -634,3 +656,5 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
 
         
 }
+
+

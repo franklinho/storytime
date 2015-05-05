@@ -372,7 +372,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="39n-zr-Y38"/>
                                 </constraints>
-                                <color key="barTintColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="barTintColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oav-fm-jT1">
@@ -423,7 +423,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Current" id="xUF-Fh-EQ1">
                         <barButtonItem key="leftBarButtonItem" image="menuIcon" id="PMg-xc-kCs">
-                            <color key="tintColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="menuButtonWasTapped:" destination="vXZ-lx-hvc" id="oT3-p6-77s"/>
                             </connections>
@@ -433,6 +433,7 @@
                         <outlet property="newStoryButton" destination="oav-fm-jT1" id="xwi-uM-0K4"/>
                         <outlet property="rankingTableView" destination="3oL-19-xSC" id="cf9-aO-L8C"/>
                         <outlet property="searchBar" destination="9SO-98-fuM" id="V4S-ct-ZjU"/>
+                        <outlet property="searchBarTopConstraint" destination="pIE-ax-KIj" id="5Qx-o6-aPg"/>
                         <outlet property="viewTapGestureRecognizer" destination="qiK-4Z-WsC" id="ifQ-Z5-DFT"/>
                     </connections>
                 </viewController>
@@ -1105,7 +1106,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Profile" id="Yzd-gy-416">
                         <barButtonItem key="leftBarButtonItem" image="menuIcon" id="YAk-u6-zJr">
-                            <color key="tintColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="menuButtonWasTapped:" destination="oPv-Ie-cqB" id="ml4-Nb-Hha"/>
                             </connections>
@@ -2216,8 +2217,8 @@
                                             </mask>
                                         </variation>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="748" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LlQ-ee-Wny">
-                                        <rect key="frame" x="0.0" y="44" width="600" height="46"/>
+                                    <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="748" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LlQ-ee-Wny">
+                                        <rect key="frame" x="0.0" y="47" width="600" height="46"/>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="77" id="6WQ-SF-wsu"/>
@@ -2417,6 +2418,7 @@
                         <outlet property="textContainer" destination="9bx-7K-B4N" id="Kyx-Ec-nS9"/>
                         <outlet property="titleTextField" destination="cHL-Ds-X6q" id="52j-ZF-7Qm"/>
                         <outlet property="titleView" destination="zC1-cs-0xd" id="yCz-iD-wGP"/>
+                        <outlet property="titleViewTopConstraint" destination="7Sq-7f-PNh" id="GoW-D8-rRa"/>
                         <outlet property="upVoteButton" destination="0fP-OH-gNp" id="CJ8-gL-E4t"/>
                         <outlet property="userLabel" destination="4T8-ck-Y0C" id="anN-v3-GwR"/>
                         <outlet property="userProfileImage" destination="twC-DJ-FCn" id="i08-Eg-BQH"/>
