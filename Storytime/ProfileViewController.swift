@@ -521,6 +521,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 PFUser.currentUser()!.saveInBackgroundWithBlock({(success, error) -> Void in
                     if success {
                         self.following = true
+                        self.sendPushNotificationToUser(self.user!)
                     } else {
                         println("There was an error: \(error!.description)")
                     }
@@ -546,6 +547,30 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             self.followButton.backgroundColor = UIColor.purpleColor()
             
         }
+        
+    }
+    
+    func sendPushNotificationToUser(user : PFUser) {
+        var pushQuery : PFQuery = PFInstallation.query()!
+        pushQuery.whereKey("user", equalTo: user.objectId!)
+        pushQuery.whereKey("followNotificationsOn", equalTo: true)
+        var currentUserProfileName = PFUser.currentUser()!["profileName"]
+        
+        let data = [
+            "alert" : "\(currentUserProfileName!) has started following you"
+        ]
+        let push = PFPush()
+        //                                            push.setMessage("\(currentUserProfileName!) has added you to the story: \(storyTitle!)")
+        push.setQuery(pushQuery)
+        push.setData(data)
+        push.sendPushInBackgroundWithBlock({
+            (success, error) -> Void in
+            if success == true {
+                println("Push query successful")
+            } else {
+                println("Push encountered error: \(error!.description)")
+            }
+        })
         
     }
 }

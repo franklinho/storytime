@@ -97,6 +97,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
             installation["commentNotificationsOn"] = true
         }
         
+        if installation["followNotificationsOn"] == nil {
+            installation["followNotificationsOn"] = true
+        }
+        
         
         
         installation.saveInBackground()
@@ -356,22 +360,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
         var storyID = userInfo["storyID"]
         var comment = userInfo["comment"]
         println("\(storyID)")
-        var targetStory : PFObject = PFObject(withoutDataWithClassName: "Story", objectId: "\(storyID!)")
-        
-        targetStory.fetchIfNeededInBackgroundWithBlock {
-            (user, error) -> Void in
-            var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as! StoryViewController
-            storyVC.story = targetStory
-            storyVC.refreshEventsForStory()
+        if storyID != nil {
+            var targetStory : PFObject = PFObject(withoutDataWithClassName: "Story", objectId: "\(storyID!)")
             
-            var rootViewController = self.window!.rootViewController as! HamburgerViewController
-            var rankingVC : UINavigationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("RankingNavigationViewController") as! UINavigationController
-            rootViewController.activeViewController = rankingVC
-            var navController = rootViewController.activeViewController as! UINavigationController
-            navController.pushViewController(storyVC, animated: true)
-            if comment != nil {
-                if comment  as! String == "true"{
-                    storyVC.displayStoryComments()
+            targetStory.fetchIfNeededInBackgroundWithBlock {
+                (user, error) -> Void in
+                var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as! StoryViewController
+                storyVC.story = targetStory
+                storyVC.refreshEventsForStory()
+                
+                var rootViewController = self.window!.rootViewController as! HamburgerViewController
+                var rankingVC : UINavigationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("RankingNavigationViewController") as! UINavigationController
+                rootViewController.activeViewController = rankingVC
+                var navController = rootViewController.activeViewController as! UINavigationController
+                navController.pushViewController(storyVC, animated: true)
+                if comment != nil {
+                    if comment  as! String == "true"{
+                        storyVC.displayStoryComments()
+                    }
                 }
             }
         }

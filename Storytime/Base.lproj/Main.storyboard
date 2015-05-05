@@ -85,6 +85,7 @@
             <string>OpenSans</string>
             <string>OpenSans</string>
             <string>OpenSans</string>
+            <string>OpenSans</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -526,27 +527,52 @@
                                 </connections>
                             </switch>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f0J-qd-B1X">
-                                <rect key="frame" x="520" y="271" width="51" height="31"/>
+                                <rect key="frame" x="520" y="257" width="51" height="31"/>
                                 <connections>
                                     <action selector="commentNotificationsSwitchWasTapped:" destination="DhS-N1-qaa" eventType="valueChanged" id="2Vm-dd-dcX"/>
+                                </connections>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Follow Notifications" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HWN-8v-sLY">
+                                <rect key="frame" x="31" y="339" width="183" height="28"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="250" id="iPq-Uf-nWu"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="iPq-Uf-nWu"/>
+                                    </mask>
+                                </variation>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MpN-iQ-Fax">
+                                <rect key="frame" x="520" y="330" width="51" height="31"/>
+                                <connections>
+                                    <action selector="commentNotificationsSwitchWasTapped:" destination="DhS-N1-qaa" eventType="valueChanged" id="Vj2-wg-Szh"/>
+                                    <action selector="followNotificationsSwitchWasTapped:" destination="DhS-N1-qaa" eventType="valueChanged" id="nVX-9o-AcB"/>
                                 </connections>
                             </switch>
                         </subviews>
                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="ZpX-kL-ggB" firstAttribute="top" secondItem="8bq-Yz-fWJ" secondAttribute="bottom" constant="100" id="9kx-2p-QbM"/>
-                            <constraint firstItem="f0J-qd-B1X" firstAttribute="top" secondItem="eia-G8-bVG" secondAttribute="bottom" constant="56" id="B2m-P5-AVx"/>
+                            <constraint firstItem="f0J-qd-B1X" firstAttribute="top" secondItem="eia-G8-bVG" secondAttribute="bottom" constant="42" id="B2m-P5-AVx"/>
                             <constraint firstItem="OR6-p4-GOt" firstAttribute="top" secondItem="ZpX-kL-ggB" secondAttribute="bottom" constant="54" id="Dmr-Kv-cLs"/>
                             <constraint firstItem="uHE-hJ-hEo" firstAttribute="top" secondItem="MLs-L7-cfx" secondAttribute="bottom" constant="21" id="FzI-jo-BOL"/>
                             <constraint firstItem="OR6-p4-GOt" firstAttribute="leading" secondItem="xOY-wD-rvp" secondAttribute="leadingMargin" constant="15" id="KIs-LG-QqI"/>
                             <constraint firstItem="eia-G8-bVG" firstAttribute="centerY" secondItem="ZpX-kL-ggB" secondAttribute="centerY" id="LWg-2l-g1i"/>
                             <constraint firstItem="8bq-Yz-fWJ" firstAttribute="leading" secondItem="xOY-wD-rvp" secondAttribute="leadingMargin" constant="5" id="NLw-17-2J5"/>
+                            <constraint firstItem="HWN-8v-sLY" firstAttribute="leading" secondItem="xOY-wD-rvp" secondAttribute="leadingMargin" constant="15" id="V3v-ol-pP7"/>
                             <constraint firstItem="8bq-Yz-fWJ" firstAttribute="top" secondItem="MLs-L7-cfx" secondAttribute="bottom" constant="15" id="X51-pF-Yxt"/>
                             <constraint firstAttribute="centerX" secondItem="uHE-hJ-hEo" secondAttribute="centerX" id="Z1l-0r-4Ub"/>
+                            <constraint firstItem="HWN-8v-sLY" firstAttribute="top" secondItem="OR6-p4-GOt" secondAttribute="bottom" constant="48" id="eB8-Cq-ofg"/>
                             <constraint firstAttribute="trailingMargin" secondItem="f0J-qd-B1X" secondAttribute="trailing" constant="15" id="ePE-i1-4Tw"/>
                             <constraint firstAttribute="trailingMargin" secondItem="eia-G8-bVG" secondAttribute="trailing" constant="15" id="ea1-N5-L1k"/>
                             <constraint firstItem="ZpX-kL-ggB" firstAttribute="leading" secondItem="xOY-wD-rvp" secondAttribute="leadingMargin" constant="15" id="kH5-lk-FN9"/>
                             <constraint firstItem="eia-G8-bVG" firstAttribute="top" secondItem="MLs-L7-cfx" secondAttribute="bottom" constant="164" id="qCr-mk-fWS"/>
+                            <constraint firstItem="MpN-iQ-Fax" firstAttribute="top" secondItem="f0J-qd-B1X" secondAttribute="bottom" constant="42" id="u6N-kx-RCR"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="MpN-iQ-Fax" secondAttribute="trailing" constant="15" id="yZx-Dc-zSN"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -557,6 +583,7 @@
                     <connections>
                         <outlet property="closeButton" destination="8bq-Yz-fWJ" id="WKQ-hh-Scz"/>
                         <outlet property="commentNotificationsSwitch" destination="f0J-qd-B1X" id="ACZ-gh-KEj"/>
+                        <outlet property="followNotificationsSwitch" destination="MpN-iQ-Fax" id="9Ic-KO-hTc"/>
                         <outlet property="storyNotificationsSwitch" destination="eia-G8-bVG" id="Uh9-83-D9x"/>
                     </connections>
                 </viewController>

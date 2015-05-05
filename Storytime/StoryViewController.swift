@@ -1602,7 +1602,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
-        if scrollView.contentOffset.y == 0 {
+        if scrollView.contentOffset.y <= 0 {
             self.titleViewTopConstraint.constant = 0
         } else {
             if (self.lastContentOffset > scrollView.contentOffset.y) {
@@ -1619,6 +1619,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
         })
 
+//        self.lastContentOffset = scrollView.contentOffset.y
         
         if (playingVideoCell != nil && playingVideoCell!.player != nil) {
             if playingVideoCell!.player!.rate == 1.0 {

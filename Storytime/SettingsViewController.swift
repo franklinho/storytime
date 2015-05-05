@@ -10,6 +10,7 @@ import UIKit
 
 class SettingsViewController: UIViewController {
 
+    @IBOutlet weak var followNotificationsSwitch: UISwitch!
     @IBOutlet weak var closeButton: UIButton!
     let defaults = NSUserDefaults.standardUserDefaults()
     @IBOutlet weak var storyNotificationsSwitch: UISwitch!
@@ -37,6 +38,12 @@ class SettingsViewController: UIViewController {
             commentNotificationsSwitch.on = false
         } else {
             commentNotificationsSwitch.on = true
+        }
+        
+        if defaults.boolForKey("followNotificationsOn") == false {
+            followNotificationsSwitch.on = false
+        } else {
+            followNotificationsSwitch.on = true
         }
     }
 
@@ -71,6 +78,20 @@ class SettingsViewController: UIViewController {
         
     }
 
+    @IBAction func followNotificationsSwitchWasTapped(sender: AnyObject) {
+        if followNotificationsSwitch.on == true {
+            defaults.setBool(true, forKey: "followNotificationsOn")
+            let installation = PFInstallation.currentInstallation()
+            installation["followNotificationsOn"] = true
+            installation.saveInBackground()
+        } else {
+            defaults.setBool(false, forKey: "followNotificationsOn")
+            let installation = PFInstallation.currentInstallation()
+            installation["followNotificationsOn"] = false
+            installation.saveInBackground()
+        }
+
+    }
     @IBAction func commentNotificationsSwitchWasTapped(sender: AnyObject) {
         if commentNotificationsSwitch.on == true {
             defaults.setBool(true, forKey: "commentNotificationsOn")

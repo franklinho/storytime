@@ -568,7 +568,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
-        if scrollView.contentOffset.y == 0 {
+        if scrollView.contentOffset.y  <= 0 {
             self.searchBarTopConstraint.constant = 0
         } else {
             if (self.lastContentOffset > scrollView.contentOffset.y) {
