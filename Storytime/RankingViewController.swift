@@ -10,6 +10,7 @@ import UIKit
 
 class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, RankingTableViewCellDelegate, UISearchBarDelegate, CreateProfileViewControllerDelegate, RankingSwitchDelegate {
 
+    @IBOutlet weak var tableViewTopConstraint: NSLayoutConstraint!
     var lastContentOffset : CGFloat = 0
 
     @IBOutlet weak var searchBarTopConstraint: NSLayoutConstraint!
@@ -566,15 +567,31 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         
     }
     
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        if scrollView.contentOffset.y  <= 0 {
+            self.searchBarTopConstraint.constant = 0
+            self.tableViewTopConstraint.constant = 0
+            UIView.animateWithDuration(0.2, animations: {
+                self.view.layoutIfNeeded()
+                }, completion: {
+                    (value: Bool) in
+                    
+            })
+        }
+    }
+    
     func scrollViewDidScroll(scrollView: UIScrollView) {
         
         if scrollView.contentOffset.y  <= 0 {
             self.searchBarTopConstraint.constant = 0
+            self.tableViewTopConstraint.constant = 0
         } else {
             if (self.lastContentOffset > scrollView.contentOffset.y) {
                 self.searchBarTopConstraint.constant = 0
+                self.tableViewTopConstraint.constant = 0
             } else if (self.lastContentOffset < scrollView.contentOffset.y) {
                 self.searchBarTopConstraint.constant = -44
+                self.tableViewTopConstraint.constant = 0
             }
         }
 

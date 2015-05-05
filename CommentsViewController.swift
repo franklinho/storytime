@@ -10,6 +10,8 @@ import UIKit
 
 class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, CreateProfileViewControllerDelegate {
 
+    var lastContentOffset : CGFloat = 0
+    @IBOutlet weak var titleViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var expandedCameraButtonXAlignmentConstraint: NSLayoutConstraint!
     @IBOutlet weak var expandedTextButtonYAlignmentConstraint: NSLayoutConstraint!
     @IBOutlet weak var expandedVideoButtonXAlignmentConstraint: NSLayoutConstraint!
@@ -1085,6 +1087,26 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
+        
+        if scrollView.contentOffset.y <= 0 {
+            self.titleViewTopConstraint.constant = 0
+        } else {
+            if (self.lastContentOffset > scrollView.contentOffset.y) {
+                self.titleViewTopConstraint.constant = 0
+            } else if (self.lastContentOffset < scrollView.contentOffset.y) {
+                self.titleViewTopConstraint.constant = -90
+            }
+        }
+        
+        UIView.animateWithDuration(0.2, animations: {
+            self.view.layoutIfNeeded()
+            }, completion: {
+                (value: Bool) in
+                
+        })
+        
+        //        self.lastContentOffset = scrollView.contentOffset.y
+        
         if (playingVideoCell != nil && playingVideoCell!.player != nil) {
             if playingVideoCell!.player!.rate == 1.0 {
                 playingVideoCell!.player?.pause()

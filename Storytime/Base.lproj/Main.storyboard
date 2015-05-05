@@ -116,7 +116,7 @@
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="64" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="359" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="3oL-19-xSC">
@@ -389,7 +389,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.16078431372549018" green="0.14509803921568626" blue="0.21568627450980393" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="3oL-19-xSC" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="0Rm-DA-cOQ"/>
@@ -435,6 +435,7 @@
                         <outlet property="rankingTableView" destination="3oL-19-xSC" id="cf9-aO-L8C"/>
                         <outlet property="searchBar" destination="9SO-98-fuM" id="V4S-ct-ZjU"/>
                         <outlet property="searchBarTopConstraint" destination="pIE-ax-KIj" id="5Qx-o6-aPg"/>
+                        <outlet property="tableViewTopConstraint" destination="wiT-c2-4DX" id="VJP-oK-3L3"/>
                         <outlet property="viewTapGestureRecognizer" destination="qiK-4Z-WsC" id="ifQ-Z5-DFT"/>
                     </connections>
                 </viewController>
@@ -3771,6 +3772,7 @@
                         <outlet property="textButton" destination="BFv-cj-2YZ" id="hM6-Eh-O2E"/>
                         <outlet property="textContainer" destination="GDW-dK-629" id="VcG-lj-BHh"/>
                         <outlet property="thumbnailImageView" destination="xak-bT-chr" id="Zwk-do-z7k"/>
+                        <outlet property="titleViewTopConstraint" destination="ij8-0O-luN" id="aot-3x-2ef"/>
                         <outlet property="userLabel" destination="Abf-rG-O01" id="hc5-Cg-0jk"/>
                         <outlet property="videoButton" destination="A9M-5R-Nqi" id="zYr-E3-Chl"/>
                         <outlet property="videoCommentLongPressGestureRecognizer" destination="UMw-LD-kWF" id="5IJ-Uc-3Hp"/>
@@ -4096,7 +4098,6 @@
                             </view>
                             <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2ok-nP-kNG" userLabel="contentView">
                                 <rect key="frame" x="225" y="0.0" width="600" height="600"/>
-                                <color key="backgroundColor" red="0.35294117650000001" green="0.7843137255" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="yvo-L3-mXS" appends="YES" id="3Cq-97-Sg1"/>

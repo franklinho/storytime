@@ -110,7 +110,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
         
         navigationBarAppearace.tintColor = UIColor.whiteColor()
         navigationBarAppearace.barTintColor = UIColor.purpleColor()
-        navigationBarAppearace.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.whiteColor()]
+        navigationBarAppearace.titleTextAttributes = [NSForegroundColorAttributeName:UIColor.whiteColor(),NSFontAttributeName: UIFont(name: "OpenSans-Bold", size: 18)!]
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         
 //        UINavigationBar.appearance().backgroundColor = UIColor(red: 49.0/255.0, green: 49.0/255.0, blue: 78.0/255.0, alpha: 1.0)

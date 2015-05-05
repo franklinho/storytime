@@ -15,7 +15,7 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="storyweave_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="fpR-kb-9X5">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AlternativeStoryweaveLogoTransparent.png" translatesAutoresizingMaskIntoConstraints="NO" id="fpR-kb-9X5">
                     <rect key="frame" x="140" y="120" width="200" height="200"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="200" id="EZ2-ge-APb"/>
@@ -42,6 +42,6 @@
         </view>
     </objects>
     <resources>
-        <image name="storyweave_logo.png" width="1024" height="1024"/>
+        <image name="AlternativeStoryweaveLogoTransparent.png" width="1024" height="1024"/>
     </resources>
 </document>
