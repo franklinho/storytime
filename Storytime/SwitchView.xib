@@ -4,9 +4,9 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="OpenSans-Bold.ttf">
-            <string>OpenSans-Bold</string>
-            <string>OpenSans-Bold</string>
+        <mutableArray key="OpenSans-Regular.ttf">
+            <string>OpenSans</string>
+            <string>OpenSans</string>
         </mutableArray>
     </customFonts>
     <objects>
@@ -24,15 +24,15 @@
                         <constraint firstAttribute="width" constant="96" id="mye-Ji-2hI"/>
                     </constraints>
                 </view>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hot" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QkA-0I-5c5">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Hot" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QkA-0I-5c5">
                     <rect key="frame" x="36" y="8" width="28" height="21"/>
-                    <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
+                    <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Following" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZC0-06-eeE">
-                    <rect key="frame" x="114" y="8" width="72" height="21"/>
-                    <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
+                    <rect key="frame" x="117" y="8" width="67" height="21"/>
+                    <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
@@ -43,7 +43,7 @@
                 <constraint firstItem="UpD-wA-nGx" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="2" id="4Il-ji-iAu"/>
                 <constraint firstAttribute="centerY" secondItem="ZC0-06-eeE" secondAttribute="centerY" id="9Wj-Tf-LFe"/>
                 <constraint firstItem="QkA-0I-5c5" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="36" id="E5u-Cg-gXj"/>
-                <constraint firstAttribute="trailing" secondItem="ZC0-06-eeE" secondAttribute="trailing" constant="14" id="JqK-hN-QiX"/>
+                <constraint firstAttribute="trailing" secondItem="ZC0-06-eeE" secondAttribute="trailing" constant="16" id="JqK-hN-QiX"/>
                 <constraint firstAttribute="centerY" secondItem="UpD-wA-nGx" secondAttribute="centerY" id="ach-qf-dPf"/>
                 <constraint firstAttribute="centerY" secondItem="QkA-0I-5c5" secondAttribute="centerY" id="uaM-G5-itg"/>
             </constraints>
