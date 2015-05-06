@@ -10,6 +10,9 @@ import UIKit
 
 class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, CreateProfileViewControllerDelegate {
 
+    
+    @IBOutlet var newCommentButtonLongPressGestureRecognizer: UILongPressGestureRecognizer!
+    var buttonActivityIndicator : UIActivityIndicatorView = UIActivityIndicatorView()
     var lastContentOffset : CGFloat = 0
     @IBOutlet weak var titleViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var expandedCameraButtonXAlignmentConstraint: NSLayoutConstraint!
@@ -96,6 +99,9 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         newCommentButton.layer.cornerRadius = 40
         newCommentButton.clipsToBounds = true
         
+        newCommentButton.addSubview(buttonActivityIndicator)
+        buttonActivityIndicator.frame = newCommentButton.bounds
+        buttonActivityIndicator.hidden = true
         
         hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
         if story != nil {
@@ -861,10 +867,16 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func savePhotoComment() {
         
+        self.buttonActivityIndicator.startAnimating()
+        self.newCommentButton.setImage(UIImage(), forState: UIControlState.Disabled)
+        self.buttonActivityIndicator.hidden = false
+        self.newCommentButton.enabled = false
+        self.newCommentButtonLongPressGestureRecognizer.enabled = false
         
-        self.progressViewTrailingConstraint.constant = self.screenSize.width
+        
+//        self.progressViewTrailingConstraint.constant = self.screenSize.width
         self.view.layoutIfNeeded()
-        self.progressView.hidden = false
+//        self.progressView.hidden = false
         
         var squareImage = squareImageWithImage(capturedImage!)
         var squareImageData = UIImageJPEGRepresentation(squareImage, 1.0)
@@ -876,17 +888,17 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 println("Image successfully uploaded")
             } else {
                 println("There was an error saving the image file: \(error!.description)")
-                self.progressView.hidden = true
+//                self.progressView.hidden = true
             }
             
             }, progressBlock: {
                 (percentDone: CInt) -> Void in
                 if percentDone == 100 {
-                    self.progressView.hidden = true
+//                    self.progressView.hidden = true
                 } else if percentDone != 0 {
                     self.view.layoutIfNeeded()
                     
-                    self.progressViewTrailingConstraint.constant = CGFloat(self.screenSize.width)*CGFloat(percentDone/100) as CGFloat
+//                    self.progressViewTrailingConstraint.constant = CGFloat(self.screenSize.width)*CGFloat(percentDone/100) as CGFloat
                     
                     
                     UIView.animateWithDuration(0.3, animations: {
@@ -950,11 +962,22 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 })
                 
                 self.vision.stopPreview()
-                
+                self.buttonActivityIndicator.hidden = true
+                self.newCommentButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                self.newCommentButton.enabled = true
+                self.newCommentButtonLongPressGestureRecognizer.enabled = true
+                self.buttonActivityIndicator.stopAnimating()
+
 
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the event: \(error!.description)")
+                self.buttonActivityIndicator.hidden = true
+                self.newCommentButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                self.newCommentButton.enabled = true
+                self.newCommentButtonLongPressGestureRecognizer.enabled = true
+                self.buttonActivityIndicator.stopAnimating()
+
             }
         })
         if self.story!["commentsCount"] != nil {
@@ -1238,10 +1261,21 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 })
                 
                 self.vision.stopPreview()
-                
+                self.buttonActivityIndicator.hidden = true
+                self.newCommentButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                self.newCommentButton.enabled = true
+                self.newCommentButtonLongPressGestureRecognizer.enabled = true
+                self.buttonActivityIndicator.stopAnimating()
+
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the comment: \(error!.description)")
+                self.buttonActivityIndicator.hidden = true
+                self.newCommentButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                self.newCommentButton.enabled = true
+                self.newCommentButtonLongPressGestureRecognizer.enabled = true
+                self.buttonActivityIndicator.stopAnimating()
+
             }
         })
         
@@ -1256,9 +1290,14 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func saveVideoComment() {
-        self.progressViewTrailingConstraint.constant = self.screenSize.width
+        self.buttonActivityIndicator.startAnimating()
+        self.newCommentButton.setImage(UIImage(), forState: UIControlState.Disabled)
+        self.buttonActivityIndicator.hidden = false
+        self.newCommentButton.enabled = false
+        self.newCommentButtonLongPressGestureRecognizer.enabled = false
+//        self.progressViewTrailingConstraint.constant = self.screenSize.width
         self.view.layoutIfNeeded()
-        self.progressView.hidden = false
+//        self.progressView.hidden = false
         var videoFile = PFFile(name: "video.mp4", contentsAtPath: "\(self.videoPath!)")
         
         videoFile.saveInBackgroundWithBlock({
@@ -1267,17 +1306,17 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 println("Video successfully uploaded")
             } else {
                 println("There was an error saving the video file: \(error!.description)")
-                self.progressView.hidden = true
+//                self.progressView.hidden = true
             }
             
             }, progressBlock: {
                 (percentDone: CInt) -> Void in
                 if percentDone == 100 {
-                    self.progressView.hidden = true
+//                    self.progressView.hidden = true
                 } else if percentDone != 0 {
                     self.view.layoutIfNeeded()
                     
-                    self.progressViewTrailingConstraint.constant = CGFloat(self.screenSize.width)*CGFloat(percentDone/100) as CGFloat
+//                    self.progressViewTrailingConstraint.constant = CGFloat(self.screenSize.width)*CGFloat(percentDone/100) as CGFloat
                     
                     
                     UIView.animateWithDuration(0.3, animations: {
@@ -1298,6 +1337,11 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
 
     
     @IBAction func textSubmitButtonWasTapped(sender: AnyObject) {
+        self.buttonActivityIndicator.startAnimating()
+        self.newCommentButton.setImage(UIImage(), forState: UIControlState.Disabled)
+        self.buttonActivityIndicator.hidden = false
+        self.newCommentButton.enabled = false
+        self.newCommentButtonLongPressGestureRecognizer.enabled = false
         self.view.endEditing(true)
         
         self.minimizeCreateView()
@@ -1365,11 +1409,21 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                     self.story!.saveInBackground()
                 }
                 self.createTextView.text = ""
-                
+                self.buttonActivityIndicator.hidden = true
+                self.newCommentButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                self.newCommentButton.enabled = true
+                self.newCommentButtonLongPressGestureRecognizer.enabled = true
+                self.buttonActivityIndicator.stopAnimating()
+
                 
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the comment: \(error!.description)")
+                self.buttonActivityIndicator.hidden = true
+                self.newCommentButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                self.newCommentButton.enabled = true
+                self.newCommentButtonLongPressGestureRecognizer.enabled = true
+                self.buttonActivityIndicator.stopAnimating()
             }
         })
         

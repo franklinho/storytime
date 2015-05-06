@@ -14,7 +14,7 @@ import MediaPlayer
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate, CreateProfileViewControllerDelegate {
     @IBOutlet weak var titleViewTopConstraint: NSLayoutConstraint!
     @IBOutlet var createButtonLongPressGestureRecognizer: UILongPressGestureRecognizer!
-    
+    var buttonActivityIndicator : UIActivityIndicatorView = UIActivityIndicatorView()
     var lastContentOffset : CGFloat = 0
     @IBOutlet weak var expandedCameraButton: UIButton!
     @IBOutlet weak var expandedVideoButton: UIButton!
@@ -30,8 +30,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var createButton: UIButton!
     var hamburgerVC : HamburgerViewController?
     let installation = PFInstallation.currentInstallation()
-    @IBOutlet weak var addAuthorButton: UIButton!
-    @IBOutlet weak var addUserButtonBorderView: UIView!
     @IBOutlet weak var noEventsLabel: UILabel!
     @IBOutlet weak var profileImageButton: UIButton!
     @IBOutlet weak var commentsButton: UIButton!
@@ -117,18 +115,27 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         createButton.layer.cornerRadius = 40
         createButton.clipsToBounds = true
-       
+        
+        
+        createButton.addSubview(buttonActivityIndicator)
+        buttonActivityIndicator.frame = createButton.bounds
+        buttonActivityIndicator.hidden = true
+
+        commentsButton.layer.cornerRadius = 45
+        commentsButton.layer.borderWidth = 6
+        commentsButton.layer.borderColor = UIColor.whiteColor().CGColor
+        commentsButton.clipsToBounds = true
+
 
         
         hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
-        addUserButtonBorderView.layer.borderWidth = 1
-        addUserButtonBorderView.layer.borderColor = UIColor.whiteColor().CGColor
         
         settingsActionSheet.delegate = self
+        settingsActionSheet.addButtonWithTitle("Add Users")
         settingsActionSheet.addButtonWithTitle("Delete Story")
         settingsActionSheet.addButtonWithTitle("Cancel")
-        settingsActionSheet.destructiveButtonIndex = 0
-        settingsActionSheet.cancelButtonIndex = 1
+        settingsActionSheet.destructiveButtonIndex = 1
+        settingsActionSheet.cancelButtonIndex = 2
         settingsActionSheet.actionSheetStyle = UIActionSheetStyle.Automatic
         
         if newStory == true {
@@ -231,8 +238,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         self.createButton!.hidden = false
                         self.expandedButtonView.hidden = false
                         self.settingsButton!.enabled = true
-                        self.addAuthorButton.hidden = false
-                        self.addUserButtonBorderView.hidden = false
                     } else if self.story!["authors"] != nil {
                         var matchCount = 0
                         for author in self.story!["authors"] as! [PFObject] {
@@ -244,8 +249,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             self.createButton!.hidden = false
                             self.expandedButtonView.hidden = false
                             self.settingsButton!.enabled = true
-                            self.addAuthorButton.hidden = false
-                            self.addUserButtonBorderView.hidden = false
                         } else {
                             self.createButton!.hidden = true
                             self.expandedButtonView.hidden = true
@@ -308,6 +311,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         previewLayer.frame = cameraContainer.bounds
         previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         cameraContainer.layer.insertSublayer(previewLayer, atIndex: 0)
+        
         
 //        if captureDevice != nil {
 //            
@@ -372,13 +376,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         vision.delegate = self
 
-
+        
         vision.cameraOrientation = PBJCameraOrientation.Portrait
         vision.cameraMode = PBJCameraMode.Photo
         vision.focusMode = PBJFocusMode.ContinuousAutoFocus
         vision.outputFormat = PBJOutputFormat.Square
         vision.maximumCaptureDuration = CMTimeMakeWithSeconds(10, 600)
         vision.flashMode = PBJFlashMode.Auto
+        vision.startPreview()
     }
     
 //    func beginSession() {
@@ -632,8 +637,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.createButton!.hidden = false
                     self.expandedButtonView.hidden = false
                     self.settingsButton!.enabled = true
-                    self.addAuthorButton.hidden = false
-                    self.addUserButtonBorderView.hidden = false
+
                 } else {
                     self.createButton!.hidden = true
                     self.expandedButtonView.hidden = true
@@ -687,8 +691,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         self.createButton!.hidden = false
                         self.expandedButtonView.hidden = false
                         self.settingsButton!.enabled = true
-                        self.addAuthorButton.hidden = false
-                        self.addUserButtonBorderView.hidden = false
                     } else if self.story!["authors"] != nil {
                         var matchCount = 0
                         for author in self.story!["authors"] as! [PFObject] {
@@ -700,8 +702,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             self.createButton!.hidden = false
                             self.expandedButtonView.hidden = false
                             self.settingsButton!.enabled = true
-                            self.addAuthorButton.hidden = false
-                            self.addUserButtonBorderView.hidden = false
                         } else {
                             self.createButton!.hidden = true
                             self.expandedButtonView.hidden = true
@@ -763,8 +763,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.createButton!.hidden = false
         self.expandedButtonView.hidden = false
         self.settingsButton!.enabled = true
-        self.addAuthorButton.hidden = false
-        self.addUserButtonBorderView.hidden = false
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "text"
         event["storyObject"] = self.story!
@@ -823,11 +821,20 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.story!.saveInBackground()
                 }
                 self.createTextView.text = ""
-                
+                self.buttonActivityIndicator.hidden = true
+                self.createButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                self.createButton.enabled = true
+                self.createButtonLongPressGestureRecognizer.enabled = true
+                self.buttonActivityIndicator.stopAnimating()
                 
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the event: \(error!.description)")
+                self.buttonActivityIndicator.hidden = true
+                self.createButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                self.createButton.enabled = true
+                self.createButtonLongPressGestureRecognizer.enabled = true
+                self.buttonActivityIndicator.stopAnimating()
             }
         })
         self.noEventsLabel.hidden = true
@@ -835,6 +842,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     @IBAction func textSubmitButtonWasTapped(sender: AnyObject) {
+        self.buttonActivityIndicator.startAnimating()
+        self.createButton.setImage(UIImage(), forState: UIControlState.Disabled)
+        self.buttonActivityIndicator.hidden = false
+        self.createButton.enabled = false
+        self.createButtonLongPressGestureRecognizer.enabled = false
         self.view.endEditing(true)
         
         self.minimizeCreateView()
@@ -889,6 +901,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 } else {
                     // There was a problem, check error.description
                     println("There was an error saving the story: \(error!.description)")
+                    self.buttonActivityIndicator.hidden = true
+                    self.createButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                    self.createButton.enabled = true
+                    self.createButtonLongPressGestureRecognizer.enabled = true
+                    self.buttonActivityIndicator.stopAnimating()
                 }
             })
         
@@ -1202,8 +1219,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.createButton!.hidden = false
         self.expandedButtonView.hidden = false
         self.settingsButton!.enabled = true
-        self.addAuthorButton.hidden = false
-        self.addUserButtonBorderView.hidden = false
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "video"
         event["storyObject"] = self.story!
@@ -1271,10 +1286,20 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         
                     }
                 }
+                self.buttonActivityIndicator.hidden = true
+                self.createButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                self.createButton.enabled = true
+                self.createButtonLongPressGestureRecognizer.enabled = true
+                self.buttonActivityIndicator.stopAnimating()
                 
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the event: \(error!.description)")
+                self.buttonActivityIndicator.hidden = true
+                self.createButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                self.createButton.enabled = true
+                self.createButtonLongPressGestureRecognizer.enabled = true
+                self.buttonActivityIndicator.stopAnimating()
             }
         })
         self.noEventsLabel.hidden = true
@@ -1282,9 +1307,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func saveVideoEvent() {
-        self.progressViewTrailingConstraint.constant = self.screenSize.width
+        self.buttonActivityIndicator.startAnimating()
+        self.createButton.setImage(UIImage(), forState: UIControlState.Disabled)
+        self.buttonActivityIndicator.hidden = false
+        self.createButton.enabled = false
+        self.createButtonLongPressGestureRecognizer.enabled = false
+//        self.progressViewTrailingConstraint.constant = self.screenSize.width
         self.view.layoutIfNeeded()
-        self.progressView.hidden = false
+//        self.progressView.hidden = false
         var videoFile = PFFile(name: "video.mp4", contentsAtPath: "\(self.videoPath!)")
         
         videoFile.saveInBackgroundWithBlock({
@@ -1293,17 +1323,17 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     println("Video successfully uploaded")
                 } else {
                     println("There was an error saving the video file: \(error!.description)")
-                    self.progressView.hidden = true
+//                    self.progressView.hidden = true
                 }
         
             }, progressBlock: {
                 (percentDone: CInt) -> Void in
                 if percentDone == 100 {
-                    self.progressView.hidden = true
+//                    self.progressView.hidden = true
                 } else if percentDone != 0 {
                     self.view.layoutIfNeeded()
                     
-                    self.progressViewTrailingConstraint.constant = CGFloat(self.screenSize.width)*CGFloat(percentDone/100) as CGFloat
+//                    self.progressViewTrailingConstraint.constant = CGFloat(self.screenSize.width)*CGFloat(percentDone/100) as CGFloat
                     
                     
                     UIView.animateWithDuration(0.3, animations: {
@@ -1356,6 +1386,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 } else {
                     // There was a problem, check error.description
                     println("There was an error saving the story: \(error!.description)")
+                    self.buttonActivityIndicator.hidden = true
+                    self.createButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                    self.createButton.enabled = true
+                    self.createButtonLongPressGestureRecognizer.enabled = true
+                    self.buttonActivityIndicator.stopAnimating()
                 }
             })
             
@@ -1386,8 +1421,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.createButton!.hidden = false
         self.expandedButtonView.hidden = false
         self.settingsButton!.enabled = true
-        self.addAuthorButton.hidden = false
-        self.addUserButtonBorderView.hidden = false
         var event: PFObject = PFObject(className: "Event")
         event["type"] = "photo"
         event["storyObject"] = self.story!
@@ -1444,9 +1477,19 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.story!["thumbnailImage"] = imageFile
                     self.story!.saveInBackground()
                 }
+                self.buttonActivityIndicator.hidden = true
+                self.createButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                self.createButton.enabled = true
+                self.createButtonLongPressGestureRecognizer.enabled = true
+                self.buttonActivityIndicator.stopAnimating()
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the event: \(error!.description)")
+                self.buttonActivityIndicator.hidden = true
+                self.createButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                self.createButton.enabled = true
+                self.createButtonLongPressGestureRecognizer.enabled = true
+                self.buttonActivityIndicator.stopAnimating()
             }
         })
         self.newStory = false
@@ -1455,11 +1498,16 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     func savePhotoEvent() {
+        self.buttonActivityIndicator.startAnimating()
+        self.createButton.setImage(UIImage(), forState: UIControlState.Disabled)
+        self.buttonActivityIndicator.hidden = false
+        self.createButton.enabled = false
+        self.createButtonLongPressGestureRecognizer.enabled = false
 
         
-        self.progressViewTrailingConstraint.constant = self.screenSize.width
+//        self.progressViewTrailingConstraint.constant = self.screenSize.width
         self.view.layoutIfNeeded()
-        self.progressView.hidden = false
+//        self.progressView.hidden = false
         
         var squareImage = squareImageWithImage(capturedImage!)
         var squareImageData = UIImageJPEGRepresentation(squareImage, 1.0)
@@ -1472,17 +1520,17 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
             } else {
                 println("There was an error saving the image file: \(error!.description)")
-                self.progressView.hidden = true
+//                self.progressView.hidden = true
             }
             
             }, progressBlock: {
                 (percentDone: CInt) -> Void in
                 if percentDone == 100 {
-                    self.progressView.hidden = true
+//                    self.progressView.hidden = true
                 } else if percentDone != 0 {
                     self.view.layoutIfNeeded()
                     
-                    self.progressViewTrailingConstraint.constant = CGFloat(self.screenSize.width)*CGFloat(percentDone/100) as CGFloat
+//                    self.progressViewTrailingConstraint.constant = CGFloat(self.screenSize.width)*CGFloat(percentDone/100) as CGFloat
                     
                     
                     UIView.animateWithDuration(0.3, animations: {
@@ -1536,6 +1584,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 } else {
                     // There was a problem, check error.description
                     println("There was an error saving the story: \(error!.description)")
+                    self.buttonActivityIndicator.hidden = true
+                    self.createButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                    self.createButton.enabled = true
+                    self.createButtonLongPressGestureRecognizer.enabled = true
+                    self.buttonActivityIndicator.stopAnimating()
                 }
             })
             
@@ -2124,11 +2177,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             if self.story != nil {
                 commentsVC.story = self.story!
             }
-        } else if (segue.identifier == "AddAuthorSegue"){
-            var addAuthorVC : AddAuthorViewController = segue.destinationViewController as! AddAuthorViewController
-            if self.story != nil {
-                addAuthorVC.story = self.story!
-            }
         }
     }
     
@@ -2178,6 +2226,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
         if (buttonIndex == 0) {
+            var addAuthorVC : AddAuthorViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("AddAuthorViewController") as! AddAuthorViewController
+            if self.story != nil {
+                addAuthorVC.story = self.story!
+            }
+            self.presentViewController(addAuthorVC, animated: true, completion: nil)
+
+        } else if (buttonIndex == 1) {
             println("Delete story button tapped")
             
             var deleteAlertView = UIAlertView(title: "Delete Story", message: "Are you sure you want to delete this story?", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Delete")
