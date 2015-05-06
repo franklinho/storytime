@@ -1612,6 +1612,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
         
+        
         UIView.animateWithDuration(0.2, animations: {
             self.view.layoutIfNeeded()
             }, completion: {
@@ -2242,25 +2243,34 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.expandedButtonView.layer.cornerRadius = 220
         anim1.toValue = 220
         anim1.duration = 0.3
-        
-        
         self.expandedButtonViewHeightConstraint.constant = 440
         self.expandedButtonViewWidthConstraint.constant = 440
+        self.expandedButtonView.layer.addAnimation(anim1, forKey: "cornerRadius")
+        
+        
+        
         self.expandedCameraXAlignmentConstraint.constant = 150
         self.expandedTextYAlignmentConstraint.constant = 150
         self.expandedVideoXAlignmentConstraint.constant = 110
         self.expandedVideoYAlignmentConstraint.constant = 110
-        
-        self.expandedButtonView.layer.addAnimation(anim1, forKey: "cornerRadius")
         UIView.animateWithDuration(0.3, animations: {
             
             self.view.layoutIfNeeded()
-//            self.expandedButtonView.transform = CGAffineTransformMakeScale(3,3)
+            //            self.expandedButtonView.transform = CGAffineTransformMakeScale(3,3)
             }, completion: {
                 (value: Bool) in
                 
                 
         })
+        
+//        
+//        UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: nil, animations: {
+//            self.view.layoutIfNeeded()
+//            }, completion: {
+//                (value: Bool) in
+//                
+//        })
+        
     }
     
     func minimizeButtonView() {

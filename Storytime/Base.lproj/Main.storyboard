@@ -2476,7 +2476,7 @@
                         <action selector="userLabelWasTapped:" destination="nXj-xd-FNA" id="6Sa-Dp-sCZ"/>
                     </connections>
                 </tapGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="GcC-sz-HAS">
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.20000000000000001" id="GcC-sz-HAS">
                     <connections>
                         <action selector="createButtonWasHeld:" destination="nXj-xd-FNA" id="NgP-00-BYG"/>
                     </connections>
@@ -3790,7 +3790,7 @@
                         <action selector="commentsTableViewTapGestureRecognizerWasTapped:" destination="22L-dv-H0B" id="8Gy-kT-4KA"/>
                     </connections>
                 </tapGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="Lmu-7b-Iyx">
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.20000000000000001" id="Lmu-7b-Iyx">
                     <connections>
                         <action selector="createButtonWasHeld:" destination="22L-dv-H0B" id="Qpa-M7-LJc"/>
                     </connections>
