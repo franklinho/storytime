@@ -89,6 +89,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
             installation["commentNotificationsOn"] = true
         }
         
+        if defaults.objectForKey("followNotificationsOn") == nil {
+            defaults.setBool(true, forKey: "followNotificationsOn")
+            installation["followNotificationsOn"] = true
+        }
+        
         if installation["storyNotificationsOn"] == nil {
             installation["storyNotificationsOn"] = true
         }

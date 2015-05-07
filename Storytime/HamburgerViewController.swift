@@ -124,11 +124,20 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
         } else if sender == profileButton{
             if PFUser.currentUser() != nil {
                 if PFUser.currentUser()!["profileName"] != nil {
-                    self.activeViewController = viewControllers[1]
                     var currentVC = self.activeViewController as! UINavigationController
                     currentVC.popToRootViewControllerAnimated(true)
-                    var profileVC = currentVC.visibleViewController as! ProfileViewController
+                    
+                    var navVC = viewControllers[1] as! UINavigationController
+                    var profileVC = navVC.visibleViewController as! ProfileViewController
+                    profileVC.menu = true
+                    profileVC.user = PFUser.currentUser()
+                    
+                    self.activeViewController = navVC
+                    
+                    
+                    
                     profileVC.refreshStories()
+                    
                 } else {
                     presentCreateProfileViewController()
                 }
@@ -209,11 +218,13 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
         PFUser.logOut()
         UIAlertView(title: "Logged Out", message: "You have successfully logged out.", delegate: nil, cancelButtonTitle: "OK").show()
         self.refreshLoginLabels()
-
+        self.activeViewController = viewControllers.first
+        
 //        self.profileButton.enabled = false
         (self.activeViewController as! UINavigationController).popToRootViewControllerAnimated(true)
         
         (self.activeViewController as! UINavigationController).visibleViewController.viewDidLoad()
+//        self.viewControllers[0] = sb.instantiateViewControllerWithIdentifier("ProfileNavigationViewController") as! UINavigationController
         
         hideHamburgerMenu()
     }

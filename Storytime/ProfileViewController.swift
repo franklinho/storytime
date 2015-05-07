@@ -20,6 +20,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     var currentOffset = 0
     var maxReached = false
     var requestingObjects = false
+    var menu = false
+    var menuButton : UIBarButtonItem?
     
     @IBOutlet weak var noStoriesLabel: UILabel!
     @IBOutlet weak var storyTableView: UITableView!
@@ -34,6 +36,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewDidLoad()
         hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
 
+        if menu == true {
+            self.menuButton = UIBarButtonItem(image: UIImage(named:"menuIcon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("didTapMenuButton"))
+            navigationItem.leftBarButtonItem = menuButton
+        }
+        
+        
 //        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as! UITabBarItem
         followButton.layer.cornerRadius = 22
         followButton.clipsToBounds = true
@@ -43,53 +51,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         profileImageView.layer.borderWidth = 4
         profileImageView.clipsToBounds = true
         
-        if user == nil {
-            if PFUser.currentUser() != nil {
-                user = PFUser.currentUser()
-                self.followButton.hidden = true
-                self.userNameTopConstraint.constant = 47
-            } else {
-                presentLoginViewController()
-            }
-        }
         
-        if user != nil {
-            usernameLabel.text = user!["profileName"] as! String
-            if user!["profileImage"] != nil {
-                var profileImageFile = user!["profileImage"] as! PFFile
-                profileImageFile.getDataInBackgroundWithBlock {
-                    (imageData, error) -> Void in
-                    if error == nil {
-                        let image = UIImage(data:imageData!)
-                        self.profileImageView.image = image
-                    }
-                }
-            }
-            
-            if PFUser.currentUser() != nil {
-                if PFUser.currentUser()!["following"] != nil {
-                    
-                    var followCount = 0
-                    if PFUser.currentUser()!["following"] != nil {
-                        var followingArray = PFUser.currentUser()!["following"] as! Array<PFUser>
-                        for followingUser : PFUser in followingArray {
-                            if followingUser.objectId == self.user!.objectId {
-                                followCount += 1
-                            }
-                        }
-                    }
-                    
-                    if followCount > 0 {
-                        self.followButton.setTitle("  Unfollow", forState: UIControlState.Normal)
-                        self.followButton.setImage(nil, forState: UIControlState.Normal)
-                        self.followButton.backgroundColor = UIColor.darkGrayColor()
-                        self.following = true
-                    }
-                    
-                }
-            }
-
-        }
         
         
 
@@ -507,6 +469,10 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         storyVC.displayStoryComments()
     }
 
+    func didTapMenuButton(){
+        self.menuButtonWasTapped(self)
+    }
+    
     @IBAction func menuButtonWasTapped(sender: AnyObject) {
         if hamburgerVC!.hamburgerShowing == true {
             hamburgerVC!.hideHamburgerMenu()
@@ -573,4 +539,55 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         })
         
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        if user == nil {
+            if PFUser.currentUser() != nil {
+                user = PFUser.currentUser()
+                self.followButton.hidden = true
+                self.userNameTopConstraint.constant = 47
+            } else {
+                presentLoginViewController()
+            }
+        }
+        
+        if user != nil {
+            usernameLabel.text = user!["profileName"] as! String
+            if user!["profileImage"] != nil {
+                var profileImageFile = user!["profileImage"] as! PFFile
+                profileImageFile.getDataInBackgroundWithBlock {
+                    (imageData, error) -> Void in
+                    if error == nil {
+                        let image = UIImage(data:imageData!)
+                        self.profileImageView.image = image
+                    }
+                }
+            }
+            
+            if PFUser.currentUser() != nil {
+                if PFUser.currentUser()!["following"] != nil {
+                    
+                    var followCount = 0
+                    if PFUser.currentUser()!["following"] != nil {
+                        var followingArray = PFUser.currentUser()!["following"] as! Array<PFUser>
+                        for followingUser : PFUser in followingArray {
+                            if followingUser.objectId == self.user!.objectId {
+                                followCount += 1
+                            }
+                        }
+                    }
+                    
+                    if followCount > 0 {
+                        self.followButton.setTitle("  Unfollow", forState: UIControlState.Normal)
+                        self.followButton.setImage(nil, forState: UIControlState.Normal)
+                        self.followButton.backgroundColor = UIColor.darkGrayColor()
+                        self.following = true
+                    }
+                    
+                }
+            }
+            
+        }
+    }
+    
 }

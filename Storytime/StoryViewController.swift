@@ -12,11 +12,15 @@ import MediaPlayer
 
 
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate, CreateProfileViewControllerDelegate {
+    @IBOutlet weak var morePostersViewLabel: UILabel!
+    @IBOutlet weak var secondProfileImageView: UIImageView!
     @IBOutlet weak var titleViewTopConstraint: NSLayoutConstraint!
     @IBOutlet var createButtonLongPressGestureRecognizer: UILongPressGestureRecognizer!
+    @IBOutlet weak var morePostersView: UIView!
     var buttonActivityIndicator : UIActivityIndicatorView = UIActivityIndicatorView()
     var lastContentOffset : CGFloat = 0
     @IBOutlet weak var expandedCameraButton: UIButton!
+    @IBOutlet weak var thirdProfileImageView: UIImageView!
     @IBOutlet weak var expandedVideoButton: UIButton!
     @IBOutlet weak var expandedTextButton: UIButton!
     @IBOutlet weak var expandedVideoYAlignmentConstraint: NSLayoutConstraint!
@@ -36,6 +40,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet var userTapGestureRecognizer: UITapGestureRecognizer!
     @IBOutlet weak var createTitleViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var cameraFlashButton: UIButton!
+    
+    var firstUser : PFUser?
+    var secondUser : PFUser?
+    var thirdUser : PFUser?
 //    var profileTabBarItem : UITabBarItem?
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var newStory : Bool = false
@@ -83,7 +91,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var userLabel: UILabel!
     
     @IBOutlet weak var cameraSendButton: UIButton!
-    @IBOutlet weak var storyTitleLabel: UILabel!
+//    @IBOutlet weak var storyTitleLabel: UILabel!
          @IBOutlet weak var titleView: UIView!
     @IBOutlet weak var createTextView: UITextView!
     @IBOutlet weak var createView: UIView!
@@ -109,6 +117,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var progressViewTrailingConstraint: NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        morePostersView.layer.cornerRadius = 31
+        morePostersView.layer.borderColor = UIColor.whiteColor().CGColor
+        morePostersView.layer.borderWidth = 2
+        morePostersView.clipsToBounds = true
+        morePostersView.hidden = true
         
         expandedButtonView.layer.cornerRadius = 40
         expandedButtonView.clipsToBounds = true
@@ -160,6 +174,18 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         userProfileImage.layer.borderWidth = 2
         userProfileImage.clipsToBounds = true
         
+        secondProfileImageView.layer.cornerRadius = 31
+        secondProfileImageView.layer.borderColor = UIColor.whiteColor().CGColor
+        secondProfileImageView.layer.borderWidth = 2
+        secondProfileImageView.clipsToBounds = true
+        
+        thirdProfileImageView.layer.cornerRadius = 31
+        thirdProfileImageView.layer.borderColor = UIColor.whiteColor().CGColor
+        thirdProfileImageView.layer.borderWidth = 2
+        thirdProfileImageView.clipsToBounds = true
+        
+        
+        
         updateVotingLabels()
         
         
@@ -200,7 +226,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.navigationItem.rightBarButtonItem = settingsButton!
         
         if newStory == false {
-            self.storyTitleLabel.text = self.story!["title"] as? String
+//            self.storyTitleLabel.text = self.story!["title"] as? String
             if story!["points"] != nil {
                 var points = story!["points"] as? Int
                 self.storyPointsLabel.text = "\(points!)"
@@ -209,16 +235,123 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             var storyUser : PFUser = self.story!["user"] as! PFUser
             storyUser.fetchIfNeededInBackgroundWithBlock {
                 (user, error) -> Void in
-                var profileName = storyUser["profileName"]
-                if storyUser["profileImage"] != nil {
-                    var profileImageFile = storyUser["profileImage"] as! PFFile
-                    profileImageFile.getDataInBackgroundWithBlock {
-                        (imageData, error) -> Void in
-                        if error == nil {
-                            let image = UIImage(data:imageData!)
-                            self.userProfileImage.image = image
+                
+                
+                if self.story!["posters"] == nil {
+                    var profileName = storyUser["profileName"]
+                    self.firstUser = storyUser
+                    self.userLabel.text = profileName as? String
+                    self.userLabel.hidden = false
+                    if self.firstUser!["profileImage"] != nil {
+                        var profileImageFile = self.firstUser!["profileImage"] as! PFFile
+                        profileImageFile.getDataInBackgroundWithBlock {
+                            (imageData, error) -> Void in
+                            if error == nil {
+                                let image = UIImage(data:imageData!)
+                                self.userProfileImage.image = image
+                            }
                         }
                     }
+                } else {
+                    var posters = self.story!["posters"] as! NSArray
+                    if posters.count <= 1{
+                        var profileName = storyUser["profileName"]
+                        self.firstUser = storyUser
+                        self.userLabel.text = profileName as? String
+                        self.userLabel.hidden = false
+                        if self.firstUser!["profileImage"] != nil {
+                            var profileImageFile = self.firstUser!["profileImage"] as! PFFile
+                            profileImageFile.getDataInBackgroundWithBlock {
+                                (imageData, error) -> Void in
+                                if error == nil {
+                                    let image = UIImage(data:imageData!)
+                                    self.userProfileImage.image = image
+                                }
+                            }
+                        }
+                    } else if posters.count == 2 || posters.count == 3 {
+                        self.firstUser = posters.firstObject as! PFUser
+                        self.firstUser!.fetchIfNeededInBackgroundWithBlock {
+                            (user, error) -> Void in
+                            if self.firstUser!["profileImage"] != nil {
+                                var profileImageFile = self.firstUser!["profileImage"] as! PFFile
+                                profileImageFile.getDataInBackgroundWithBlock {
+                                    (imageData, error) -> Void in
+                                    if error == nil {
+                                        let image = UIImage(data:imageData!)
+                                        self.userProfileImage.image = image
+                                    }
+                                }
+                            }
+                        }
+                        self.secondUser = posters[1] as! PFUser
+                        self.secondUser!.fetchIfNeededInBackgroundWithBlock {
+                            (user, error) -> Void in
+                            if self.secondUser!["profileImage"] != nil {
+                                var profileImageFile = self.secondUser!["profileImage"] as! PFFile
+                                profileImageFile.getDataInBackgroundWithBlock {
+                                    (imageData, error) -> Void in
+                                    if error == nil {
+                                        let image = UIImage(data:imageData!)
+                                        self.secondProfileImageView.image = image
+                                    }
+                                }
+                            }
+                        }
+                        self.secondProfileImageView.hidden = false
+                        if posters.count == 3 {
+                            self.thirdUser = posters[2] as! PFUser
+                            self.thirdUser!.fetchIfNeededInBackgroundWithBlock {
+                                (user, error) -> Void in
+                                if self.thirdUser!["profileImage"] != nil {
+                                    var profileImageFile = self.thirdUser!["profileImage"] as! PFFile
+                                    profileImageFile.getDataInBackgroundWithBlock {
+                                        (imageData, error) -> Void in
+                                        if error == nil {
+                                            let image = UIImage(data:imageData!)
+                                            self.thirdProfileImageView.image = image
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                            self.thirdProfileImageView.hidden = false
+                        }
+                        
+                    } else {
+                        self.firstUser = posters.firstObject as! PFUser
+                        self.firstUser!.fetchIfNeededInBackgroundWithBlock {
+                            (user, error) -> Void in
+                            if self.firstUser!["profileImage"] != nil {
+                                var profileImageFile = self.firstUser!["profileImage"] as! PFFile
+                                profileImageFile.getDataInBackgroundWithBlock {
+                                    (imageData, error) -> Void in
+                                    if error == nil {
+                                        let image = UIImage(data:imageData!)
+                                        self.userProfileImage.image = image
+                                    }
+                                }
+                            }
+                        }
+                        var secondUser = posters[1] as! PFUser
+                        secondUser.fetchIfNeededInBackgroundWithBlock {
+                            (user, error) -> Void in
+                            if secondUser["profileImage"] != nil {
+                                var profileImageFile = secondUser["profileImage"] as! PFFile
+                                profileImageFile.getDataInBackgroundWithBlock {
+                                    (imageData, error) -> Void in
+                                    if error == nil {
+                                        let image = UIImage(data:imageData!)
+                                        self.secondProfileImageView.image = image
+                                    }
+                                }
+                            }
+                        }
+                        self.secondProfileImageView.hidden = false
+                        self.morePostersView.hidden = false
+                        self.morePostersViewLabel.text = "+ \(posters.count-2) others"
+                    }
+                    
                 }
                 
                 if self.story!["commentsCount"] != nil {
@@ -226,7 +359,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.commentsLabel.text = "\(commentsCount!) Comments"
                 }
                 
-                self.userLabel.text = profileName as? String
+                
                 self.createViewBottomConstraint.constant = -(self.screenSize.width + 46)
                 self.createView.hidden = true
                 self.createTitleView.hidden = true
@@ -262,6 +395,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                 }
             }
+
+            
+            
             
         } else {
             createViewBottomConstraint.constant = -(screenSize.width + 46)
@@ -880,7 +1016,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 if (success) {
                     // The object has been saved.
                     println("Story and event successfully saved")
-                    self.storyTitleLabel.text = self.story!["title"] as? String
+//                    self.storyTitleLabel.text = self.story!["title"] as? String
                     if  PFUser.currentUser()!["profileName"] != nil {
                         self.userLabel.text = PFUser.currentUser()!["profileName"] as! String
                     }
@@ -1364,7 +1500,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 (success, error) -> Void in
                 if (success) {
                     // The object has been saved.
-                    self.storyTitleLabel.text = self.story!["title"] as? String
+//                    self.storyTitleLabel.text = self.story!["title"] as? String
                     if  PFUser.currentUser()!["profileName"] != nil {
                         self.userLabel.text = PFUser.currentUser()!["profileName"] as! String
                     }
@@ -1562,7 +1698,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 (success, error) -> Void in
                 if (success) {
                     // The object has been saved.
-                    self.storyTitleLabel.text = self.story!["title"] as? String
+//                    self.storyTitleLabel.text = self.story!["title"] as? String
                     var storyUser : PFUser = PFUser.currentUser()! as PFUser
                     var profileName : String = storyUser["profileName"] as! String
                     self.userLabel.text = profileName as String
@@ -2058,7 +2194,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBAction func userLabelWasTapped(sender: AnyObject) {
         var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
-        profileVC.user = self.story!["user"] as? PFUser
+        if self.firstUser != nil {
+            profileVC.user = self.firstUser!
+        }
+        profileVC.user = self.story!["user"] as! PFUser
+        println("\(profileVC.user)")
         navigationController?.pushViewController(profileVC, animated: true)
 
         
@@ -2109,7 +2249,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.view.layoutIfNeeded()
         self.upVoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
         self.pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
-        self.storyTitleLabel.text = self.titleTextField.text
+//        self.storyTitleLabel.text = self.titleTextField.text
         self.title = self.titleTextField.text
         self.storyPointsLabel.text = "1"
         
@@ -2192,7 +2332,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func displayUserProfileView(user: PFUser) {
         var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
-        profileVC.user = user
+        profileVC.user = self.firstUser!
         navigationController?.pushViewController(profileVC, animated: true)
     }
 
@@ -2392,5 +2532,24 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
         }
     }
+   
+    @IBAction func secondProfileImageViewWasTapped(sender: AnyObject) {
+        if self.secondUser != nil {
+            var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
+                profileVC.user = self.secondUser!
+            navigationController?.pushViewController(profileVC, animated: true)
+        }
+        
+    }
+    @IBAction func thirdProfileImageViewWasTapped(sender: AnyObject) {
+        if self.thirdUser != nil {
+            var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
+                profileVC.user = self.thirdUser!
+            navigationController?.pushViewController(profileVC, animated: true)
+        }
+
+    }
+
+
     
 }
