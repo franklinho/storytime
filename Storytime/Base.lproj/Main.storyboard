@@ -40,6 +40,7 @@
             <string>OpenSans-Bold</string>
             <string>OpenSans-Bold</string>
             <string>OpenSans-Bold</string>
+            <string>OpenSans-Bold</string>
         </mutableArray>
         <mutableArray key="OpenSans-ExtraBold.ttf">
             <string>OpenSans-Extrabold</string>
@@ -1042,13 +1043,17 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user_icon_scaled_white.png" translatesAutoresizingMaskIntoConstraints="NO" id="2qN-Jd-2m3">
+                                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user_icon_scaled_white.png" translatesAutoresizingMaskIntoConstraints="NO" id="2qN-Jd-2m3">
                                         <rect key="frame" x="130" y="14" width="100" height="100"/>
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="2OV-Fd-nEm"/>
                                             <constraint firstAttribute="width" constant="100" id="kfb-93-HMm"/>
                                         </constraints>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="rEL-E8-fx5" appends="YES" id="Qtd-83-KLK"/>
+                                        </connections>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jAr-8W-P2B">
                                         <rect key="frame" x="250" y="59" width="136" height="44"/>
@@ -1073,12 +1078,12 @@
                                     <constraint firstItem="IUW-kG-GUB" firstAttribute="top" secondItem="2qN-Jd-2m3" secondAttribute="bottom" constant="5" id="44Q-fk-i2N"/>
                                     <constraint firstItem="2qN-Jd-2m3" firstAttribute="leading" secondItem="Kv5-x0-yDV" secondAttribute="leading" constant="130" id="A8y-g3-e2w"/>
                                     <constraint firstItem="IUW-kG-GUB" firstAttribute="top" secondItem="Kv5-x0-yDV" secondAttribute="top" constant="18" id="AOk-7M-h4I"/>
-                                    <constraint firstItem="IUW-kG-GUB" firstAttribute="leading" secondItem="2qN-Jd-2m3" secondAttribute="trailing" constant="20" id="J6s-47-KXB"/>
                                     <constraint firstAttribute="centerX" secondItem="2qN-Jd-2m3" secondAttribute="centerX" constant="120" id="eES-pS-EbX"/>
                                     <constraint firstItem="2qN-Jd-2m3" firstAttribute="top" secondItem="Kv5-x0-yDV" secondAttribute="top" constant="14" id="fCV-hH-Gl3"/>
                                     <constraint firstItem="jAr-8W-P2B" firstAttribute="top" secondItem="IUW-kG-GUB" secondAttribute="bottom" constant="8" id="hjK-dg-uYZ"/>
                                     <constraint firstItem="IUW-kG-GUB" firstAttribute="top" secondItem="2qN-Jd-2m3" secondAttribute="bottom" constant="8" id="hs9-Yq-TUf"/>
                                     <constraint firstItem="jAr-8W-P2B" firstAttribute="leading" secondItem="2qN-Jd-2m3" secondAttribute="trailing" constant="20" id="jcc-fM-X7q"/>
+                                    <constraint firstItem="IUW-kG-GUB" firstAttribute="leading" secondItem="Kv5-x0-yDV" secondAttribute="leading" constant="250" id="qd7-gd-WDE"/>
                                     <constraint firstAttribute="centerX" secondItem="IUW-kG-GUB" secondAttribute="centerX" id="vR7-sx-ryz"/>
                                     <constraint firstAttribute="height" constant="130" id="xsb-LZ-gZJ"/>
                                 </constraints>
@@ -1121,16 +1126,77 @@
                     <connections>
                         <outlet property="followButton" destination="jAr-8W-P2B" id="GUk-OW-bky"/>
                         <outlet property="noStoriesLabel" destination="XSL-FQ-tMs" id="UVx-jf-Bqb"/>
+                        <outlet property="profileImageHeightConstraint" destination="2OV-Fd-nEm" id="EGT-Vo-hEX"/>
                         <outlet property="profileImageLeadingConstraint" destination="A8y-g3-e2w" id="0cb-tG-HNZ"/>
+                        <outlet property="profileImageTopConstraint" destination="fCV-hH-Gl3" id="f5X-qw-H0h"/>
                         <outlet property="profileImageView" destination="2qN-Jd-2m3" id="Xed-90-KzF"/>
+                        <outlet property="profileImageWidthConstraint" destination="kfb-93-HMm" id="wRn-Yc-L63"/>
                         <outlet property="storyTableView" destination="ory-Wm-nvm" id="EhU-2W-xWw"/>
+                        <outlet property="userNameLabelLeadingConstraint" destination="qd7-gd-WDE" id="pJe-17-Fh0"/>
                         <outlet property="userNameTopConstraint" destination="AOk-7M-h4I" id="LuA-rT-CmC"/>
                         <outlet property="usernameLabel" destination="IUW-kG-GUB" id="726-ZP-bC9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HqC-SZ-Lz5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="rEL-E8-fx5">
+                    <connections>
+                        <action selector="profileImageWasTapped:" destination="oPv-Ie-cqB" id="vqh-2e-geE"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1929" y="1094"/>
+        </scene>
+        <!--Profile Image View Controller-->
+        <scene sceneID="pYR-cm-VJB">
+            <objects>
+                <viewController storyboardIdentifier="ProfileImageViewController" id="Hwg-Pk-Xea" customClass="ProfileImageViewController" customModule="Storytime" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wEN-bi-OO9"/>
+                        <viewControllerLayoutGuide type="bottom" id="8CM-s8-Blv"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tH3-Ha-GeN">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mIv-UU-EPz">
+                                <rect key="frame" x="0.0" y="20" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="44" id="OSw-Ar-jMC"/>
+                                    <constraint firstAttribute="height" constant="44" id="zxM-QS-KBE"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="20"/>
+                                <state key="normal" title="X">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="closeButtonWasTapped:" destination="Hwg-Pk-Xea" eventType="touchUpInside" id="ysA-PO-0xg"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Oox-x4-Pao">
+                                <rect key="frame" x="0.0" y="145" width="600" height="310"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="310" id="mvh-ia-OnN"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="mIv-UU-EPz" firstAttribute="leading" secondItem="tH3-Ha-GeN" secondAttribute="leading" id="5Px-IK-bNJ"/>
+                            <constraint firstItem="Oox-x4-Pao" firstAttribute="leading" secondItem="tH3-Ha-GeN" secondAttribute="leading" id="NhE-Vy-6yj"/>
+                            <constraint firstItem="mIv-UU-EPz" firstAttribute="top" secondItem="wEN-bi-OO9" secondAttribute="bottom" id="T2b-2s-EG6"/>
+                            <constraint firstAttribute="trailing" secondItem="Oox-x4-Pao" secondAttribute="trailing" id="ZYw-b7-4ox"/>
+                            <constraint firstAttribute="centerY" secondItem="Oox-x4-Pao" secondAttribute="centerY" id="lmO-Kb-lii"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="profileImageView" destination="Oox-x4-Pao" id="Jos-Ad-aVC"/>
+                        <outlet property="profileImageViewHeightConstraint" destination="mvh-ia-OnN" id="EFT-Mo-H8r"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Oeg-YK-zB9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1929" y="1808"/>
         </scene>
         <!--Story-->
         <scene sceneID="43q-Op-Sxf">
@@ -4255,7 +4321,6 @@
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wzh-ZI-JYB">
                                 <rect key="frame" x="0.0" y="20" width="44" height="44"/>
-                                <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="44" id="3ii-ZI-u3g"/>
                                     <constraint firstAttribute="height" constant="44" id="IWe-yy-czi"/>

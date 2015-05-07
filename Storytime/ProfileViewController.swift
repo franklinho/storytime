@@ -9,8 +9,12 @@
 import UIKit
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, RankingTableViewCellDelegate,PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, CreateProfileViewControllerDelegate {
+    @IBOutlet weak var userNameLabelLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var profileImageHeightConstraint: NSLayoutConstraint!
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     @IBOutlet weak var profileImageLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var profileImageWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var profileImageTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var userNameTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var followButton: UIButton!
     var stories = []
@@ -22,6 +26,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     var requestingObjects = false
     var menu = false
     var menuButton : UIBarButtonItem?
+    var profileImage : UIImage?
     
     @IBOutlet weak var noStoriesLabel: UILabel!
     @IBOutlet weak var storyTableView: UITableView!
@@ -37,6 +42,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
 
         profileImageLeadingConstraint.constant = (screenSize.width - 256)/2
+        userNameLabelLeadingConstraint.constant = (screenSize.width - 256)/2 + 120
         
         if menu == true {
             self.menuButton = UIBarButtonItem(image: UIImage(named:"menuIcon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("didTapMenuButton"))
@@ -555,6 +561,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     override func viewWillAppear(animated: Bool) {
+        profileImageTopConstraint.constant = 14
+        profileImageLeadingConstraint.constant = (screenSize.width - 256)/2
+        profileImageHeightConstraint.constant = 100
+        profileImageWidthConstraint.constant = 100
+        profileImageView.layer.cornerRadius = 50
         self.refreshStories()
         if user == nil {
             checkIfUserIsCurrentUser()
@@ -602,5 +613,55 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             
         }
     }
+    
+    @IBAction func profileImageWasTapped(sender: AnyObject) {
+        
+        var anim1 = CABasicAnimation(keyPath: "cornerRadius")
+        anim1.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        anim1.fromValue = 50
+        self.profileImageView.layer.cornerRadius = 0
+        anim1.toValue = 0
+        anim1.duration = 0.3
+
+        
+//        var anim2 = CABasicAnimation(keyPath: "bounds.size.height")
+//        anim2.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+//        anim2.fromValue = 100
+        self.profileImageHeightConstraint.constant = self.screenSize.width
+//        anim2.toValue = self.screenSize.width
+//        anim2.duration = 0.3
+//        
+//        var anim3 = CABasicAnimation(keyPath: "bounds.size.width")
+//        anim3.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+//        anim3.fromValue = 100
+        self.profileImageWidthConstraint.constant = self.screenSize.width
+//        anim3.toValue = self.screenSize.width
+//        anim3.duration = 0.3
+        self.profileImageView.layer.addAnimation(anim1, forKey: "cornerRadius")
+//        self.profileImageView.layer.addAnimation(anim2, forKey: "bounds.size.height")
+//        self.profileImageView.layer.addAnimation(anim3, forKey: "bounds.size.width")
+        
+        self.profileImageLeadingConstraint.constant = 0
+        self.profileImageTopConstraint.constant = (self.screenSize.height  - screenSize.width)/2 - self.navigationController!.navigationBar.frame.size.height - UIApplication.sharedApplication().statusBarFrame.height
+        
+        
+        UIView.animateWithDuration(0.3, animations: {
+            
+            self.view.layoutIfNeeded()
+            //            self.expandedButtonView.transform = CGAffineTransformMakeScale(3,3)
+            }, completion: {
+                (value: Bool) in
+                var profileImageVC : ProfileImageViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileImageViewController") as! ProfileImageViewController
+                profileImageVC.profileImage = self.profileImageView.image!
+                
+               profileImageVC.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+                
+                self.presentViewController(profileImageVC, animated: true, completion: nil)
+                
+                
+        })
+        
+    }
+    
     
 }
