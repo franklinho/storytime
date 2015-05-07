@@ -476,7 +476,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
 //        
 //    }
     func refreshStories() {
-
+        self.stories = []
         requestStories(self, offset: 0)
     }
     

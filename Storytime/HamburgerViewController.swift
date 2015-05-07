@@ -136,7 +136,7 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
                     
                     
                     
-                    profileVC.refreshStories()
+//                    profileVC.refreshStories()
                     
                 } else {
                     presentCreateProfileViewController()

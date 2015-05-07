@@ -9,11 +9,11 @@
 import UIKit
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, RankingTableViewCellDelegate,PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, CreateProfileViewControllerDelegate {
-
+    let screenSize: CGRect = UIScreen.mainScreen().bounds
+    @IBOutlet weak var profileImageLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var userNameTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var followButton: UIButton!
     var stories = []
-    let screenSize: CGRect = UIScreen.mainScreen().bounds
     var votedStories : NSMutableDictionary = [:]
     var user : PFUser?
     @IBOutlet weak var profileImageView: UIImageView!
@@ -36,6 +36,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewDidLoad()
         hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
 
+        profileImageLeadingConstraint.constant = (screenSize.width - 256)/2
+        
         if menu == true {
             self.menuButton = UIBarButtonItem(image: UIImage(named:"menuIcon"), style: UIBarButtonItemStyle.Plain, target: self, action: Selector("didTapMenuButton"))
             navigationItem.leftBarButtonItem = menuButton
@@ -63,7 +65,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         
         storyTableView.rowHeight = self.screenSize.width
-        refreshStories()
+//        refreshStories()
 //        GSProgressHUD.show()
         
         // Add pull to refresh to the tableview
@@ -219,7 +221,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func refreshStories() {
-        
+        self.stories = []
         requestStories(self, offset: 0)
     }
     
@@ -541,6 +543,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     override func viewWillAppear(animated: Bool) {
+        self.refreshStories()
         if user == nil {
             if PFUser.currentUser() != nil {
                 user = PFUser.currentUser()

@@ -169,17 +169,17 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         self.storyTableView.tableHeaderView = UIView(frame: CGRectMake(0.0, 0.0, self.storyTableView.bounds.size.width, 0.01))
         
-        userProfileImage.layer.cornerRadius = 31
+        userProfileImage.layer.cornerRadius = 22
         userProfileImage.layer.borderColor = UIColor.whiteColor().CGColor
         userProfileImage.layer.borderWidth = 2
         userProfileImage.clipsToBounds = true
         
-        secondProfileImageView.layer.cornerRadius = 31
+        secondProfileImageView.layer.cornerRadius = 22
         secondProfileImageView.layer.borderColor = UIColor.whiteColor().CGColor
         secondProfileImageView.layer.borderWidth = 2
         secondProfileImageView.clipsToBounds = true
         
-        thirdProfileImageView.layer.cornerRadius = 31
+        thirdProfileImageView.layer.cornerRadius = 22
         thirdProfileImageView.layer.borderColor = UIColor.whiteColor().CGColor
         thirdProfileImageView.layer.borderWidth = 2
         thirdProfileImageView.clipsToBounds = true
@@ -1163,6 +1163,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func refreshEventsForStory() {
+        self.events = []
         requestEventsForStory(self, offset: 0)
     }
     
