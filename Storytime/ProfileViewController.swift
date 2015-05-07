@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, RankingTableViewCellDelegate,PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, CreateProfileViewControllerDelegate {
+class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, RankingTableViewCellDelegate,PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, CreateProfileViewControllerDelegate, ProfileImageViewControllerDelegate {
     @IBOutlet weak var userNameLabelLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var profileImageHeightConstraint: NSLayoutConstraint!
     let screenSize: CGRect = UIScreen.mainScreen().bounds
@@ -566,6 +566,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         profileImageHeightConstraint.constant = 100
         profileImageWidthConstraint.constant = 100
         profileImageView.layer.cornerRadius = 50
+        profileImageView.layer.borderWidth = 2
         self.refreshStories()
         if user == nil {
             checkIfUserIsCurrentUser()
@@ -622,25 +623,21 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.profileImageView.layer.cornerRadius = 0
         anim1.toValue = 0
         anim1.duration = 0.3
-
-        
-//        var anim2 = CABasicAnimation(keyPath: "bounds.size.height")
-//        anim2.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
-//        anim2.fromValue = 100
-        self.profileImageHeightConstraint.constant = self.screenSize.width
-//        anim2.toValue = self.screenSize.width
-//        anim2.duration = 0.3
-//        
-//        var anim3 = CABasicAnimation(keyPath: "bounds.size.width")
-//        anim3.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
-//        anim3.fromValue = 100
-        self.profileImageWidthConstraint.constant = self.screenSize.width
-//        anim3.toValue = self.screenSize.width
-//        anim3.duration = 0.3
         self.profileImageView.layer.addAnimation(anim1, forKey: "cornerRadius")
-//        self.profileImageView.layer.addAnimation(anim2, forKey: "bounds.size.height")
-//        self.profileImageView.layer.addAnimation(anim3, forKey: "bounds.size.width")
         
+        var anim2 = CABasicAnimation(keyPath: "borderWidth")
+        anim2.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        anim2.fromValue = 2
+        self.profileImageView.layer.borderWidth = 0
+        anim2.toValue = 0
+        anim2.duration = 0.3
+        self.profileImageView.layer.addAnimation(anim2, forKey: "borderWidth")
+
+
+        self.profileImageHeightConstraint.constant = self.screenSize.width
+
+        self.profileImageWidthConstraint.constant = self.screenSize.width
+
         self.profileImageLeadingConstraint.constant = 0
         self.profileImageTopConstraint.constant = (self.screenSize.height  - screenSize.width)/2 - self.navigationController!.navigationBar.frame.size.height - UIApplication.sharedApplication().statusBarFrame.height
         
@@ -653,8 +650,9 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 (value: Bool) in
                 var profileImageVC : ProfileImageViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileImageViewController") as! ProfileImageViewController
                 profileImageVC.profileImage = self.profileImageView.image!
-                
-               profileImageVC.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+                profileImageVC.user = self.user!
+                profileImageVC.delegate = self
+                profileImageVC.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
                 
                 self.presentViewController(profileImageVC, animated: true, completion: nil)
                 
@@ -662,6 +660,11 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         })
         
     }
-    
+    func profileImageWasChanged(profileImage: UIImage, profileImageFile : PFFile) {
+        self.profileImageView.image = profileImage
+        PFUser.currentUser()!["profileImage"] = profileImageFile
+        self.user = PFUser.currentUser()
+        self.hamburgerVC!.refreshLoginLabels()
+    }
     
 }

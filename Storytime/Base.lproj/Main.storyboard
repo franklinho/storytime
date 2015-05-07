@@ -88,6 +88,8 @@
             <string>OpenSans</string>
             <string>OpenSans</string>
             <string>OpenSans</string>
+            <string>OpenSans</string>
+            <string>OpenSans</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -1034,6 +1036,12 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="No Stories" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XSL-FQ-tMs" userLabel="No Stories">
+                                <rect key="frame" x="211" y="283.5" width="177.5" height="34.5"/>
+                                <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="25"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kv5-x0-yDV">
                                 <rect key="frame" x="0.0" y="64" width="600" height="130"/>
                                 <subviews>
@@ -1096,12 +1104,6 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="No Stories" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XSL-FQ-tMs" userLabel="No Stories">
-                                <rect key="frame" x="211.5" y="283" width="177.5" height="34.5"/>
-                                <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="25"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -1158,6 +1160,31 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PlE-RK-sb1" userLabel="PreviewView">
+                                <rect key="frame" x="0.0" y="145" width="600" height="310"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Tap to Capture" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wNk-k6-18Q">
+                                        <rect key="frame" x="225" y="141" width="151" height="30"/>
+                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="22"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="centerY" secondItem="wNk-k6-18Q" secondAttribute="centerY" id="9ih-7g-qRU"/>
+                                    <constraint firstAttribute="centerX" secondItem="wNk-k6-18Q" secondAttribute="centerX" id="zxv-mi-6E5"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="DSh-9L-hle" appends="YES" id="c6B-74-9PG"/>
+                                </connections>
+                            </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Oox-x4-Pao">
+                                <rect key="frame" x="0.0" y="145" width="600" height="310"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="310" id="mvh-ia-OnN"/>
+                                </constraints>
+                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mIv-UU-EPz">
                                 <rect key="frame" x="0.0" y="20" width="44" height="44"/>
                                 <constraints>
@@ -1173,28 +1200,52 @@
                                     <action selector="closeButtonWasTapped:" destination="Hwg-Pk-Xea" eventType="touchUpInside" id="ysA-PO-0xg"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Oox-x4-Pao">
-                                <rect key="frame" x="0.0" y="145" width="600" height="310"/>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5rZ-MF-SvM">
+                                <rect key="frame" x="202" y="485" width="197" height="44"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="310" id="mvh-ia-OnN"/>
+                                    <constraint firstAttribute="height" constant="44" id="pEc-aJ-nMv"/>
                                 </constraints>
-                            </imageView>
+                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="18"/>
+                                <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                                <state key="normal" title="Change Profile Photo">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="changeProfileButtonWasTapped:" destination="Hwg-Pk-Xea" eventType="touchUpInside" id="e1G-lv-GGb"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="mIv-UU-EPz" firstAttribute="leading" secondItem="tH3-Ha-GeN" secondAttribute="leading" id="5Px-IK-bNJ"/>
+                            <constraint firstAttribute="centerX" secondItem="5rZ-MF-SvM" secondAttribute="centerX" id="AMM-8m-xL0"/>
+                            <constraint firstItem="PlE-RK-sb1" firstAttribute="bottom" secondItem="Oox-x4-Pao" secondAttribute="bottom" id="MBg-hI-aRc"/>
+                            <constraint firstItem="PlE-RK-sb1" firstAttribute="top" secondItem="Oox-x4-Pao" secondAttribute="top" id="MW1-ws-mcn"/>
                             <constraint firstItem="Oox-x4-Pao" firstAttribute="leading" secondItem="tH3-Ha-GeN" secondAttribute="leading" id="NhE-Vy-6yj"/>
+                            <constraint firstItem="5rZ-MF-SvM" firstAttribute="top" secondItem="Oox-x4-Pao" secondAttribute="bottom" constant="30" id="Qzf-36-zXG"/>
                             <constraint firstItem="mIv-UU-EPz" firstAttribute="top" secondItem="wEN-bi-OO9" secondAttribute="bottom" id="T2b-2s-EG6"/>
                             <constraint firstAttribute="trailing" secondItem="Oox-x4-Pao" secondAttribute="trailing" id="ZYw-b7-4ox"/>
+                            <constraint firstItem="PlE-RK-sb1" firstAttribute="leading" secondItem="Oox-x4-Pao" secondAttribute="leading" id="hAm-gf-fxx"/>
                             <constraint firstAttribute="centerY" secondItem="Oox-x4-Pao" secondAttribute="centerY" id="lmO-Kb-lii"/>
+                            <constraint firstItem="PlE-RK-sb1" firstAttribute="trailing" secondItem="Oox-x4-Pao" secondAttribute="trailing" id="oSx-Cw-XQg"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="changeProfilePhotoButton" destination="5rZ-MF-SvM" id="p1f-Qs-RT9"/>
+                        <outlet property="previewView" destination="PlE-RK-sb1" id="ava-Gs-IcM"/>
                         <outlet property="profileImageView" destination="Oox-x4-Pao" id="Jos-Ad-aVC"/>
                         <outlet property="profileImageViewHeightConstraint" destination="mvh-ia-OnN" id="EFT-Mo-H8r"/>
+                        <outlet property="tapToCaptureLabel" destination="wNk-k6-18Q" id="qPN-kS-W5Q"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Oeg-YK-zB9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="DSh-9L-hle">
+                    <connections>
+                        <action selector="previewViewWasTapped:" destination="Hwg-Pk-Xea" id="hM1-b6-gsM"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1929" y="1808"/>
         </scene>
