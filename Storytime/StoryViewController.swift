@@ -11,12 +11,11 @@ import AVFoundation
 import MediaPlayer
 
 
-class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate, CreateProfileViewControllerDelegate {
-    @IBOutlet weak var morePostersViewLabel: UILabel!
+class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate, CreateProfileViewControllerDelegate, PostersViewControllerDelegate {
+    @IBOutlet weak var morePostersButton: UIButton!
     @IBOutlet weak var secondProfileImageView: UIImageView!
     @IBOutlet weak var titleViewTopConstraint: NSLayoutConstraint!
     @IBOutlet var createButtonLongPressGestureRecognizer: UILongPressGestureRecognizer!
-    @IBOutlet weak var morePostersView: UIView!
     var buttonActivityIndicator : UIActivityIndicatorView = UIActivityIndicatorView()
     var lastContentOffset : CGFloat = 0
     @IBOutlet weak var expandedCameraButton: UIButton!
@@ -118,11 +117,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        morePostersView.layer.cornerRadius = 31
-        morePostersView.layer.borderColor = UIColor.whiteColor().CGColor
-        morePostersView.layer.borderWidth = 2
-        morePostersView.clipsToBounds = true
-        morePostersView.hidden = true
+        morePostersButton.layer.cornerRadius = 22
+        morePostersButton.layer.borderColor = UIColor.whiteColor().CGColor
+        morePostersButton.layer.borderWidth = 2
+        morePostersButton.clipsToBounds = true
+        morePostersButton.hidden = true
         
         expandedButtonView.layer.cornerRadius = 40
         expandedButtonView.clipsToBounds = true
@@ -348,8 +347,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             }
                         }
                         self.secondProfileImageView.hidden = false
-                        self.morePostersView.hidden = false
-                        self.morePostersViewLabel.text = "+ \(posters.count-2) others"
+                        self.morePostersButton.hidden = false
                     }
                     
                 }
@@ -946,6 +944,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 println("Adding storychannel: \(self.story!.objectId!)")
                 self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
                 self.story!.addUniqueObject(PFUser.currentUser()!, forKey: "posters")
+//                PFUser.currentUser()!.addUniqueObject(self.story!, forKey: "postedStories")
+                PFUser.currentUser()!.saveInBackground()
                 self.story!.saveInBackground()
                 var currentChannels = self.installation["channels"]
                 println("Story ID: \(self.story!.objectId!), Current Channels: \(currentChannels!)")
@@ -1403,6 +1403,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 println("Adding storychannel: \(self.story!.objectId!)")
                 self.story!.addUniqueObject(PFUser.currentUser()!, forKey: "posters")
+//                PFUser.currentUser()!.addUniqueObject(self.story!, forKey: "postedStories")
+                PFUser.currentUser()!.saveInBackground()
                 self.story!.saveInBackground()
                 self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
                 self.installation.saveInBackground()
@@ -1606,6 +1608,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 println("Adding storychannel: \(self.story!.objectId!)")
                 self.story!.addUniqueObject(PFUser.currentUser()!, forKey: "posters")
+//                PFUser.currentUser()!.addUniqueObject(self.story!, forKey: "postedStories")
+                PFUser.currentUser()!.saveInBackground()
                 self.story!.saveInBackground()
                 self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
                 self.installation.saveInBackground()
@@ -2192,15 +2196,19 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         println("User dismissed the signupviewcontroller")
     }
     
+    func presentProfileControllerWithUser(user: PFUser) {
+        var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
+//        if self.firstUser != nil {
+//            profileVC.user = self.firstUser!
+//        }
+        profileVC.user = user
+        navigationController?.pushViewController(profileVC, animated: true)
+    }
+    
     
     @IBAction func userLabelWasTapped(sender: AnyObject) {
-        var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
-        if self.firstUser != nil {
-            profileVC.user = self.firstUser!
-        }
-        profileVC.user = self.story!["user"] as! PFUser
-        println("\(profileVC.user)")
-        navigationController?.pushViewController(profileVC, animated: true)
+        
+        presentProfileControllerWithUser(self.story!["user"] as! PFUser)
 
         
     }
@@ -2257,6 +2265,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if  PFUser.currentUser() != nil {
             var storyUser = PFUser.currentUser()!
             self.userLabel.text = storyUser["profileName"] as! String
+            self.userLabel.hidden = false
             if storyUser["profileImage"] != nil {
                 var profileImageFile = storyUser["profileImage"] as! PFFile
                 profileImageFile.getDataInBackgroundWithBlock {
@@ -2332,9 +2341,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func displayUserProfileView(user: PFUser) {
-        var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
-        profileVC.user = self.firstUser!
-        navigationController?.pushViewController(profileVC, animated: true)
+        presentProfileControllerWithUser(self.firstUser!)
     }
 
     
@@ -2536,21 +2543,31 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
    
     @IBAction func secondProfileImageViewWasTapped(sender: AnyObject) {
         if self.secondUser != nil {
-            var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
-                profileVC.user = self.secondUser!
-            navigationController?.pushViewController(profileVC, animated: true)
+            self.presentProfileControllerWithUser(self.secondUser!)
         }
         
     }
     @IBAction func thirdProfileImageViewWasTapped(sender: AnyObject) {
         if self.thirdUser != nil {
-            var profileVC : ProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("ProfileViewController") as! ProfileViewController
-                profileVC.user = self.thirdUser!
-            navigationController?.pushViewController(profileVC, animated: true)
+            self.presentProfileControllerWithUser(self.thirdUser!)
         }
 
     }
 
+    @IBAction func morePostersButtonWasTapped(sender: AnyObject) {
+        if self.story!["posters"] != nil {
+            var postersVC : PostersViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("PostersViewController") as! PostersViewController
+            postersVC.posters = self.story!["posters"]! as! NSArray
+            postersVC.delegate = self
+            self.presentViewController(postersVC, animated: true, completion: nil)
+            
+        }
+        
+    }
+    
+    func posterWasSelected(user: PFUser) {
+        presentProfileControllerWithUser(user)
+    }
 
     
 }

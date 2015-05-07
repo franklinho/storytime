@@ -5,9 +5,36 @@ Parse.Cloud.define("hello", function(request, response) {
   response.success("Hello world!");
 });
 
+Parse.Cloud.define("populateStoryPosters", function(request, response) {
+  var query = new Parse.Query("Story");
+  query.descending("createdAt");
+  query.limit(1000);
+  query.find({
+    success: function(results) {
+      for (var i = 0; i < results.length; ++i) {
+        var object = results[i];
+		var author = object.get("user")
+		author.addUnique("postedStories", object)
+		author.save()
+
+		// var posters = object.get("posters")
+		// for poster in posters {
+		// 	poster.addUnique("postedStories", object)
+		// 	poster.save()
+		// }
+
+      }
+      response.success(results.length + " stories");
+    },
+    error: function() {
+      response.error("story lookup failed");
+    }
+  });
+});
+
 Parse.Cloud.define("rankingManual", function(request, response) {
   var query = new Parse.Query("Story");
-  query.desending("createdAt");
+  query.descending("createdAt");
   query.limit(1000);
   query.find({
     success: function(results) {

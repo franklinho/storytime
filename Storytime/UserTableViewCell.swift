@@ -9,7 +9,7 @@
 import UIKit
 
 class UserTableViewCell: UITableViewCell {
-
+    var user : PFUser?
     @IBOutlet weak var userAddedIndicator: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var userImageView: UIImageView!
@@ -22,6 +22,10 @@ class UserTableViewCell: UITableViewCell {
             userImageView.layer.borderWidth = 2
             userImageView.layer.borderColor = UIColor.darkGrayColor().CGColor
             userImageView.clipsToBounds = true
+        }
+        
+        if self.user != nil {
+            self.populateCellWithUser(self.user!)
         }
     }
 

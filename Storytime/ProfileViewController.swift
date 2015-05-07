@@ -231,7 +231,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         dispatch_async(dispatch_get_main_queue(),{
             var query = PFQuery(className:"Story")
             query.whereKey("user", equalTo: self.user!)
-            query.orderByDescending("points")
+//            query.orderByDescending("rankingValue")
+//            query.addDescendingOrder("points")
             query.addDescendingOrder("createdAt")
             query.limit = 10
             if offset == 0 {

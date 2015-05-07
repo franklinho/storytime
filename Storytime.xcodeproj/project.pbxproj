@@ -20,6 +20,7 @@
 		DD3D45B71ACF0F63001B38BD /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3D45B61ACF0F63001B38BD /* OpenGLES.framework */; };
 		DD3D45B91ACF0F68001B38BD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3D45B81ACF0F68001B38BD /* UIKit.framework */; };
 		DD3D460B1ACF1255001B38BD /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = DD3D460A1ACF1255001B38BD /* Podfile */; };
+		DD3F06A81AFBEFE300647963 /* PostersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3F06A71AFBEFE300647963 /* PostersViewController.swift */; };
 		DD42B7211AF4192E0001565A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD42B7201AF4192E0001565A /* SettingsViewController.swift */; };
 		DD49B4201ACF13970027F2C9 /* libstdc++.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD3D45981ACF0CAA001B38BD /* libstdc++.6.dylib */; };
 		DD4A77241AF3DF5300573585 /* HamburgerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4A77231AF3DF5300573585 /* HamburgerViewController.swift */; };
@@ -132,6 +133,7 @@
 		DD3D45B61ACF0F63001B38BD /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		DD3D45B81ACF0F68001B38BD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		DD3D460A1ACF1255001B38BD /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		DD3F06A71AFBEFE300647963 /* PostersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostersViewController.swift; sourceTree = "<group>"; };
 		DD42B7201AF4192E0001565A /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		DD4A77231AF3DF5300573585 /* HamburgerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HamburgerViewController.swift; sourceTree = "<group>"; };
 		DD60BCFC1AF7FA5F000755E6 /* SwitchView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwitchView.xib; sourceTree = "<group>"; };
@@ -280,12 +282,13 @@
 		DD138C7F1AE572CF00C74E8A /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				DD3F06A71AFBEFE300647963 /* PostersViewController.swift */,
+				DD138C811AE58D8500C74E8A /* AddAuthorViewController.swift */,
 				DD42B7201AF4192E0001565A /* SettingsViewController.swift */,
 				DDF06E961AD4529F007D4954 /* CreateProfileViewController.swift */,
 				DD9B26DD1AD8574600E6D3DE /* CustomLoginViewController.swift */,
 				DD9B26DF1AD8578A00E6D3DE /* CustomSignUpViewController.swift */,
 				DDF7AED51ADDEC8D0033F487 /* CommentsViewController.swift */,
-				DD138C811AE58D8500C74E8A /* AddAuthorViewController.swift */,
 				DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */,
 				DDC93A0E1AC48E22006D4646 /* StoryViewController.swift */,
 				DDC936AD1AC47D32006D4646 /* RankingViewController.swift */,
@@ -699,6 +702,7 @@
 				DDC93A151AC48FAD006D4646 /* StoryVideoTableViewCell.swift in Sources */,
 				DD8C82851AD5CE1E00B9A47B /* ProfileViewController.swift in Sources */,
 				DD60BCFF1AF7FBA6000755E6 /* RankingSwitch.swift in Sources */,
+				DD3F06A81AFBEFE300647963 /* PostersViewController.swift in Sources */,
 				DDF7AED61ADDEC8D0033F487 /* CommentsViewController.swift in Sources */,
 				DD138C841AE58F1600C74E8A /* UserTableViewCell.swift in Sources */,
 				DDC93A111AC48F96006D4646 /* StoryImageTableViewCell.swift in Sources */,
