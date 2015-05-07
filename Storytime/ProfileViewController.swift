@@ -543,19 +543,25 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
     }
     
+    func checkIfUserIsCurrentUser() {
+        if PFUser.currentUser() != nil {
+            user = PFUser.currentUser()
+            self.followButton.hidden = true
+            self.userNameTopConstraint.constant = 47
+        } else {
+            presentLoginViewController()
+        }
+        
+    }
+    
     override func viewWillAppear(animated: Bool) {
         self.refreshStories()
         if user == nil {
-            if PFUser.currentUser() != nil {
-                user = PFUser.currentUser()
-                self.followButton.hidden = true
-                self.userNameTopConstraint.constant = 47
-            } else {
-                presentLoginViewController()
-            }
+            checkIfUserIsCurrentUser()
         }
         
         if user != nil {
+
             usernameLabel.text = user!["profileName"] as! String
             if user!["profileImage"] != nil {
                 var profileImageFile = user!["profileImage"] as! PFFile
@@ -570,7 +576,10 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             if PFUser.currentUser() != nil {
                 if PFUser.currentUser()!["following"] != nil {
-                    
+                    if user?.objectId == PFUser.currentUser()?.objectId {
+                        self.followButton.hidden = true
+                        self.userNameTopConstraint.constant = 47
+                    }
                     var followCount = 0
                     if PFUser.currentUser()!["following"] != nil {
                         var followingArray = PFUser.currentUser()!["following"] as! Array<PFUser>
