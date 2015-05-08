@@ -518,6 +518,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         vision.cameraOrientation = PBJCameraOrientation.Portrait
         vision.cameraMode = PBJCameraMode.Photo
+        vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
         vision.focusMode = PBJFocusMode.ContinuousAutoFocus
         vision.outputFormat = PBJOutputFormat.Square
         vision.maximumCaptureDuration = CMTimeMakeWithSeconds(10, 600)
@@ -792,7 +793,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if defaultBehavior == true {
             vision.cameraMode = PBJCameraMode.Photo
-            vision.captureSessionPreset = AVCaptureSessionPresetPhoto
+            vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
             
             cameraSendButton.hidden = false
             cameraSendButton.enabled = true
@@ -921,6 +922,31 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 // The object has been saved.
                 println("Event successfully saved")
                 
+                
+                
+                println("Adding storychannel: \(self.story!.objectId!)")
+                self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
+                self.story!.addUniqueObject(PFUser.currentUser()!, forKey: "posters")
+//                PFUser.currentUser()!.addUniqueObject(self.story!, forKey: "postedStories")
+                PFUser.currentUser()!.saveInBackground()
+                self.story!.saveInBackground()
+                var currentChannels = self.installation["channels"]
+                println("Story ID: \(self.story!.objectId!), Current Channels: \(currentChannels!)")
+                self.installation.saveInBackground()
+                
+                self.minimizeCreateView()
+                if self.story!["thumbnailText"] == nil {
+                    self.story!["thumbnailText"] = self.createTextView.text
+                    self.story!.saveInBackground()
+                }
+                self.createTextView.text = ""
+                self.buttonActivityIndicator.hidden = true
+                self.createButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                self.createButton.enabled = true
+                self.createButtonLongPressGestureRecognizer.enabled = true
+                self.buttonActivityIndicator.stopAnimating()
+                
+                
                 if self.newStory == false {
                     let pushQuery = PFInstallation.query()!
                     pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
@@ -945,29 +971,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     })
                 }
-                
-                println("Adding storychannel: \(self.story!.objectId!)")
-                self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
-                self.story!.addUniqueObject(PFUser.currentUser()!, forKey: "posters")
-//                PFUser.currentUser()!.addUniqueObject(self.story!, forKey: "postedStories")
-                PFUser.currentUser()!.saveInBackground()
-                self.story!.saveInBackground()
-                var currentChannels = self.installation["channels"]
-                println("Story ID: \(self.story!.objectId!), Current Channels: \(currentChannels!)")
-                self.installation.saveInBackground()
-                
-                self.minimizeCreateView()
-                if self.story!["thumbnailText"] == nil {
-                    self.story!["thumbnailText"] = self.createTextView.text
-                    self.story!.saveInBackground()
-                }
-                self.createTextView.text = ""
-                self.buttonActivityIndicator.hidden = true
-                self.createButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
-                self.createButton.enabled = true
-                self.createButtonLongPressGestureRecognizer.enabled = true
-                self.buttonActivityIndicator.stopAnimating()
-                
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the event: \(error!.description)")
@@ -1115,7 +1118,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         })
         
         vision.cameraMode = PBJCameraMode.Photo
-        vision.captureSessionPreset = AVCaptureSessionPresetPhoto
+        vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
         cameraSendButton.hidden = false
         cameraSendButton.enabled = true
         holdToRecordLabel.hidden = true
@@ -1284,6 +1287,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         dispatch_async(dispatch_get_main_queue(),{
             self.videoPath = videoDict[PBJVisionVideoPathKey] as! String
+            if self.videoPath != nil {
+                UISaveVideoAtPathToSavedPhotosAlbum(self.videoPath, nil, nil, nil)
+            }
             self.saveVideoEvent()
         })
         self.minimizeCreateView()
@@ -1380,31 +1386,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 // The object has been saved.
                 println("Event successfully saved")
                 
-                if self.newStory == false {
-                    let pushQuery = PFInstallation.query()!
-                    pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
-                    pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
-                    pushQuery.whereKey("storyNotificationsOn", notEqualTo: false)
-                    
-                    
-                    var currentUserProfileName = PFUser.currentUser()!["profileName"]
-                    var storyTitle = self.story!["title"]
-                    let data = [
-                        "alert" : "\(currentUserProfileName!) has added a video to the story: \(storyTitle!)",
-                        "storyID" : self.story!.objectId!
-                    ]
-                    let push = PFPush()
-                    push.setQuery(pushQuery)
-                    push.setData(data)
-                    push.sendPushInBackgroundWithBlock({
-                        (success, error) -> Void in
-                        if success == true {
-                            println("Push query successful")
-                        } else {
-                            println("Push encountered error: \(error!.description)")
-                        }
-                    })
-                }
+                
                 
                 println("Adding storychannel: \(self.story!.objectId!)")
                 self.story!.addUniqueObject(PFUser.currentUser()!, forKey: "posters")
@@ -1435,7 +1417,31 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.createButton.enabled = true
                 self.createButtonLongPressGestureRecognizer.enabled = true
                 self.buttonActivityIndicator.stopAnimating()
-                
+                if self.newStory == false {
+                    let pushQuery = PFInstallation.query()!
+                    pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
+                    pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
+                    pushQuery.whereKey("storyNotificationsOn", notEqualTo: false)
+                    
+                    
+                    var currentUserProfileName = PFUser.currentUser()!["profileName"]
+                    var storyTitle = self.story!["title"]
+                    let data = [
+                        "alert" : "\(currentUserProfileName!) has added a video to the story: \(storyTitle!)",
+                        "storyID" : self.story!.objectId!
+                    ]
+                    let push = PFPush()
+                    push.setQuery(pushQuery)
+                    push.setData(data)
+                    push.sendPushInBackgroundWithBlock({
+                        (success, error) -> Void in
+                        if success == true {
+                            println("Push query successful")
+                        } else {
+                            println("Push encountered error: \(error!.description)")
+                        }
+                    })
+                }
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the event: \(error!.description)")
@@ -1544,6 +1550,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func vision(vision: PBJVision!, capturedPhoto photoDict: [NSObject : AnyObject]!, error: NSError!) {
         capturedImage = photoDict[PBJVisionPhotoImageKey] as! UIImage
         dispatch_async(dispatch_get_main_queue(),{
+            if self.capturedImage != nil {
+                UIImageWriteToSavedPhotosAlbum(self.squareImageWithImage(self.capturedImage!), nil, nil, nil)
+            }
             self.savePhotoEvent()
         })
     }
@@ -1584,6 +1593,27 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 // The object has been saved.
                 println("Event successfully saved")
                 
+                
+                
+                
+                
+                println("Adding storychannel: \(self.story!.objectId!)")
+                self.story!.addUniqueObject(PFUser.currentUser()!, forKey: "posters")
+//                PFUser.currentUser()!.addUniqueObject(self.story!, forKey: "postedStories")
+                PFUser.currentUser()!.saveInBackground()
+                self.story!.saveInBackground()
+                self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
+                self.installation.saveInBackground()
+                self.vision.stopPreview()
+                if self.story!["thumbnailImage"] == nil {
+                    self.story!["thumbnailImage"] = imageFile
+                    self.story!.saveInBackground()
+                }
+                self.buttonActivityIndicator.hidden = true
+                self.createButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
+                self.createButton.enabled = true
+                self.createButtonLongPressGestureRecognizer.enabled = true
+                self.buttonActivityIndicator.stopAnimating()
                 if self.newStory == false {
                     let pushQuery = PFInstallation.query()!
                     pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
@@ -1608,26 +1638,6 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     })
                 }
-                
-                
-                
-                println("Adding storychannel: \(self.story!.objectId!)")
-                self.story!.addUniqueObject(PFUser.currentUser()!, forKey: "posters")
-//                PFUser.currentUser()!.addUniqueObject(self.story!, forKey: "postedStories")
-                PFUser.currentUser()!.saveInBackground()
-                self.story!.saveInBackground()
-                self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
-                self.installation.saveInBackground()
-                self.vision.stopPreview()
-                if self.story!["thumbnailImage"] == nil {
-                    self.story!["thumbnailImage"] = imageFile
-                    self.story!.saveInBackground()
-                }
-                self.buttonActivityIndicator.hidden = true
-                self.createButton.setImage(UIImage(named: "plusIcon"), forState: UIControlState.Disabled)
-                self.createButton.enabled = true
-                self.createButtonLongPressGestureRecognizer.enabled = true
-                self.buttonActivityIndicator.stopAnimating()
             } else {
                 // There was a problem, check error.description
                 println("There was an error saving the event: \(error!.description)")

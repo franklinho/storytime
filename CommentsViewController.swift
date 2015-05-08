@@ -534,7 +534,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         
         if defaultBehavior == true {
             vision.cameraMode = PBJCameraMode.Photo
-            vision.captureSessionPreset = AVCaptureSessionPresetPhoto
+            vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
             cameraSendButton.hidden = false
             cameraSendButton.enabled = true
             holdToRecordLabel.hidden = true
@@ -714,7 +714,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         })
         
         vision.cameraMode = PBJCameraMode.Photo
-        vision.captureSessionPreset = AVCaptureSessionPresetPhoto
+        vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
         cameraSendButton.hidden = false
         cameraSendButton.enabled = true
         holdToRecordLabel.hidden = true
