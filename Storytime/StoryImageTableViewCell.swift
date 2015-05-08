@@ -33,7 +33,7 @@ class StoryImageTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
+        self.selectionStyle = UITableViewCellSelectionStyle.None
         timestampView.layer.cornerRadius = 5
         timestampView.clipsToBounds = true
         

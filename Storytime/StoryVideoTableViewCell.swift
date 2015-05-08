@@ -37,6 +37,7 @@ class StoryVideoTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        self.selectionStyle = UITableViewCellSelectionStyle.None
         playButtonIconImageView.layer.cornerRadius = 100
         playButtonIconImageView.clipsToBounds = true
         

@@ -9,6 +9,9 @@
 import UIKit
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, RankingTableViewCellDelegate,PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, CreateProfileViewControllerDelegate, ProfileImageViewControllerDelegate {
+    var networkError = false
+    @IBOutlet weak var networkErrorView: UIView!
+    @IBOutlet weak var networkErrorViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var userNameLabelLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var profileImageHeightConstraint: NSLayoutConstraint!
     let screenSize: CGRect = UIScreen.mainScreen().bounds
@@ -97,7 +100,12 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row == storyTableView.numberOfRowsInSection(0)-1 && maxReached == false {
-            var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as! UITableViewCell
+            var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as! SpinnerTableViewCell
+            if self.networkError == false {
+                cell.spinnerActivityIndicator.startAnimating()
+            } else {
+                cell.spinnerActivityIndicator.stopAnimating()
+            }
             if (cell.respondsToSelector(Selector("layoutMargins"))) {
                 cell.layoutMargins = UIEdgeInsetsZero;
             }
@@ -232,6 +240,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func requestStories(sender:AnyObject, offset: Int) {
+        networkError = false
+        hideNetworkErrorView()
         maxReached = false
         
         dispatch_async(dispatch_get_main_queue(),{
@@ -281,7 +291,10 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 } else {
                     // Log details of the failure
                     println("Error: \(error!) \(error!.userInfo!)")
+                    self.networkError = true
+                    self.showNetworkErrorView()
                     self.refreshControl.endRefreshing()
+                    self.storyTableView.reloadData()
                     //                    if(GSProgressHUD.isVisible()) {
                     //                        GSProgressHUD.dismiss()
                     //                    }
@@ -665,6 +678,30 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         PFUser.currentUser()!["profileImage"] = profileImageFile
         self.user = PFUser.currentUser()
         self.hamburgerVC!.refreshLoginLabels()
+    }
+    
+    func showNetworkErrorView() {
+        self.networkErrorViewTopConstraint.constant = 0
+        self.networkErrorView.hidden = false
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            }, completion: {
+                (value: Bool) in
+                
+        })
+        
+    }
+    
+    func hideNetworkErrorView() {
+        self.networkErrorViewTopConstraint.constant = -44
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            }, completion: {
+                (value: Bool) in
+                self.networkErrorView.hidden = true
+                
+        })
+        
     }
     
 }

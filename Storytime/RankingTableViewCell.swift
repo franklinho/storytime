@@ -43,9 +43,10 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
     
     
     override func awakeFromNib() {
+        
         super.awakeFromNib()
         // Initialization code
-        
+        self.selectionStyle = UITableViewCellSelectionStyle.None
         voteView.layer.cornerRadius = 10
         voteView.clipsToBounds = true
         

@@ -164,6 +164,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             return cell
         } else if indexPath.row == rankingTableView.numberOfRowsInSection(0)-1 && self.stories.count == 0 && rankingSwitch!.hot == false {
             var cell = tableView.dequeueReusableCellWithIdentifier("FollowUsersCell") as! UITableViewCell
+            cell.selectionStyle = UITableViewCellSelectionStyle.None
             if (cell.respondsToSelector(Selector("layoutMargins"))) {
                 cell.layoutMargins = UIEdgeInsetsZero;
             }

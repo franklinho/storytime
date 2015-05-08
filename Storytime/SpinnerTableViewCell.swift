@@ -14,6 +14,7 @@ class SpinnerTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        self.selectionStyle = UITableViewCellSelectionStyle.None
         spinnerActivityIndicator.startAnimating()
     }
 
