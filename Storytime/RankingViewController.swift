@@ -233,10 +233,12 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                         if votedStories[story!.objectId!] != nil{
                             if votedStories[story!.objectId!] as! Int == 1 {
                                 cell.storyUpVoted = true
+                                cell.storyDownVoted = false
                                 cell.upvoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
                                 cell.pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
                             } else if votedStories[story!.objectId!] as! Int == -1 {
                                 cell.storyDownVoted = true
+                                cell.storyUpVoted = false
                                 cell.downvoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
                                 cell.pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
                             } else {

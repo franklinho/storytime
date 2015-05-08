@@ -93,6 +93,7 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
                     if storyUpVoted == true {
                         self.votedStories![self.story!.objectId!] = 0
                         storyUpVoted = false
+                        storyDownVoted = false
                         upvoteButton.setImage(UIImage(named: "up_icon_white.png"), forState: UIControlState.Normal)
                         pointsLabel.textColor = UIColor.whiteColor()
                         self.story!["upvotes"] = self.story!["upvotes"] as! Int - 1
@@ -114,6 +115,7 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
                     }else {
                         self.votedStories![self.story!.objectId!] = 1
                         storyUpVoted = true
+                        storyDownVoted = false
                         upvoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
                         pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
                         self.story!["upvotes"] = self.story!["upvotes"] as! Int + 1
@@ -127,6 +129,7 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
             } else {
                 self.votedStories = [self.story!.objectId! : 1]
                 storyUpVoted = true
+                storyDownVoted = false
                 upvoteButton.setImage(UIImage(named: "up_icon_green.png"), forState: UIControlState.Normal)
                 pointsLabel.textColor = UIColor(red: 15/255, green: 207/255, blue: 0/255, alpha: 1)
                 self.story!["upvotes"] = self.story!["upvotes"] as! Int + 1
@@ -155,6 +158,7 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
                     if storyDownVoted == true {
                         self.votedStories![self.story!.objectId!] = 0
                         storyDownVoted = false
+                        storyUpVoted = false
                         downvoteButton.setImage(UIImage(named: "down_icon_white.png"), forState: UIControlState.Normal)
                         pointsLabel.textColor = UIColor.whiteColor()
                         self.story!["downvotes"] = self.story!["downvotes"] as! Int - 1
@@ -176,6 +180,7 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
                     }else {
                         self.votedStories![self.story!.objectId!] = -1
                         storyDownVoted = true
+                        storyUpVoted = false
                         downvoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
                         pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
                         self.story!["downvotes"] = self.story!["downvotes"] as! Int + 1
@@ -189,6 +194,7 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
             } else {
                 self.votedStories = [self.story!.objectId! : -1]
                 storyDownVoted = true
+                storyUpVoted = false
                 downvoteButton.setImage(UIImage(named: "down_icon_red.png"), forState: UIControlState.Normal)
                 pointsLabel.textColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 1)
                 self.story!["downvotes"] = self.story!["downvotes"] as! Int + 1

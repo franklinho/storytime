@@ -1329,6 +1329,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 
         })
         
+        
         if (self.story != nil) {
             createVideoComment(videoFile)
         }
