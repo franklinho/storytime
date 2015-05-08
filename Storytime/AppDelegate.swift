@@ -79,31 +79,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
         let defaults = NSUserDefaults.standardUserDefaults()
         let installation = PFInstallation.currentInstallation()
         
-        if defaults.objectForKey("storyNotificationsOn") == nil {
-            defaults.setBool(true, forKey: "storyNotificationsOn")
-            installation["storyNotificationsOn"] = true
-        }
-        
-        if defaults.objectForKey("commentNotificationsOn") == nil {
-            defaults.setBool(true, forKey: "commentNotificationsOn")
-            installation["commentNotificationsOn"] = true
-        }
-        
-        if defaults.objectForKey("followNotificationsOn") == nil {
-            defaults.setBool(true, forKey: "followNotificationsOn")
-            installation["followNotificationsOn"] = true
-        }
+//        if defaults.objectForKey("storyNotificationsOn") == nil {
+//            defaults.setBool(true, forKey: "storyNotificationsOn")
+//            installation["storyNotificationsOn"] = true
+//        }
+//        
+//        if defaults.objectForKey("commentNotificationsOn") == nil {
+//            defaults.setBool(true, forKey: "commentNotificationsOn")
+//            installation["commentNotificationsOn"] = true
+//        }
+//        
+//        if defaults.objectForKey("followNotificationsOn") == nil {
+//            defaults.setBool(true, forKey: "followNotificationsOn")
+//            installation["followNotificationsOn"] = true
+//        }
         
         if installation["storyNotificationsOn"] == nil {
             installation["storyNotificationsOn"] = true
+            defaults.setBool(true, forKey: "storyNotificationsOn")
+        } else {
+            if installation["storyNotificationsOn"]! as! Bool == true {
+                defaults.setBool(true, forKey: "storyNotificationsOn")
+            } else {
+                defaults.setBool(false, forKey: "storyNotificationsOn")
+            }
         }
         
         if installation["commentNotificationsOn"] == nil {
             installation["commentNotificationsOn"] = true
+            defaults.setBool(true, forKey: "commentNotificationsOn")
+        } else {
+            if installation["commentNotificationsOn"]! as! Bool == true {
+                defaults.setBool(true, forKey: "commentNotificationsOn")
+            } else {
+                defaults.setBool(false, forKey: "commentNotificationsOn")
+            }
         }
         
         if installation["followNotificationsOn"] == nil {
             installation["followNotificationsOn"] = true
+            defaults.setBool(true, forKey: "followNotificationsOn")
+        } else {
+            if installation["followNotificationsOn"]! as! Bool == true {
+                defaults.setBool(true, forKey: "followNotificationsOn")
+            } else {
+                defaults.setBool(false, forKey: "followNotificationsOn")
+            }
         }
         
         
@@ -378,6 +399,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
                 var storyVC : StoryViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("StoryViewController") as! StoryViewController
                 storyVC.story = targetStory
                 storyVC.refreshEventsForStory()
+                
                 
                 var rootViewController = self.window!.rootViewController as! HamburgerViewController
                 var rankingVC : UINavigationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("RankingNavigationViewController") as! UINavigationController

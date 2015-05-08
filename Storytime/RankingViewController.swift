@@ -28,6 +28,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     var hamburgerVC : HamburgerViewController?
     var rankingSwitch : RankingSwitch?
     var networkError = false
+    var networkErrorViewExpanded = false
 
 
     @IBOutlet var viewTapGestureRecognizer: UITapGestureRecognizer!
@@ -492,6 +493,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             self.view.layoutIfNeeded()
             }, completion: {
                 (value: Bool) in
+                self.networkErrorViewExpanded = true
                 
         })
 
@@ -503,6 +505,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             self.view.layoutIfNeeded()
             }, completion: {
                 (value: Bool) in
+                self.networkErrorViewExpanded = false
                 
         })
         
@@ -518,7 +521,9 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func requestStories(sender:AnyObject, offset: Int) {
         self.networkError = false
-        self.hideNetworkErrorView()
+        if networkErrorViewExpanded == true {
+            self.hideNetworkErrorView()
+        }
         maxReached = false
         
         dispatch_async(dispatch_get_main_queue(),{

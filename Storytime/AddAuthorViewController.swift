@@ -27,6 +27,7 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
     var story : PFObject?
     var userAlreadyAddedAlertVisible = false
     var networkError = false
+    var networkErrorViewExpanded = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -172,7 +173,8 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
             
             }, completion: {
                 (value: Bool) in
-                self.userAlreadyAddedAlertVisible = false})
+                self.userAlreadyAddedAlertVisible = false
+        })
     }
 
     /*
@@ -288,12 +290,16 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
     }
     
     func requestUsers(sender:AnyObject, offset: Int)  {
-        self.dismissAlreadyAddedAlert()
+        if userAlreadyAddedAlertVisible == true {
+            self.dismissAlreadyAddedAlert()
+        }
         self.users = []
         self.maxReached = false
         self.userTableView.reloadData()
         self.networkError = false
-        self.hideNetworkErrorView()
+        if networkErrorViewExpanded == true {
+            self.hideNetworkErrorView()
+        }
         self.maxReached = false
         
         
@@ -391,6 +397,7 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
             self.view.layoutIfNeeded()
             }, completion: {
                 (value: Bool) in
+                self.networkErrorViewExpanded = true
                 
         })
         
@@ -403,7 +410,7 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
             }, completion: {
                 (value: Bool) in
                 self.networkErrorView.hidden = true
-                
+                self.networkErrorViewExpanded = false
         })
         
     }

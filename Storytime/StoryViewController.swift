@@ -42,6 +42,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var createTitleViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var cameraFlashButton: UIButton!
     var networkError = false
+    var networkErrorViewExpanded = false
     
     var firstUser : PFUser?
     var secondUser : PFUser?
@@ -933,8 +934,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 
                 
-                println("Adding storychannel: \(self.story!.objectId!)")
-                self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
+                println("Adding storychannel: c\(self.story!.objectId!)")
+                self.installation.addUniqueObject("c\(self.story!.objectId!)", forKey: "channels")
                 self.story!.addUniqueObject(PFUser.currentUser()!, forKey: "posters")
 //                PFUser.currentUser()!.addUniqueObject(self.story!, forKey: "postedStories")
                 PFUser.currentUser()!.saveInBackground()
@@ -958,7 +959,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 if self.newStory == false {
                     let pushQuery = PFInstallation.query()!
-                    pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
+                    pushQuery.whereKey("channels", equalTo: "c\(self.story!.objectId!)") // Set channel
                     pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
                     pushQuery.whereKey("storyNotificationsOn", notEqualTo: false)
                     
@@ -1186,7 +1187,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func requestEventsForStory(sender:AnyObject, offset: Int) {
         networkError = false
-        hideNetworkErrorView()
+        if networkErrorViewExpanded == true {
+            self.hideNetworkErrorView()
+        }
         maxReached = false
         
         dispatch_async(dispatch_get_main_queue(),{
@@ -1402,12 +1405,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 
                 
-                println("Adding storychannel: \(self.story!.objectId!)")
+                println("Adding storychannel: c\(self.story!.objectId!)")
                 self.story!.addUniqueObject(PFUser.currentUser()!, forKey: "posters")
 //                PFUser.currentUser()!.addUniqueObject(self.story!, forKey: "postedStories")
                 PFUser.currentUser()!.saveInBackground()
                 self.story!.saveInBackground()
-                self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
+                self.installation.addUniqueObject("c\(self.story!.objectId!)", forKey: "channels")
                 self.installation.saveInBackground()
                 self.vision.stopPreview()
                 if self.story!["thumbnailVideoScreenCap"] == nil {
@@ -1433,7 +1436,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.buttonActivityIndicator.stopAnimating()
                 if self.newStory == false {
                     let pushQuery = PFInstallation.query()!
-                    pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
+                    pushQuery.whereKey("channels", equalTo: "c\(self.story!.objectId!)") // Set channel
                     pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
                     pushQuery.whereKey("storyNotificationsOn", notEqualTo: false)
                     
@@ -1611,12 +1614,12 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 
                 
-                println("Adding storychannel: \(self.story!.objectId!)")
+                println("Adding storychannel: c\(self.story!.objectId!)")
                 self.story!.addUniqueObject(PFUser.currentUser()!, forKey: "posters")
 //                PFUser.currentUser()!.addUniqueObject(self.story!, forKey: "postedStories")
                 PFUser.currentUser()!.saveInBackground()
                 self.story!.saveInBackground()
-                self.installation.addUniqueObject("\(self.story!.objectId!)", forKey: "channels")
+                self.installation.addUniqueObject("c\(self.story!.objectId!)", forKey: "channels")
                 self.installation.saveInBackground()
                 self.vision.stopPreview()
                 if self.story!["thumbnailImage"] == nil {
@@ -1630,7 +1633,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.buttonActivityIndicator.stopAnimating()
                 if self.newStory == false {
                     let pushQuery = PFInstallation.query()!
-                    pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
+                    pushQuery.whereKey("channels", equalTo: "c\(self.story!.objectId!)") // Set channel
                     pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
                     pushQuery.whereKey("storyNotificationsOn", notEqualTo: false)
                     
@@ -2432,7 +2435,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 var channels = installation["channels"] as! Array<String>
                 if contains(channels, "\(self.story!.objectId!)") {
-                    installation.removeObject("\(self.story!.objectId!)", forKey: "channels")
+                    installation.removeObject("c\(self.story!.objectId!)", forKey: "channels")
                     var currentChannels = installation["channels"]
                     println("Current Channels : \(currentChannels!)")
                     installation.saveInBackground()
@@ -2609,6 +2612,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.view.layoutIfNeeded()
             }, completion: {
                 (value: Bool) in
+                self.networkErrorViewExpanded = true
                 
         })
         
@@ -2621,6 +2625,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }, completion: {
                 (value: Bool) in
                 self.networkErrorView.hidden = true
+                self.networkErrorViewExpanded = false
                 
         })
         

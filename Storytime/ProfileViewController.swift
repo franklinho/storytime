@@ -30,6 +30,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     var menu = false
     var menuButton : UIBarButtonItem?
     var profileImage : UIImage?
+    var networkErrorViewExpanded = false
     
     @IBOutlet weak var noStoriesLabel: UILabel!
     @IBOutlet weak var storyTableView: UITableView!
@@ -241,7 +242,9 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func requestStories(sender:AnyObject, offset: Int) {
         networkError = false
-        hideNetworkErrorView()
+        if self.networkErrorViewExpanded == true {
+            hideNetworkErrorView()
+        }
         maxReached = false
         
         dispatch_async(dispatch_get_main_queue(),{
@@ -687,6 +690,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             self.view.layoutIfNeeded()
             }, completion: {
                 (value: Bool) in
+                self.networkErrorViewExpanded = true
                 
         })
         
@@ -699,6 +703,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             }, completion: {
                 (value: Bool) in
                 self.networkErrorView.hidden = true
+                self.networkErrorViewExpanded = false
                 
         })
         

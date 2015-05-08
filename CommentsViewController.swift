@@ -31,6 +31,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var createViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet var commentsTableViewTapGestureRecognizer: UITapGestureRecognizer!
     @IBOutlet weak var progressView: UIView!
+    var networkErrorViewExpanded = false
     
     var installation = PFInstallation.currentInstallation()
     @IBOutlet weak var noCommentsLabel: UILabel!
@@ -946,7 +947,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 // The object has been saved.
                 println("Event successfully saved")
                 let pushQuery = PFInstallation.query()!
-                pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
+                pushQuery.whereKey("channels", equalTo: "c\(self.story!.objectId!)") // Set channel
                 pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
                 pushQuery.whereKey("commentNotificationsOn", notEqualTo: false)
                 var currentUserProfileName = PFUser.currentUser()!["profileName"]
@@ -1004,7 +1005,9 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func requestCommentsForStory(sender:AnyObject, offset: Int) {
         self.networkError = false
-        self.hideNetworkErrorView()
+        if self.networkErrorViewExpanded == true {
+            self.hideNetworkErrorView()
+        }
         maxReached = false
         
         dispatch_async(dispatch_get_main_queue(),{
@@ -1250,7 +1253,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 // The object has been saved.
                 println("Comment successfully saved")
                 let pushQuery = PFInstallation.query()!
-                pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
+                pushQuery.whereKey("channels", equalTo: "c\(self.story!.objectId!)") // Set channel
                 pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
                 pushQuery.whereKey("commentNotificationsOn", notEqualTo: false)
                 var currentUserProfileName = PFUser.currentUser()!["profileName"]
@@ -1394,7 +1397,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 // The object has been saved.
                 println("Comment successfully saved")
                 let pushQuery = PFInstallation.query()!
-                pushQuery.whereKey("channels", equalTo: "\(self.story!.objectId!)") // Set channel
+                pushQuery.whereKey("channels", equalTo: "c\(self.story!.objectId!)") // Set channel
                 pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
                 pushQuery.whereKey("commentNotificationsOn", notEqualTo: false)
                 var currentUserProfileName = PFUser.currentUser()!["profileName"]
@@ -1599,6 +1602,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             self.view.layoutIfNeeded()
             }, completion: {
                 (value: Bool) in
+                self.networkErrorViewExpanded = true
                 
         })
         
@@ -1611,6 +1615,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             }, completion: {
                 (value: Bool) in
                 self.networkErrorView.hidden = true
+                self.networkErrorViewExpanded = false
                 
         })
         
