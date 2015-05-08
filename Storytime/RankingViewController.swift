@@ -10,6 +10,7 @@ import UIKit
 
 class RankingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, RankingTableViewCellDelegate, UISearchBarDelegate, CreateProfileViewControllerDelegate, RankingSwitchDelegate {
 
+    @IBOutlet weak var networkErrorViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var tableViewTopConstraint: NSLayoutConstraint!
     var lastContentOffset : CGFloat = 0
 
@@ -26,6 +27,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     var requestingObjects = false
     var hamburgerVC : HamburgerViewController?
     var rankingSwitch : RankingSwitch?
+    var networkError = false
 
 
     @IBOutlet var viewTapGestureRecognizer: UITapGestureRecognizer!
@@ -150,7 +152,12 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         if indexPath.row == rankingTableView.numberOfRowsInSection(0)-1 && maxReached == false {
-            var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as! UITableViewCell
+            var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as! SpinnerTableViewCell
+            if networkError == false {
+                cell.spinnerActivityIndicator.startAnimating()
+            } else {
+                cell.spinnerActivityIndicator.stopAnimating()
+            }
             if (cell.respondsToSelector(Selector("layoutMargins"))) {
                 cell.layoutMargins = UIEdgeInsetsZero;
             }
@@ -477,12 +484,40 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
 //        }
 //        
 //    }
+    
+    func showNetworkErrorView() {
+        self.networkErrorViewTopConstraint.constant = 0
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            }, completion: {
+                (value: Bool) in
+                
+        })
+
+    }
+    
+    func hideNetworkErrorView() {
+        self.networkErrorViewTopConstraint.constant = -44
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            }, completion: {
+                (value: Bool) in
+                
+        })
+        
+    }
+    
+    
     func refreshStories() {
         self.stories = []
         requestStories(self, offset: 0)
     }
     
+    
+    
     func requestStories(sender:AnyObject, offset: Int) {
+        self.networkError = false
+        self.hideNetworkErrorView()
         maxReached = false
         
         dispatch_async(dispatch_get_main_queue(),{
@@ -534,6 +569,9 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                     // Log details of the failure
                     println("Error: \(error) \(error!.userInfo!)")
                     self.refreshControl.endRefreshing()
+                    self.networkError = true
+                    self.showNetworkErrorView()
+                    self.rankingTableView.reloadData()
 //                    if(GSProgressHUD.isVisible()) {
 //                        GSProgressHUD.dismiss()
 //                    }

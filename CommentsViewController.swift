@@ -10,7 +10,9 @@ import UIKit
 
 class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, CreateProfileViewControllerDelegate {
 
-    
+    @IBOutlet weak var networkErrorView: UIView!
+    var networkError = false
+    @IBOutlet weak var networkErrorViewTopConstraint: NSLayoutConstraint!
     @IBOutlet var newCommentButtonLongPressGestureRecognizer: UILongPressGestureRecognizer!
     var buttonActivityIndicator : UIActivityIndicatorView = UIActivityIndicatorView()
     var lastContentOffset : CGFloat = 0
@@ -254,7 +256,12 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var comment : PFObject?
         if indexPath.row == commentsTableView.numberOfRowsInSection(0)-1 && maxReached == false {
-            var cell = tableView.dequeueReusableCellWithIdentifier("CommentSpinnerCell") as! UITableViewCell
+            var cell = tableView.dequeueReusableCellWithIdentifier("CommentSpinnerCell") as! SpinnerTableViewCell
+            if self.networkError == false {
+                cell.spinnerActivityIndicator.startAnimating()
+            } else {
+                cell.spinnerActivityIndicator.stopAnimating()
+            }
             if (cell.respondsToSelector(Selector("layoutMargins"))) {
                 cell.layoutMargins = UIEdgeInsetsZero;
             }
@@ -996,6 +1003,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func requestCommentsForStory(sender:AnyObject, offset: Int) {
+        self.networkError = false
+        self.hideNetworkErrorView()
         maxReached = false
         
         dispatch_async(dispatch_get_main_queue(),{
@@ -1048,7 +1057,10 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 } else {
                     // Log details of the failure
                     println("Error: \(error!) \(error!.userInfo!)")
+                    self.networkError = true
+                    self.showNetworkErrorView()
                     self.refreshControl.endRefreshing()
+                    self.commentsTableView.reloadData()
                     //                    if(GSProgressHUD.isVisible()) {
                     //                        GSProgressHUD.dismiss()
                     //                    }
@@ -1580,6 +1592,29 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         })
     }
 
+    func showNetworkErrorView() {
+        self.networkErrorViewTopConstraint.constant = 0
+        self.networkErrorView.hidden = false
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            }, completion: {
+                (value: Bool) in
+                
+        })
+        
+    }
+    
+    func hideNetworkErrorView() {
+        self.networkErrorViewTopConstraint.constant = -44
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            }, completion: {
+                (value: Bool) in
+                self.networkErrorView.hidden = true
+                
+        })
+        
+    }
     
     
 }

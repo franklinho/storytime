@@ -12,6 +12,8 @@ import MediaPlayer
 
 
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate, CreateProfileViewControllerDelegate, PostersViewControllerDelegate {
+    @IBOutlet weak var networkErrorTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var networkErrorView: UIView!
     @IBOutlet weak var morePostersButton: UIButton!
     @IBOutlet weak var secondProfileImageView: UIImageView!
     @IBOutlet weak var titleViewTopConstraint: NSLayoutConstraint!
@@ -39,6 +41,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet var userTapGestureRecognizer: UITapGestureRecognizer!
     @IBOutlet weak var createTitleViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var cameraFlashButton: UIButton!
+    var networkError = false
     
     var firstUser : PFUser?
     var secondUser : PFUser?
@@ -565,7 +568,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var event : PFObject?
         if indexPath.row == storyTableView.numberOfRowsInSection(0)-1 && maxReached == false {
-            var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as! UITableViewCell
+            var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as! SpinnerTableViewCell
+            if networkError == false {
+                cell.spinnerActivityIndicator.startAnimating()
+            } else {
+                cell.spinnerActivityIndicator.stopAnimating()
+            }
+            
             if (cell.respondsToSelector(Selector("layoutMargins"))) {
                 cell.layoutMargins = UIEdgeInsetsZero;
             }
@@ -1176,6 +1185,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func requestEventsForStory(sender:AnyObject, offset: Int) {
+        networkError = false
+        hideNetworkErrorView()
         maxReached = false
         
         dispatch_async(dispatch_get_main_queue(),{
@@ -1225,7 +1236,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 } else {
                     // Log details of the failure
                     println("Error: \(error!) \(error!.userInfo!)")
+                    self.showNetworkErrorView()
                     self.refreshControl.endRefreshing()
+                    self.networkError = true
+                    self.storyTableView.reloadData()
                     //                    if(GSProgressHUD.isVisible()) {
                     //                        GSProgressHUD.dismiss()
                     //                    }
@@ -2588,6 +2602,29 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         presentProfileControllerWithUser(user)
     }
 
+    func showNetworkErrorView() {
+        self.networkErrorTopConstraint.constant = 0
+        self.networkErrorView.hidden = false
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            }, completion: {
+                (value: Bool) in
+                
+        })
+        
+    }
+    
+    func hideNetworkErrorView() {
+        self.networkErrorTopConstraint.constant = -44
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            }, completion: {
+                (value: Bool) in
+                self.networkErrorView.hidden = true
+                
+        })
+        
+    }
     
     
 }
