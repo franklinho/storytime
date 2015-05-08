@@ -12,6 +12,8 @@ import UIKit
 
 class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
     
+    @IBOutlet weak var networkErrorView: UIView!
+    @IBOutlet weak var networkErrorViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var userAlreadyAddedAlertTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var userTableViewBottomConstraint: NSLayoutConstraint!
 
@@ -24,6 +26,7 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
     var requestingUsers = false
     var story : PFObject?
     var userAlreadyAddedAlertVisible = false
+    var networkError = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -230,7 +233,12 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row == userTableView.numberOfRowsInSection(0)-1 && maxReached == false {
-            var cell = tableView.dequeueReusableCellWithIdentifier("UserSpinnerCell") as! UITableViewCell
+            var cell = tableView.dequeueReusableCellWithIdentifier("UserSpinnerCell") as! SpinnerTableViewCell
+            if self.networkError == false {
+                cell.spinnerActivityIndicator.startAnimating()
+            } else {
+                cell.spinnerActivityIndicator.stopAnimating()
+            }
             if (cell.respondsToSelector(Selector("layoutMargins"))) {
                 cell.layoutMargins = UIEdgeInsetsZero;
             }
@@ -280,6 +288,12 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
     }
     
     func requestUsers(sender:AnyObject, offset: Int)  {
+        self.dismissAlreadyAddedAlert()
+        self.users = []
+        self.maxReached = false
+        self.userTableView.reloadData()
+        self.networkError = false
+        self.hideNetworkErrorView()
         self.maxReached = false
         
         
@@ -315,6 +329,9 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
                 self.requestingUsers = false
             } else {
                 // Log details of the failure
+                self.showNetworkErrorView()
+                self.networkError = true
+                self.userTableView.reloadData()
                 println("Error: \(error!) \(error!.userInfo!)")
 
             }
@@ -365,6 +382,30 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
             }
         })
 
+    }
+    
+    func showNetworkErrorView() {
+        self.networkErrorViewTopConstraint.constant = 0
+        self.networkErrorView.hidden = false
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            }, completion: {
+                (value: Bool) in
+                
+        })
+        
+    }
+    
+    func hideNetworkErrorView() {
+        self.networkErrorViewTopConstraint.constant = -44
+        UIView.animateWithDuration(0.3, animations: {
+            self.view.layoutIfNeeded()
+            }, completion: {
+                (value: Bool) in
+                self.networkErrorView.hidden = true
+                
+        })
+        
     }
 
 }

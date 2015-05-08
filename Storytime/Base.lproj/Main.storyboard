@@ -94,6 +94,7 @@
             <string>OpenSans</string>
             <string>OpenSans</string>
             <string>OpenSans</string>
+            <string>OpenSans</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -2785,21 +2786,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User Already Added" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHJ-G5-zhB">
-                                <rect key="frame" x="0.0" y="64" width="600" height="44"/>
-                                <color key="backgroundColor" red="0.96079940029999999" green="0.93582712550000002" blue="0.018377676499999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="SsW-Fv-dPs"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <searchBar contentMode="redraw" placeholder="Search for users to add" translatesAutoresizingMaskIntoConstraints="NO" id="Yjm-Pc-87P">
-                                <rect key="frame" x="0.0" y="64" width="600" height="44"/>
-                                <color key="barTintColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="71" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="2NQ-Xr-doY">
                                 <rect key="frame" x="0.0" y="108" width="600" height="492"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2824,8 +2810,8 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="check_icon_green.png" translatesAutoresizingMaskIntoConstraints="NO" id="nLp-aN-L2F">
-                                                    <rect key="frame" x="28" y="13.5" width="44" height="44"/>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="check_icon_green.png" translatesAutoresizingMaskIntoConstraints="NO" id="nLp-aN-L2F">
+                                                    <rect key="frame" x="28" y="14" width="44" height="44"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="44" id="Yq0-A2-PdY"/>
                                                         <constraint firstAttribute="height" constant="44" id="k7V-JX-a9j"/>
@@ -2853,13 +2839,13 @@
                                             <outlet property="usernameLabel" destination="ppA-aA-5FZ" id="ZZL-Kg-lC2"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UserSpinnerCell" rowHeight="71" id="N6X-lr-teM">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UserSpinnerCell" rowHeight="71" id="N6X-lr-teM" customClass="SpinnerTableViewCell" customModule="Storytime" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="N6X-lr-teM" id="7UZ-bp-Ekr">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="PnZ-Ga-X2z">
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="PnZ-Ga-X2z">
                                                     <rect key="frame" x="290" y="26" width="20" height="20"/>
                                                 </activityIndicatorView>
                                             </subviews>
@@ -2868,9 +2854,65 @@
                                                 <constraint firstAttribute="centerX" secondItem="PnZ-Ga-X2z" secondAttribute="centerX" id="jPd-Wi-3K5"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="spinnerActivityIndicator" destination="PnZ-Ga-X2z" id="KPc-mF-cGe"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hGa-xK-TE5" userLabel="NetworkErrorView">
+                                <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XHj-Ar-qaG">
+                                        <rect key="frame" x="197" y="0.0" width="206" height="44"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Network Error" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bNf-rh-oeF">
+                                                <rect key="frame" x="50" y="7" width="146" height="30"/>
+                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="22"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="networkErrorIcon" translatesAutoresizingMaskIntoConstraints="NO" id="EeA-g1-L35">
+                                                <rect key="frame" x="10" y="7" width="30" height="30"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="30" id="bqP-7V-SNc"/>
+                                                    <constraint firstAttribute="height" constant="30" id="cwk-eN-Nap"/>
+                                                </constraints>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="bNf-rh-oeF" firstAttribute="leading" secondItem="EeA-g1-L35" secondAttribute="trailing" constant="10" id="0iI-9s-rHi"/>
+                                            <constraint firstAttribute="centerY" secondItem="bNf-rh-oeF" secondAttribute="centerY" id="9YY-3X-Rfk"/>
+                                            <constraint firstItem="EeA-g1-L35" firstAttribute="leading" secondItem="XHj-Ar-qaG" secondAttribute="leading" constant="10" id="KCP-Js-pUB"/>
+                                            <constraint firstAttribute="trailing" secondItem="bNf-rh-oeF" secondAttribute="trailing" constant="10" id="S02-MB-eV8"/>
+                                            <constraint firstAttribute="centerY" secondItem="EeA-g1-L35" secondAttribute="centerY" id="zO9-Kw-igw"/>
+                                            <constraint firstAttribute="height" constant="44" id="zty-6j-bwy"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="0fL-U0-rBe"/>
+                                    <constraint firstAttribute="centerY" secondItem="XHj-Ar-qaG" secondAttribute="centerY" id="naj-b8-L3f"/>
+                                    <constraint firstAttribute="centerX" secondItem="XHj-Ar-qaG" secondAttribute="centerX" id="sO3-YZ-h8m"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User Already Added" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fHJ-G5-zhB">
+                                <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                                <color key="backgroundColor" red="0.96079940029999999" green="0.93582712550000002" blue="0.018377676499999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="SsW-Fv-dPs"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <searchBar contentMode="redraw" placeholder="Search for users to add" translatesAutoresizingMaskIntoConstraints="NO" id="Yjm-Pc-87P">
+                                <rect key="frame" x="0.0" y="64" width="600" height="44"/>
+                                <color key="barTintColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xYy-KH-FXe">
                                 <rect key="frame" x="0.0" y="20" width="44" height="44"/>
                                 <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
@@ -2888,7 +2930,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Authors" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DDm-wP-F9W">
-                                <rect key="frame" x="240" y="31" width="118.5" height="26"/>
+                                <rect key="frame" x="240" y="31" width="119" height="26"/>
                                 <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="19"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -2901,27 +2943,26 @@
                             <constraint firstItem="Yjm-Pc-87P" firstAttribute="top" secondItem="xYy-KH-FXe" secondAttribute="bottom" id="PFd-Ex-T6y"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Yjm-Pc-87P" secondAttribute="trailing" constant="-16" id="QFE-Cd-7BX"/>
                             <constraint firstItem="xYy-KH-FXe" firstAttribute="leading" secondItem="uhD-MY-RDM" secondAttribute="leadingMargin" constant="-16" id="QSW-mF-2gi"/>
+                            <constraint firstItem="fHJ-G5-zhB" firstAttribute="top" secondItem="hGa-xK-TE5" secondAttribute="bottom" constant="-44" id="TT2-8a-756"/>
                             <constraint firstItem="Yjm-Pc-87P" firstAttribute="leading" secondItem="uhD-MY-RDM" secondAttribute="leading" id="Tv7-J4-CHY"/>
-                            <constraint firstItem="Yjm-Pc-87P" firstAttribute="leading" secondItem="xYy-KH-FXe" secondAttribute="trailing" id="Wvo-sB-D3M"/>
-                            <constraint firstItem="fHJ-G5-zhB" firstAttribute="top" secondItem="Yjm-Pc-87P" secondAttribute="bottom" constant="-44" id="YOP-ZA-bba"/>
+                            <constraint firstAttribute="trailing" secondItem="hGa-xK-TE5" secondAttribute="trailing" id="WOh-Oq-KeC"/>
                             <constraint firstAttribute="centerX" secondItem="DDm-wP-F9W" secondAttribute="centerX" id="Z0W-jk-XNG"/>
                             <constraint firstItem="2NQ-Xr-doY" firstAttribute="top" secondItem="Yjm-Pc-87P" secondAttribute="bottom" id="av0-lM-mrc"/>
-                            <constraint firstItem="Yjm-Pc-87P" firstAttribute="top" secondItem="en5-Bd-Na8" secondAttribute="bottom" constant="44" id="dRt-9s-owT"/>
                             <constraint firstItem="2NQ-Xr-doY" firstAttribute="top" secondItem="fHJ-G5-zhB" secondAttribute="bottom" id="diL-rA-vUY"/>
+                            <constraint firstItem="2NQ-Xr-doY" firstAttribute="top" secondItem="hGa-xK-TE5" secondAttribute="bottom" id="eal-dk-Fei"/>
                             <constraint firstItem="rzc-UC-OLw" firstAttribute="top" secondItem="2NQ-Xr-doY" secondAttribute="bottom" id="fZz-hj-CEc"/>
                             <constraint firstItem="DDm-wP-F9W" firstAttribute="top" secondItem="en5-Bd-Na8" secondAttribute="bottom" constant="11" id="ivv-tP-0MZ"/>
                             <constraint firstItem="xYy-KH-FXe" firstAttribute="top" secondItem="en5-Bd-Na8" secondAttribute="bottom" id="jIp-2Z-1P6"/>
                             <constraint firstAttribute="trailing" secondItem="fHJ-G5-zhB" secondAttribute="trailing" id="jOS-op-V0Y"/>
                             <constraint firstAttribute="trailing" secondItem="2NQ-Xr-doY" secondAttribute="trailing" id="lHY-d8-82s"/>
-                            <constraint firstAttribute="centerX" secondItem="fHJ-G5-zhB" secondAttribute="centerX" id="r2C-Pz-tcc"/>
+                            <constraint firstItem="hGa-xK-TE5" firstAttribute="leading" secondItem="uhD-MY-RDM" secondAttribute="leading" id="rMn-JS-aFJ"/>
+                            <constraint firstItem="hGa-xK-TE5" firstAttribute="top" secondItem="Yjm-Pc-87P" secondAttribute="bottom" constant="-44" id="t3z-yt-qwI"/>
                             <constraint firstItem="2NQ-Xr-doY" firstAttribute="leading" secondItem="uhD-MY-RDM" secondAttribute="leading" id="vy9-hA-pvd"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="Wvo-sB-D3M"/>
-                                <exclude reference="dRt-9s-owT"/>
-                                <exclude reference="r2C-Pz-tcc"/>
                                 <exclude reference="av0-lM-mrc"/>
+                                <exclude reference="eal-dk-Fei"/>
                             </mask>
                         </variation>
                         <connections>
@@ -2929,8 +2970,10 @@
                         </connections>
                     </view>
                     <connections>
+                        <outlet property="networkErrorView" destination="hGa-xK-TE5" id="obH-An-cFs"/>
+                        <outlet property="networkErrorViewTopConstraint" destination="t3z-yt-qwI" id="1Mf-Lk-des"/>
                         <outlet property="tableViewTapGestureRecognizer" destination="W02-4n-iBx" id="IxN-xL-cvz"/>
-                        <outlet property="userAlreadyAddedAlertTopConstraint" destination="YOP-ZA-bba" id="a9K-Y2-uK6"/>
+                        <outlet property="userAlreadyAddedAlertTopConstraint" destination="TT2-8a-756" id="Xf1-Qi-aGx"/>
                         <outlet property="userSearchBar" destination="Yjm-Pc-87P" id="eFG-W3-GFl"/>
                         <outlet property="userTableView" destination="2NQ-Xr-doY" id="1f6-WS-Nhr"/>
                         <outlet property="userTableViewBottomConstraint" destination="fZz-hj-CEc" id="VjT-d8-roy"/>
