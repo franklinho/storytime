@@ -19,7 +19,8 @@ protocol StoryVideoTableViewCellDelegate{
 class StoryVideoTableViewCell: UITableViewCell {
     var delegate : StoryVideoTableViewCellDelegate?
     var deleteButtonExpanded = false
-    
+    var soundOn = true
+    @IBOutlet weak var muteButton: UIButton!
     @IBOutlet weak var deleteButtonWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var deleteButton: UIButton!
     var comment : PFObject?
@@ -40,6 +41,9 @@ class StoryVideoTableViewCell: UITableViewCell {
         self.selectionStyle = UITableViewCellSelectionStyle.None
         playButtonIconImageView.layer.cornerRadius = 100
         playButtonIconImageView.clipsToBounds = true
+        
+        muteButton.layer.cornerRadius = 22
+        muteButton.clipsToBounds = true
         
         timestampView.layer.cornerRadius = 5
         timestampView.clipsToBounds = true
@@ -139,6 +143,15 @@ class StoryVideoTableViewCell: UITableViewCell {
     }
     
     
+    @IBAction func muteButtonWasTapped(sender: AnyObject) {
+        if self.player!.muted == false {
+            self.player!.muted = true
+            self.muteButton.setImage(UIImage(named: "muteIcon"), forState: UIControlState.Normal)
+        } else {
+            self.player!.muted = false
+            self.muteButton.setImage(UIImage(named: "soundIcon"), forState: UIControlState.Normal)
+        }
+    }
     
 
 }

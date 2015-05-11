@@ -32,6 +32,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet var commentsTableViewTapGestureRecognizer: UITapGestureRecognizer!
     @IBOutlet weak var progressView: UIView!
     var networkErrorViewExpanded = false
+    var selectedContainer = 0
     
     var installation = PFInstallation.currentInstallation()
     @IBOutlet weak var noCommentsLabel: UILabel!
@@ -541,6 +542,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
 //        }
         
         if defaultBehavior == true {
+            self.selectedContainer = 0
             vision.cameraMode = PBJCameraMode.Photo
             vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
             cameraSendButton.hidden = false
@@ -701,6 +703,14 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     @IBAction func textButtonWasTapped(sender: AnyObject) {
+        if self.selectedContainer != 2 {
+            if self.selectedContainer == 1 {
+                UIView.transitionWithView(self.textContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: {}, completion: nil)
+            } else {
+                UIView.transitionWithView(self.textContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromTop, animations: {}, completion: nil)
+            }
+        }
+        self.selectedContainer = 2
         println("Text button was tapped")
         videoCommentLongPressGestureRecognizer.enabled = false
         for view in createViews {
@@ -711,6 +721,14 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @IBAction func cameraButtonWasTapped(sender: AnyObject) {
+        if self.selectedContainer != 0 {
+            if self.selectedContainer == 2 {
+                UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: {}, completion: nil)
+            } else {
+                UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromTop, animations: {}, completion: nil)
+            }
+        }
+        self.selectedContainer = 0
         self.view.endEditing(true)
         self.view.layoutIfNeeded()
         var createViewRect : CGRect = self.createView.bounds
@@ -720,9 +738,13 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             self.view.layoutIfNeeded()
             
         })
+        if vision.cameraMode != PBJCameraMode.Photo {
+            vision.cameraMode = PBJCameraMode.Photo
+        }
         
-        vision.cameraMode = PBJCameraMode.Photo
-        vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
+        if vision.captureSessionPreset != AVCaptureSessionPreset1920x1080 {
+            vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
+        }
         cameraSendButton.hidden = false
         cameraSendButton.enabled = true
         holdToRecordLabel.hidden = true
@@ -734,12 +756,20 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         }
         
         
-        vision.startPreview()
+//        vision.startPreview()
 
     }
     
     
     @IBAction func videoButtonWasTapped(sender: AnyObject) {
+        if self.selectedContainer != 1 {
+            if self.selectedContainer == 0 {
+                UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: {}, completion: nil)
+            } else {
+                UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromTop, animations: {}, completion: nil)
+            }
+        }
+        self.selectedContainer = 1
         self.view.endEditing(true)
         self.view.endEditing(true)
         self.view.layoutIfNeeded()
@@ -751,8 +781,13 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             
         })
         
-        vision.cameraMode = PBJCameraMode.Video
-        vision.captureSessionPreset = AVCaptureSessionPresetMedium
+        if vision.cameraMode != PBJCameraMode.Video {
+            vision.cameraMode = PBJCameraMode.Video
+        }
+        if vision.captureSessionPreset != AVCaptureSessionPresetMedium {
+            vision.captureSessionPreset = AVCaptureSessionPresetMedium
+        }
+        
         cameraSendButton.hidden = true
         cameraSendButton.enabled = false
         holdToRecordLabel.hidden = false
@@ -762,7 +797,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             (view as! UIView).hidden = true
             cameraContainer.hidden = false
         }
-        vision.startPreview()
+//        vision.startPreview()
 
     }
     
@@ -799,10 +834,19 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @IBAction func cameraSwitchButtonWasTapped(sender: AnyObject) {
+        vision.stopPreview()
         if vision.cameraDevice == PBJCameraDevice.Back {
-            vision.cameraDevice = PBJCameraDevice.Front
+            self.vision.cameraDevice = PBJCameraDevice.Front
+            self.vision.startPreview()
+            UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromLeft, animations: {}, completion: { (value: Bool) in
+            })
+            
         } else {
-            vision.cameraDevice = PBJCameraDevice.Back
+            self.vision.cameraDevice = PBJCameraDevice.Back
+            self.vision.startPreview()
+            UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromRight, animations: {}, completion: { (value: Bool) in
+            })
+            
         }
     }
     

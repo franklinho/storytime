@@ -43,6 +43,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var cameraFlashButton: UIButton!
     var networkError = false
     var networkErrorViewExpanded = false
+    var selectedContainer = 0
     
     var firstUser : PFUser?
     var secondUser : PFUser?
@@ -336,11 +337,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 }
                             }
                         }
-                        var secondUser = posters[1] as! PFUser
-                        secondUser.fetchIfNeededInBackgroundWithBlock {
+                        self.secondUser = posters[1] as! PFUser
+                        self.secondUser!.fetchIfNeededInBackgroundWithBlock {
                             (user, error) -> Void in
-                            if secondUser["profileImage"] != nil {
-                                var profileImageFile = secondUser["profileImage"] as! PFFile
+                            if self.secondUser!["profileImage"] != nil {
+                                var profileImageFile = self.secondUser!["profileImage"] as! PFFile
                                 profileImageFile.getDataInBackgroundWithBlock {
                                     (imageData, error) -> Void in
                                     if error == nil {
@@ -527,7 +528,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         vision.outputFormat = PBJOutputFormat.Square
         vision.maximumCaptureDuration = CMTimeMakeWithSeconds(10, 600)
         vision.flashMode = PBJFlashMode.Auto
-        vision.startPreview()
+//        vision.startPreview()
     }
     
 //    func beginSession() {
@@ -802,6 +803,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         pauseVideoIfPlaying()
         
         if defaultBehavior == true {
+            self.selectedContainer = 0
             vision.cameraMode = PBJCameraMode.Photo
             vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
             
@@ -1068,6 +1070,16 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     @IBAction func videoSelectorWasTapped(sender: AnyObject) {
+        if self.selectedContainer != 1 {
+            if self.selectedContainer == 0 {
+                UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: {}, completion: nil)
+            } else {
+                UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromTop, animations: {}, completion: nil)
+            }
+        }
+        self.selectedContainer = 1
+        
+        
         self.view.endEditing(true)
         self.view.endEditing(true)
         self.view.layoutIfNeeded()
@@ -1079,8 +1091,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
         })
         
-        vision.cameraMode = PBJCameraMode.Video
-        vision.captureSessionPreset = AVCaptureSessionPresetMedium
+        if vision.cameraMode != PBJCameraMode.Video {
+            vision.cameraMode = PBJCameraMode.Video
+        }
+        if vision.captureSessionPreset != AVCaptureSessionPresetMedium {
+            vision.captureSessionPreset = AVCaptureSessionPresetMedium
+        }
+        
         cameraSendButton.hidden = true
         cameraSendButton.enabled = false
         holdToRecordLabel.hidden = false
@@ -1090,7 +1107,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             (view as! UIView).hidden = true
             cameraContainer.hidden = false
         }
-        vision.startPreview()
+//        vision.startPreview()
 //        if captureSession.canSetSessionPreset(AVCaptureSessionPresetHigh){
 //            captureSession.sessionPreset = AVCaptureSessionPresetHigh
 //        }
@@ -1117,6 +1134,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     
     @IBAction func cameraSelectorWasTapped(sender: AnyObject) {
+        if self.selectedContainer != 0 {
+            if self.selectedContainer == 2 {
+                UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: {}, completion: nil)
+            } else {
+                UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromTop, animations: {}, completion: nil)
+            }
+        }
+        self.selectedContainer = 0
         self.view.endEditing(true)
         self.view.layoutIfNeeded()
         var createViewRect : CGRect = self.createView.bounds
@@ -1127,8 +1152,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
         })
         
-        vision.cameraMode = PBJCameraMode.Photo
-        vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
+        if vision.cameraMode != PBJCameraMode.Photo {
+            vision.cameraMode = PBJCameraMode.Photo
+        }
+        if vision.captureSessionPreset != AVCaptureSessionPreset1920x1080 {
+            vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
+        }
+        
         cameraSendButton.hidden = false
         cameraSendButton.enabled = true
         holdToRecordLabel.hidden = true
@@ -1140,7 +1170,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
 
 
-       vision.startPreview()
+//       vision.startPreview()
         
         //        if captureSession.canSetSessionPreset(AVCaptureSessionPresetHigh){
         //                captureSession.sessionPreset = AVCaptureSessionPresetHigh
@@ -1163,6 +1193,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
 
     @IBAction func textSelectorWasTapped(sender: AnyObject) {
+        if self.selectedContainer != 2 {
+            if self.selectedContainer == 1 {
+                UIView.transitionWithView(self.textContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromBottom, animations: {}, completion: nil)
+            } else {
+                UIView.transitionWithView(self.textContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromTop, animations: {}, completion: nil)
+            }
+        }
+        self.selectedContainer = 2
         println("Text button was tapped")
         videoLongPressGestureRecognizer.enabled = false
         for view in createViews {
@@ -2084,10 +2122,19 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     
     @IBAction func cameraSwitchButtonWasTapped(sender: AnyObject) {
+        vision.stopPreview()
         if vision.cameraDevice == PBJCameraDevice.Back {
-            vision.cameraDevice = PBJCameraDevice.Front
+            self.vision.cameraDevice = PBJCameraDevice.Front
+            self.vision.startPreview()
+            UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromLeft, animations: {}, completion: { (value: Bool) in
+            })
+            
         } else {
-            vision.cameraDevice = PBJCameraDevice.Back
+            self.vision.cameraDevice = PBJCameraDevice.Back
+            self.vision.startPreview()
+            UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromRight, animations: {}, completion: { (value: Bool) in
+            })
+            
         }
     }
     

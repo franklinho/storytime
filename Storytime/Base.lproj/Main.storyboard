@@ -1580,11 +1580,11 @@
                                                         <constraint firstAttribute="width" constant="200" id="DHX-NH-hcK"/>
                                                     </constraints>
                                                 </imageView>
-                                                <view alpha="0.75" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cis-kN-nv6" userLabel="TimestampView">
-                                                    <rect key="frame" x="494" y="17" width="96" height="44"/>
+                                                <view alpha="0.75" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cis-kN-nv6" userLabel="TimestampView">
+                                                    <rect key="frame" x="499" y="17" width="91" height="44"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="timestamp" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J2H-ea-73u">
-                                                            <rect key="frame" x="5" y="2" width="86" height="40"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="timestamp" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J2H-ea-73u">
+                                                            <rect key="frame" x="5" y="2" width="81" height="40"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" id="SzG-QC-xkm"/>
                                                             </constraints>
@@ -1634,8 +1634,8 @@
                                                         <action selector="deleteButtonWasTapped:" destination="1Sp-W7-uAW" eventType="touchUpInside" id="jqg-vh-xoH"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" alpha="0.75" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uZ1-xx-SVX">
-                                                    <rect key="frame" x="80" y="17" width="36" height="44"/>
+                                                <button opaque="NO" alpha="0.75" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uZ1-xx-SVX">
+                                                    <rect key="frame" x="80" y="17" width="33" height="44"/>
                                                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="44" id="FIX-j7-nQC"/>
@@ -1666,6 +1666,20 @@
                                                         <action selector="showUserProfileWasTapped:" destination="1Sp-W7-uAW" eventType="touchUpInside" id="DEP-91-kzS"/>
                                                     </connections>
                                                 </button>
+                                                <button opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VrF-Zu-81E" userLabel="soundButton">
+                                                    <rect key="frame" x="548" y="281" width="44" height="44"/>
+                                                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="44" id="89j-w5-57t"/>
+                                                        <constraint firstAttribute="width" constant="44" id="x22-jb-smb"/>
+                                                    </constraints>
+                                                    <state key="normal" image="soundIcon">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="muteButtonWasTapped:" destination="1Sp-W7-uAW" eventType="touchUpInside" id="5TD-iX-GD2"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                             <gestureRecognizers/>
@@ -1677,8 +1691,10 @@
                                                 <constraint firstAttribute="trailing" secondItem="lX6-HP-Kvp" secondAttribute="trailing" id="Kev-dF-NFv"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="lX6-HP-Kvp" secondAttribute="trailing" id="L86-8c-gaX"/>
                                                 <constraint firstItem="lX6-HP-Kvp" firstAttribute="top" secondItem="mqd-bj-yN5" secondAttribute="top" id="Laf-cW-0ke"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="VrF-Zu-81E" secondAttribute="bottom" id="Q8N-cH-GKU"/>
                                                 <constraint firstItem="4aD-dW-GiR" firstAttribute="top" secondItem="mqd-bj-yN5" secondAttribute="top" id="SxY-F9-n5E"/>
                                                 <constraint firstAttribute="trailing" secondItem="4aD-dW-GiR" secondAttribute="trailing" id="Uoo-Ge-8GY"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="VrF-Zu-81E" secondAttribute="trailing" id="YQ7-2J-kcX"/>
                                                 <constraint firstItem="Ak1-Dx-rez" firstAttribute="trailing" secondItem="BsE-bS-cL5" secondAttribute="trailing" id="ZI4-Kx-vWM"/>
                                                 <constraint firstItem="BsE-bS-cL5" firstAttribute="leading" secondItem="mqd-bj-yN5" secondAttribute="leadingMargin" id="a8B-YQ-gau"/>
                                                 <constraint firstItem="cis-kN-nv6" firstAttribute="height" secondItem="uZ1-xx-SVX" secondAttribute="height" id="b1b-d8-VnW"/>
@@ -1711,6 +1727,7 @@
                                             <outlet property="deleteButton" destination="iWS-uN-Y9G" id="p2p-Hp-hRX"/>
                                             <outlet property="deleteButtonWidthConstraint" destination="dit-1I-n0m" id="uJU-Of-JXu"/>
                                             <outlet property="deleteDismissButton" destination="4aD-dW-GiR" id="Rz5-gO-yI5"/>
+                                            <outlet property="muteButton" destination="VrF-Zu-81E" id="YIM-tb-zBw"/>
                                             <outlet property="playButtonIconImageView" destination="V3A-ji-sEl" id="g7K-TI-ToQ"/>
                                             <outlet property="playerView" destination="lX6-HP-Kvp" id="GSL-Sv-fQS"/>
                                             <outlet property="profileImageView" destination="BsE-bS-cL5" id="Cql-Uw-WeE"/>
@@ -2501,21 +2518,6 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ebf-0P-F2l" userLabel="CreateTitleView">
                                 <rect key="frame" x="0.0" y="64" width="600" height="90"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter title here" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cHL-Ds-X6q">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="44" id="eBd-gc-3dw"/>
-                                            <constraint firstAttribute="height" constant="30" id="oPh-fV-56o"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                        <variation key="default">
-                                            <mask key="constraints">
-                                                <exclude reference="oPh-fV-56o"/>
-                                            </mask>
-                                        </variation>
-                                    </textField>
                                     <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="748" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LlQ-ee-Wny">
                                         <rect key="frame" x="0.0" y="47" width="600" height="46"/>
                                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -2544,6 +2546,21 @@
                                             <action selector="titleCreateButtonWasTapped:" destination="nXj-xd-FNA" eventType="touchUpInside" id="KRH-Hp-x51"/>
                                         </connections>
                                     </button>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter title here" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cHL-Ds-X6q">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="eBd-gc-3dw"/>
+                                            <constraint firstAttribute="height" constant="30" id="oPh-fV-56o"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="oPh-fV-56o"/>
+                                            </mask>
+                                        </variation>
+                                    </textField>
                                 </subviews>
                                 <color key="backgroundColor" red="0.12156862745098039" green="0.12941176470588237" blue="0.14117647058823529" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -2746,7 +2763,7 @@
                         <action selector="storyTableViewWasTapped:" destination="nXj-xd-FNA" id="IjQ-dg-PHd"/>
                     </connections>
                 </tapGestureRecognizer>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.10000000000000001" id="49O-YB-Itb">
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.20000000000000001" id="49O-YB-Itb">
                     <connections>
                         <action selector="videoLongPressGestureRecognizerWasTapped:" destination="nXj-xd-FNA" id="9fq-nt-fxI"/>
                     </connections>
@@ -3131,6 +3148,20 @@
                                                         <action selector="deleteButtonWasTapped:" destination="kAw-tL-Mzf" eventType="touchUpInside" id="scL-v9-zzz"/>
                                                     </connections>
                                                 </button>
+                                                <button opaque="NO" alpha="0.80000001192092896" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9aP-NE-tKB" userLabel="soundButton">
+                                                    <rect key="frame" x="548" y="281" width="44" height="44"/>
+                                                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="44" id="jbL-UC-weO"/>
+                                                        <constraint firstAttribute="width" constant="44" id="yRV-Jl-ejS"/>
+                                                    </constraints>
+                                                    <state key="normal" image="soundIcon">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="muteButtonWasTapped:" destination="kAw-tL-Mzf" eventType="touchUpInside" id="uCq-7a-Ke1"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <color key="backgroundColor" red="0.16078431369999999" green="0.1450980392" blue="0.2156862745" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
@@ -3159,7 +3190,9 @@
                                                 <constraint firstAttribute="trailing" secondItem="Vfe-zq-D7F" secondAttribute="trailing" id="jg2-Lj-EAv"/>
                                                 <constraint firstItem="Zyq-de-Bza" firstAttribute="top" secondItem="sv6-R1-6DY" secondAttribute="top" id="mdY-Y4-hYP"/>
                                                 <constraint firstAttribute="trailing" secondItem="Zyq-de-Bza" secondAttribute="trailing" id="sDH-sz-ydq"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="9aP-NE-tKB" secondAttribute="bottom" id="x7x-Ue-BgO"/>
                                                 <constraint firstItem="gH5-fD-8kh" firstAttribute="leading" secondItem="CxM-I1-oGx" secondAttribute="trailing" constant="10" id="ytt-9R-abK"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="9aP-NE-tKB" secondAttribute="trailing" id="zdW-Xd-LQp"/>
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
@@ -3174,6 +3207,7 @@
                                             <outlet property="deleteButton" destination="tOk-u9-bv6" id="lic-na-1Rn"/>
                                             <outlet property="deleteButtonWidthConstraint" destination="KCU-pc-60q" id="QRU-QB-DcP"/>
                                             <outlet property="deleteDismissButton" destination="Vfe-zq-D7F" id="IQJ-U1-rfo"/>
+                                            <outlet property="muteButton" destination="9aP-NE-tKB" id="F0v-oT-vXh"/>
                                             <outlet property="playButtonIconImageView" destination="R3c-CX-V4j" id="CN0-DY-xkY"/>
                                             <outlet property="playerView" destination="Zyq-de-Bza" id="FyD-rR-5Zf"/>
                                             <outlet property="profileImageView" destination="CxM-I1-oGx" id="UFb-cm-FSZ"/>
@@ -4165,7 +4199,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QKw-NZ-fQX" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <pongPressGestureRecognizer enabled="NO" allowableMovement="10" minimumPressDuration="0.10000000000000001" id="UMw-LD-kWF">
+                <pongPressGestureRecognizer enabled="NO" allowableMovement="10" minimumPressDuration="0.20000000000000001" id="UMw-LD-kWF">
                     <connections>
                         <action selector="videoCommentLongPressGestureRecognizerWasPressed:" destination="22L-dv-H0B" id="QM2-zl-QOE"/>
                     </connections>
@@ -4686,6 +4720,7 @@
         <image name="play_button_icon_white.png" width="256" height="256"/>
         <image name="plusIcon" width="32" height="32"/>
         <image name="settingsIcon" width="24" height="24"/>
+        <image name="soundIcon" width="24" height="24"/>
         <image name="switch_camera_icon.png" width="128" height="128"/>
         <image name="text_icon.png" width="256" height="256"/>
         <image name="up_icon_white.png" width="256" height="256"/>
