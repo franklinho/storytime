@@ -512,7 +512,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 PFUser.currentUser()!.saveInBackgroundWithBlock({(success, error) -> Void in
                     if success {
                         self.following = true
-                        self.sendPushNotificationToUser(self.user!)
+//                        self.sendPushNotificationToUser(self.user!)
                     } else {
                         println("There was an error: \(error!.description)")
                     }

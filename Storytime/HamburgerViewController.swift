@@ -272,6 +272,7 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
         
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
+            createProfileVC.delegate = self
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         }
         
@@ -314,6 +315,7 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
         
         if PFUser.currentUser()!["profileName"] == nil {
             var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
+            createProfileVC.delegate = self
             self.presentViewController(createProfileVC, animated: true, completion: nil)
         }
     }

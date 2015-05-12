@@ -9,7 +9,9 @@
 import UIKit
 
 class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, CreateProfileViewControllerDelegate {
+    @IBOutlet weak var titleView: UIView!
 
+    @IBOutlet weak var commentsTableViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var networkErrorView: UIView!
     var networkError = false
     @IBOutlet weak var networkErrorViewTopConstraint: NSLayoutConstraint!
@@ -97,6 +99,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
 
         // Do any additional setup after loading the view.
         
+        self.networkErrorView.hidden = true
         expandedButtonView.layer.cornerRadius = 40
         expandedButtonView.clipsToBounds = true
         
@@ -440,6 +443,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         vision.outputFormat = PBJOutputFormat.Square
         vision.maximumCaptureDuration = CMTimeMakeWithSeconds(10, 600)
         vision.flashMode = PBJFlashMode.Auto
+        self.vision.startPreview()
     }
 
     func keyBoardWillChange(notification: NSNotification) {
@@ -834,17 +838,22 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @IBAction func cameraSwitchButtonWasTapped(sender: AnyObject) {
+        self.cameraSwitchButton.enabled = false
         vision.stopPreview()
         if vision.cameraDevice == PBJCameraDevice.Back {
-            self.vision.cameraDevice = PBJCameraDevice.Front
-            self.vision.startPreview()
+            
             UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromLeft, animations: {}, completion: { (value: Bool) in
+                self.vision.cameraDevice = PBJCameraDevice.Front
+                self.vision.startPreview()
+                self.cameraSwitchButton.enabled = true
             })
             
         } else {
-            self.vision.cameraDevice = PBJCameraDevice.Back
-            self.vision.startPreview()
+            
             UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromRight, animations: {}, completion: { (value: Bool) in
+                self.vision.cameraDevice = PBJCameraDevice.Back
+                self.vision.startPreview()
+                self.cameraSwitchButton.enabled = true
             })
             
         }
@@ -1172,13 +1181,35 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         
         if scrollView.contentOffset.y <= 0 {
             self.titleViewTopConstraint.constant = 0
+            self.commentsTableViewTopConstraint.constant = 0
+            
         } else {
             if (self.lastContentOffset > scrollView.contentOffset.y) {
-                self.titleViewTopConstraint.constant = 0
+                if self.titleViewTopConstraint.constant < 0 {
+                    var topValue = self.titleViewTopConstraint.constant + self.lastContentOffset - scrollView.contentOffset.y
+                    if topValue > 0 {
+                        self.titleViewTopConstraint.constant = 0
+                    } else {
+                        self.titleViewTopConstraint.constant += self.lastContentOffset - scrollView.contentOffset.y
+                    }
+                    
+                }
+                self.commentsTableViewTopConstraint.constant = 0
             } else if (self.lastContentOffset < scrollView.contentOffset.y) {
-                self.titleViewTopConstraint.constant = -90
+                if self.titleViewTopConstraint.constant > -90 {
+                    
+                    
+                    var bottomValue = self.titleViewTopConstraint.constant - scrollView.contentOffset.y - self.lastContentOffset
+                    if bottomValue < -90 {
+                        self.titleViewTopConstraint.constant = -90
+                    } else {
+                        self.titleViewTopConstraint.constant -= scrollView.contentOffset.y - self.lastContentOffset
+                    }
+                }
+                self.commentsTableViewTopConstraint.constant = 0
             }
         }
+        self.lastContentOffset = scrollView.contentOffset.y
         
         UIView.animateWithDuration(0.2, animations: {
             self.view.layoutIfNeeded()
@@ -1213,6 +1244,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        
         var cells = commentsTableView.visibleCells()
         var indexPaths = commentsTableView.indexPathsForVisibleRows()
         
@@ -1641,6 +1673,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
 
     func showNetworkErrorView() {
         self.networkErrorViewTopConstraint.constant = 0
+        self.commentsTableViewTopConstraint.constant = 0
         self.networkErrorView.hidden = false
         UIView.animateWithDuration(0.3, animations: {
             self.view.layoutIfNeeded()
@@ -1654,6 +1687,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func hideNetworkErrorView() {
         self.networkErrorViewTopConstraint.constant = -44
+        self.commentsTableViewTopConstraint.constant = 0
         UIView.animateWithDuration(0.3, animations: {
             self.view.layoutIfNeeded()
             }, completion: {

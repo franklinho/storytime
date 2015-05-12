@@ -21,6 +21,12 @@ class CustomLoginViewController: PFLogInViewController {
         var storyWeaveLogo = UIImageView(image: UIImage(named: "AlternativeStoryweaveLogoTransparent.png"))
         storyWeaveLogo.frame = CGRectMake((screenSize.width - 300) / 2, 150, 300, 300)
         self.view.addSubview(storyWeaveLogo)
+        var storyWeaveLabel = UILabel(frame: CGRectMake((screenSize.width - 162)/2, 450, 162, 41))
+        storyWeaveLabel.text = "Storyweave"
+        storyWeaveLabel.font = UIFont(name: "OpenSans", size: 30)
+        storyWeaveLabel.textColor = UIColor.whiteColor()
+        self.view.addSubview(storyWeaveLabel)
+        
     }
 
     override func didReceiveMemoryWarning() {

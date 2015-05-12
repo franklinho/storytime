@@ -627,19 +627,49 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        
-        if scrollView.contentOffset.y  <= 0 {
+        if scrollView.contentOffset.y <= 0 {
             self.searchBarTopConstraint.constant = 0
-            self.tableViewTopConstraint.constant = 0
+            
         } else {
             if (self.lastContentOffset > scrollView.contentOffset.y) {
-                self.searchBarTopConstraint.constant = 0
-                self.tableViewTopConstraint.constant = 0
+                if self.searchBarTopConstraint.constant < 0 {
+                    var topValue = self.searchBarTopConstraint.constant + self.lastContentOffset - scrollView.contentOffset.y
+                    if topValue > 0 {
+                        self.searchBarTopConstraint.constant = 0
+                    } else {
+                        self.searchBarTopConstraint.constant += self.lastContentOffset - scrollView.contentOffset.y
+                    }
+                    
+                }
             } else if (self.lastContentOffset < scrollView.contentOffset.y) {
-                self.searchBarTopConstraint.constant = -44
-                self.tableViewTopConstraint.constant = 0
+                if self.searchBarTopConstraint.constant > -44 {
+                    
+                    
+                    var bottomValue = self.searchBarTopConstraint.constant - scrollView.contentOffset.y - self.lastContentOffset
+                    if bottomValue < -44 {
+                        self.searchBarTopConstraint.constant = -44
+                    } else {
+                        self.searchBarTopConstraint.constant -= scrollView.contentOffset.y - self.lastContentOffset
+                    }
+                }
+
             }
         }
+        self.lastContentOffset = scrollView.contentOffset.y
+        
+        
+//        if scrollView.contentOffset.y  <= 0 {
+//            self.searchBarTopConstraint.constant = 0
+//            self.tableViewTopConstraint.constant = 0
+//        } else {
+//            if (self.lastContentOffset > scrollView.contentOffset.y) {
+//                self.searchBarTopConstraint.constant = 0
+//                self.tableViewTopConstraint.constant = 0
+//            } else if (self.lastContentOffset < scrollView.contentOffset.y) {
+//                self.searchBarTopConstraint.constant = -44
+//                self.tableViewTopConstraint.constant = 0
+//            }
+//        }
 
         UIView.animateWithDuration(0.2, animations: {
             self.view.layoutIfNeeded()
@@ -647,8 +677,6 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 (value: Bool) in
                 
         })
-        
-        self.lastContentOffset = scrollView.contentOffset.y
         
         
         

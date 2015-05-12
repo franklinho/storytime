@@ -12,7 +12,9 @@ import MediaPlayer
 
 
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate, CreateProfileViewControllerDelegate, PostersViewControllerDelegate {
+    @IBOutlet weak var storyTableViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var networkErrorTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var cameraSwitchButton: UIButton!
     @IBOutlet weak var networkErrorView: UIView!
     @IBOutlet weak var morePostersButton: UIButton!
     @IBOutlet weak var secondProfileImageView: UIImageView!
@@ -367,6 +369,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.createView.hidden = true
                 self.createTitleView.hidden = true
                 self.titleView.hidden = false
+//                self.networkErrorView.hidden = false
                 if PFUser.currentUser() != nil {
                     var currentUser = PFUser.currentUser()
                     println("Story user is \(storyUser.username) and current user is \(currentUser!.username)")
@@ -519,16 +522,16 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //        }
 
         vision.delegate = self
-
         
+        
+        vision.outputFormat = PBJOutputFormat.Square
+        vision.maximumCaptureDuration = CMTimeMakeWithSeconds(10, 600)
         vision.cameraOrientation = PBJCameraOrientation.Portrait
         vision.cameraMode = PBJCameraMode.Photo
         vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
         vision.focusMode = PBJFocusMode.ContinuousAutoFocus
-        vision.outputFormat = PBJOutputFormat.Square
-        vision.maximumCaptureDuration = CMTimeMakeWithSeconds(10, 600)
         vision.flashMode = PBJFlashMode.Auto
-//        vision.startPreview()
+        vision.startPreview()
     }
     
 //    func beginSession() {
@@ -1052,6 +1055,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.storyPointsLabel.text = "\(points)"
                     self.createTitleView.hidden = true
                     self.titleView.hidden = false
+//                    self.networkErrorView.hidden = false
                     self.createTextEvent()
                     
                 } else {
@@ -1865,17 +1869,38 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //    }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        
         if scrollView.contentOffset.y <= 0 {
             self.titleViewTopConstraint.constant = 0
+            self.storyTableViewTopConstraint.constant = 0
+            
         } else {
             if (self.lastContentOffset > scrollView.contentOffset.y) {
-                self.titleViewTopConstraint.constant = 0
+                if self.titleViewTopConstraint.constant < 0 {
+                    var topValue = self.titleViewTopConstraint.constant + self.lastContentOffset - scrollView.contentOffset.y
+                    if topValue > 0 {
+                        self.titleViewTopConstraint.constant = 0
+                    } else {
+                        self.titleViewTopConstraint.constant += self.lastContentOffset - scrollView.contentOffset.y
+                    }
+                    
+                }
+                self.storyTableViewTopConstraint.constant = 0
             } else if (self.lastContentOffset < scrollView.contentOffset.y) {
-                self.titleViewTopConstraint.constant = -90
+                if self.titleViewTopConstraint.constant > -90 {
+                    
+                    
+                    var bottomValue = self.titleViewTopConstraint.constant - scrollView.contentOffset.y - self.lastContentOffset
+                    if bottomValue < -90 {
+                        self.titleViewTopConstraint.constant = -90
+                    } else {
+                        self.titleViewTopConstraint.constant -= scrollView.contentOffset.y - self.lastContentOffset
+                    }
+                }
+                self.storyTableViewTopConstraint.constant = 0
             }
         }
         
+        self.lastContentOffset = scrollView.contentOffset.y
         
         UIView.animateWithDuration(0.2, animations: {
             self.view.layoutIfNeeded()
@@ -1910,6 +1935,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        
         var cells = storyTableView.visibleCells()
         var indexPaths = storyTableView.indexPathsForVisibleRows()
         
@@ -2122,17 +2148,22 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     
     @IBAction func cameraSwitchButtonWasTapped(sender: AnyObject) {
+        self.cameraSwitchButton.enabled = false
         vision.stopPreview()
         if vision.cameraDevice == PBJCameraDevice.Back {
-            self.vision.cameraDevice = PBJCameraDevice.Front
-            self.vision.startPreview()
+            
             UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromLeft, animations: {}, completion: { (value: Bool) in
+                self.vision.cameraDevice = PBJCameraDevice.Front
+                self.vision.startPreview()
+                self.cameraSwitchButton.enabled = true
             })
             
         } else {
-            self.vision.cameraDevice = PBJCameraDevice.Back
-            self.vision.startPreview()
+            
             UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromRight, animations: {}, completion: { (value: Bool) in
+                self.vision.cameraDevice = PBJCameraDevice.Back
+                self.vision.startPreview()
+                self.cameraSwitchButton.enabled = true
             })
             
         }

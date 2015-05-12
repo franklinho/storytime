@@ -4,8 +4,8 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="OpenSans-ExtraBold.ttf">
-            <string>OpenSans-Extrabold</string>
+        <mutableArray key="OpenSans-Regular.ttf">
+            <string>OpenSans</string>
         </mutableArray>
     </customFonts>
     <objects>
@@ -22,9 +22,9 @@
                         <constraint firstAttribute="height" constant="200" id="b9f-qy-aId"/>
                     </constraints>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Storyweave" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OOX-Vw-4Ip">
-                    <rect key="frame" x="148.5" y="320" width="184.5" height="41"/>
-                    <fontDescription key="fontDescription" name="OpenSans-Extrabold" family="Open Sans" pointSize="30"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Storyweave" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OOX-Vw-4Ip">
+                    <rect key="frame" x="160" y="320" width="162" height="41"/>
+                    <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="30"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
