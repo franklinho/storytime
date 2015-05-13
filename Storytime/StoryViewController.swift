@@ -134,6 +134,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         expandedButtonView.clipsToBounds = true
         
         createButton.layer.cornerRadius = 40
+        createButton.layer.borderWidth = 2
+        createButton.layer.borderColor = UIColor.purpleColor().CGColor
         createButton.clipsToBounds = true
         
         

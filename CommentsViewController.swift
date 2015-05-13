@@ -104,6 +104,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         expandedButtonView.clipsToBounds = true
         
         newCommentButton.layer.cornerRadius = 40
+        newCommentButton.layer.borderWidth = 2
+        newCommentButton.layer.borderColor = UIColor.purpleColor().CGColor
         newCommentButton.clipsToBounds = true
         
         newCommentButton.addSubview(buttonActivityIndicator)

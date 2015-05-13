@@ -48,6 +48,8 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         self.navigationItem.titleView = rankingSwitch
         
         newStoryButton.layer.cornerRadius = 40
+        newStoryButton.layer.borderWidth = 2
+        newStoryButton.layer.borderColor = UIColor.purpleColor().CGColor
         newStoryButton.clipsToBounds = true
         
         
@@ -536,6 +538,9 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             query.addDescendingOrder("points")
             query.addDescendingOrder("createdAt")
             if self.rankingSwitch?.hot == false {
+                if PFUser.currentUser()!["following"] == nil {
+                    PFUser.currentUser()!["following"] = []
+                }
                 query.whereKey("user", containedIn: PFUser.currentUser()!["following"] as! [PFUser])
             }
             
@@ -614,16 +619,16 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        if scrollView.contentOffset.y  <= 0 {
-            self.searchBarTopConstraint.constant = 0
-            self.tableViewTopConstraint.constant = 0
-            UIView.animateWithDuration(0.2, animations: {
-                self.view.layoutIfNeeded()
-                }, completion: {
-                    (value: Bool) in
-                    
-            })
-        }
+//        if scrollView.contentOffset.y  <= 0 {
+//            self.searchBarTopConstraint.constant = 0
+//            self.tableViewTopConstraint.constant = 0
+//            UIView.animateWithDuration(0.2, animations: {
+//                self.view.layoutIfNeeded()
+//                }, completion: {
+//                    (value: Bool) in
+//                    
+//            })
+//        }
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
