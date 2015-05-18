@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, CreateProfileViewControllerDelegate {
+class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, CreateProfileViewControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate {
     @IBOutlet weak var titleView: UIView!
 
     @IBOutlet weak var commentsTableViewTopConstraint: NSLayoutConstraint!
@@ -60,6 +60,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     var photoJustCreated = false
     var videoJustCreated = false
     var hamburgerVC : HamburgerViewController?
+    var optionsComment : PFObject?
+    var optionsCell : UITableViewCell?
 
     
     @IBOutlet weak var thumbnailImageView: UIImageView!
@@ -211,12 +213,37 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
 
         refreshCommentsForStory()
         
+        
     }
+    
+    func violatingUser(){
+        if PFUser.currentUser() != nil {
+            if let violation = PFUser.currentUser()!["violation"] as? Bool {
+                if violation == true {
+                    self.newCommentButton.hidden = true
+                    self.expandedButtonView.hidden = true
+                }
+            }
+            
+        }
+    }
+    
+    func visionCameraDeviceWillChange(vision: PBJVision) {
+        if vision.cameraDevice == PBJCameraDevice.Back {
+            UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromLeft, animations: {}, completion: { (value: Bool) in
+            })
+        } else {
+            UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromRight, animations: {}, completion: { (value: Bool) in
+            })
+        }
+    }
+    
     
     override func viewWillAppear(animated: Bool) {
         self.createViewBottomConstraint.constant = -(screenSize.width + 46)
         self.createViewHeightConstraint.constant = self.view.bounds.width + 46
         self.view.layoutIfNeeded()
+        violatingUser()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -550,7 +577,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         if defaultBehavior == true {
             self.selectedContainer = 0
             vision.cameraMode = PBJCameraMode.Photo
-            vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
+            vision.captureSessionPreset = AVCaptureSessionPresetHigh
             cameraSendButton.hidden = false
             cameraSendButton.enabled = true
             holdToRecordLabel.hidden = true
@@ -625,6 +652,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             //                navigationController?.pushViewController(storyVC, animated: true)
             //            }
         }
+        self.violatingUser()
         
     }
     
@@ -673,6 +701,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             //                navigationController?.pushViewController(storyVC, animated: true)
             //            }
         }
+        self.violatingUser()
     }
     
     func signUpViewController(signUpController: PFSignUpViewController!, didFailToSignUpWithError error: NSError!) {
@@ -748,8 +777,8 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             vision.cameraMode = PBJCameraMode.Photo
         }
         
-        if vision.captureSessionPreset != AVCaptureSessionPreset1920x1080 {
-            vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
+        if vision.captureSessionPreset != AVCaptureSessionPresetHigh {
+            vision.captureSessionPreset = AVCaptureSessionPresetHigh
         }
         cameraSendButton.hidden = false
         cameraSendButton.enabled = true
@@ -840,24 +869,15 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @IBAction func cameraSwitchButtonWasTapped(sender: AnyObject) {
-        self.cameraSwitchButton.enabled = false
-        vision.stopPreview()
-        if vision.cameraDevice == PBJCameraDevice.Back {
+        if vision.cameraDevice != PBJCameraDevice.Back {
+            self.vision.cameraDevice = PBJCameraDevice.Back
             
-            UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromLeft, animations: {}, completion: { (value: Bool) in
-                self.vision.cameraDevice = PBJCameraDevice.Front
-                self.vision.startPreview()
-                self.cameraSwitchButton.enabled = true
-            })
             
+            
+        } else if vision.cameraDevice != PBJCameraDevice.Front {
+            self.vision.cameraDevice = PBJCameraDevice.Front
         } else {
-            
-            UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromRight, animations: {}, completion: { (value: Bool) in
-                self.vision.cameraDevice = PBJCameraDevice.Back
-                self.vision.startPreview()
-                self.cameraSwitchButton.enabled = true
-            })
-            
+            println("What camera are you using then?!")
         }
     }
     
@@ -1067,6 +1087,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         
         dispatch_async(dispatch_get_main_queue(),{
             var query = PFQuery(className:"Comment")
+            query.whereKey("violation", notEqualTo: true)
             query.whereKey("storyObject", equalTo:self.story!)
             query.orderByDescending("createdAt")
             
@@ -1701,5 +1722,72 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         
     }
     
+    func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
+        if actionSheet.tag == 2 {
+            if buttonIndex == 0 {
+                self.optionsComment!["reported"] = true
+                self.optionsComment!.saveInBackground()
+            } else if buttonIndex == 1 {
+                var deleteAlertView = UIAlertView(title: "Delete Event", message: "Are you sure you want to delete this comment?", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Delete")
+//                deleteAlertView.tag = 2
+                deleteAlertView.show()
+            } else {
+                println("Cancel button tapped")
+            }
+        } else {
+            if buttonIndex == 0 {
+                self.optionsComment!["reported"] = true
+                self.optionsComment!.saveInBackground()
+            } else {
+                println("Cancel button tapped")
+            }
+        }
+    }
+    
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if (buttonIndex == 0) {
+            println("Cancel button tapped")
+        } else {
+            self.deleteCell(self.optionsCell!)
+        }
+    }
+    
+    func optionsWasTapped(cell: UITableViewCell, event: PFObject) {
+        pauseVideoIfPlaying()
+        self.optionsComment = event
+        self.optionsCell = cell
+        var cellActionSheet : UIActionSheet = UIActionSheet()
+        cellActionSheet.delegate = self
+        cellActionSheet.addButtonWithTitle("Report")
+        var eventUser = self.optionsComment!["user"] as! PFUser
+        eventUser.fetchIfNeededInBackgroundWithBlock {
+            (post, error) -> Void in
+            if PFUser.currentUser() != nil {
+                var currentUser = PFUser.currentUser()!
+                currentUser.fetchIfNeededInBackgroundWithBlock {
+                    (post, error) -> Void in
+                    println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
+                    if  eventUser.username == currentUser.username {
+                        cellActionSheet.addButtonWithTitle("Delete Story")
+                        cellActionSheet.destructiveButtonIndex = 1
+                        cellActionSheet.addButtonWithTitle("Cancel")
+                        cellActionSheet.cancelButtonIndex = 2
+                        cellActionSheet.tag = 2
+                    } else {
+                        cellActionSheet.addButtonWithTitle("Cancel")
+                        cellActionSheet.cancelButtonIndex = 1
+                        cellActionSheet.tag = 3
+                    }
+                }
+            } else {
+                cellActionSheet.addButtonWithTitle("Cancel")
+                cellActionSheet.cancelButtonIndex = 1
+                cellActionSheet.tag = 3
+            }
+        }
+        cellActionSheet.actionSheetStyle = UIActionSheetStyle.Automatic
+        cellActionSheet.showInView(self.view)
+        
+    }
     
 }

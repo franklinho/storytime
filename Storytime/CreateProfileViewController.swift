@@ -236,6 +236,7 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
             submitButton.hidden = false
         } else {
             var query = PFUser.query()
+            query!.whereKey("violation", notEqualTo: true)
             query!.whereKey("canonicalProfileName", equalTo:userNameTextField.text.lowercaseString)
             query!.findObjectsInBackgroundWithBlock {
                 (objects, error) -> Void in

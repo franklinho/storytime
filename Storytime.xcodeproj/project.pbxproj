@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		CE078F49D064E69FA88C342F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E8ECC8C0FC39FC2D49766AFB /* libPods.a */; };
+		DD10924D1B03DF4B00CEA7DC /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10924C1B03DF4B00CEA7DC /* PrivacyPolicyViewController.swift */; };
+		DD10924F1B03DF5E00CEA7DC /* EULAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD10924E1B03DF5E00CEA7DC /* EULAViewController.swift */; };
+		DD1092511B03E42200CEA7DC /* SignUpView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD1092501B03E42200CEA7DC /* SignUpView.xib */; };
+		DD1092531B03E5CE00CEA7DC /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1092521B03E5CE00CEA7DC /* SignupView.swift */; };
 		DD138C821AE58D8500C74E8A /* AddAuthorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD138C811AE58D8500C74E8A /* AddAuthorViewController.swift */; };
 		DD138C841AE58F1600C74E8A /* UserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD138C831AE58F1600C74E8A /* UserTableViewCell.swift */; };
 		DD2E0C431ADF79D7003BB496 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD2E0C411ADF79D7003BB496 /* Crashlytics.framework */; };
@@ -121,6 +125,10 @@
 /* Begin PBXFileReference section */
 		50D9B7673DE49B0BA43B5277 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		A9FD829E06F375ECF0A329F6 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		DD10924C1B03DF4B00CEA7DC /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
+		DD10924E1B03DF5E00CEA7DC /* EULAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EULAViewController.swift; sourceTree = "<group>"; };
+		DD1092501B03E42200CEA7DC /* SignUpView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SignUpView.xib; sourceTree = "<group>"; };
+		DD1092521B03E5CE00CEA7DC /* SignupView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
 		DD138C811AE58D8500C74E8A /* AddAuthorViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAuthorViewController.swift; sourceTree = "<group>"; };
 		DD138C831AE58F1600C74E8A /* UserTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewCell.swift; sourceTree = "<group>"; };
 		DD2E0C411ADF79D7003BB496 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
@@ -288,6 +296,7 @@
 				DD3F06A71AFBEFE300647963 /* PostersViewController.swift */,
 				DD138C811AE58D8500C74E8A /* AddAuthorViewController.swift */,
 				DD42B7201AF4192E0001565A /* SettingsViewController.swift */,
+				DD10924C1B03DF4B00CEA7DC /* PrivacyPolicyViewController.swift */,
 				DDF06E961AD4529F007D4954 /* CreateProfileViewController.swift */,
 				DD9B26DD1AD8574600E6D3DE /* CustomLoginViewController.swift */,
 				DD9B26DF1AD8578A00E6D3DE /* CustomSignUpViewController.swift */,
@@ -408,7 +417,10 @@
 				DDC9368F1AC47CAE006D4646 /* ViewController.swift */,
 				DD60BCFE1AF7FBA6000755E6 /* RankingSwitch.swift */,
 				DDC936911AC47CAE006D4646 /* Main.storyboard */,
+				DD10924E1B03DF5E00CEA7DC /* EULAViewController.swift */,
 				DD60BCFC1AF7FA5F000755E6 /* SwitchView.xib */,
+				DD1092521B03E5CE00CEA7DC /* SignupView.swift */,
+				DD1092501B03E42200CEA7DC /* SignUpView.xib */,
 				DDC936941AC47CAE006D4646 /* Images.xcassets */,
 				DDC936961AC47CAE006D4646 /* LaunchScreen.xib */,
 				DDC9368C1AC47CAE006D4646 /* Storytime.xcdatamodeld */,
@@ -604,6 +616,7 @@
 				DDC93A071AC48268006D4646 /* OpenSans-Light.ttf in Resources */,
 				DDF06E9B1AD45857007D4954 /* user_icon_white.png in Resources */,
 				DDC939E91AC47FD8006D4646 /* fontello.css in Resources */,
+				DD1092511B03E42200CEA7DC /* SignUpView.xib in Resources */,
 				DDF7AED41ADDD96E0033F487 /* flash_icon_off.png in Resources */,
 				DDF06E951AD44ED2007D4954 /* switch_camera_icon.png in Resources */,
 				DDC939F01AC47FD8006D4646 /* README.txt in Resources */,
@@ -699,12 +712,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDC93A131AC48FA2006D4646 /* StoryTextTableViewCell.swift in Sources */,
+				DD10924F1B03DF5E00CEA7DC /* EULAViewController.swift in Sources */,
 				DDC93A0F1AC48E22006D4646 /* StoryViewController.swift in Sources */,
+				DD10924D1B03DF4B00CEA7DC /* PrivacyPolicyViewController.swift in Sources */,
 				DDC936901AC47CAE006D4646 /* ViewController.swift in Sources */,
 				DD42B7211AF4192E0001565A /* SettingsViewController.swift in Sources */,
 				DDF06E971AD4529F007D4954 /* CreateProfileViewController.swift in Sources */,
 				DD9B26E01AD8578A00E6D3DE /* CustomSignUpViewController.swift in Sources */,
 				DD138C821AE58D8500C74E8A /* AddAuthorViewController.swift in Sources */,
+				DD1092531B03E5CE00CEA7DC /* SignupView.swift in Sources */,
 				DDC93A171AC48FB9006D4646 /* StoryCreateTableViewCell.swift in Sources */,
 				DDC93A151AC48FAD006D4646 /* StoryVideoTableViewCell.swift in Sources */,
 				DD8C82851AD5CE1E00B9A47B /* ProfileViewController.swift in Sources */,
@@ -800,7 +816,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "cd81ce08-113a-49c0-b314-623a82814d17";
+				PROVISIONING_PROFILE = "7b154135-68f8-4428-ab63-bbb8d3026580";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -836,7 +852,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "cd81ce08-113a-49c0-b314-623a82814d17";
+				PROVISIONING_PROFILE = "7b154135-68f8-4428-ab63-bbb8d3026580";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -860,7 +876,7 @@
 				INFOPLIST_FILE = Storytime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "cd81ce08-113a-49c0-b314-623a82814d17";
+				PROVISIONING_PROFILE = "7b154135-68f8-4428-ab63-bbb8d3026580";
 				SWIFT_OBJC_BRIDGING_HEADER = "Storytime-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -885,7 +901,7 @@
 				INFOPLIST_FILE = Storytime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "cd81ce08-113a-49c0-b314-623a82814d17";
+				PROVISIONING_PROFILE = "7b154135-68f8-4428-ab63-bbb8d3026580";
 				SWIFT_OBJC_BRIDGING_HEADER = "Storytime-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

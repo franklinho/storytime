@@ -83,6 +83,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var previewLayer = PBJVision.sharedInstance().previewLayer
     var photoJustCreated = false
     var videoJustCreated = false
+    var optionsCell : UITableViewCell?
+    var optionsEvent : PFObject?
 
     @IBOutlet weak var pointsLabel: UILabel!
     @IBOutlet weak var upVoteButton: UIButton!
@@ -118,11 +120,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var textContainer: UIView!
     @IBOutlet weak var videoContainer: UIView!
     var createViews = []
+    var userViolation = false
     
     @IBOutlet weak var progressView: UIView!
     @IBOutlet weak var progressViewTrailingConstraint: NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         
         morePostersButton.layer.cornerRadius = 22
         morePostersButton.layer.borderColor = UIColor.whiteColor().CGColor
@@ -159,6 +164,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         settingsActionSheet.destructiveButtonIndex = 1
         settingsActionSheet.cancelButtonIndex = 2
         settingsActionSheet.actionSheetStyle = UIActionSheetStyle.Automatic
+        settingsActionSheet.tag = 1
         
         if newStory == true {
             self.title = "New Story"
@@ -376,7 +382,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     var currentUser = PFUser.currentUser()
                     println("Story user is \(storyUser.username) and current user is \(currentUser!.username)")
                     if  storyUser.username == currentUser!.username {
-                        self.createButton!.hidden = false
+                        if self.userViolation != true {
+                            self.createButton!.hidden = false
+                        }
                         self.expandedButtonView.hidden = false
                         self.settingsButton!.enabled = true
                     } else if self.story!["authors"] != nil {
@@ -387,7 +395,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             }
                         }
                         if matchCount > 0 {
-                            self.createButton!.hidden = false
+                            if self.userViolation != true {
+                                self.createButton!.hidden = false
+                            }
                             self.expandedButtonView.hidden = false
                             self.settingsButton!.enabled = true
                         } else {
@@ -479,6 +489,20 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.refreshControl.addTarget(self, action: "refreshEventsForStory", forControlEvents: UIControlEvents.ValueChanged)
         self.storyTableView.addSubview(refreshControl)
         
+        
+    }
+    
+    func violatingUser(){
+        if PFUser.currentUser() != nil {
+            if let violation = PFUser.currentUser()!["violation"] as? Bool {
+                if violation == true {
+                    self.userViolation = true
+                    self.createButton.hidden = true
+                    self.expandedButtonView.hidden = true
+                }
+            }
+            
+        }
     }
     
     func updateVotingLabels() {
@@ -530,7 +554,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         vision.maximumCaptureDuration = CMTimeMakeWithSeconds(10, 600)
         vision.cameraOrientation = PBJCameraOrientation.Portrait
         vision.cameraMode = PBJCameraMode.Photo
-        vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
+        vision.captureSessionPreset = AVCaptureSessionPresetHigh
         vision.focusMode = PBJFocusMode.ContinuousAutoFocus
         vision.flashMode = PBJFlashMode.Auto
         vision.startPreview()
@@ -572,11 +596,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
+    
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var event : PFObject?
         if indexPath.row == storyTableView.numberOfRowsInSection(0)-1 && maxReached == false {
             var cell = tableView.dequeueReusableCellWithIdentifier("SpinnerCell") as! SpinnerTableViewCell
-            if networkError == false {
+            if networkError == false && self.noEventsLabel.hidden == true {
                 cell.spinnerActivityIndicator.startAnimating()
             } else {
                 cell.spinnerActivityIndicator.stopAnimating()
@@ -720,25 +746,26 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     }
                                 }
                             }
-                            if PFUser.currentUser() != nil {
-                                var currentUser = PFUser.currentUser()!
-                                currentUser.fetchIfNeededInBackgroundWithBlock {
-                                    (post, error) -> Void in
-                                    println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
-                                    if  eventUser.username == currentUser.username {
-                                        cell.deleteButton!.hidden = false
-                                    } else {
-                                        cell.deleteButton!.hidden = true
-                                    }
-                                }
-                            } else {
-                                cell.deleteButton!.hidden = true
-                            }
+//                            if PFUser.currentUser() != nil {
+//                                var currentUser = PFUser.currentUser()!
+//                                currentUser.fetchIfNeededInBackgroundWithBlock {
+//                                    (post, error) -> Void in
+//                                    println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
+//                                    if  eventUser.username == currentUser.username {
+//                                        cell.deleteButton!.hidden = false
+//                                    } else {
+//                                        cell.deleteButton!.hidden = true
+//                                    }
+//                                }
+//                            } else {
+//                                cell.deleteButton!.hidden = true
+//                            }
                             
                         }
-                    } else {
-                        cell.deleteButton!.hidden = true
                     }
+//                    } else {
+//                        cell.deleteButton!.hidden = true
+//                    }
                     
                     return cell
                     
@@ -790,12 +817,16 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 (value: Bool) in
                 self.createView.hidden = false
                 if self.newStory != true {
-                    self.createButton!.hidden = false
+                    if self.userViolation != true && self.newStory != true {
+                        self.createButton!.hidden = false
+                    }
                     self.expandedButtonView.hidden = false
                     self.settingsButton!.enabled = true
 
                 } else {
-                    self.createButton!.hidden = true
+                    if self.userViolation != true  && self.newStory != true {
+                        self.createButton!.hidden = false
+                    }
                     self.expandedButtonView.hidden = true
                     self.settingsButton!.enabled = false
                 }
@@ -810,7 +841,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if defaultBehavior == true {
             self.selectedContainer = 0
             vision.cameraMode = PBJCameraMode.Photo
-            vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
+            vision.captureSessionPreset = AVCaptureSessionPresetHigh
             
             cameraSendButton.hidden = false
             cameraSendButton.enabled = true
@@ -845,7 +876,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     println("Story user is \(storyUser.username) and current user is \(currentUser!.username)")
                     
                     if  storyUser.username == currentUser!.username {
-                        self.createButton!.hidden = false
+                        if self.userViolation != true {
+                            self.createButton!.hidden = false
+                        }
                         self.expandedButtonView.hidden = false
                         self.settingsButton!.enabled = true
                     } else if self.story!["authors"] != nil {
@@ -856,7 +889,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             }
                         }
                         if matchCount > 0 {
-                            self.createButton!.hidden = false
+                            if self.userViolation != true {
+                                self.createButton!.hidden = false
+                            }
                             self.expandedButtonView.hidden = false
                             self.settingsButton!.enabled = true
                         } else {
@@ -917,7 +952,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.userTapGestureRecognizer.enabled = true
         self.commentsButton.enabled = true
         self.profileImageButton.enabled = true
-        self.createButton!.hidden = false
+        if self.userViolation != true {
+            self.createButton!.hidden = false
+        }
         self.expandedButtonView.hidden = false
         self.settingsButton!.enabled = true
         var event: PFObject = PFObject(className: "Event")
@@ -1161,8 +1198,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if vision.cameraMode != PBJCameraMode.Photo {
             vision.cameraMode = PBJCameraMode.Photo
         }
-        if vision.captureSessionPreset != AVCaptureSessionPreset1920x1080 {
-            vision.captureSessionPreset = AVCaptureSessionPreset1920x1080
+        if vision.captureSessionPreset != AVCaptureSessionPresetHigh {
+            vision.captureSessionPreset = AVCaptureSessionPresetHigh
         }
         
         cameraSendButton.hidden = false
@@ -1238,6 +1275,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         dispatch_async(dispatch_get_main_queue(),{
             var query = PFQuery(className:"Event")
+            query.whereKey("violation", notEqualTo: true)
             query.whereKey("storyObject", equalTo:self.story!)
             query.orderByDescending("createdAt")
             query.limit = 5
@@ -1268,6 +1306,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     
                     if self.events.count == 0 {
                         self.noEventsLabel.hidden = false
+                        self.storyTableView.reloadData()
                     } else {
                         self.noEventsLabel.hidden = true
                     }
@@ -1300,6 +1339,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.createViewBottomConstraint.constant = -(screenSize.width + 46)
         self.createViewHeightConstraint.constant = self.view.bounds.width + 46
         self.view.layoutIfNeeded()
+        violatingUser()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -1425,7 +1465,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.userTapGestureRecognizer.enabled = true
         self.commentsButton.enabled = true
         self.profileImageButton.enabled = true
-        self.createButton!.hidden = false
+        if self.userViolation != true {
+            self.createButton!.hidden = false
+        }
         self.expandedButtonView.hidden = false
         self.settingsButton!.enabled = true
         var event: PFObject = PFObject(className: "Event")
@@ -1608,6 +1650,18 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+    func visionCameraDeviceWillChange(vision: PBJVision) {
+        self.vision.stopPreview()
+        self.cameraSwitchButton.enabled = false
+        if vision.cameraDevice == PBJCameraDevice.Back {
+            UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromLeft, animations: {}, completion: { (value: Bool) in
+            })
+        } else {
+            UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromRight, animations: {}, completion: { (value: Bool) in
+            })
+        }
+    }
+    
     func vision(vision: PBJVision!, capturedPhoto photoDict: [NSObject : AnyObject]!, error: NSError!) {
         capturedImage = photoDict[PBJVisionPhotoImageKey] as! UIImage
         dispatch_async(dispatch_get_main_queue(),{
@@ -1632,7 +1686,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.userTapGestureRecognizer.enabled = true
         self.commentsButton.enabled = true
         self.profileImageButton.enabled = true
-        self.createButton!.hidden = false
+        if self.userViolation != true {
+            self.createButton!.hidden = false
+        }
         self.expandedButtonView.hidden = false
         self.settingsButton!.enabled = true
         var event: PFObject = PFObject(className: "Event")
@@ -2148,26 +2204,34 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         PFUser.currentUser()!.saveInBackground()
     }
 
+    func visionCameraDeviceDidChange(vision: PBJVision) {
+        self.cameraSwitchButton.enabled = true
+        
+        self.vision.outputFormat = PBJOutputFormat.Square
+        self.vision.maximumCaptureDuration = CMTimeMakeWithSeconds(10, 600)
+        self.vision.cameraOrientation = PBJCameraOrientation.Portrait
+        if self.selectedContainer == 0 {
+            self.vision.cameraMode = PBJCameraMode.Photo
+            self.vision.captureSessionPreset = AVCaptureSessionPresetHigh
+        } else {
+            self.vision.cameraMode = PBJCameraMode.Video
+            self.vision.captureSessionPreset = AVCaptureSessionPresetMedium
+        }
+        self.vision.focusMode = PBJFocusMode.ContinuousAutoFocus
+        
+        self.vision.startPreview()
+    }
     
     @IBAction func cameraSwitchButtonWasTapped(sender: AnyObject) {
-        self.cameraSwitchButton.enabled = false
-        vision.stopPreview()
         if vision.cameraDevice == PBJCameraDevice.Back {
+            self.vision.cameraDevice = PBJCameraDevice.Front
             
-            UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromLeft, animations: {}, completion: { (value: Bool) in
-                self.vision.cameraDevice = PBJCameraDevice.Front
-                self.vision.startPreview()
-                self.cameraSwitchButton.enabled = true
-            })
+
             
+//        } else if vision.cameraDevice != PBJCameraDevice.Front {
+//            self.vision.cameraDevice = PBJCameraDevice.Front
         } else {
-            
-            UIView.transitionWithView(self.cameraContainer!, duration: 0.4, options: UIViewAnimationOptions.TransitionFlipFromRight, animations: {}, completion: { (value: Bool) in
-                self.vision.cameraDevice = PBJCameraDevice.Back
-                self.vision.startPreview()
-                self.cameraSwitchButton.enabled = true
-            })
-            
+            self.vision.cameraDevice = PBJCameraDevice.Back
         }
     }
     
@@ -2254,6 +2318,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //                navigationController?.pushViewController(storyVC, animated: true)
 //            }
         }
+        self.violatingUser()
         
     }
     
@@ -2302,6 +2367,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //                navigationController?.pushViewController(storyVC, animated: true)
 //            }
         }
+        self.violatingUser()
     }
     
     func signUpViewController(signUpController: PFSignUpViewController!, didFailToSignUpWithError error: NSError!) {
@@ -2462,10 +2528,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     
     func deleteCell(cell: UITableViewCell) {
-        if playingVideoCell != nil && playingVideoCell?.player?.rate == 1.0 {
-            playingVideoCell?.player?.pause()
-            playingVideoCell?.playButtonIconImageView.hidden = false
-        }
+        pauseVideoIfPlaying()
         var deleteCellIndexPath : NSIndexPath = self.storyTableView.indexPathForCell(cell)!
         var temporaryCommentsArray = NSMutableArray(array: events)
         temporaryCommentsArray.removeObjectAtIndex(deleteCellIndexPath.row)
@@ -2489,51 +2552,80 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
-        if (buttonIndex == 0) {
-            var addAuthorVC : AddAuthorViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("AddAuthorViewController") as! AddAuthorViewController
-            if self.story != nil {
-                addAuthorVC.story = self.story!
+        if actionSheet.tag == 1 {
+            if (buttonIndex == 0) {
+                var addAuthorVC : AddAuthorViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("AddAuthorViewController") as! AddAuthorViewController
+                if self.story != nil {
+                    addAuthorVC.story = self.story!
+                }
+                self.presentViewController(addAuthorVC, animated: true, completion: nil)
+                
+            } else if (buttonIndex == 1) {
+                println("Delete story button tapped")
+                
+                var deleteAlertView = UIAlertView(title: "Delete Story", message: "Are you sure you want to delete this story?", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Delete")
+                deleteAlertView.tag = 1
+                deleteAlertView.show()
+            } else {
+                println("Cancel button tapped")
             }
-            self.presentViewController(addAuthorVC, animated: true, completion: nil)
-
-        } else if (buttonIndex == 1) {
-            println("Delete story button tapped")
-            
-            var deleteAlertView = UIAlertView(title: "Delete Story", message: "Are you sure you want to delete this story?", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Delete")
-            deleteAlertView.show()
+        } else if actionSheet.tag == 2 {
+            if buttonIndex == 0 {
+                self.optionsEvent!["reported"] = true
+                self.optionsEvent!.saveInBackground()
+            } else if buttonIndex == 1 {
+                var deleteAlertView = UIAlertView(title: "Delete Event", message: "Are you sure you want to delete this post?", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Delete")
+                deleteAlertView.tag = 2
+                deleteAlertView.show()
+            } else {
+                println("Cancel button tapped")
+            }
         } else {
-            println("Cancel button tapped")
+            if buttonIndex == 0 {
+                self.optionsEvent!["reported"] = true
+                self.optionsEvent!.saveInBackground()
+            } else {
+                println("Cancel button tapped")
+            }
         }
     }
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        if (buttonIndex == 0) {
-            println("Cancel button tapped")
-        } else {
-            println("Delete button tapped")
-            if self.story != nil {
-                
-                var channels = installation["channels"] as! Array<String>
-                if contains(channels, "\(self.story!.objectId!)") {
-                    installation.removeObject("c\(self.story!.objectId!)", forKey: "channels")
-                    var currentChannels = installation["channels"]
-                    println("Current Channels : \(currentChannels!)")
-                    installation.saveInBackground()
-                }
-                
-                self.story!.deleteInBackgroundWithBlock({
-                    (success, error) -> Void in
-                    if (success) {
-                        self.navigationController?.popToRootViewControllerAnimated(true)
-                        var rankingViewController = self.navigationController?.viewControllers[0] as? RankingViewController
-                        if rankingViewController != nil {
-                            rankingViewController!.refreshStories()
-                        }
-                    } else {
-                        println("There was an error deleting the story: \(error!.description)")
+        if alertView.tag == 1 {
+            if (buttonIndex == 0) {
+                println("Cancel button tapped")
+            } else {
+                println("Delete button tapped")
+                if self.story != nil {
+                    
+                    var channels = installation["channels"] as! Array<String>
+                    if contains(channels, "\(self.story!.objectId!)") {
+                        installation.removeObject("c\(self.story!.objectId!)", forKey: "channels")
+                        var currentChannels = installation["channels"]
+                        println("Current Channels : \(currentChannels!)")
+                        installation.saveInBackground()
                     }
                     
-                })
+                    self.story!.deleteInBackgroundWithBlock({
+                        (success, error) -> Void in
+                        if (success) {
+                            self.navigationController?.popToRootViewControllerAnimated(true)
+                            var rankingViewController = self.navigationController?.viewControllers[0] as? RankingViewController
+                            if rankingViewController != nil {
+                                rankingViewController!.refreshStories()
+                            }
+                        } else {
+                            println("There was an error deleting the story: \(error!.description)")
+                        }
+                        
+                    })
+                }
+            }
+        } else {
+            if (buttonIndex == 0) {
+                println("Cancel button tapped")
+            } else {
+                self.deleteCell(self.optionsCell!)
             }
         }
     }
@@ -2710,6 +2802,46 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         })
         
     }
+    
+    func optionsWasTapped(cell: UITableViewCell, event: PFObject) {
+        pauseVideoIfPlaying()
+        self.optionsEvent = event
+        self.optionsCell = cell
+        var cellActionSheet : UIActionSheet = UIActionSheet()
+        cellActionSheet.delegate = self
+        cellActionSheet.addButtonWithTitle("Report")
+        var eventUser = self.optionsEvent!["user"] as! PFUser
+        eventUser.fetchIfNeededInBackgroundWithBlock {
+            (post, error) -> Void in
+            if PFUser.currentUser() != nil {
+                var currentUser = PFUser.currentUser()!
+                currentUser.fetchIfNeededInBackgroundWithBlock {
+                    (post, error) -> Void in
+                    println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
+                    if  eventUser.username == currentUser.username {
+                        cellActionSheet.addButtonWithTitle("Delete Story")
+                        cellActionSheet.destructiveButtonIndex = 1
+                        cellActionSheet.addButtonWithTitle("Cancel")
+                        cellActionSheet.cancelButtonIndex = 2
+                        cellActionSheet.tag = 2
+                    } else {
+                        cellActionSheet.addButtonWithTitle("Cancel")
+                        cellActionSheet.cancelButtonIndex = 1
+                        cellActionSheet.tag = 3
+                    }
+                }
+            } else {
+                cellActionSheet.addButtonWithTitle("Cancel")
+                cellActionSheet.cancelButtonIndex = 1
+                cellActionSheet.tag = 3
+            }
+        }
+        cellActionSheet.actionSheetStyle = UIActionSheetStyle.Automatic
+        cellActionSheet.showInView(self.view)
+
+    }
+    
+    
     
     
 }

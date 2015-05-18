@@ -306,6 +306,7 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
         var query = PFUser.query()!
         println("\(self.userSearchBar.text.lowercaseString)")
         var string = self.userSearchBar.text as String
+        query.whereKey("violation", notEqualTo: true)
         query.whereKey("canonicalProfileName", containsString: string.lowercaseString)
 //            query.whereKey("canonicalProfileName", equalTo: string.lowercaseString)
         query.orderByAscending("profileName")

@@ -12,6 +12,7 @@ import UIKit
 protocol StoryTextTableViewCellDelegate{
     func displayUserProfileView(user : PFUser)
     func deleteCell(cell : UITableViewCell)
+    func optionsWasTapped(cell: UITableViewCell, event: PFObject)
 }
 
 class StoryTextTableViewCell: UITableViewCell {
@@ -68,21 +69,26 @@ class StoryTextTableViewCell: UITableViewCell {
     
 
     @IBAction func deleteButtonWasTapped(sender: AnyObject) {
-        if deleteButtonExpanded == false {
-            self.contentView.layoutIfNeeded()
-            self.deleteButtonWidthConstraint.constant = 132
-            UIView.animateWithDuration(0.3, animations: {
-                self.contentView.layoutIfNeeded()
-                }, completion: {
-                    (value: Bool) in
-                    self.deleteButton.backgroundColor = UIColor(red: 255.0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 0.75)
-                    self.deleteButtonExpanded = true
-                    self.deleteButton.setTitle("Delete", forState: UIControlState.Normal)
-                    self.deleteDismissButton.enabled = true
-            })
-        } else {
-            self.delegate?.deleteCell(self)
+        if self.event != nil {
+            self.delegate?.optionsWasTapped(self, event: self.event!)
+        } else if self.comment != nil {
+            self.delegate?.optionsWasTapped(self, event: self.comment!)
         }
+//        if deleteButtonExpanded == false {
+//            self.contentView.layoutIfNeeded()
+//            self.deleteButtonWidthConstraint.constant = 132
+//            UIView.animateWithDuration(0.3, animations: {
+//                self.contentView.layoutIfNeeded()
+//                }, completion: {
+//                    (value: Bool) in
+//                    self.deleteButton.backgroundColor = UIColor(red: 255.0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 0.75)
+//                    self.deleteButtonExpanded = true
+//                    self.deleteButton.setTitle("Delete", forState: UIControlState.Normal)
+//                    self.deleteDismissButton.enabled = true
+//            })
+//        } else {
+//            self.delegate?.deleteCell(self)
+//        }
     }
 
     @IBAction func deleteDismissButtonWasTapped(sender: AnyObject) {
@@ -111,7 +117,7 @@ class StoryTextTableViewCell: UITableViewCell {
         if self.userNameButton != nil {
             self.userNameButton.setTitle("", forState: UIControlState.Normal)
         }
-        self.deleteButton.hidden = true
+//        self.deleteButton.hidden = true
         self.minimizeDeleteButton()
         if self.profileImageView != nil {
             self.profileImageView.image = UIImage(named: "user_icon_scaled_white.png")
@@ -161,11 +167,11 @@ class StoryTextTableViewCell: UITableViewCell {
                     currentUser.fetchIfNeededInBackgroundWithBlock {
                         (post, error) -> Void in
                         println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
-                        if  eventUser.username == currentUser.username {
-                            self.deleteButton!.hidden = false
-                        } else {
-                            self.deleteButton!.hidden = true
-                        }
+//                        if  eventUser.username == currentUser.username {
+//                            self.deleteButton!.hidden = false
+//                        } else {
+//                            self.deleteButton!.hidden = true
+//                        }
                     }
                 } else {
                     self.deleteButton!.hidden = true

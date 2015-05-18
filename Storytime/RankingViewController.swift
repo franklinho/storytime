@@ -103,6 +103,21 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
 //        GSProgressHUD.show()
         self.currentOffset = 0
         requestStories(self,offset: currentOffset)
+        
+        
+    }
+    
+    func violatingUser() {
+        if PFUser.currentUser() != nil {
+            if let violation = PFUser.currentUser()!["violation"] as? Bool {
+                if violation == true {
+                    self.newStoryButton.hidden = true
+                } else {
+                    self.newStoryButton.hidden = false
+                }
+            }
+            
+        }
     }
     
     func rankingSwitchWasTapped() {
@@ -406,6 +421,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 navigationController?.pushViewController(storyVC, animated: true)
             }
         }
+        self.violatingUser()
         
     }
     
@@ -464,6 +480,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 navigationController?.pushViewController(storyVC, animated: true)
             }
         }
+        self.violatingUser()
     }
     
     func signUpViewController(signUpController: PFSignUpViewController!, didFailToSignUpWithError error: NSError!) {
@@ -530,6 +547,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         
         dispatch_async(dispatch_get_main_queue(),{
             var query = PFQuery(className:"Story")
+            query.whereKey("violation", notEqualTo: true)
             if self.searchBar.text != "" {
                 var string = self.searchBar.text as String
                 query.whereKey("title", matchesRegex: string, modifiers: "i")
@@ -540,6 +558,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             if self.rankingSwitch?.hot == false {
                 if PFUser.currentUser()!["following"] == nil {
                     PFUser.currentUser()!["following"] = []
+                    PFUser.currentUser()?.saveInBackground()
                 }
                 query.whereKey("user", containedIn: PFUser.currentUser()!["following"] as! [PFUser])
             }
@@ -615,6 +634,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func viewWillAppear(animated: Bool) {
         self.rankingTableView.reloadData()
+        violatingUser()
         
     }
     
