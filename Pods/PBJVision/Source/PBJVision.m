@@ -500,6 +500,13 @@ typedef NS_ENUM(GLint, PBJVisionUniformLocationTypes)
 
 }
 
+- (void) _setCurrentDevice:(AVCaptureDevice *)device
+{
+    _currentDevice  = device;
+    _exposureMode   = (PBJExposureMode)device.exposureMode;
+    _focusMode      = (PBJFocusMode)device.focusMode;
+}
+
 - (BOOL)isFlashAvailable
 {
     return (_currentDevice && [_currentDevice hasFlash]);
@@ -562,7 +569,7 @@ typedef NS_ENUM(GLint, PBJVisionUniformLocationTypes)
 
     CMTime fps = CMTimeMake(1, (int32_t)videoFrameRate);
 
-    AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    AVCaptureDevice *videoDevice = _currentDevice;
     AVCaptureDeviceFormat *supportingFormat = nil;
     int32_t maxWidth = 0;
 
@@ -616,14 +623,28 @@ typedef NS_ENUM(GLint, PBJVisionUniformLocationTypes)
 
 - (BOOL)supportsVideoFrameRate:(NSInteger)videoFrameRate
 {
-    AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-
-    NSArray *formats = [videoDevice formats];
-    for (AVCaptureDeviceFormat *format in formats) {
-        NSArray *videoSupportedFrameRateRanges = [format videoSupportedFrameRateRanges];
-        for (AVFrameRateRange *frameRateRange in videoSupportedFrameRateRanges) {
-            if ( (frameRateRange.minFrameRate <= videoFrameRate) && (videoFrameRate <= frameRateRange.maxFrameRate) ) {
-                return YES;
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1) {
+        AVCaptureDevice *videoDevice = nil;
+        NSArray *videoDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+        NSPredicate *predicate = nil;
+        if (self.cameraDevice == PBJCameraDeviceBack) {
+            predicate = [NSPredicate predicateWithFormat:@"position == %i", AVCaptureDevicePositionBack];
+        } else {
+            predicate = [NSPredicate predicateWithFormat:@"position == %i", AVCaptureDevicePositionFront];
+        }
+        NSArray *filteredDevices = [videoDevices filteredArrayUsingPredicate:predicate];
+        if (filteredDevices.count > 0) {
+            videoDevice = filteredDevices.firstObject;
+        } else {
+            return NO;
+        }
+        NSArray *formats = [videoDevice formats];
+        for (AVCaptureDeviceFormat *format in formats) {
+            NSArray *videoSupportedFrameRateRanges = [format videoSupportedFrameRateRanges];
+            for (AVFrameRateRange *frameRateRange in videoSupportedFrameRateRanges) {
+                if ( (frameRateRange.minFrameRate <= videoFrameRate) && (videoFrameRate <= frameRateRange.maxFrameRate) ) {
+                    return YES;
+                }
             }
         }
     }
@@ -1128,7 +1149,7 @@ typedef void (^PBJVisionBlock)();
         AVCaptureDevice *device = [_currentInput device];
         if (device) {
             [self willChangeValueForKey:@"currentDevice"];
-            _currentDevice = device;
+            [self _setCurrentDevice:device];
             [self didChangeValueForKey:@"currentDevice"];
         }
     }
@@ -2318,7 +2339,7 @@ typedef void (^PBJVisionBlock)();
             AVCaptureDevice *device = [_currentInput device];
             if (device) {
                 [self willChangeValueForKey:@"currentDevice"];
-                _currentDevice = device;
+                [self _setCurrentDevice:device];
                 [self didChangeValueForKey:@"currentDevice"];
             }
         }

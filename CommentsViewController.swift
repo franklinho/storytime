@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import MobileCoreServices
 
-class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, CreateProfileViewControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate {
+class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, CreateProfileViewControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet weak var titleView: UIView!
+    let imagePicker = UIImagePickerController()
 
     @IBOutlet weak var commentsTableViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var networkErrorView: UIView!
@@ -100,6 +102,11 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        imagePicker.allowsEditing = false
+        imagePicker.mediaTypes = [kUTTypeImage]
+        imagePicker.sourceType = .PhotoLibrary
+        imagePicker.delegate = self
         
         self.networkErrorView.hidden = true
         expandedButtonView.layer.cornerRadius = 40
@@ -1790,4 +1797,25 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         
     }
     
+    @IBAction func cameraRollButtonWasTapped(sender: AnyObject) {
+        
+        presentViewController(imagePicker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            println("Successfully picked image!")
+            capturedImage = squareImageWithImage(pickedImage)
+            dispatch_async(dispatch_get_main_queue(),{
+                if self.capturedImage != nil {
+                    UIImageWriteToSavedPhotosAlbum(self.squareImageWithImage(self.capturedImage!), nil, nil, nil)
+                }
+                self.savePhotoComment()
+            })
+        }
+        
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+
 }

@@ -9,9 +9,11 @@
 import UIKit
 import AVFoundation
 import MediaPlayer
+import MobileCoreServices
 
 
-class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate, CreateProfileViewControllerDelegate, PostersViewControllerDelegate {
+class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate, CreateProfileViewControllerDelegate, PostersViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    let imagePicker = UIImagePickerController()
     @IBOutlet weak var storyTableViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var networkErrorTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var cameraSwitchButton: UIButton!
@@ -127,7 +129,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        imagePicker.allowsEditing = false
+        imagePicker.mediaTypes = [kUTTypeImage]
+        imagePicker.sourceType = .PhotoLibrary
+        imagePicker.delegate = self
         
         morePostersButton.layer.cornerRadius = 22
         morePostersButton.layer.borderColor = UIColor.whiteColor().CGColor
@@ -2842,6 +2847,25 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     
+
+    @IBAction func cameraRollSelectorWasTapped(sender: AnyObject) {
+        self.presentViewController(imagePicker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            println("Successfully picked image!")
+            capturedImage = squareImageWithImage(pickedImage)
+            dispatch_async(dispatch_get_main_queue(),{
+                if self.capturedImage != nil {
+                    UIImageWriteToSavedPhotosAlbum(self.squareImageWithImage(self.capturedImage!), nil, nil, nil)
+                }
+                self.savePhotoEvent()
+            })
+        }
+        
+        dismissViewControllerAnimated(true, completion: nil)
+    }
     
     
 }

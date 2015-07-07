@@ -98,6 +98,7 @@
 		DDC93A191AC493FE006D4646 /* video_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC93A181AC493FE006D4646 /* video_icon.png */; };
 		DDC93A1B1AC4940E006D4646 /* camera_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC93A1A1AC4940E006D4646 /* camera_icon.png */; };
 		DDC93A1D1AC49422006D4646 /* text_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC93A1C1AC49422006D4646 /* text_icon.png */; };
+		DDC9A22E1B4C56CC0016D6F3 /* photo_icon_white.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC9A22D1B4C56CC0016D6F3 /* photo_icon_white.png */; };
 		DDDCFF281AFD4A3400975940 /* SpinnerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDCFF271AFD4A3400975940 /* SpinnerTableViewCell.swift */; };
 		DDF06E921AD33038007D4954 /* down_icon_red.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF06E901AD33038007D4954 /* down_icon_red.png */; };
 		DDF06E931AD33038007D4954 /* up_icon_green.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF06E911AD33038007D4954 /* up_icon_green.png */; };
@@ -220,6 +221,7 @@
 		DDC93A181AC493FE006D4646 /* video_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_icon.png; sourceTree = "<group>"; };
 		DDC93A1A1AC4940E006D4646 /* camera_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_icon.png; sourceTree = "<group>"; };
 		DDC93A1C1AC49422006D4646 /* text_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = text_icon.png; sourceTree = "<group>"; };
+		DDC9A22D1B4C56CC0016D6F3 /* photo_icon_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_icon_white.png; sourceTree = "<group>"; };
 		DDDCFF271AFD4A3400975940 /* SpinnerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerTableViewCell.swift; sourceTree = "<group>"; };
 		DDE0A5421AD5C6E1002B5D88 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		DDF06E901AD33038007D4954 /* down_icon_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down_icon_red.png; sourceTree = "<group>"; };
@@ -357,6 +359,7 @@
 		DDBA72141AC5FD5B00D0EC97 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				DDC9A22D1B4C56CC0016D6F3 /* photo_icon_white.png */,
 				DD842DB21AF98319001B5FD9 /* AlternativeStoryweaveLogoTransparent.png */,
 				DD9AD1C61AE6D72F00AE7EEB /* check_icon_green.png */,
 				DDF7AECF1ADDD96E0033F487 /* flash_icon_auto.png */,
@@ -606,6 +609,7 @@
 				DDC93A031AC48268006D4646 /* OpenSans-BoldItalic.ttf in Resources */,
 				DDC936931AC47CAE006D4646 /* Main.storyboard in Resources */,
 				DDC939E61AC47FD8006D4646 /* fontello-embedded.css in Resources */,
+				DDC9A22E1B4C56CC0016D6F3 /* photo_icon_white.png in Resources */,
 				DDF06E931AD33038007D4954 /* up_icon_green.png in Resources */,
 				DD9AD1C71AE6D72F00AE7EEB /* check_icon_green.png in Resources */,
 				DDC939E71AC47FD8006D4646 /* fontello-ie7-codes.css in Resources */,
@@ -816,7 +820,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "7b154135-68f8-4428-ab63-bbb8d3026580";
+				PROVISIONING_PROFILE = "749eda9b-2148-4798-80a9-2633334fe00f";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -852,7 +856,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "7b154135-68f8-4428-ab63-bbb8d3026580";
+				PROVISIONING_PROFILE = "749eda9b-2148-4798-80a9-2633334fe00f";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -876,7 +880,7 @@
 				INFOPLIST_FILE = Storytime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7b154135-68f8-4428-ab63-bbb8d3026580";
+				PROVISIONING_PROFILE = "749eda9b-2148-4798-80a9-2633334fe00f";
 				SWIFT_OBJC_BRIDGING_HEADER = "Storytime-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -901,7 +905,7 @@
 				INFOPLIST_FILE = Storytime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7b154135-68f8-4428-ab63-bbb8d3026580";
+				PROVISIONING_PROFILE = "749eda9b-2148-4798-80a9-2633334fe00f";
 				SWIFT_OBJC_BRIDGING_HEADER = "Storytime-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -225,6 +225,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         FBAppCall.handleDidBecomeActiveWithSession(PFFacebookUtils.session())
+//        FBSDKAppEvents.activateApp()
 
     }
 
@@ -299,18 +300,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
     
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
         
-        var rootViewController = self.window!.rootViewController as! UITabBarController
-        let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        
         if url.host == "twitterLogInSuccessful" {
+            var rootViewController = self.window!.rootViewController as! UITabBarController
+            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             if (PFUser.currentUser() != nil && PFUser.currentUser()!["profileName"] == nil) {
                 var createProfileVC : CreateProfileViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("CreateProfileViewController") as! CreateProfileViewController
                 rootViewController.presentViewController(createProfileVC, animated: true, completion: nil)
             }
             
         }
-        return FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication)
+        return FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication, withSession: PFFacebookUtils.session())
+//        println("URL: \(url), Source Application \(sourceApplication)")
+//        return FBSDKApplicationDelegate.sharedInstance().application(application,
+//            openURL: url,
+//            sourceApplication: sourceApplication,
+//            annotation: annotation)
+    
     }
     
+    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
+        return FBSession.activeSession().handleOpenURL(url)
+    }
+    
+
+
     func animateMask() {
         let keyFrameAnimation = CAKeyframeAnimation(keyPath: "bounds")
         keyFrameAnimation.delegate = self
