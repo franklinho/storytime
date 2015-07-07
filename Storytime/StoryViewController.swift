@@ -2492,6 +2492,23 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
+    func postTitleNewStorySetup(){
+        self.createTitleView.hidden = true
+        self.titleView.hidden = false
+        
+        self.upVoteButton.enabled = false
+        self.downVoteButton.enabled = false
+        self.userTapGestureRecognizer.enabled = false
+        self.commentsButton.enabled = false
+        self.profileImageButton.enabled = false
+        
+        
+        self.createButton!.hidden = true
+        self.expandedButtonView.hidden = true
+        self.settingsButton!.enabled = false
+        self.expandCreateView(true)
+    }
+    
     
     @IBAction func flashButtonWasTapped(sender: AnyObject) {
         if vision.flashMode == PBJFlashMode.Auto {
@@ -2867,5 +2884,15 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        picker.dismissViewControllerAnimated(true, completion: { () -> Void in
+            if self.newStory == true {
+                self.postTitleNewStorySetup()
+            } else {
+                self.expandCreateView(true)
+            }
+        })
+        
+    }
     
 }

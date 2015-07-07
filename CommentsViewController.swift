@@ -1817,5 +1817,9 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        self.navigationController?.popToRootViewControllerAnimated(true)
+    }
+    
 
 }
