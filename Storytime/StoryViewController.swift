@@ -2596,7 +2596,27 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.optionsEvent!["reported"] = true
                 self.optionsEvent!.saveInBackground()
             } else if buttonIndex == 1 {
-                var deleteAlertView = UIAlertView(title: "Delete Event", message: "Are you sure you want to delete this post?", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Delete")
+                var deleteAlertView = UIAlertView(title: "Delete Post", message: "Are you sure you want to delete this post?", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Delete")
+                deleteAlertView.tag = 2
+                deleteAlertView.show()
+            } else {
+                println("Cancel button tapped")
+            }
+        } else if actionSheet.tag == 4 {
+            if buttonIndex == 0 {
+                self.story!["thumbnailImage"] = self.optionsEvent!["image"]
+                self.story?.saveInBackgroundWithBlock({ (success, error) -> Void in
+                    if (success) {
+                        println("Successfully saved new thumbnail image for story")
+                    } else {
+                        println("Failed to save new thumbnail image for story")
+                    }
+                })
+            } else if buttonIndex == 1 {
+                self.optionsEvent!["reported"] = true
+                self.optionsEvent!.saveInBackground()
+            } else if buttonIndex == 2 {
+                var deleteAlertView = UIAlertView(title: "Delete Post", message: "Are you sure you want to delete this post?", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Delete")
                 deleteAlertView.tag = 2
                 deleteAlertView.show()
             } else {
@@ -2825,13 +2845,13 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
-    func optionsWasTapped(cell: UITableViewCell, event: PFObject) {
+    func optionsWasTapped(cell: UITableViewCell, event: PFObject, type: String) {
         pauseVideoIfPlaying()
         self.optionsEvent = event
         self.optionsCell = cell
         var cellActionSheet : UIActionSheet = UIActionSheet()
         cellActionSheet.delegate = self
-        cellActionSheet.addButtonWithTitle("Report")
+        
         var eventUser = self.optionsEvent!["user"] as! PFUser
         eventUser.fetchIfNeededInBackgroundWithBlock {
             (post, error) -> Void in
@@ -2841,18 +2861,31 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     (post, error) -> Void in
                     println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
                     if  eventUser.username == currentUser.username {
-                        cellActionSheet.addButtonWithTitle("Delete Story")
-                        cellActionSheet.destructiveButtonIndex = 1
-                        cellActionSheet.addButtonWithTitle("Cancel")
-                        cellActionSheet.cancelButtonIndex = 2
-                        cellActionSheet.tag = 2
+                        if type == "photo" {
+                            cellActionSheet.addButtonWithTitle("Set as title photo")
+                            cellActionSheet.addButtonWithTitle("Report")
+                            cellActionSheet.addButtonWithTitle("Delete Post")
+                            cellActionSheet.destructiveButtonIndex = 2
+                            cellActionSheet.addButtonWithTitle("Cancel")
+                            cellActionSheet.cancelButtonIndex = 3
+                            cellActionSheet.tag = 4
+                        } else {
+                            cellActionSheet.addButtonWithTitle("Report")
+                            cellActionSheet.addButtonWithTitle("Delete Post")
+                            cellActionSheet.destructiveButtonIndex = 1
+                            cellActionSheet.addButtonWithTitle("Cancel")
+                            cellActionSheet.cancelButtonIndex = 2
+                            cellActionSheet.tag = 2
+                        }
                     } else {
+                        cellActionSheet.addButtonWithTitle("Report")
                         cellActionSheet.addButtonWithTitle("Cancel")
                         cellActionSheet.cancelButtonIndex = 1
                         cellActionSheet.tag = 3
                     }
                 }
             } else {
+                cellActionSheet.addButtonWithTitle("Report")
                 cellActionSheet.addButtonWithTitle("Cancel")
                 cellActionSheet.cancelButtonIndex = 1
                 cellActionSheet.tag = 3

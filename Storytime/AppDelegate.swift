@@ -205,6 +205,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
 //        var vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("HamburgerViewController") as! UIViewController
 //        window?.rootViewController = vc
         
+        if defaults.boolForKey("onboardingCompleted") != true {
+                    var vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("OnboardingController") as! UIViewController
+                    window?.rootViewController = vc
+        }
+        
         return true
     }
 

@@ -93,6 +93,7 @@
             <string>OpenSans</string>
             <string>OpenSans</string>
             <string>OpenSans</string>
+            <string>OpenSans</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -483,6 +484,48 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1929" y="371"/>
+        </scene>
+        <!--Onboarding Controller-->
+        <scene sceneID="LbM-RE-DM5">
+            <objects>
+                <viewController storyboardIdentifier="OnboardingController" id="wQ4-pz-Tdk" customClass="OnboardingController" customModule="Storytime" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="1qa-RL-TwV"/>
+                        <viewControllerLayoutGuide type="bottom" id="Flv-6n-K5q"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="hdn-KL-L9l">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NPb-V3-iR9">
+                                <rect key="frame" x="538" y="28" width="46" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="JLE-ZX-0so"/>
+                                    <constraint firstAttribute="width" constant="46" id="lsR-MA-qDD"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
+                                <state key="normal" title="Skip">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="skipButtonWasTapped:" destination="wQ4-pz-Tdk" eventType="touchUpInside" id="nY8-CG-gll"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="NPb-V3-iR9" firstAttribute="top" secondItem="1qa-RL-TwV" secondAttribute="bottom" constant="8" id="Nwy-DX-ud5"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="NPb-V3-iR9" secondAttribute="trailing" id="ZcI-Ii-in5"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="skipButton" destination="NPb-V3-iR9" id="FKL-el-v57"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NcF-Q3-j4A" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="380" y="-991"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="LlI-l1-uV2">

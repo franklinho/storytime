@@ -12,7 +12,7 @@ import UIKit
 protocol StoryTextTableViewCellDelegate{
     func displayUserProfileView(user : PFUser)
     func deleteCell(cell : UITableViewCell)
-    func optionsWasTapped(cell: UITableViewCell, event: PFObject)
+    func optionsWasTapped(cell: UITableViewCell, event: PFObject, type: String)
 }
 
 class StoryTextTableViewCell: UITableViewCell {
@@ -70,9 +70,9 @@ class StoryTextTableViewCell: UITableViewCell {
 
     @IBAction func deleteButtonWasTapped(sender: AnyObject) {
         if self.event != nil {
-            self.delegate?.optionsWasTapped(self, event: self.event!)
+            self.delegate?.optionsWasTapped(self, event: self.event!, type: "text")
         } else if self.comment != nil {
-            self.delegate?.optionsWasTapped(self, event: self.comment!)
+            self.delegate?.optionsWasTapped(self, event: self.comment!, type: "text")
         }
 //        if deleteButtonExpanded == false {
 //            self.contentView.layoutIfNeeded()

@@ -1735,7 +1735,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 self.optionsComment!["reported"] = true
                 self.optionsComment!.saveInBackground()
             } else if buttonIndex == 1 {
-                var deleteAlertView = UIAlertView(title: "Delete Event", message: "Are you sure you want to delete this comment?", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Delete")
+                var deleteAlertView = UIAlertView(title: "Delete Comment", message: "Are you sure you want to delete this comment?", delegate: self, cancelButtonTitle: "Cancel", otherButtonTitles: "Delete")
 //                deleteAlertView.tag = 2
                 deleteAlertView.show()
             } else {
@@ -1759,7 +1759,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    func optionsWasTapped(cell: UITableViewCell, event: PFObject) {
+    func optionsWasTapped(cell: UITableViewCell, event: PFObject, type: String) {
         pauseVideoIfPlaying()
         self.optionsComment = event
         self.optionsCell = cell
@@ -1775,7 +1775,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                     (post, error) -> Void in
                     println("Event user is \(eventUser.username) and current user is \(currentUser.username)")
                     if  eventUser.username == currentUser.username {
-                        cellActionSheet.addButtonWithTitle("Delete Story")
+                        cellActionSheet.addButtonWithTitle("Delete Comment")
                         cellActionSheet.destructiveButtonIndex = 1
                         cellActionSheet.addButtonWithTitle("Cancel")
                         cellActionSheet.cancelButtonIndex = 2
@@ -1816,10 +1816,10 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         
         dismissViewControllerAnimated(true, completion: nil)
     }
-    
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        self.navigationController?.popToRootViewControllerAnimated(true)
-    }
+//    
+//    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+//        self.navigationController?.popToRootViewControllerAnimated(true)
+//    }
     
 
 }

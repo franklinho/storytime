@@ -99,6 +99,11 @@
 		DDC93A1B1AC4940E006D4646 /* camera_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC93A1A1AC4940E006D4646 /* camera_icon.png */; };
 		DDC93A1D1AC49422006D4646 /* text_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC93A1C1AC49422006D4646 /* text_icon.png */; };
 		DDC9A22E1B4C56CC0016D6F3 /* photo_icon_white.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC9A22D1B4C56CC0016D6F3 /* photo_icon_white.png */; };
+		DDC9A2301B4DB2770016D6F3 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC9A22F1B4DB2770016D6F3 /* OnboardingViewController.swift */; };
+		DDC9A2351B4DB4090016D6F3 /* OnboardingImage3phone.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC9A2311B4DB4090016D6F3 /* OnboardingImage3phone.png */; };
+		DDC9A2361B4DB4090016D6F3 /* OnboardingImage2phone.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC9A2321B4DB4090016D6F3 /* OnboardingImage2phone.png */; };
+		DDC9A2371B4DB4090016D6F3 /* OnboardingImage1phone.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC9A2331B4DB4090016D6F3 /* OnboardingImage1phone.png */; };
+		DDC9A2381B4DB4090016D6F3 /* OnboardingImage4phone.png in Resources */ = {isa = PBXBuildFile; fileRef = DDC9A2341B4DB4090016D6F3 /* OnboardingImage4phone.png */; };
 		DDDCFF281AFD4A3400975940 /* SpinnerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDCFF271AFD4A3400975940 /* SpinnerTableViewCell.swift */; };
 		DDF06E921AD33038007D4954 /* down_icon_red.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF06E901AD33038007D4954 /* down_icon_red.png */; };
 		DDF06E931AD33038007D4954 /* up_icon_green.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF06E911AD33038007D4954 /* up_icon_green.png */; };
@@ -222,6 +227,11 @@
 		DDC93A1A1AC4940E006D4646 /* camera_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_icon.png; sourceTree = "<group>"; };
 		DDC93A1C1AC49422006D4646 /* text_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = text_icon.png; sourceTree = "<group>"; };
 		DDC9A22D1B4C56CC0016D6F3 /* photo_icon_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photo_icon_white.png; sourceTree = "<group>"; };
+		DDC9A22F1B4DB2770016D6F3 /* OnboardingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		DDC9A2311B4DB4090016D6F3 /* OnboardingImage3phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OnboardingImage3phone.png; sourceTree = "<group>"; };
+		DDC9A2321B4DB4090016D6F3 /* OnboardingImage2phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OnboardingImage2phone.png; sourceTree = "<group>"; };
+		DDC9A2331B4DB4090016D6F3 /* OnboardingImage1phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OnboardingImage1phone.png; sourceTree = "<group>"; };
+		DDC9A2341B4DB4090016D6F3 /* OnboardingImage4phone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = OnboardingImage4phone.png; sourceTree = "<group>"; };
 		DDDCFF271AFD4A3400975940 /* SpinnerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerTableViewCell.swift; sourceTree = "<group>"; };
 		DDE0A5421AD5C6E1002B5D88 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		DDF06E901AD33038007D4954 /* down_icon_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = down_icon_red.png; sourceTree = "<group>"; };
@@ -293,6 +303,7 @@
 		DD138C7F1AE572CF00C74E8A /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				DDC9A22F1B4DB2770016D6F3 /* OnboardingViewController.swift */,
 				DD3F06A91AFC158900647963 /* ProfileImageViewController.swift */,
 				DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */,
 				DD3F06A71AFBEFE300647963 /* PostersViewController.swift */,
@@ -414,6 +425,10 @@
 		DDC936871AC47CAE006D4646 /* Storytime */ = {
 			isa = PBXGroup;
 			children = (
+				DDC9A2311B4DB4090016D6F3 /* OnboardingImage3phone.png */,
+				DDC9A2321B4DB4090016D6F3 /* OnboardingImage2phone.png */,
+				DDC9A2331B4DB4090016D6F3 /* OnboardingImage1phone.png */,
+				DDC9A2341B4DB4090016D6F3 /* OnboardingImage4phone.png */,
 				DD138C801AE572E600C74E8A /* TableViewCells */,
 				DD138C7F1AE572CF00C74E8A /* View Controllers */,
 				DDC9368A1AC47CAE006D4646 /* AppDelegate.swift */,
@@ -606,6 +621,7 @@
 				DDC93A051AC48268006D4646 /* OpenSans-ExtraBoldItalic.ttf in Resources */,
 				DD842DB31AF98319001B5FD9 /* AlternativeStoryweaveLogoTransparent.png in Resources */,
 				DDC939F41AC48083006D4646 /* up_icon_white.png in Resources */,
+				DDC9A2381B4DB4090016D6F3 /* OnboardingImage4phone.png in Resources */,
 				DDC93A031AC48268006D4646 /* OpenSans-BoldItalic.ttf in Resources */,
 				DDC936931AC47CAE006D4646 /* Main.storyboard in Resources */,
 				DDC939E61AC47FD8006D4646 /* fontello-embedded.css in Resources */,
@@ -632,6 +648,8 @@
 				DDC939EC1AC47FD8006D4646 /* fontello.svg in Resources */,
 				DDC939EF1AC47FD8006D4646 /* LICENSE.txt in Resources */,
 				DDC93A0A1AC48268006D4646 /* OpenSans-Semibold.ttf in Resources */,
+				DDC9A2361B4DB4090016D6F3 /* OnboardingImage2phone.png in Resources */,
+				DDC9A2351B4DB4090016D6F3 /* OnboardingImage3phone.png in Resources */,
 				DD60BCFD1AF7FA5F000755E6 /* SwitchView.xib in Resources */,
 				DDF7AED31ADDD96E0033F487 /* flash_icon_on.png in Resources */,
 				DD9B26E21AD85F9800E6D3DE /* storyweave_logo.png in Resources */,
@@ -644,6 +662,7 @@
 				DDC936981AC47CAE006D4646 /* LaunchScreen.xib in Resources */,
 				DDC55B071AD49C0700659E70 /* play_button_icon_white.png in Resources */,
 				DDC939EA1AC47FD8006D4646 /* demo.html in Resources */,
+				DDC9A2371B4DB4090016D6F3 /* OnboardingImage1phone.png in Resources */,
 				DDC939F31AC48083006D4646 /* down_icon_white.png in Resources */,
 				DDC939E31AC47FD8006D4646 /* config.json in Resources */,
 				DDC936951AC47CAE006D4646 /* Images.xcassets in Resources */,
@@ -726,6 +745,7 @@
 				DD138C821AE58D8500C74E8A /* AddAuthorViewController.swift in Sources */,
 				DD1092531B03E5CE00CEA7DC /* SignupView.swift in Sources */,
 				DDC93A171AC48FB9006D4646 /* StoryCreateTableViewCell.swift in Sources */,
+				DDC9A2301B4DB2770016D6F3 /* OnboardingViewController.swift in Sources */,
 				DDC93A151AC48FAD006D4646 /* StoryVideoTableViewCell.swift in Sources */,
 				DD8C82851AD5CE1E00B9A47B /* ProfileViewController.swift in Sources */,
 				DD60BCFF1AF7FBA6000755E6 /* RankingSwitch.swift in Sources */,
@@ -820,7 +840,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "749eda9b-2148-4798-80a9-2633334fe00f";
+				PROVISIONING_PROFILE = "7b154135-68f8-4428-ab63-bbb8d3026580";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -856,7 +876,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "749eda9b-2148-4798-80a9-2633334fe00f";
+				PROVISIONING_PROFILE = "7b154135-68f8-4428-ab63-bbb8d3026580";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -880,7 +900,7 @@
 				INFOPLIST_FILE = Storytime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "749eda9b-2148-4798-80a9-2633334fe00f";
+				PROVISIONING_PROFILE = "7b154135-68f8-4428-ab63-bbb8d3026580";
 				SWIFT_OBJC_BRIDGING_HEADER = "Storytime-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -905,7 +925,7 @@
 				INFOPLIST_FILE = Storytime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "749eda9b-2148-4798-80a9-2633334fe00f";
+				PROVISIONING_PROFILE = "7b154135-68f8-4428-ab63-bbb8d3026580";
 				SWIFT_OBJC_BRIDGING_HEADER = "Storytime-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
