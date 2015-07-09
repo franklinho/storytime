@@ -20,21 +20,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var vc : UIViewController?
     var mostRecentUserInfo : [NSObject : AnyObject]?
-    var bridgeForKochava: KochavaTracker = KochavaTracker()
+//    var bridgeForKochava: KochavaTracker = KochavaTracker()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
 
         
-        var kTracker: KochavaTracker
-        var kochavaInitDict: Dictionary = [
-            "kochavaAppId": "kostoryweave-conversion559e1152dd919",
-            "enableLogging":"1",
-            "retrieveAttribution":"1"]
-        
-        kTracker = bridgeForKochava.swiftInitKochavaWithParams(kochavaInitDict)
-        var delegate: KochavaTrackerClientDelegate
+//        var kTracker: KochavaTracker
+//        var kochavaInitDict: Dictionary = [
+//            "kochavaAppId": "kostoryweave-conversion559e1152dd919",
+//            "enableLogging":"1",
+//            "retrieveAttribution":"1"]
+//        
+//        kTracker = bridgeForKochava.swiftInitKochavaWithParams(kochavaInitDict)
+//        var delegate: KochavaTrackerClientDelegate
         
         Fabric.with([Crashlytics()])
 
@@ -226,6 +226,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
                     var vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("OnboardingController") as! UIViewController
                     window?.rootViewController = vc
         }
+        
+       
+        
+        
+            
+        if  (launchOptions?[UIApplicationLaunchOptionsURLKey as NSObject] == nil) {
+            FBSDKAppLinkUtility.fetchDeferredAppLink({ (url, error) -> Void in
+                if (error != nil) {
+                    println("Received error while fetching deferred app link \(error)")
+                }
+                if (url != nil) {
+                    UIApplication.sharedApplication().openURL(url)
+                }
+            })
+        }
+        
+
+        
         
         return true
     }

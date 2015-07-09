@@ -42,7 +42,6 @@ PODS:
   - FBSDKShareKit (4.2.0):
     - FBSDKCoreKit
   - GSProgressHUD (0.3)
-  - Kochava (20150523)
   - Parse (1.7.1):
     - Bolts (~> 1.1)
   - ParseFacebookUtils (1.7.1):
@@ -56,7 +55,6 @@ DEPENDENCIES:
   - FBSDKLoginKit
   - FBSDKShareKit
   - GSProgressHUD
-  - Kochava
   - Parse (= 1.7.1)
   - ParseFacebookUtils
   - PBJVision
@@ -69,7 +67,6 @@ SPEC CHECKSUMS:
   FBSDKLoginKit: 57e37106af12c9e264e473dcb75d7decdbb07fe4
   FBSDKShareKit: 931746fdf8fb95efd6e12310ec14b2b3295e2aec
   GSProgressHUD: 4fc9672ec9c7f752acf1b1bffefa3d86ba38426a
-  Kochava: c9aa43e71bba1bb8251358c88172e105231644de
   Parse: fa8ec29de6d82035635986c11946299fb1b38316
   ParseFacebookUtils: fa09adf78372b589163b5a71a34d6ebc7eb83395
   PBJVision: fe43c9a58bb1c1277d16fd802fa836d25e034a45

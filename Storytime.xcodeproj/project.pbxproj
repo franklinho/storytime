@@ -45,7 +45,6 @@
 		DD9D5C6E1B4E3EE5008F5CED /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9D5C6D1B4E3EE5008F5CED /* AdSupport.framework */; };
 		DD9D5C701B4E4235008F5CED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9D5C6F1B4E4235008F5CED /* Foundation.framework */; };
 		DD9D5C721B4E423B008F5CED /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9D5C711B4E423B008F5CED /* iAd.framework */; };
-		DD9D5C741B4E4266008F5CED /* libTrackAndAd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9D5C731B4E4266008F5CED /* libTrackAndAd.a */; };
 		DDBA71F61AC5FCC100D0EC97 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA71F51AC5FCC100D0EC97 /* Accounts.framework */; };
 		DDBA71F81AC5FCC700D0EC97 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA71F71AC5FCC700D0EC97 /* AudioToolbox.framework */; };
 		DDBA71FA1AC5FCCC00D0EC97 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA71F91AC5FCCC00D0EC97 /* CFNetwork.framework */; };
@@ -265,7 +264,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD9D5C741B4E4266008F5CED /* libTrackAndAd.a in Frameworks */,
 				DDBA71FE1AC5FCD400D0EC97 /* CoreLocation.framework in Frameworks */,
 				DD9D5C721B4E423B008F5CED /* iAd.framework in Frameworks */,
 				DD9D5C701B4E4235008F5CED /* Foundation.framework in Frameworks */,
