@@ -40,7 +40,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        rankingSwitch = NSBundle.mainBundle().loadNibNamed("SwitchView", owner: self, options: nil)[0] as! RankingSwitch
+        rankingSwitch = NSBundle.mainBundle().loadNibNamed("SwitchView", owner: self, options: nil)[0] as? RankingSwitch
         rankingSwitch?.delegate = self
         
 //        MyViewClass* myViewObject = [[[NSBundle mainBundle] loadNibNamed:@"MyViewClassNib" owner:self options:nil] objectAtIndex:0]
@@ -53,7 +53,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
         newStoryButton.clipsToBounds = true
         
         
-        hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
+        hamburgerVC = self.parentViewController!.parentViewController as? HamburgerViewController
         viewTapGestureRecognizer.enabled = false
         searchBar.delegate = self
 //        profileTabBarItem = self.tabBarController?.tabBar.items?[1] as! UITabBarItem
@@ -320,7 +320,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
                 } else if story!["thumbnailText"] != nil {
                     cell.previewImageView.hidden = true
                     cell.thumbnailTextLabel.hidden = false
-                    cell.thumbnailTextLabel.text = story!["thumbnailText"] as! String
+                    cell.thumbnailTextLabel.text = story!["thumbnailText"] as? String
                 }
                 
                 cell.rankLabel.text = "\(indexPath.row+1)."
@@ -617,7 +617,7 @@ class RankingViewController: UIViewController, UITableViewDataSource, UITableVie
             var storyVC : StoryViewController = segue.destinationViewController as! StoryViewController
             var storyIndex = rankingTableView!.indexPathForSelectedRow()?.row
             var selectedStory : PFObject?
-            selectedStory = stories[storyIndex!] as! PFObject
+            selectedStory = stories[storyIndex!] as? PFObject
             storyVC.story = selectedStory
             storyVC.storyCreated = true
         }

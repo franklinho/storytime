@@ -10,6 +10,9 @@ import UIKit
 import MobileCoreServices
 
 class CommentsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, CreateProfileViewControllerDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    var uploadingFromCameraRoll = false
+    let defaults = NSUserDefaults.standardUserDefaults()
     @IBOutlet weak var titleView: UIView!
     let imagePicker = UIImagePickerController()
 
@@ -121,7 +124,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         buttonActivityIndicator.frame = newCommentButton.bounds
         buttonActivityIndicator.hidden = true
         
-        hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
+        hamburgerVC = self.parentViewController!.parentViewController as? HamburgerViewController
         if story != nil {
             
             if story!["thumbnailImage"] != nil {
@@ -146,7 +149,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 }
             }
             
-            storyTitleLabel.text = story!["title"] as! String
+            storyTitleLabel.text = story!["title"] as? String
             var storyUser : PFUser = story!["user"] as! PFUser
             if storyUser["profileName"] != nil {
                 var profileName : String = storyUser["profileName"] as! String
@@ -309,7 +312,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
             return cell
         } else {
             if comments.count > 0 {
-                comment = comments[indexPath.row] as! PFObject
+                comment = comments[indexPath.row] as? PFObject
                 if comment!["type"] as! NSString == "text" {
                     var cell = commentsTableView.dequeueReusableCellWithIdentifier("CommentTextTableViewCell") as! StoryTextTableViewCell
                     if (cell.respondsToSelector(Selector("layoutMargins"))) {
@@ -854,9 +857,13 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func vision(vision: PBJVision!, capturedPhoto photoDict: [NSObject : AnyObject]!, error: NSError!) {
-        capturedImage = photoDict[PBJVisionPhotoImageKey] as! UIImage
+        uploadingFromCameraRoll = false
+        capturedImage = photoDict[PBJVisionPhotoImageKey] as? UIImage
         dispatch_async(dispatch_get_main_queue(),{
-            self.savePhotoComment()
+            if self.capturedImage != nil {
+                UIImageWriteToSavedPhotosAlbum(self.squareImageWithImage(self.capturedImage!), nil, nil, nil)
+                self.savePhotoComment()
+            }
         })
     }
     
@@ -918,7 +925,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         
         
         dispatch_async(dispatch_get_main_queue(),{
-            self.videoPath = videoDict[PBJVisionVideoPathKey] as! String
+            self.videoPath = videoDict[PBJVisionVideoPathKey] as? String
             self.saveVideoComment()
         })
         self.minimizeCreateView()
@@ -1032,10 +1039,10 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 pushQuery.whereKey("channels", equalTo: "c\(self.story!.objectId!)") // Set channel
                 pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
                 pushQuery.whereKey("commentNotificationsOn", notEqualTo: false)
-                var currentUserProfileName = PFUser.currentUser()!["profileName"]
-                var storyTitle = self.story!["title"]
+                var currentUserProfileName : String = PFUser.currentUser()!["profileName"] as! String
+                var storyTitle : String = self.story!["title"] as! String
                 let data = [
-                    "alert" : "\(currentUserProfileName!) has added a photo comment to the story: \(storyTitle!)",
+                    "alert" : "\(currentUserProfileName) has added a photo comment to the story: \(storyTitle)",
                     "storyID" : self.story!.objectId!,
                     "comment" : "true"
                 ]
@@ -1297,7 +1304,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         }
         
         if playableCells.count > 0 && playableCells[0].player != nil {
-            playingVideoCell = playableCells[0] as! StoryVideoTableViewCell
+            playingVideoCell = playableCells[0] as? StoryVideoTableViewCell
             
             if playingVideoCell!.player != nil {
                 playingVideoCell?.playButtonIconImageView.hidden = true
@@ -1362,10 +1369,10 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 pushQuery.whereKey("channels", equalTo: "c\(self.story!.objectId!)") // Set channel
                 pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
                 pushQuery.whereKey("commentNotificationsOn", notEqualTo: false)
-                var currentUserProfileName = PFUser.currentUser()!["profileName"]
-                var storyTitle = self.story!["title"]
+                var currentUserProfileName : String = PFUser.currentUser()!["profileName"] as! String
+                var storyTitle : String = self.story!["title"] as! String
                 let data = [
-                    "alert" : "\(currentUserProfileName!) has added a video comment to the story: \(storyTitle!)",
+                    "alert" : "\(currentUserProfileName) has added a video comment to the story: \(storyTitle)",
                     "storyID" : self.story!.objectId!,
                     "comment" : "true"
                 ]
@@ -1506,10 +1513,10 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
                 pushQuery.whereKey("channels", equalTo: "c\(self.story!.objectId!)") // Set channel
                 pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
                 pushQuery.whereKey("commentNotificationsOn", notEqualTo: false)
-                var currentUserProfileName = PFUser.currentUser()!["profileName"]
-                var storyTitle = self.story!["title"]
+                var currentUserProfileName : String = PFUser.currentUser()!["profileName"] as! String
+                var storyTitle : String = self.story!["title"] as! String
                 let data = [
-                    "alert" : "\(currentUserProfileName!) has added a comment to the story: \(storyTitle!)",
+                    "alert" : "\(currentUserProfileName) has added a comment to the story: \(storyTitle)",
                     "storyID" : self.story!.objectId!,
                     "comment" : "true"
                 ]
@@ -1620,7 +1627,7 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
         }
         
         if sender.state == UIGestureRecognizerState.Ended {
-            var touch = (((sender as! UILongPressGestureRecognizer).valueForKey("_touches") as! NSArray)[0] as! UITouch).locationInView(self.view) as! CGPoint
+            var touch = (((sender as! UILongPressGestureRecognizer).valueForKey("_touches") as! NSArray)[0] as! UITouch).locationInView(self.view) as CGPoint
             println("Touch: \(touch), CreateButton: \(self.newCommentButton.frame), Camera Button: \(self.expandedCameraButton.convertRect(expandedCameraButton.frame, toView: nil)), Video Button: \(self.expandedVideoButton.convertRect(expandedVideoButton.frame, toView: nil)), Text: \(self.expandedTextButton.convertRect(expandedTextButton.frame, toView: nil))")
             
             
@@ -1752,11 +1759,31 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-        if (buttonIndex == 0) {
-            println("Cancel button tapped")
-        } else {
-            self.deleteCell(self.optionsCell!)
-        }
+//        if alertView.tag == 3 {
+//            if (buttonIndex == 0) {
+//                println("No twitter sharing button tapped")
+//                defaults.setBool(false, forKey: "twitterSharingOn")
+//                let installation = PFInstallation.currentInstallation()
+//                installation["twitterSharingOn"] = false
+//                installation.saveInBackground()
+//            } else {
+//                println("Twitter sharing OK button tapped")
+//                defaults.setBool(true, forKey: "twitterSharingOn")
+//                let installation = PFInstallation.currentInstallation()
+//                installation["twitterSharingOn"] = true
+//                installation.saveInBackground()
+//            }
+//            defaults.setBool(true, forKey: "initialTwitterSettingSeen")
+//
+//        } else {
+            if (buttonIndex == 0) {
+                println("Cancel button tapped")
+            } else {
+                self.deleteCell(self.optionsCell!)
+            }
+//        }
+        
+        
     }
     
     func optionsWasTapped(cell: UITableViewCell, event: PFObject, type: String) {
@@ -1803,14 +1830,15 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        uploadingFromCameraRoll = true
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             println("Successfully picked image!")
             capturedImage = squareImageWithImage(pickedImage)
             dispatch_async(dispatch_get_main_queue(),{
                 if self.capturedImage != nil {
-                    UIImageWriteToSavedPhotosAlbum(self.squareImageWithImage(self.capturedImage!), nil, nil, nil)
+                    self.savePhotoComment()
                 }
-                self.savePhotoComment()
+                
             })
         }
         
@@ -1822,4 +1850,16 @@ class CommentsViewController: UIViewController, UITableViewDelegate, UITableView
 //    }
     
 
+    
+//    func showTwitterAlertView() {
+//        
+//        if defaults.boolForKey("initialTwitterSettingSeen") as? Bool == false {
+//            if PFTwitterUtils.isLinkedWithUser(PFUser.currentUser()) == true {
+//                var alertView = UIAlertView(title: "Share on Twitter", message: "Would you like to share your posts on Twitter?", delegate: self, cancelButtonTitle: "No", otherButtonTitles: "OK")
+//                alertView.tag = 3
+//                alertView.show()
+//            }
+//            
+//        }
+//    }
 }

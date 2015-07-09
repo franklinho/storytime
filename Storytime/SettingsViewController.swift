@@ -10,23 +10,25 @@ import UIKit
 
 class SettingsViewController: UIViewController {
 
+//    @IBOutlet weak var twitterSharingSwitch: UISwitch!
     @IBOutlet weak var followNotificationsSwitch: UISwitch!
-    @IBOutlet weak var closeButton: UIButton!
+//    @IBOutlet weak var closeButton: UIButton!
     let defaults = NSUserDefaults.standardUserDefaults()
     @IBOutlet weak var storyNotificationsSwitch: UISwitch!
     @IBOutlet weak var commentNotificationsSwitch: UISwitch!
+    var hamburgerVC : HamburgerViewController?
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         
-        closeButton.layer.cornerRadius = 23
-        closeButton.layer.borderWidth = 3
-        closeButton.layer.borderColor = UIColor.whiteColor().CGColor
-        closeButton.clipsToBounds = true
+//        closeButton.layer.cornerRadius = 23
+//        closeButton.layer.borderWidth = 3
+//        closeButton.layer.borderColor = UIColor.whiteColor().CGColor
+//        closeButton.clipsToBounds = true
         
         
-        
+        hamburgerVC = self.parentViewController!.parentViewController as? HamburgerViewController
         
         if defaults.boolForKey("storyNotificationsOn") == false {
             storyNotificationsSwitch.on = false
@@ -45,6 +47,12 @@ class SettingsViewController: UIViewController {
         } else {
             followNotificationsSwitch.on = true
         }
+        
+//        if defaults.boolForKey("twitterSharingOn") == false {
+//            twitterSharingSwitch.on = false
+//        } else {
+//            twitterSharingSwitch.on = true
+//        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -105,7 +113,28 @@ class SettingsViewController: UIViewController {
             installation.saveInBackground()
         }
     }
-    @IBAction func closeButtonWasTapped(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    
+    
+    @IBAction func menuButtonWasTapped(sender: AnyObject) {
+        
+        
+        if hamburgerVC!.hamburgerShowing == true {
+            hamburgerVC!.hideHamburgerMenu()
+        } else {
+            hamburgerVC!.showHamburgerMenu()
+        }
     }
+//    @IBAction func twitterSharingSwitchWasTapped(sender: AnyObject) {
+//        if twitterSharingSwitch.on == true {
+//            defaults.setBool(true, forKey: "twitterSharingOn")
+//            let installation = PFInstallation.currentInstallation()
+//            installation["twitterSharingOn"] = true
+//            installation.saveInBackground()
+//        } else {
+//            defaults.setBool(false, forKey: "twitterSharingOn")
+//            let installation = PFInstallation.currentInstallation()
+//            installation["twitterSharingOn"] = false
+//            installation.saveInBackground()
+//        }
+//    }
 }

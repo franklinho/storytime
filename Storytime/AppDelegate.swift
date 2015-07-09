@@ -20,12 +20,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
     let screenSize: CGRect = UIScreen.mainScreen().bounds
     var vc : UIViewController?
     var mostRecentUserInfo : [NSObject : AnyObject]?
+    var bridgeForKochava: KochavaTracker = KochavaTracker()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
+
         
+        var kTracker: KochavaTracker
+        var kochavaInitDict: Dictionary = [
+            "kochavaAppId": "kostoryweave-conversion559e1152dd919",
+            "enableLogging":"1",
+            "retrieveAttribution":"1"]
         
+        kTracker = bridgeForKochava.swiftInitKochavaWithParams(kochavaInitDict)
+        var delegate: KochavaTrackerClientDelegate
         
         Fabric.with([Crashlytics()])
 
@@ -127,6 +136,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
             }
         }
         
+//        if installation["twitterSharingOn"] != nil {
+//            if installation["twitterSharingOn"]! as! Bool == true {
+//                defaults.setBool(true, forKey: "twitterSharingOn")
+//            } else {
+//                defaults.setBool(false, forKey: "twitterSharingOn")
+//            }
+//        }
+        
         
         
         installation.saveInBackground()
@@ -140,7 +157,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
         
         
-        UIBarButtonItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName:UIColor.whiteColor(),NSFontAttributeName: UIFont(name: "OpenSans", size: 18)] as! [NSObject:AnyObject!], forState: UIControlState.Normal)
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName:UIColor.whiteColor(),NSFontAttributeName: UIFont(name: "OpenSans", size: 18)] as [NSObject:AnyObject!], forState: UIControlState.Normal)
 
 
         
@@ -230,7 +247,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIAlertViewDelegate {
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         FBAppCall.handleDidBecomeActiveWithSession(PFFacebookUtils.session())
-//        FBSDKAppEvents.activateApp()
+        FBSDKAppEvents.activateApp()
 
     }
 

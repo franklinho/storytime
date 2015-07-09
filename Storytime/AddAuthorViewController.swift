@@ -369,11 +369,11 @@ class AddAuthorViewController: UIViewController, UISearchBarDelegate, UITableVie
         var pushQuery : PFQuery = PFInstallation.query()!
         pushQuery.whereKey("user", equalTo: user.objectId!)
         pushQuery.whereKey("storyNotificationsOn", equalTo: true)
-        var currentUserProfileName = PFUser.currentUser()!["profileName"]
-        var storyTitle = self.story!["title"]
+        var currentUserProfileName : String = PFUser.currentUser()!["profileName"] as! String
+        var storyTitle : String = self.story!["title"] as! String
         
         let data = [
-            "alert" : "\(currentUserProfileName!) has added you to the story: \(storyTitle!)",
+            "alert" : "\(currentUserProfileName) has added you to the story: \(storyTitle)",
             "storyID" : self.story!.objectId!
         ]
         let push = PFPush()

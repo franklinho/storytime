@@ -10,9 +10,10 @@ import UIKit
 
 
 
-class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, CreateProfileViewControllerDelegate {
+class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, CreateProfileViewControllerDelegate, UIActionSheetDelegate {
     
     
+    @IBOutlet weak var feedbackButton: UIButton!
     @IBOutlet weak var profileButton: UIButton!
     @IBOutlet weak var logOutButton: UIButton!
     @IBOutlet weak var createProfileButton: UIButton!
@@ -89,10 +90,14 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
         self.profileButton.enabled = true
         var rankingVC : UINavigationController = sb.instantiateViewControllerWithIdentifier("RankingNavigationViewController") as! UINavigationController
         var profileVC : UINavigationController = sb.instantiateViewControllerWithIdentifier("ProfileNavigationViewController") as! UINavigationController
+        var settingsVC : UINavigationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("SettingsNavigationController") as! UINavigationController
+        var feedbackVC : UINavigationController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("FeedbackNavigationController") as! UINavigationController
+        
+        
 //        var mentionsVC : TwitterNavigationController  = sb.instantiateViewControllerWithIdentifier("StatusesViewController") as! TwitterNavigationController
 //        mentionsVC.timelineStyle = "Mentions"
         
-        viewControllers = [rankingVC,profileVC]
+        viewControllers = [rankingVC,profileVC, settingsVC, feedbackVC]
         
         
         
@@ -135,11 +140,6 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
                     profileVC.user = PFUser.currentUser()
                     
                     self.activeViewController = navVC
-                    
-                    
-                    
-//                    profileVC.refreshStories()
-                    
                 } else {
                     presentCreateProfileViewController()
                 }
@@ -147,8 +147,22 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
                 presentLoginViewController()
             }
         } else if sender == settingsButton{
-            var settingsVC : SettingsViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewControllerWithIdentifier("SettingsViewController") as! SettingsViewController
-            self.presentViewController(settingsVC, animated: true, completion: nil)
+            var currentVC = self.activeViewController as! UINavigationController
+            currentVC.popToRootViewControllerAnimated(true)
+            var settingsVC = viewControllers[2] as! UINavigationController
+            self.activeViewController = settingsVC
+        } else if sender == feedbackButton {
+            var feedbackActionSheet = UIActionSheet()
+            feedbackActionSheet.delegate = self
+            feedbackActionSheet.title = "How do you feel about Storyweave?"
+            feedbackActionSheet.addButtonWithTitle("Happy")
+            feedbackActionSheet.addButtonWithTitle("Confused")
+            feedbackActionSheet.addButtonWithTitle("Unhappy")
+            feedbackActionSheet.addButtonWithTitle("Cancel")
+            feedbackActionSheet.cancelButtonIndex = 3
+            feedbackActionSheet.actionSheetStyle = UIActionSheetStyle.Automatic
+            feedbackActionSheet.tag = 1
+            feedbackActionSheet.showInView(self.view)
         } else {
             println("Unknown button")
         }
@@ -183,7 +197,7 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
                 self.logInButton.hidden = true
                 
                 self.createProfileButton.hidden = true
-                self.userNameLabel.text = PFUser.currentUser()!["profileName"] as! String
+                self.userNameLabel.text = PFUser.currentUser()!["profileName"] as? String
                 self.userImageView.layer.cornerRadius = 24
                 self.userImageView.layer.borderWidth = 2
                 self.userImageView.layer.borderColor = UIColor.whiteColor().CGColor
@@ -307,7 +321,7 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
         
     }
     
-    func signUpViewController(signUpController: PFSignUpViewController!, didSignUpUser user: PFUser!) {
+    func signUpViewController(signUpController: PFSignUpViewController, didSignUpUser user: PFUser) {
         self.dismissViewControllerAnimated(true, completion: nil)
         refreshLoginLabels()
         profileButton.enabled = true
@@ -332,6 +346,27 @@ class HamburgerViewController: UIViewController, PFLogInViewControllerDelegate, 
     
     func didCreateProfile() {
         self.refreshLoginLabels()
+    }
+    
+    func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
+        if actionSheet.tag == 1 {
+            var currentVC = self.activeViewController as! UINavigationController
+            currentVC.popToRootViewControllerAnimated(true)
+            var feedbackNav = viewControllers[3] as! UINavigationController
+            var feedbackPage = feedbackNav.visibleViewController as! FeedbackViewController
+            
+            if (buttonIndex == 0) {
+                feedbackPage.userSentiment = "happy"
+                self.activeViewController = feedbackNav
+            } else if (buttonIndex == 1) {
+                feedbackPage.userSentiment = "confused"
+                self.activeViewController = feedbackNav
+            } else {
+                feedbackPage.userSentiment = "unhappy"
+                self.activeViewController = feedbackNav
+
+            }
+        }
     }
 
 }

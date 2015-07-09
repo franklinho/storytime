@@ -85,9 +85,9 @@ class ProfileImageViewController: UIViewController, PBJVisionDelegate {
         
     }
     
-    func vision(vision: PBJVision!, capturedPhoto photoDict: [NSObject : AnyObject]!, error: NSError!) {
+    func vision(vision: PBJVision, capturedPhoto photoDict: [NSObject : AnyObject]?, error: NSError?) {
         if error == nil {
-            var capturedImage = photoDict[PBJVisionPhotoImageKey] as? UIImage
+            var capturedImage = photoDict![PBJVisionPhotoImageKey] as? UIImage
             var squareImage = squareImageWithImage(capturedImage!)
             profileImage = squareImage
             self.profileImageView.image = squareImage

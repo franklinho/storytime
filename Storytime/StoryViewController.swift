@@ -10,9 +10,12 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 import MobileCoreServices
+import CoreFoundation
 
 
 class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AVCaptureFileOutputRecordingDelegate, PBJVisionDelegate, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, StoryVideoTableViewCellDelegate, StoryImageTableViewCellDelegate, StoryTextTableViewCellDelegate, UIActionSheetDelegate, UIAlertViewDelegate, CreateProfileViewControllerDelegate, PostersViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    let defaults = NSUserDefaults.standardUserDefaults()
     let imagePicker = UIImagePickerController()
     @IBOutlet weak var storyTableViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var networkErrorTopConstraint: NSLayoutConstraint!
@@ -160,7 +163,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
 
         
-        hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
+        hamburgerVC = self.parentViewController!.parentViewController as? HamburgerViewController
         
         settingsActionSheet.delegate = self
         settingsActionSheet.addButtonWithTitle("Add Users")
@@ -178,7 +181,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
         } else {
             if self.story != nil {
-                self.title = story!["title"] as! String
+                self.title = story!["title"] as? String
             }
         }
         
@@ -257,9 +260,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 
                 if self.story!["posters"] == nil {
-                    var profileName = storyUser["profileName"]
+                    var profileName : String = storyUser["profileName"] as! String
                     self.firstUser = storyUser
-                    self.userLabel.text = profileName as? String
+                    self.userLabel.text = profileName
                     self.userLabel.hidden = false
                     if self.firstUser!["profileImage"] != nil {
                         var profileImageFile = self.firstUser!["profileImage"] as! PFFile
@@ -274,9 +277,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 } else {
                     var posters = self.story!["posters"] as! NSArray
                     if posters.count <= 1{
-                        var profileName = storyUser["profileName"]
+                        var profileName : String = storyUser["profileName"] as! String
                         self.firstUser = storyUser
-                        self.userLabel.text = profileName as? String
+                        self.userLabel.text = profileName as String
                         self.userLabel.hidden = false
                         if self.firstUser!["profileImage"] != nil {
                             var profileImageFile = self.firstUser!["profileImage"] as! PFFile
@@ -289,7 +292,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             }
                         }
                     } else if posters.count == 2 || posters.count == 3 {
-                        self.firstUser = posters.firstObject as! PFUser
+                        self.firstUser = posters.firstObject as? PFUser
                         self.firstUser!.fetchIfNeededInBackgroundWithBlock {
                             (user, error) -> Void in
                             if self.firstUser!["profileImage"] != nil {
@@ -303,7 +306,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 }
                             }
                         }
-                        self.secondUser = posters[1] as! PFUser
+                        self.secondUser = posters[1] as? PFUser
                         self.secondUser!.fetchIfNeededInBackgroundWithBlock {
                             (user, error) -> Void in
                             if self.secondUser!["profileImage"] != nil {
@@ -319,7 +322,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                         self.secondProfileImageView.hidden = false
                         if posters.count == 3 {
-                            self.thirdUser = posters[2] as! PFUser
+                            self.thirdUser = posters[2] as? PFUser
                             self.thirdUser!.fetchIfNeededInBackgroundWithBlock {
                                 (user, error) -> Void in
                                 if self.thirdUser!["profileImage"] != nil {
@@ -338,7 +341,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                         
                     } else {
-                        self.firstUser = posters.firstObject as! PFUser
+                        self.firstUser = posters.firstObject as? PFUser
                         self.firstUser!.fetchIfNeededInBackgroundWithBlock {
                             (user, error) -> Void in
                             if self.firstUser!["profileImage"] != nil {
@@ -352,7 +355,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 }
                             }
                         }
-                        self.secondUser = posters[1] as! PFUser
+                        self.secondUser = posters[1] as? PFUser
                         self.secondUser!.fetchIfNeededInBackgroundWithBlock {
                             (user, error) -> Void in
                             if self.secondUser!["profileImage"] != nil {
@@ -373,8 +376,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
                 
                 if self.story!["commentsCount"] != nil {
-                    var commentsCount = self.story!["commentsCount"]
-                    self.commentsLabel.text = "\(commentsCount!) Comments"
+                    var commentsCount : Int = self.story!["commentsCount"] as! Int
+                    self.commentsLabel.text = "\(commentsCount) Comments"
                 }
                 
                 
@@ -619,7 +622,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             return cell
         } else {
             if events.count > 0 {
-                event = events[indexPath.row] as! PFObject
+                event = events[indexPath.row] as? PFObject
                 if event!["type"] as! NSString == "text" {
                     var cell = storyTableView.dequeueReusableCellWithIdentifier("StoryTextTableViewCell") as! StoryTextTableViewCell
                     if (cell.respondsToSelector(Selector("layoutMargins"))) {
@@ -980,7 +983,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             if (success) {
                 // The object has been saved.
                 println("Event successfully saved")
-                
+//                self.showTwitterAlertView()
                 
                 
                 println("Adding storychannel: c\(self.story!.objectId!)")
@@ -1012,10 +1015,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
                     pushQuery.whereKey("storyNotificationsOn", notEqualTo: false)
                     
-                    var currentUserProfileName = PFUser.currentUser()!["profileName"]
-                    var storyTitle = self.story!["title"]
+                    var currentUserProfileName : String = PFUser.currentUser()!["profileName"] as! String
+                    var storyTitle : String = self.story!["title"] as! String
                     let data = [
-                        "alert" : "\(currentUserProfileName!) has added a post to the story: \(storyTitle!)",
+                        "alert" : "\(currentUserProfileName) has added a post to the story: \(storyTitle)",
                         "storyID" : self.story!.objectId!
                     ]
                     let push = PFPush()
@@ -1085,7 +1088,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     println("Story and event successfully saved")
 //                    self.storyTitleLabel.text = self.story!["title"] as? String
                     if  PFUser.currentUser()!["profileName"] != nil {
-                        self.userLabel.text = PFUser.currentUser()!["profileName"] as! String
+                        self.userLabel.text = PFUser.currentUser()!["profileName"] as? String
                     }
                                         var upvotes = self.story!["upvotes"] as? Int
                     var downvotes = self.story!["downvotes"] as? Int
@@ -1350,8 +1353,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidAppear(animated: Bool) {
         if self.story != nil {
             if self.story!["commentsCount"] != nil {
-                var commentsCount = self.story!["commentsCount"]
-                self.commentsLabel.text = "\(commentsCount!) Comments"
+                var commentsCount : Int = self.story!["commentsCount"] as! Int
+                self.commentsLabel.text = "\(commentsCount) Comments"
             }
         }
         self.vision.delegate = self
@@ -1388,11 +1391,11 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    func vision(vision: PBJVision!, capturedVideo videoDict: [NSObject : AnyObject]!, error: NSError!) {
+    func vision(vision: PBJVision, capturedVideo videoDict: [NSObject : AnyObject]?, error: NSError?) {
         
         
         dispatch_async(dispatch_get_main_queue(),{
-            self.videoPath = videoDict[PBJVisionVideoPathKey] as! String
+            self.videoPath = videoDict![PBJVisionVideoPathKey] as? String
             if self.videoPath != nil {
                 UISaveVideoAtPathToSavedPhotosAlbum(self.videoPath, nil, nil, nil)
             }
@@ -1493,7 +1496,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             if (success) {
                 // The object has been saved.
                 println("Event successfully saved")
-                
+//                self.showTwitterAlertView()
                 
                 
                 println("Adding storychannel: c\(self.story!.objectId!)")
@@ -1532,10 +1535,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     pushQuery.whereKey("storyNotificationsOn", notEqualTo: false)
                     
                     
-                    var currentUserProfileName = PFUser.currentUser()!["profileName"]
-                    var storyTitle = self.story!["title"]
+                    var currentUserProfileName : String = PFUser.currentUser()!["profileName"] as! String
+                    var storyTitle : String = self.story!["title"] as! String
                     let data = [
-                        "alert" : "\(currentUserProfileName!) has added a video to the story: \(storyTitle!)",
+                        "alert" : "\(currentUserProfileName) has added a video to the story: \(storyTitle)",
                         "storyID" : self.story!.objectId!
                     ]
                     let push = PFPush()
@@ -1624,7 +1627,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     // The object has been saved.
 //                    self.storyTitleLabel.text = self.story!["title"] as? String
                     if  PFUser.currentUser()!["profileName"] != nil {
-                        self.userLabel.text = PFUser.currentUser()!["profileName"] as! String
+                        self.userLabel.text = PFUser.currentUser()!["profileName"] as? String
                     }
                     var upvotes = self.story!["upvotes"] as? Int
                     var downvotes = self.story!["downvotes"] as? Int
@@ -1667,8 +1670,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
-    func vision(vision: PBJVision!, capturedPhoto photoDict: [NSObject : AnyObject]!, error: NSError!) {
-        capturedImage = photoDict[PBJVisionPhotoImageKey] as! UIImage
+    func vision(vision: PBJVision, capturedPhoto photoDict: [NSObject : AnyObject]?, error: NSError?) {
+        capturedImage = photoDict![PBJVisionPhotoImageKey] as? UIImage
         dispatch_async(dispatch_get_main_queue(),{
             if self.capturedImage != nil {
                 UIImageWriteToSavedPhotosAlbum(self.squareImageWithImage(self.capturedImage!), nil, nil, nil)
@@ -1714,7 +1717,8 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             if (success) {
                 // The object has been saved.
                 println("Event successfully saved")
-                
+//                self.showTwitterAlertView()
+//                self.postToTwitter("photo")
                 
                 
                 
@@ -1742,10 +1746,10 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     pushQuery.whereKey("objectId", notEqualTo: self.installation.objectId!)
                     pushQuery.whereKey("storyNotificationsOn", notEqualTo: false)
                     
-                    var currentUserProfileName = PFUser.currentUser()!["profileName"]
-                    var storyTitle = self.story!["title"]
+                    var currentUserProfileName : String = PFUser.currentUser()!["profileName"]  as! String
+                    var storyTitle : String = self.story!["title"] as! String
                     let data = [
-                        "alert" : "\(currentUserProfileName!) has added a photo to the story: \(storyTitle!)",
+                        "alert" : "\(currentUserProfileName) has added a photo to the story: \(storyTitle)",
                         "storyID" : self.story!.objectId!
                     ]
                     let push = PFPush()
@@ -2021,7 +2025,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         if playableCells.count > 0 && playableCells[0].player != nil {
-            playingVideoCell = playableCells[0] as! StoryVideoTableViewCell
+            playingVideoCell = playableCells[0] as? StoryVideoTableViewCell
             
             if playingVideoCell!.player != nil {
                 playingVideoCell!.playButtonIconImageView.hidden = true
@@ -2304,7 +2308,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         return false
     }
     
-    func logInViewController(logInController: PFLogInViewController!, didLogInUser user: PFUser!) {
+    func logInViewController(logInController: PFLogInViewController, didLogInUser user: PFUser) {
         self.dismissViewControllerAnimated(true, completion: nil)
         updateVotingLabels()
 //        hamburgerVC!.profileButton.enabled = true
@@ -2331,7 +2335,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         println("Failed to log in")
     }
     
-    func logInViewControllerDidCancelLogIn(logInController: PFLogInViewController!) {
+    func logInViewControllerDidCancelLogIn(logInController: PFLogInViewController) {
         self.navigationController?.popViewControllerAnimated(true)
     }
     
@@ -2375,11 +2379,14 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.violatingUser()
     }
     
-    func signUpViewController(signUpController: PFSignUpViewController!, didFailToSignUpWithError error: NSError!) {
+    func signUpViewController(signUpController: PFSignUpViewController, didFailToSignUpWithError error: NSError?) {
         println("Failed to sign up")
     }
+
     
-    func signUpViewControllerDidCancelSignUp(signUpController: PFSignUpViewController!) {
+    
+    
+    func signUpViewControllerDidCancelSignUp(signUpController: PFSignUpViewController) {
         println("User dismissed the signupviewcontroller")
     }
     
@@ -2451,7 +2458,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if  PFUser.currentUser() != nil {
             var storyUser = PFUser.currentUser()!
-            self.userLabel.text = storyUser["profileName"] as! String
+            self.userLabel.text = storyUser["profileName"] as? String
             self.userLabel.hidden = false
             if storyUser["profileImage"] != nil {
                 var profileImageFile = storyUser["profileImage"] as! PFFile
@@ -2663,6 +2670,21 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     })
                 }
             }
+//        } else if alertView.tag == 3 {
+//            if (buttonIndex == 0) {
+//                println("No twitter sharing button tapped")
+//                defaults.setBool(false, forKey: "twitterSharingOn")
+//                let installation = PFInstallation.currentInstallation()
+//                installation["twitterSharingOn"] = false
+//                installation.saveInBackground()
+//            } else {
+//                println("Twitter sharing OK button tapped")
+//                defaults.setBool(true, forKey: "twitterSharingOn")
+//                let installation = PFInstallation.currentInstallation()
+//                installation["twitterSharingOn"] = true
+//                installation.saveInBackground()
+//            }
+//            defaults.setBool(true, forKey: "initialTwitterSettingSeen")
         } else {
             if (buttonIndex == 0) {
                 println("Cancel button tapped")
@@ -2765,7 +2787,7 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         if sender.state == UIGestureRecognizerState.Ended {
-            var touch = (((sender as! UILongPressGestureRecognizer).valueForKey("_touches") as! NSArray)[0] as! UITouch).locationInView(self.view) as! CGPoint
+            var touch = (((sender as! UILongPressGestureRecognizer).valueForKey("_touches") as! NSArray)[0] as! UITouch).locationInView(self.view) as CGPoint
             println("Touch: \(touch), CreateButton: \(self.createButton.frame), Camera Button: \(self.expandedCameraButton.convertRect(expandedCameraButton.frame, toView: nil)), Video Button: \(self.expandedVideoButton.convertRect(expandedVideoButton.frame, toView: nil)), Text: \(self.expandedTextButton.convertRect(expandedTextButton.frame, toView: nil))")
             
             
@@ -2908,9 +2930,9 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
             capturedImage = squareImageWithImage(pickedImage)
             dispatch_async(dispatch_get_main_queue(),{
                 if self.capturedImage != nil {
-                    UIImageWriteToSavedPhotosAlbum(self.squareImageWithImage(self.capturedImage!), nil, nil, nil)
+                    self.savePhotoEvent()
                 }
-                self.savePhotoEvent()
+
             })
         }
         
@@ -2927,5 +2949,100 @@ class StoryViewController: UIViewController, UITableViewDelegate, UITableViewDat
         })
         
     }
+    
+    
+//    func showTwitterAlertView() {
+//        
+//        if defaults.boolForKey("initialTwitterSettingSeen") as? Bool == false {
+//            if PFTwitterUtils.isLinkedWithUser(PFUser.currentUser()) == true {
+//                var alertView = UIAlertView(title: "Share on Twitter", message: "Would you like to share your posts on Twitter?", delegate: self, cancelButtonTitle: "No", otherButtonTitles: "OK")
+//                alertView.tag = 3
+//                alertView.show()
+//            }
+//            
+//        }
+//    }
+//    
+//    func postToTwitter(type: String) {
+//        let twitterSharingOn = defaults.boolForKey("twitterSharingOn")
+//        println("Twitter Sharing State : \(twitterSharingOn)")
+//        if defaults.boolForKey("twitterSharingOn") == true {
+//            
+//            if type == "photo" {
+//                let mediaURL = NSURL(string: "https://upload.twitter.com/1.1/media/upload.json")
+//                let imageData = UIImageJPEGRepresentation(capturedImage, 1.0)
+//                var mediaRequest : NSMutableURLRequest = NSMutableURLRequest(URL: mediaURL!)
+//                mediaRequest.HTTPMethod = "POST"
+//                let boundary = "---------------------------14737809831466499882746641449"
+//                let contentType = NSString(format: "multipart/form-data; boundary=%@", boundary)
+//                mediaRequest.addValue(contentType as String, forHTTPHeaderField: "Content-Type")
+//                
+//                var body = NSMutableData()
+//                body.appendData(NSString(format: "--%@\r\n", boundary).dataUsingEncoding(NSUTF8StringEncoding)!)
+//                body.appendData(NSString(format: "Content-Disposition: form-data; name=\"media\"; filename=\"image.jpg\"\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
+//                body.appendData(NSString(format: "Content-Type: image/jpeg\r\n\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
+//                body.appendData(imageData)
+//                body.appendData(NSString(format: "\r\n").dataUsingEncoding(NSUTF8StringEncoding)!)
+//                body.appendData(NSString(format:"--%@--\r\n", boundary).dataUsingEncoding(NSUTF8StringEncoding)!)
+//                
+//                mediaRequest.HTTPBody = body
+//                
+//                PFTwitterUtils.twitter()?.signRequest(mediaRequest)
+//                println("Sending twitter request")
+//                NSURLConnection.sendAsynchronousRequest(mediaRequest, queue: NSOperationQueue(), completionHandler: { (response, data, connectionError) -> Void in
+//                    var mediaIdString : String?
+//                    if (data != nil) {
+//                        var jsonSerializationError : NSError?
+//                        var mediaDict = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers, error: &jsonSerializationError)
+//                        if (jsonSerializationError == nil) {
+//                            println("Media Dictionary: \(mediaDict!)")
+//                            
+//                            if let mediaIdString = mediaDict!["media_id_string"] as? String {
+//                                let status = "I just posted a photo on #Storyweave. See the full story: http://apple.co/1LSYaJI".stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())
+//                                
+////                                let bodyString = "status=\(status!)&media_ids=\(mediaIdString)".stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())
+//                                let bodyString = "status=I just posted a photo on #Storyweave&media_ids=\(mediaIdString)".stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())
+//                                println("Body String : \(bodyString)")
+//                                
+//                                
+//                                let url : NSURL = NSURL(string: "https://api.twitter.com/1.1/statuses/update.json")!
+//                                var tweetRequest : NSMutableURLRequest = NSMutableURLRequest(URL: url)
+//                                
+//                                tweetRequest.HTTPMethod = "POST"
+//                                tweetRequest.HTTPBody = bodyString!.dataUsingEncoding(NSUTF8StringEncoding)
+//                                PFTwitterUtils.twitter()?.signRequest(tweetRequest)
+//                                
+//                                var response : NSURLResponse?
+//                                var error : NSError?
+//                                
+//                                NSURLConnection.sendAsynchronousRequest(tweetRequest, queue: NSOperationQueue(), completionHandler: { (response, data, error) -> Void in
+//                                    if (error == nil) {
+//                                        println("Response :\(NSString(data: data, encoding: NSUTF8StringEncoding))")
+//                                    } else {
+//                                        println("Error : \(error)")
+//                                    }
+//                                })
+//                                
+//                            }
+//
+//                    
+//                            
+//                        } else {
+//                            println("JSON serialization error \(jsonSerializationError)")
+//                        }
+//                    } else {
+//                        println("Error hitting media/upload endpoint: \(connectionError)")
+//                    }
+//                })
+//            }
+//            
+//        
+//        }
+//    }
+
+
+    
+    
+    
     
 }

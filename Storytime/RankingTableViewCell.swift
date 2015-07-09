@@ -90,7 +90,7 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
         if PFUser.currentUser() != nil{
             if PFUser.currentUser()!["votedStories"] != nil {
                 if self.story != nil {
-                    self.votedStories = PFUser.currentUser()!["votedStories"] as! NSMutableDictionary
+                    self.votedStories = PFUser.currentUser()!["votedStories"] as? NSMutableDictionary
                     if storyUpVoted == true {
                         self.votedStories![self.story!.objectId!] = 0
                         storyUpVoted = false
@@ -141,8 +141,8 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
             
             if self.story != nil {
                 self.story!.saveInBackground()
-                var points = self.story!["points"]
-                pointsLabel.text = "\(points!)"
+                var points : Int = self.story!["points"] as! Int
+                pointsLabel.text = "\(points)"
             }
             
             PFUser.currentUser()!["votedStories"] = self.votedStories
@@ -155,7 +155,7 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
         if PFUser.currentUser() != nil{
             if PFUser.currentUser()!["votedStories"] != nil {
                 if self.story != nil {
-                    self.votedStories = PFUser.currentUser()!["votedStories"] as! NSMutableDictionary
+                    self.votedStories = PFUser.currentUser()!["votedStories"] as? NSMutableDictionary
                     if storyDownVoted == true {
                         self.votedStories![self.story!.objectId!] = 0
                         storyDownVoted = false
@@ -206,8 +206,8 @@ class RankingTableViewCell: UITableViewCell, PFLogInViewControllerDelegate, PFSi
             
             if self.story != nil {
                 self.story!.saveInBackground()
-                var points = self.story!["points"]
-                pointsLabel.text = "\(points!)"
+                var points : Int = self.story!["points"] as! Int
+                pointsLabel.text = "\(points)"
             }
             
             PFUser.currentUser()!["votedStories"] = self.votedStories

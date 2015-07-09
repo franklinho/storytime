@@ -108,8 +108,8 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
 //                    println("\(userData)")
                     println("\(username)")
                     self.userNameTextField.text = (userData["first_name"] as! String) + (userData["last_name"] as! String)
-                    var userID = userData["id"]
-                    var profileImageURL = "https://graph.facebook.com/\(userID!)/picture?width=300&height=300"
+                    var userID : String = userData["id"] as! String
+                    var profileImageURL = "https://graph.facebook.com/\(userID)/picture?width=300&height=300"
                     println("\(profileImageURL)")
                     self.profileImageView.setImageWithURL(NSURL(string: profileImageURL))
                     self.profileImage = self.profileImageView.image
@@ -186,8 +186,8 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
     
 
 
-    func vision(vision: PBJVision!, capturedPhoto photoDict: [NSObject : AnyObject]!, error: NSError!) {
-        var capturedImage = photoDict[PBJVisionPhotoImageKey] as? UIImage
+    func vision(vision: PBJVision, capturedPhoto photoDict: [NSObject : AnyObject]?, error: NSError?) {
+        var capturedImage = photoDict![PBJVisionPhotoImageKey] as? UIImage
         var squareImage = squareImageWithImage(capturedImage!)
         profileImage = squareImage
         profileImageView.image = squareImage
@@ -215,6 +215,7 @@ class CreateProfileViewController: UIViewController, PBJVisionDelegate, UITextFi
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         self.view.endEditing(true)
+        self.submitButtonWasTapped(self)
         return true
     }
     

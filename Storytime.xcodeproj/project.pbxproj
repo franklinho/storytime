@@ -33,6 +33,8 @@
 		DD60BCFF1AF7FBA6000755E6 /* RankingSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD60BCFE1AF7FBA6000755E6 /* RankingSwitch.swift */; };
 		DD70FBD11ACF16DE0002C5CC /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD70FBD01ACF16DE0002C5CC /* ParseUI.framework */; };
 		DD70FBD31ACF16FB0002C5CC /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD70FBD21ACF16FB0002C5CC /* Parse.framework */; };
+		DD809D6B1B4F0DFF0021D6CB /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD809D6A1B4F0DFF0021D6CB /* FeedbackViewController.swift */; };
+		DD809D6D1B4F14860021D6CB /* FeedbackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD809D6C1B4F14860021D6CB /* FeedbackTableViewCell.swift */; };
 		DD842DB31AF98319001B5FD9 /* AlternativeStoryweaveLogoTransparent.png in Resources */ = {isa = PBXBuildFile; fileRef = DD842DB21AF98319001B5FD9 /* AlternativeStoryweaveLogoTransparent.png */; };
 		DD8C82851AD5CE1E00B9A47B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */; };
 		DD8C828B1AD5D52600B9A47B /* menu_icon_white.png in Resources */ = {isa = PBXBuildFile; fileRef = DD8C828A1AD5D52600B9A47B /* menu_icon_white.png */; };
@@ -40,6 +42,10 @@
 		DD9B26DE1AD8574600E6D3DE /* CustomLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9B26DD1AD8574600E6D3DE /* CustomLoginViewController.swift */; };
 		DD9B26E01AD8578A00E6D3DE /* CustomSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9B26DF1AD8578A00E6D3DE /* CustomSignUpViewController.swift */; };
 		DD9B26E21AD85F9800E6D3DE /* storyweave_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = DD9B26E11AD85F9800E6D3DE /* storyweave_logo.png */; };
+		DD9D5C6E1B4E3EE5008F5CED /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9D5C6D1B4E3EE5008F5CED /* AdSupport.framework */; };
+		DD9D5C701B4E4235008F5CED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9D5C6F1B4E4235008F5CED /* Foundation.framework */; };
+		DD9D5C721B4E423B008F5CED /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9D5C711B4E423B008F5CED /* iAd.framework */; };
+		DD9D5C741B4E4266008F5CED /* libTrackAndAd.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD9D5C731B4E4266008F5CED /* libTrackAndAd.a */; };
 		DDBA71F61AC5FCC100D0EC97 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA71F51AC5FCC100D0EC97 /* Accounts.framework */; };
 		DDBA71F81AC5FCC700D0EC97 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA71F71AC5FCC700D0EC97 /* AudioToolbox.framework */; };
 		DDBA71FA1AC5FCCC00D0EC97 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDBA71F91AC5FCCC00D0EC97 /* CFNetwork.framework */; };
@@ -156,6 +162,8 @@
 		DD60BCFE1AF7FBA6000755E6 /* RankingSwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingSwitch.swift; sourceTree = "<group>"; };
 		DD70FBD01ACF16DE0002C5CC /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
 		DD70FBD21ACF16FB0002C5CC /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = Pods/Parse/Parse.framework; sourceTree = "<group>"; };
+		DD809D6A1B4F0DFF0021D6CB /* FeedbackViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
+		DD809D6C1B4F14860021D6CB /* FeedbackTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackTableViewCell.swift; sourceTree = "<group>"; };
 		DD842DB21AF98319001B5FD9 /* AlternativeStoryweaveLogoTransparent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AlternativeStoryweaveLogoTransparent.png; sourceTree = "<group>"; };
 		DD8C82841AD5CE1E00B9A47B /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		DD8C828A1AD5D52600B9A47B /* menu_icon_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_icon_white.png; sourceTree = "<group>"; };
@@ -163,6 +171,10 @@
 		DD9B26DD1AD8574600E6D3DE /* CustomLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomLoginViewController.swift; sourceTree = "<group>"; };
 		DD9B26DF1AD8578A00E6D3DE /* CustomSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSignUpViewController.swift; sourceTree = "<group>"; };
 		DD9B26E11AD85F9800E6D3DE /* storyweave_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = storyweave_logo.png; sourceTree = "<group>"; };
+		DD9D5C6D1B4E3EE5008F5CED /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		DD9D5C6F1B4E4235008F5CED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		DD9D5C711B4E423B008F5CED /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		DD9D5C731B4E4266008F5CED /* libTrackAndAd.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libTrackAndAd.a; path = Pods/Kochava/libTrackAndAd.a; sourceTree = "<group>"; };
 		DDBA71F51AC5FCC100D0EC97 /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		DDBA71F71AC5FCC700D0EC97 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		DDBA71F91AC5FCCC00D0EC97 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -253,6 +265,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD9D5C741B4E4266008F5CED /* libTrackAndAd.a in Frameworks */,
+				DDBA71FE1AC5FCD400D0EC97 /* CoreLocation.framework in Frameworks */,
+				DD9D5C721B4E423B008F5CED /* iAd.framework in Frameworks */,
+				DD9D5C701B4E4235008F5CED /* Foundation.framework in Frameworks */,
+				DD9D5C6E1B4E3EE5008F5CED /* AdSupport.framework in Frameworks */,
 				DD70FBD31ACF16FB0002C5CC /* Parse.framework in Frameworks */,
 				DD70FBD11ACF16DE0002C5CC /* ParseUI.framework in Frameworks */,
 				DDBA71FA1AC5FCCC00D0EC97 /* CFNetwork.framework in Frameworks */,
@@ -275,7 +292,6 @@
 				DDBA72041AC5FCE500D0EC97 /* Security.framework in Frameworks */,
 				DD2E0C441ADF79D7003BB496 /* Fabric.framework in Frameworks */,
 				DD2E0C431ADF79D7003BB496 /* Crashlytics.framework in Frameworks */,
-				DDBA71FE1AC5FCD400D0EC97 /* CoreLocation.framework in Frameworks */,
 				DDBA71F81AC5FCC700D0EC97 /* AudioToolbox.framework in Frameworks */,
 				CE078F49D064E69FA88C342F /* libPods.a in Frameworks */,
 			);
@@ -312,6 +328,7 @@
 				DD10924C1B03DF4B00CEA7DC /* PrivacyPolicyViewController.swift */,
 				DDF06E961AD4529F007D4954 /* CreateProfileViewController.swift */,
 				DD9B26DD1AD8574600E6D3DE /* CustomLoginViewController.swift */,
+				DD809D6A1B4F0DFF0021D6CB /* FeedbackViewController.swift */,
 				DD9B26DF1AD8578A00E6D3DE /* CustomSignUpViewController.swift */,
 				DDF7AED51ADDEC8D0033F487 /* CommentsViewController.swift */,
 				DDC93A0E1AC48E22006D4646 /* StoryViewController.swift */,
@@ -332,6 +349,7 @@
 				DDDCFF271AFD4A3400975940 /* SpinnerTableViewCell.swift */,
 				DDC93A161AC48FB9006D4646 /* StoryCreateTableViewCell.swift */,
 				DDC93A0C1AC48589006D4646 /* RankingTableViewCell.swift */,
+				DD809D6C1B4F14860021D6CB /* FeedbackTableViewCell.swift */,
 			);
 			name = TableViewCells;
 			sourceTree = "<group>";
@@ -339,6 +357,10 @@
 		DDBA72131AC5FD4800D0EC97 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DD9D5C731B4E4266008F5CED /* libTrackAndAd.a */,
+				DD9D5C711B4E423B008F5CED /* iAd.framework */,
+				DD9D5C6F1B4E4235008F5CED /* Foundation.framework */,
+				DD9D5C6D1B4E3EE5008F5CED /* AdSupport.framework */,
 				DD70FBD21ACF16FB0002C5CC /* Parse.framework */,
 				DD70FBD01ACF16DE0002C5CC /* ParseUI.framework */,
 				DD3D45B81ACF0F68001B38BD /* UIKit.framework */,
@@ -743,6 +765,7 @@
 				DDF06E971AD4529F007D4954 /* CreateProfileViewController.swift in Sources */,
 				DD9B26E01AD8578A00E6D3DE /* CustomSignUpViewController.swift in Sources */,
 				DD138C821AE58D8500C74E8A /* AddAuthorViewController.swift in Sources */,
+				DD809D6B1B4F0DFF0021D6CB /* FeedbackViewController.swift in Sources */,
 				DD1092531B03E5CE00CEA7DC /* SignupView.swift in Sources */,
 				DDC93A171AC48FB9006D4646 /* StoryCreateTableViewCell.swift in Sources */,
 				DDC9A2301B4DB2770016D6F3 /* OnboardingViewController.swift in Sources */,
@@ -753,6 +776,7 @@
 				DDF7AED61ADDEC8D0033F487 /* CommentsViewController.swift in Sources */,
 				DD138C841AE58F1600C74E8A /* UserTableViewCell.swift in Sources */,
 				DDC93A111AC48F96006D4646 /* StoryImageTableViewCell.swift in Sources */,
+				DD809D6D1B4F14860021D6CB /* FeedbackTableViewCell.swift in Sources */,
 				DD3F06AA1AFC158900647963 /* ProfileImageViewController.swift in Sources */,
 				DDC9368E1AC47CAE006D4646 /* Storytime.xcdatamodeld in Sources */,
 				DDC9368B1AC47CAE006D4646 /* AppDelegate.swift in Sources */,
@@ -840,7 +864,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "7b154135-68f8-4428-ab63-bbb8d3026580";
+				PROVISIONING_PROFILE = "749eda9b-2148-4798-80a9-2633334fe00f";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -876,7 +900,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "7b154135-68f8-4428-ab63-bbb8d3026580";
+				PROVISIONING_PROFILE = "749eda9b-2148-4798-80a9-2633334fe00f";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -899,8 +923,12 @@
 				);
 				INFOPLIST_FILE = Storytime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/Kochava",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7b154135-68f8-4428-ab63-bbb8d3026580";
+				PROVISIONING_PROFILE = "749eda9b-2148-4798-80a9-2633334fe00f";
 				SWIFT_OBJC_BRIDGING_HEADER = "Storytime-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -924,8 +952,12 @@
 				);
 				INFOPLIST_FILE = Storytime/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/Kochava",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7b154135-68f8-4428-ab63-bbb8d3026580";
+				PROVISIONING_PROFILE = "749eda9b-2148-4798-80a9-2633334fe00f";
 				SWIFT_OBJC_BRIDGING_HEADER = "Storytime-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -43,7 +43,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        hamburgerVC = self.parentViewController!.parentViewController as! HamburgerViewController
+        hamburgerVC = self.parentViewController!.parentViewController as? HamburgerViewController
 
         profileImageLeadingConstraint.constant = (screenSize.width - 256)/2
         userNameLabelLeadingConstraint.constant = (screenSize.width - 256)/2 + 120
@@ -155,8 +155,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 }
                 
                 if story!["points"] != nil {
-                    var points = story!["points"]
-                    cell.pointsLabel.text = "\(points!)"
+                    var points : Int = story!["points"] as! Int
+                    cell.pointsLabel.text = "\(points)"
                 }
                 
                 if story!["commentsCount"] != nil {
@@ -213,8 +213,8 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
                 } else if story!["thumbnailText"] != nil {
                     cell.previewImageView.hidden = true
                     cell.thumbnailTextLabel.hidden = false
-                    cell.thumbnailTextLabel.text = story!["thumbnailText"] as! String
-                }
+                    cell.thumbnailTextLabel.text = story!["thumbnailText"] as? String
+               }
                 
                 cell.rankLabel.text = "\(indexPath.row+1)."
             }
@@ -446,7 +446,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
             var storyIndex = storyTableView!.indexPathForSelectedRow()?.row
             var selectedStory : PFObject?
 
-            selectedStory = stories[storyIndex!] as! PFObject
+            selectedStory = stories[storyIndex!] as? PFObject
             storyVC.story = selectedStory
             storyVC.storyCreated = true
 
@@ -546,10 +546,10 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         var pushQuery : PFQuery = PFInstallation.query()!
         pushQuery.whereKey("user", equalTo: user.objectId!)
         pushQuery.whereKey("followNotificationsOn", equalTo: true)
-        var currentUserProfileName = PFUser.currentUser()!["profileName"]
+        var currentUserProfileName : String = PFUser.currentUser()!["profileName"] as! String
         
         let data = [
-            "alert" : "\(currentUserProfileName!) has started following you"
+            "alert" : "\(currentUserProfileName) has started following you"
         ]
         let push = PFPush()
         //                                            push.setMessage("\(currentUserProfileName!) has added you to the story: \(storyTitle!)")
@@ -591,7 +591,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         if user != nil {
 
-            usernameLabel.text = user!["profileName"] as! String
+            usernameLabel.text = user!["profileName"] as? String
             if user!["profileImage"] != nil {
                 var profileImageFile = user!["profileImage"] as! PFFile
                 profileImageFile.getDataInBackgroundWithBlock {

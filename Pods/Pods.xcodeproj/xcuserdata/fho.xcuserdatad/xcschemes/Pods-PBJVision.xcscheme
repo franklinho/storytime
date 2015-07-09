@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0640"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3F5BEBFF66BA2EEC703E202C"
+               BlueprintIdentifier = "1B1171A246F244168D8FF2AA"
                BuildableName = "libPods-PBJVision.a"
                BlueprintName = "Pods-PBJVision"
                ReferencedContainer = "container:Pods.xcodeproj">
